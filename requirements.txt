@@ -11,8 +11,5 @@ garlicsim-wx==0.6.3
 ipython==1.1.0
 klein==0.2.1
 mock==1.0.1
-readline==6.2.4.1
 wsgiref==0.1.2
-wxPython==2.8.12.1
-wxPython-common==2.8.12.1
 zope.interface==4.0.5

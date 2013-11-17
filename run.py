@@ -9,7 +9,7 @@ from autobahn.websocket import WebSocketServerFactory, \
                                WebSocketServerProtocol
 
 from autobahn.resource import WebSocketResource, HTTPChannelHixie76Aware
-
+import webbrowser
 
 class EchoServerProtocol(WebSocketServerProtocol):
 
@@ -48,4 +48,5 @@ if __name__ == '__main__':
    site.protocol = HTTPChannelHixie76Aware # needed if Hixie76 is to be supported
    reactor.listenTCP(8080, site)
 
+   webbrowser.open('http://127.0.0.1:8080')
    reactor.run()
