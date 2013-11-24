@@ -7,7 +7,7 @@ This is a framework to modify things!
 * Python 2.x
 
 # Installation #
-1. Clone this repository.
+1. Clone this repository: `git clone --recursive https://github.com/majdal/modex.git`. Notice the `--recursive` flag: it is used to clone the `lightbulb_simpack`, which makes the lightbulb mode work with garlicsim. 
 
 > If you're on Ubuntu, use install the following packages `sudo apt-get install build-essential python-dev`
 > If you're on OSX, make sure that you have Xcode installed, and up to date, including commandline tools
