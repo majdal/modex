@@ -6,7 +6,13 @@ class LightbulbCase(unittest.TestCase):
 
     def test_init(self):
     	import sys
-    	sys.path.append('/Users/majdal-shihabi/Documents/School/4A/design_workshop/modex')
+    	import os
+    	cwd = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
+    	sys.path.append(cwd)
+    	
+    	#import ipdb; ipdb.set_trace()
+
     	from lightbulb.lightbulb import People, Lamps, Intervention
     	import lightbulb_simpack
     	import garlicsim

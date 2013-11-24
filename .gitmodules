@@ -1,0 +1,3 @@
+[submodule "lightbulb_simpack"]
+      path = lightbulb_simpack
+      url = https://github.com/vchynarov/lightbulb-simpack.git
