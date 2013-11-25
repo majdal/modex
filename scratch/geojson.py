@@ -2,18 +2,12 @@
 # 
 # ---copyright goes here---
 # this is python2 code
+# requirements: gdal with its python bindings installed
 
 import os
 import osgeo.ogr as ogr
 #import geojson
 
-shapefile = "../assets/maps/_ags_DMTI_2010_CanMapRL_POI_AER_ALL_PROV2"
-
-#
-#this dataset is courtesy http://geo2.scholarsportal.info/#Metadata_Information
-# originally from http://lioapp.lrc.gov.on.ca/edwin/EDWINCGI.exe?IHID=6&AgencyID=35&Theme=AGRICULTURE
-# which is now quite dead
-#shapefile = "../assets/maps/OGDE_ARI/AgricultureResourceInventory_1983"
 
 #functions we care about:
 # ogr.open() (not, not gdal.open, that's for rasters!!)
@@ -35,8 +29,15 @@ def filter_to_elora():
 	# the lat/lon system is deformed so that
 	# # a unit latitude is 8.3km, and a unit longitude is 10km (<-- is this right??)
 	# for ourpuroses, taking a couple of degrees in each direction should be good ... 79 to 81 
-	elora = ((-81, 42), (-79, 44)) #(bottomleft, topright), to be in line with SetSpatialFilterRect()
+	#elora = ((-81, 42), (-79, 44)) #(bottomleft, topright), to be in line with SetSpatialFilterRect()
 	
+	
+	#this dataset is courtesy http://geo2.scholarsportal.info/
+	# originally from http://lioapp.lrc.gov.on.ca/edwin/EDWINCGI.exe?IHID=6&AgencyID=35&Theme=AGRICULTURE
+	# which is now quite dead
+	# we do not have a license to distribute it, so you will need to go to that site,
+	# find "Agriculture Resource Inventory", download and unzip it.
+
 	shapefile = "../assets/maps/OGDE_ARI/AgricultureResourceInventory_1983"
 	input = ogr.Open(shapefile)
 	
@@ -71,9 +72,19 @@ def filter_to_elora():
 		
 		feature_schema = layer_in.GetLayerDefn() #this produces an instance of FeatureDefn, which essentially just defines several fields and is an awful lot like a class. It's like this since this is C++ wrapped by SWIG and C++ doesn't have class-objects so GDAL has no way to represent such a meta concept
 		
+		#layer_in.SetSpatialFilterRect(-79, 42, -81, 43) #this one gives a strange result... it seems to mark out a rectangle of some sort, yet..not really??
+		#layer_in.SetSpatialFilterRect(minx, miny, maxx, maxy)
+		#layer_in.SetSpatialFilterRect(-83, 43, -82, 44)  #this seems to be filtering *out* everything in this layer
+		layer_in.SetSpatialFilterRect(-82, 44, -83, 43)  #flipped??
 		
-		#layer_in.SetSpatialFilterRect(-79, 42, -81, 43) #this one gives a strange result
-		layer_in.SetSpatialFilterRect(-79, 42, -81, 43)
+		
+		filter_rectangle = layer_in.GetSpatialFilter();
+		#assert layer_out.CreateFeature(filter_rectangle) == 0;
+		print "filter", filter_rectangle.ExportToJson()
+		
+		filter_feature = ogr.Feature(feature_schema)
+		filter_feature.SetGeometry(filter_rectangle)
+		assert layer_out.CreateFeature(filter_feature) == 0
 		
 		# we need to clone the schema to the new layer
 		# if we don't do this, the code will run and will copy records
@@ -83,9 +94,11 @@ def filter_to_elora():
 			layer_out.CreateField(field)
 		
 		#.SetWidth(32)?????
-		
+		#print(filter_feature.keys())
 		#raw_input("About to copy all the %d datums" % layer_in.GetFeatureCount())
 		for datum in (layer_in.GetFeature(f) for f in range(layer_in.GetFeatureCount())):
+			#print(datum.keys())
+			#IPython.embed()
 			if layer_out.CreateFeature(datum) != 0:
 				#XXX this crash should list the layer name its copying too as well
 				raise RuntimeError("Failed copying feature FID%d to shapefile '%s'." % (datum.GetFID(), shapefile_out))
@@ -99,7 +112,7 @@ def filter_to_elora():
 
 def main():
 	"for debugging"
-	shapefile = "../assets/maps/OGDE_ARI/AgricultureResourceInventory_1983"
+	shapefile = "../assets/maps/_ags_DMTI_2010_CanMapRL_POI_AER_ALL_PROV2"
 	
 	dataset = ogr.Open(shapefile)
 	print ("Loaded it, yo")

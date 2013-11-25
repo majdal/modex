@@ -1,11 +1,13 @@
  QGIS Cheatsheet 
   you can NOT map symbols onto polygon layers. duh
-  you have some small amount of ability to compose symbolology: fills, borders, and symbols
-  the default symbology for categories is *all* gradient. to map data that aren't ordinal the secret is 
   
-  to make layers (eg to make clipping layers)
+  you have some small amount of ability to compose symbolology: fills, borders, and symbols
+  the default symbologies for category mode are *all* gradient. to map data that aren't ordinal the secret is to click Color Ramp, scroll all the way down, and choose "New Color Ramp" and THEN you get the "random" and "ColorBrewer" options
+  
+  to make layers (eg to make clipping layers to filter data)
    add a new empty layer with Layer -> New -> Shapefile
    click "Toggle Editing" which probably is living on the bottomleft toolbar
    
   protip: http://colorbrewer2.com/
-  protip: openlayers
+  protip: http://openlayers.org
+  
