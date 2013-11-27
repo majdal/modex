@@ -4,3 +4,7 @@ Some allies, tangible and desired
 * [http://schoolofdata.org/](School of Data)
 * [http://data.marsdd.com](MaRS)
 * 
+
+
+[[Step-by-step-installation-instructions-for-Windows-users]]
+[[References]]
