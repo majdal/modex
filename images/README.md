@@ -26,16 +26,15 @@ but they can have multiple overlay layers a time.
 For instance,
 
 Base layers include: 
-     * land usage (ie city, farmland, quarries, watersheds)
-	 * topology (height map)
-	 * water basins
-		(only caring about water, I dont know enough geography)
+  * land usage (ie city, farmland, quarries, watersheds)
+  * topology (height map)
+  * water basins
+  	(only caring about water, I dont know enough geography)
 		
-Overlay layers include:
-	* roads
-	* rivers
-	* geopolitical boundaries (city/county divisions etc)
-	
+Overlay layers include: 
+  * rivers
+  * geopolitical boundaries (city/county divisions etc)
+  * roads
 
 Why
 ------
