@@ -30,10 +30,12 @@ Weather?? (Light, Wetness)
      (country, provincial, municipal, township, Greenbelt / Bioregion boundaries, Food Safety Inspection Zones)
 
 ### Network
-1.  Seller networks
-1.  Social networks
-1.  Resource flow Networks (e.g. Food: directed, Money: bidirectional)
-1.  Manufacturing -- there's an open problem here: what does it mean to track resources as they transform? how do we visualize that?
+1.  Seller networks (directed)
+1.  Social networks (undirected)
+1.  Resource flow Networks
+-  Food: directed
+-  Money: bidirected
+-  Manufacturing ((there's an open problem here: what does it mean to track resources as they transform? how do we visualize that?))
  
 ### Tabular
 1.     What food processing is done 
