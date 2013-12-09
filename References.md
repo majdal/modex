@@ -1,4 +1,4 @@
-[http://www.radicalcartography.net/?projectionref](Cartographic Projections), with lots of pictures
+
 
 ## Visualization
 
@@ -6,6 +6,9 @@
 Klippel, Alexander et al. [http://dx.doi.org/10.3138/carto.44.3.217](“Colour-Enhanced Star Plot Glyphs: Can Salient Shape Characteristics Be Overcome?”) Cartographica: The International Journal for Geographic Information and Geovisualization 44.3 (2009): 217-231.
 
 Harter, Jonathan M. et al. [http://dx.doi.org/10.1117/12.907486](“Increasing the perceptual salience of relationships in parallel coordinate plots.”) Visualization and Data Analysis 2012. Ed. Pak Chung Wong et al. SPIE - International Society for Optical Engineering, 2012. 82940T.
+
+### Cartography
+[http://www.radicalcartography.net/?projectionref](Cartographic Projections), with lots of pictures
 
 ### Network Maps
 http://sunlightfoundation.com/tools/
