@@ -1,8 +1,8 @@
-
 ## Modelling
 
 ### GIS
 http://corridordesign.org/
+Harvard has [http://www.gsd.harvard.edu/gis/manual/raster/index.htm](a tutorial) on GIS operations which gives solid intuitive crash course in rasters, vectors, what they mean and what you can do with them (make sure to mouse-over the highlighted words!). (It's got lots of typos and could be condensed, so we should recreate something similar for our own website -nick).
 
 ### Agent
 
