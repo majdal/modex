@@ -48,7 +48,8 @@ Since farmers are assumed to be price takers, we don't need to set prices within
 
 
 
-### Resources
+### References
 
+(also very disorganized. there are themes here, but they need to be brought out -nick)
 http://corridordesign.org/
-
+http://en.wikipedia.org/wiki/Ecosystem_services
