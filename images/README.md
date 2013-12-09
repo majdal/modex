@@ -39,4 +39,7 @@ Overlay layers include:
 Why
 ------
 The advantage of this system is that you can
-take rasterized.
+take rasterized maps, do something simple like looping over 
+pixels to find certain things, and then you can have Python
+process all layers serverside. Then WebSockets allow Python server
+backend to process maps and then it sends to crafty to display to end user.
