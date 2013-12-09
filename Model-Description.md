@@ -44,7 +44,7 @@ Each has a financial price, but they can also have other costs (for instance tim
 
 The input and output quantities can be modified by the properties of the landscape.
 
-Since farmers are assumed to be price takers, we don't need to set prices within the model at least at first. We can take price data from existing food price indices to start. We can modify those prices and under policy interventions, or hypothetical changes in users preferences. 
+Since farmers are assumed (**by who?**) to be price-takers (i.e. agents who are assumed to be too small-scale to affect the market prices individually, as opposed to price-givers who are large and influentials agents that can demand certain pricing margins), we don't need to set prices within the model at least at first. We can take price data from existing food price indices to start. We can modify those prices and under policy interventions, or hypothetical changes in users preferences. 
 
 
 
