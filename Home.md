@@ -8,3 +8,9 @@ Some allies, tangible and desired
 
 * [[Step-by-step-installation-instructions-for-Windows-users]]
 * [[References]]
+
+
+Check out our gameplan:
+* [[Modelling]]
+* [[Datasets]]
+* [[Visualizations]]
