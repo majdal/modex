@@ -21,6 +21,9 @@ Harter, Jonathan M. et al. [http://dx.doi.org/10.1117/12.907486](“Increasing t
 [http://www.radicalcartography.net/?projectionref](Cartographic Projections), with lots of pictures
 
 ### Network Maps
+Alice Thudt, Dominikus Baur and Sheelagh Carpendale. [http://innovis.cpsc.ucalgary.ca/Publications/_Thudt:2013:Visits](Visits: A Spatiotemporal Visualization of Location Histories.) EuroVis 2013. _a clever rearrangement of timeseries-map data; we could use this to show the flow of goods_
+
+[https://en.wikipedia.org/wiki/Sankey_diagram](Sankey Diagrams) _which display weighted, directed networks by size of the edges (e.g. the [http://www.opensecrets.org/outsidespending/nonprof_growth.php](OpenSecrets Lobbying Pulse Chart) or the famous [https://en.wikipedia.org/wiki/File:Minard.png](Minard plot of Napoleon's march on Russian)). Available to us in d3.js and matplotlib and R._. For more inspiration, check out [http://www.sankey-diagrams.com/](this blog).
 
 
 ## Software
@@ -28,7 +31,7 @@ Here's some software which has aspects of the data-modelling-visualization ideas
 
 http://sunlightfoundation.com/tools/
 http://www.opensecrets.org/
-  --> http://www.opensecrets.org/outsidespending/nonprof_growth.php
+  --> 
 http://www.muckety.com/
 (this list is messy. please fix it -nick)
 http://www.openabm.org/
