@@ -18,4 +18,4 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 ## Network
 
 (idea: check out Sheelagh Carpendale's transmogrification and Visits work)
-For networks that are actually trees: [http://rocs.northwestern.edu/projects/geometry/geometry.html](egonetwork pandemic visualization)
+For networks that are actually trees: [http://rocs.hu-berlin.de/projects/hidden/index.html](egonetwork pandemic visualization)
