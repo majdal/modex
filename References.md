@@ -9,6 +9,9 @@ Harvard has [http://www.gsd.harvard.edu/gis/manual/raster/index.htm](a tutorial)
 
 ## Visualization
 
+Brosz, John et al. [http://dx.doi.org/10.1145/2501988.2502046](“Transmogrification.”) Proceedings of the 26th annual ACM symposium on User interface software and technology - UIST  13. Association for Computing Machinery, 2013. 97-106. ((also available direct [http://innovis.cpsc.ucalgary.ca/Publications/_Brosz:2013:TCM](here)).
+
+
 ### Symbology
 Klippel, Alexander et al. [http://dx.doi.org/10.3138/carto.44.3.217](“Colour-Enhanced Star Plot Glyphs: Can Salient Shape Characteristics Be Overcome?”) Cartographica: The International Journal for Geographic Information and Geovisualization 44.3 (2009): 217-231.
 
