@@ -1,4 +1,11 @@
 
+## Modelling
+
+### GIS
+http://corridordesign.org/
+
+### Agent
+
 
 ## Visualization
 
@@ -11,11 +18,19 @@ Harter, Jonathan M. et al. [http://dx.doi.org/10.1117/12.907486](“Increasing t
 [http://www.radicalcartography.net/?projectionref](Cartographic Projections), with lots of pictures
 
 ### Network Maps
+
+
+## Software
+Here's some software which has aspects of the data-modelling-visualization ideas we are looking at
+
 http://sunlightfoundation.com/tools/
 http://www.opensecrets.org/
   --> http://www.opensecrets.org/outsidespending/nonprof_growth.php
 http://www.muckety.com/
-
-
+(this list is messy. please fix it -nick)
+http://www.openabm.org/
+http://ccl.northwestern.edu/netlogo/
+http://repast.sourceforge.net/
+http://insightmaker.com/
 
 (small tip: use search.crossref.org to find DOIs and cite them into MLA format)
