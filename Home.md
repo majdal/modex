@@ -11,6 +11,7 @@ Some allies, tangible and desired
 
 
 Check out our gameplan:
+* [[Architecture]]
 * [[Modelling]]
 * [[Datasets]]
 * [[Visualizations]]
