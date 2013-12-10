@@ -2,9 +2,7 @@
 
 ## Data Types
 
-### To Sort
-Weather?? (Light, Wetness)
-  --this is tricky.
+One of our todos, issue #22, is 
 
 ### Maps - Raster
 (**NB**: rasters can be coerced with some resolution loss to vectors, so this list is only tentative)
@@ -24,6 +22,7 @@ Weather?? (Light, Wetness)
   
 ### Maps - Vector
 (**NB**: vectors can be coerced with some resolution loss to rasters, so this list is only tentative)
+
 1. Agent locations
 1. Major food warehouses (e.g. Food Terminal in Toronto - I think most of Ontario's food goes there)
 1. Roads, Highways, Rail, Shipping Routes, Ports, Backroads
@@ -41,19 +40,15 @@ Weather?? (Light, Wetness)
 1.  Seller networks (directed)
 1.  Social networks (undirected)
 1.  Resource flow Networks
--  Food: directed
--  Money: bidirected
--  Manufacturing ((there's an open problem here: what does it mean to track resources as they transform? how do we visualize that?))
+  - Food: directed
+  - Money: bidirected
+  - Manufacturing ((there's an open problem here: what does it mean to track resources as they transform? how do we visualize that?))
  
 ### Tabular
-1.     What food processing is done 
-
-1.     Farm level crop production (broadly by category)
-
-1.     Quantity of food for (Ontario/rest of Canada)
-
-1.     Properties of species
-
+1. What food processing is done 
+1. Farm level crop production (broadly by category)
+1. Quantity of food for (Ontario/rest of Canada)
+1. Properties of species
 
 ### Tabular: [Resource/Product I/O Rates](https://en.wikipedia.org/wiki/Input-output_model)
 * Farming methods
@@ -71,22 +66,21 @@ Weather?? (Light, Wetness)
 1. How roads/people/land/light/warmth etc modifies survival of species
 1. Input/output table of production techniques
 
-### Visualization Types?
-1. Salience PlotsImp
-1. Sheelagh's Transmogrifications
+### To Sort
+Weather?? (Light, Wetness)
+  --this is tricky.
 
-## For Now This Could Look Like
+
+# Mockup
+For getting the ball rolling, let us invent datasets and put them under assets/data/, in .csv, .dot, and .shp formats.
+
 1) Table of Agents
- ---farmers
- ---processing plants?
- ---buyers (cities)
-
+ - farmers
+ - processing plants?
+ - buyers (cities)
 2) Map (Vector layer--possibly just a sketch in photoshop) of Agents
-
 3) Road Network
-
 4) Raster: Wealth Distribution for each of 6 time steps
-
 5) Raster: Water distibution for each of 6 time steps
 Raster: land cover type? (or should this be split into soil type/water/...?)
 
