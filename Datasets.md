@@ -21,7 +21,7 @@ Weather?? (Light, Wetness)
 1.     Location of watersheds/rivers
 
   
- ### Maps - Vector
+### Maps - Vector
 (**NB**: vectors can be coerced with some resolution loss to rasters, so this list is only tentative)
 1.    Agent locations
 1.    Major food warehouses (e.g. Food Terminal in Toronto - I think most of Ontario's food goes there)
