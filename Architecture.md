@@ -16,12 +16,13 @@ Backend:
 ### Model
 * [[GarlicSIM]]
 * [[Modelling]]
+
 ### Model Explorer
   Some major component of this is a tool at some remove from the nitty details of the rest of the system for exploring models in general. It should be able to easily record, slice and visualize aspects. **Aspects** is a key word here, as even a simple five-object model has 5 objects each of which could have some arbitrary number of variables of interest (weight, tempurature, wealth, happiness, ...) and 5-choose-2=10 pairs which means that any relationship of interest has 10 series that need tracking, and all of this is potentially recorded over time. We need to have a tight way to record this information, and a tighter way to reduce it to useful slices.
-  
    ([ccmsuite](http://github.com/tcstewar/ccmsuite), or whatever develops to replace it)
+
 ### Importing (csv, shapefile, graphviz)
-  * [[Datasets]]
+  [[Datasets]]
 
 ### Exporting (csv, graphs)
 
