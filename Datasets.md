@@ -15,22 +15,22 @@ Weather?? (Light, Wetness)
 1. Heightmap
 1. Population density (human, rabbit, fox, deer, butterfly, forest, dandelion
 1. Albedo
-1.   Climate?? Temperature? Wetness?? unsure
-1.   Soil type (are there subproperties here? like separate layers for nitrogen, oxygen, water..?)
-1.     Location and type/quality of forests
-1.     Population location and density
-1.     Location of watersheds/rivers
+1. Climate?? Temperature? Wetness?? unsure
+1. Soil type (are there subproperties here? like separate layers for nitrogen, oxygen, water..?)
+  1. Location and type/quality of forests
+  1. Population location and density
+  1. Location of watersheds/rivers
 
   
 ### Maps - Vector
 (**NB**: vectors can be coerced with some resolution loss to rasters, so this list is only tentative)
-1.    Agent locations
-1.    Major food warehouses (e.g. Food Terminal in Toronto - I think most of Ontario's food goes there)
-1.    Roads, Highways, Rail, Shipping Routes, Ports, Backroads
-1.    Watersheds
-1.    Rivers / groundwater / lakes
-1.    Underground water: aquifers
-1.    Political Boundaries:
+1. Agent locations
+1. Major food warehouses (e.g. Food Terminal in Toronto - I think most of Ontario's food goes there)
+1. Roads, Highways, Rail, Shipping Routes, Ports, Backroads
+1. Watersheds
+1. Rivers / groundwater / lakes
+1. Underground water: aquifers
+1. Political Boundaries:
      (country, provincial, municipal, township)
 1. Greenbelt / Bioregion boundaries, Food Safety Inspection Zones)
 
