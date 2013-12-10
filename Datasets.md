@@ -7,6 +7,7 @@ Weather?? (Light, Wetness)
   --this is tricky.
 
 ### Maps - Raster
+(**NB**: rasters can be coerced with some resolution loss to vectors, so this list is only tentative)
 1.   (Human) Wealth density
 1.   Ground water
 1.   Surface water
@@ -21,13 +22,16 @@ Weather?? (Light, Wetness)
 
   
  ### Maps - Vector
+(**NB**: vectors can be coerced with some resolution loss to rasters, so this list is only tentative)
 1.    Agent locations
 1.    Major food warehouses (e.g. Food Terminal in Toronto - I think most of Ontario's food goes there)
 1.    Roads, Highways, Rail, Shipping Routes, Ports, Backroads
 1.    Watersheds
 1.    Rivers / groundwater / lakes
+1.    Underground water: aquifers
 1.    Political Boundaries:
-     (country, provincial, municipal, township, Greenbelt / Bioregion boundaries, Food Safety Inspection Zones)
+     (country, provincial, municipal, township)
+1. Greenbelt / Bioregion boundaries, Food Safety Inspection Zones)
 
 ### Network
 1.  Seller networks (directed)
@@ -45,6 +49,11 @@ Weather?? (Light, Wetness)
 1.     Quantity of food for (Ontario/rest of Canada)
 
 1.     Properties of species
+
+
+### Tabular: [Resource/Product I/O Rates](https://en.wikipedia.org/wiki/Input-output_model)
+* Farming methods
+* Farm productiveness by land-type
 
 ### Time Series
 1.  GDP / Overall / Average Wealth
