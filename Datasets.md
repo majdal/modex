@@ -8,12 +8,13 @@ Weather?? (Light, Wetness)
 
 ### Maps - Raster
 (**NB**: rasters can be coerced with some resolution loss to vectors, so this list is only tentative)
-1.   (Human) Wealth density
-1.   Ground water
-1.   Surface water
-1.   Heightmap
-1.   Population density (human, rabbit, fox, deer, butterfly, forest, dandelion
-1.   Albedo
+
+1. (Human) Wealth density
+1. Ground water
+1. Surface water
+1. Heightmap
+1. Population density (human, rabbit, fox, deer, butterfly, forest, dandelion
+1. Albedo
 1.   Climate?? Temperature? Wetness?? unsure
 1.   Soil type (are there subproperties here? like separate layers for nitrogen, oxygen, water..?)
 1.     Location and type/quality of forests
