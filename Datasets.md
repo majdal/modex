@@ -17,9 +17,9 @@ Weather?? (Light, Wetness)
 1. Albedo
 1. Climate?? Temperature? Wetness?? unsure
 1. Soil type (are there subproperties here? like separate layers for nitrogen, oxygen, water..?)
-  1. Location and type/quality of forests
-  1. Population location and density
-  1. Location of watersheds/rivers
+1. Location and type/quality of forests
+1. Population location and density
+1. Location of watersheds/rivers
 
   
 ### Maps - Vector
@@ -31,7 +31,10 @@ Weather?? (Light, Wetness)
 1. Rivers / groundwater / lakes
 1. Underground water: aquifers
 1. Political Boundaries:
-     (country, provincial, municipal, township)
+  * country
+  * provincial
+  * regional
+  * municipal
 1. Greenbelt / Bioregion boundaries, Food Safety Inspection Zones)
 
 ### Network
