@@ -1,4 +1,3 @@
-
 **Backend**
 (todo: make a visio||svg diagram of the architecture, paste it in here)
 
@@ -11,11 +10,23 @@ Backend:
  GDAL (for geographic data)
  [http://repast.sourceforge.net/](Repast)?
 
+# Major Components
+ Model
+ Model Explorer ([ccmsuite](http://github.com/tcstewar/ccmsuite), or whatever develops to replace it)
+ Importing (csv, shapefile, graphviz)
+ Exporting (csv, graphs)
+ Rendering (see [[Visualization]])
+  * 
+  * 
+  ---interactives
 
-Model
+ A single run of the model will probably be highly CPU bound and serialized, but we have a chances for parallelization at these points:
+ * rendering
+ * running multiple model runs, to get better statistics
+ * getting bootstrap statistics
+
+
  
- Rendering
-
 See more details at
 * [[Modelling]]
 * [[Datasets]]
