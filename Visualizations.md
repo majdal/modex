@@ -3,6 +3,14 @@
 
 For this to be any use, this tool desperately must limit the cognitive burden on the user. That means easy-to-learn, attractive maps and plots with details-on-demand, and probably information reduction.
 
+### Zooming
+
+We've been throwing around an idea about adaptive-zoom a lot. In short, we want different scales to be rendered qualitatively differently.
+
+Audacity, the famous and free audio editor, does exactly this (see [TrackArtist::DrawClipWaveform](http://code.google.com/p/audacity/source/browse/audacity-src/trunk/src/TrackArtist.cpp#1379)): when you zoom out you see an overlay with two different frequency bands in different colours, when you zoom in you see individual samples.
+
+In our case, when you zoom out to the further scale we would like to show world maps overlaid with the various metrics (carbon, soil, air, wealth) the user asks for, mapped with their uncertainty (where those values and uncertainty are computed across several model instances running in parallel), while at the medium scales we want to show renderings of some of the data in aggregate--for example, render tree sprites in areas of forest--and at the finest scales we should pick an individual model and display what it is up to, complete with agents animated and walking around (and maybe the tree sprites can stick around, but enlarged).
+
 ## Uncertainty 
 In our [[Modelling]], we care deeply about compuing estimates of the uncertainty in our models (e.g. confidence intervals or credible intervals) (which we can do, see [[Modelling]] for details on that, if that section has been written yet, which it probably hasn't if this comment is still here -nick).
 
