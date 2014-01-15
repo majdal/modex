@@ -1,5 +1,15 @@
 (Nick organized a starting list based on a brainstorm we did together.)
 
+## Potential Datasets
+
+### To Sort
+
+1. Canada>Ontario>Provincial ont_omafra: soils from omafra - Ontario's ministry of food and agriculture 1.75 GB
+1. Canada>Ontario>Provincial ont_greenbelt plan_2005 20 MB
+1. Canada>Federal>??agriculture nlwis_gridded climate.. anu_splin model GeoTif from the weather model (get). 7.43 GB total: 1/2 mb is a day 1 day temporal resolution 10 km spatial resolution and each day is 1/2 mb - 
+1. Agriculture department also gives soils.. (soils dataset is 130 MB) 
+canada_dept_agriculture>waterloo soils_cansis>
+
 ## Data Types
 
 One of our todos, issue #22, is 
