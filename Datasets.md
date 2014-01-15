@@ -16,7 +16,7 @@ canada_dept_agriculture>waterloo soils_cansis>
 1. **Omafra**
 1. **Ontario Open Data** https://www.ontario.ca/government/open-data-ontario
 1. **Esri** Writes ArcGIS and provides some maps including ones that OpenLayers can access. 
-1. **DTMI**
+1. **DMTI**
 1. **Teranet** Ownership (cadastral) data.
 
 
