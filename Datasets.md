@@ -13,6 +13,9 @@ canada_dept_agriculture>waterloo soils_cansis>
 
 allala FIX THIS OOPS TIME FOR CLASS 
 http://data.gc.ca/eng/showcase
+OGDE -0- part of LIO
+  http://www.mnr.gov.on.ca/en/Business/LIO/2ColumnSubPage/STEL02_167959.html / (list of OGDE member institutions: UW is on this list, and this initiative is not so much about 'open' as 'access' http://publicdocs.mnr.gov.on.ca/View.asp?Document_ID=8348&Attachment_ID=15887) 
+  https://www.appliometadata.lrc.gov.on.ca/geonetwork/srv/en/main.home
 http://geoapps.nrcan.gc.ca/
 http://www.nrcan.gc.ca/earth-sciences/geomatics/canada-lands-surveys/11092
 http://cityofwaterlooopendata.cloudapp.net/
