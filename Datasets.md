@@ -4,12 +4,12 @@
 
 ### To Sort
 
-1. **Soils**: Canada>Ontario>Provincial ont_omafra: soils from omafra - Ontario's ministry of food and agriculture 1.75 GB
-1. **Soils** Agriculture department also gives soils.. (soils dataset is 130 MB) 
+1. **Soils:** Canada>Ontario>Provincial ont_omafra: soils from omafra - Ontario's ministry of food and agriculture 1.75 GB
+1. **Soils:** Agriculture department also gives soils.. (soils dataset is 130 MB) 
 canada_dept_agriculture>waterloo soils_cansis>
-1. **Provincial Political Boundaries** Canada>Ontario>Provincial ont_greenbelt plan_2005 20 MB
-1. **Temperature** Canada>Federal>??agriculture nlwis_gridded climate.. anu_splin model GeoTif from the weather model (get). 7.43 GB total: 1/2 mb is a day 1 day temporal resolution 10 km spatial resolution and each day is 1/2 mb - 
-1. **Property Ownership** cadastral
+1. **Provincial Political Boundaries:** Canada>Ontario>Provincial ont_greenbelt plan_2005 20 MB
+1. **Temperature:** Canada>Federal>??agriculture nlwis_gridded climate.. anu_splin model GeoTif from the weather model (get). 7.43 GB total: 1/2 mb is a day 1 day temporal resolution 10 km spatial resolution and each day is 1/2 mb - 
+1. **Property Ownership:** cadastral
 
 
 ## Data Types
