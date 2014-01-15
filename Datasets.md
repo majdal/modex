@@ -11,6 +11,19 @@ canada_dept_agriculture>waterloo soils_cansis>
 1. **Temperature:** Canada>Federal>??agriculture nlwis_gridded climate.. anu_splin model GeoTif from the weather model (get). 7.43 GB total: 1/2 mb is a day 1 day temporal resolution 10 km spatial resolution and each day is 1/2 mb - 
 1. **Property Ownership:** cadastral
 
+allala FIX THIS OOPS TIME FOR CLASS 
+http://data.gc.ca/eng/showcase
+http://geoapps.nrcan.gc.ca/
+http://www.nrcan.gc.ca/earth-sciences/geomatics/canada-lands-surveys/11092
+http://cityofwaterlooopendata.cloudapp.net/
+http://www.ec.gc.ca/air-sc-r/default.asp?lang=En&n=9547191B-1
+http://www.geobase.ca/
+http://www.nrcan.gc.ca/earth-sciences/geomatics/canada-lands-surveys/11092
+http://geodiscover.cgdi.ca/
+geo.scholarsportal.info
+http://www.regionofwaterloo.ca/en/regionalGovernment/OpenDataCatalogue.asp
+
+
 ### Sources
 1. **Ontario Geospatial Data Exchange** (Waterloo is a member. We can use for academic purposes.)
 1. **Omafra**
