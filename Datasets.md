@@ -15,10 +15,32 @@ canada_dept_agriculture>waterloo soils_cansis>
 1. **Ontario Geospatial Data Exchange** (Waterloo is a member. We can use for academic purposes.)
 1. **Omafra**
 1. **Ontario Open Data** https://www.ontario.ca/government/open-data-ontario
-1. **Esri** Writes ArcGIS and provides some maps including ones that OpenLayers can access. 
-1. **DMTI**
-1. **Teranet** Ownership (cadastral) data.
+1. **Esri** (Writes ArcGIS and provides some maps including ones that OpenLayers can access. ). curated datasets available at Z:\Canada\ESRI 
+1. **DMTI**: curated datasets available at the Map Library as Z:\Canada\DMTI
+1. **Teranet** Ownership (cadastral) data available Z:\Canada\Ontario\Provincial\Teranet.
 
+MESSY MESSY MESSY LALAL
+Guide to the government GIS beauracracy
+
+LIO    -- Land Information (Ontario)
+OMAFRA -- Agriculture (Ontario)
+NRCAN  -- Natural Resources (Federal)
+ --Toporama  -- top
+ --GeoGratis -- OpenData (BSD-style)
+CCOG
+ --GeoBase ~~ sort of a duplicate but not the same as GeoGratis -- OpenData (BSD-style)
+
+Index to more:
+ data.gc.ca -- links to federal, provincial, and regional/city OpenData sites
+
+http://www.regionofwaterloo.ca/en/regionalGovernment/OpenDataCatalogue.asp
+
+Atlas of Canada(?)
+ -- provides premade maps. for data, they refer one to GeoGratis and GeoBase.
+
+
+TODO: ROAD NETWORK
+Terminology: "cadastral"
 
 ## Data Types
 
