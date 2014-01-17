@@ -9,6 +9,10 @@
   1. Agents
   1. 
 4. Datasets and Release Form
+5. Calendaring:
+  1. when to meet
+  1. when to create
+  1. next hackathon?
 
 ## Minutes
  ...
