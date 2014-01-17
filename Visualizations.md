@@ -33,6 +33,6 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 For networks that are actually trees: [egonetwork pandemic visualization](http://rocs.hu-berlin.de/projects/hidden/index.html)
 
 ## Inspiration
-http://visual.ly
-http://visualizing.org/
-http://flowingdata.com/
+* http://visual.ly
+* http://visualizing.org/
+* http://flowingdata.com/
