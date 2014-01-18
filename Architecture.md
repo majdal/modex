@@ -18,6 +18,16 @@
 ### Model Explorer
   A major component for us is a tool at some remove from the nitty details of the rest of the system for exploring models in general. This wiki is in the "modex" repository right now, reflecting the importance of this tool. It might also be called the Simulation Host, which in an [IoC](http://en.wikipedia.org/wiki/Inversion_of_control) way, loads and collects results from simulation runs. It should be able to easily record, slice and visualize any aspect of the simulation. The closest work we have in mind is tcstewar's [ccmsuite](https://github.com/tcstewar/ccmsuite) and (the unmaintained) [GarlicSim](https://github.com/cool-RR/GarlicSim) (in fact we might just take up maintenance GarlicSim). Also, for the sake of getting other research groups interesting, using, and eating our own dogfood, the simulation host should be as platform agnostic as possible.
 
+Model Explorer's duties are:
+ * load models
+ * batch run lots of copies of a model
+   * clearly distinguish and provide hooks for handling deterministic models sampled at different initial conditions, nondeterministic models sampled several times at the same initial conditions, and mixtures
+ * provide a consistent data API (similar to how Repast collects several timestepping and geographic APIs in one place)
+ * provide a consistent data logging API
+ * generate plots
+ * generate statistics (estimates, probability densities, condidence intervals) -- and plots of these where relevant (eg estimated temperature on a map, estimated sensitivity field across a state space plot)
+ * 
+
 **Aspects** is a key word here, as even a simple five-object model has 5 objects each of which could have some arbitrary number of variables of interest (weight, tempurature, wealth, happiness, ...) and 5-choose-2=10 pairs which means that any relationship of interest has 10 series that need tracking, and all of this is potentially recorded over time. We need to have a tight way to record this information, and a tighter way to reduce it to useful slices.
    ([ccmsuite](http://github.com/tcstewar/ccmsuite), or whatever develops to replace it)
 
