@@ -1,6 +1,6 @@
 **Backend**
 
-![Architecture Diagram](https://raw.github.com/wiki/majdal/modex/Architecture.svg)
+![Architecture Diagram](https://raw.github.com/wiki/majdal/modex/Architecture.png)
 
 # Major Components
 ## Backend
