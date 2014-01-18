@@ -12,3 +12,12 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 * WebSockets
 * jsonp
 * Repast
+
+## Scientific Collaboration
+* http://dat-data.com 
+* (there's at least two other dataset-version-control/archival sites; what are they?)
+* github
+
+## Blogs
+* wordpress
+* mezzanine (on django)
