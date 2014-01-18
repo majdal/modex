@@ -1,5 +1,6 @@
 **Backend**
-(todo: make a visio||svg diagram of the architecture, paste it in here)
+
+![Architecture Diagram](Architecture.svg)
 
 # Major Components
 ## Backend
