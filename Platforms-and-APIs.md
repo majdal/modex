@@ -2,6 +2,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 * GarlicSIM
 * [PyABM](http://www-rohan.sdsu.edu/~zvoleff/research/pyabm/)
+  * check out [what wikipedia thinks](http://en.wikipedia.org/wiki/Comparison_of_agent-based_modeling_software) to be bored to tears
 * PostGIS
 * Twisted
 * Django
