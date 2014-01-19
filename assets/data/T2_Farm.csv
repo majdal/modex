@@ -1,0 +1,1 @@
+farmID,"GIS Stuff (Polygon, ID etc)..",farmType,farmSize (km^2),cultivatedArea (%),farmerID1,,wheat,10000,0.95,12,,sunflower,1000,0.85,23,,wheat,8000,0.9,34,,corn,9000,0.93,3,,,,,,,,,,Question: What do we want for farm type? Dairy vs. wheat seems to matter. What about organic/not? Arid/arrable? We need to decide how we will use it.,,,,,
