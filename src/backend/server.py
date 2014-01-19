@@ -2,8 +2,7 @@ import sys
 from os.path import dirname, abspath, join as pathjoin
 
 #'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
-PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__))))
-
+PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the project root is two levels up from the directory the server is
 
 from twisted.internet import reactor
 from twisted.python import log
@@ -36,7 +35,8 @@ if __name__ == '__main__':
    else:
       debug = False
    
-   print("Starting server in", PROJECT_ROOT)
+   if debug:
+     print("Starting server in", PROJECT_ROOT)
 
    factory = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
@@ -45,12 +45,11 @@ if __name__ == '__main__':
    factory.protocol = EchoServerProtocol
    factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported
    
-   
-   
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
    assets = pathjoin(PROJECT_ROOT,"assets")
-   print "putting", webroot,"at root"
-   print "putting", assets,"at assets"
+   if debug:
+     print "putting", webroot,"at root"
+     print "putting", assets,"at assets"
 
    ## we serve static files (most of the frontend html, js, and css) under "/" ..
    ## except for some which are under assets/
