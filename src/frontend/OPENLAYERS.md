@@ -11,9 +11,9 @@ Properties are given json-style to class constructors:
 each constructor takes a single dictionary (aka javascript object aka something written like
  "{ ... name: value, name: value, ... }").
 This looks like
-<pre>
+```javascript
           new ol.layer.Tile({     opacity: .5,        source: new ol.source.OSM()          })
-</pre>
+```
 
  By digging through the OL3 [source code](https://github.com/openlayers/ol3/tree/master/src/ol/layer)
  you can figure out the names of properties that objects will take. This can be sort of tricky though.
