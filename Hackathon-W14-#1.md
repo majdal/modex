@@ -22,3 +22,5 @@ We're stumped and frozen because we have no stable skeleton of code that does so
 1. Investigate pushing update events to the vector layers: e.g. can we get it to display a rainbow wave? This is our **spatial simulation _prototype_**
 1. Once we can render arbitrary rasters over to the frontend, figure out what it takes to convince ol3 to invalidate and redownload rasters.
 1. Investigate d3.geo: why are/aren't we using it? does it do basemaps? it doesn't do canvases, only svgs, but maybe that's okay?
+
+1. Move the wiki under the repo (so that we can have folders for minutes/ and so that uploading images is easier). Github renders .md files that it finds in repos, so having the wiki there isn't really all that different
