@@ -36,3 +36,7 @@ For networks that are actually trees: [egonetwork pandemic visualization](http:/
 * http://visual.ly
 * http://visualizing.org/
 * http://flowingdata.com/
+* http://popchartlab.com/
+* http://eagereyes.org/techniques/graphs-hairball
+* http://store.axismaps.co.uk/
+* http://graphicdesign.stackexchange.com/questions/15788/examples-of-well-designed-software-architecture-diagrams
