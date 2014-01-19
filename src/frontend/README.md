@@ -1,5 +1,8 @@
 # Frontend Developer's Readme
 
+## Code Structure
+Code written for this project goes under src/ (so your javascripts should be src/frontend/*.js and your css under src/frontend/css/*.css).
+Code dependencies (external javascripts like OpenLayers and D3), being relatively static and _not_ part of our project, are considered assets and go under assets/libs/.
 
 ## Developer's Tools
 
@@ -25,8 +28,9 @@ Firefox has the option of installing the Firebug extension which is
  a) older b) better than the built in inspector.
 
 For certain in-depth debugging scenarios like **tracking the flow of call-response** with all the headers and contents
-you might need to investigate [Fiddler](http://fiddler2.com/) which 
-h
+you might need to investigate [Fiddler](http://fiddler2.com/) which is a traffic-sniffing proxy.
+
+Another resource, useful for doing remote (ie non-LAN) debugging, is nodejs's [localtunnel](http://localtunnel.me/) service.
 
 When developing with Chrome you should disable the cache to avoid problems. To do this open the Developer Tools (option+command+J), click on Settings (the gear in the top left) and then check the box marked "Disable cache (while DevTools is open)".
 
@@ -35,6 +39,5 @@ When developing with Chrome you should disable the cache to avoid problems. To d
 Since this is a web app, it needs to be tested in all browsers on all platforms.
 Since that's not a realistic goal, especially not at this stage and with this size of team,
 we should at least cover:
-Firefox on Windows, Mac, and Linux
-Chrome on Windows, Mac, and Linux
-e
+* Firefox on Windows, Mac, and Linux
+* Chrome on Windows, Mac, and Linux
