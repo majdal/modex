@@ -16,8 +16,11 @@ Check out our gameplan:
 * [[Datasets]]
 * [[Visualizations]]
 
+
 There are very disorganized notes scattered on these shared docs:
 http://piratepad.net/xQTNPECqcj
 http://piratepad.net/uud1vW5W5e
 
 When we want to get off github, know that this wiki itself is simply a git repo with URL https://github.com/majdal/modex.wiki.git and the issue tracker can be extracted with the REST API ([this ruby project](http://github.com/sorich87/github-to-bitbucket-issues-migration) is a one-click export solution).
+
+Wiki syntax protips: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
