@@ -1,4 +1,9 @@
 import sys
+from os.path import dirname, abspath, join as pathjoin
+
+#'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
+PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__))))
+
 
 from twisted.internet import reactor
 from twisted.python import log
@@ -14,7 +19,7 @@ import json
 
 class EchoServerProtocol(WebSocketServerProtocol):
 
-    def onMessage(self, msg, binary):
+   def onMessage(self, msg, binary):
         data = {'Incandescent': [-_ for _ in range(10)],
                 'CFL': [_ for _ in range(10)],
                 'Halogen': [_*2 for _ in range(10)],
@@ -30,21 +35,33 @@ if __name__ == '__main__':
       debug = True
    else:
       debug = False
+   
+   print("Starting server in", PROJECT_ROOT)
 
    factory = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
                                     debugCodePaths = True)
-
+   
    factory.protocol = EchoServerProtocol
    factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported
+   
+   
+   
+   webroot = pathjoin(PROJECT_ROOT,"src","frontend")
+   assets = pathjoin(PROJECT_ROOT,"assets")
+   print "putting", webroot,"at root"
+   print "putting", assets,"at assets"
 
+   ## we serve static files (most of the frontend html, js, and css) under "/" ..
+   ## except for some which are under assets/
+   ## and we have our WebSocket server under "/ws"
+   root = File(webroot)
+   assets = File(assets)  
    resource = WebSocketResource(factory)
 
-   ## we server static files under "/" ..
-   root = File(".")
-   ## and our WebSocket server under "/ws"
+   root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
    root.putChild("ws", resource)
-
+  
    ## both under one Twisted Web Site
    site = Site(root)
    site.protocol = HTTPChannelHixie76Aware #  needed if Hixie76 is to be supported

@@ -234,31 +234,35 @@ def filter_to_elora():
 	
 	
 
-def main():
-	"for debugging"
-	shapefile = "../assets/maps/_ags_DMTI_2010_CanMapRL_POI_AER_ALL_PROV2"
+def geojson(shapefile):
+	"dump a shapefile to GeoJSON"
 	
 	dataset = ogr.Open(shapefile)
-	print ("Loaded it, yo")
-	raw_input();
+	#print ("Loaded it, yo")
+	
 	for l in range(dataset.GetLayerCount()):
 		layer = dataset.GetLayerByIndex(l);
-		print layer.GetName(), "has these coordinates", layer.GetExtent()
-		print "which are relative to this reference:"
-		print str(layer.GetSpatialRef())
-		print "%s has %d elements" % (layer.GetName(), layer.GetFeatureCount())
-		return;
-		for f in range(layer.GetFeatureCount()):
-			datum = layer.GetFeature(f)
+		#print layer.GetName(), "has these coordinates", layer.GetExtent()
+		#print "which are relative to this reference:"
+		#print str(layer.GetSpatialRef())
+		#print "%s has %d elements" % (layer.GetName(), layer.GetFeatureCount())
+		#return;
+		
+		for f in range(1, layer.GetFeatureCount()):
+			feature = layer.GetFeature(f)
+			print feature.ExportToJson()
 			#IPython.embed(); break;
 			#print datum.keys()
 			#MAP_DESCR
-			_p = "%s, %s{FLEXSPACE}(%.3f, %.3f)" % (datum['name'], datum['city'], datum.geometry().GetX(), datum.geometry().GetY())
+			#_p = "%s, %s{FLEXSPACE}(%.3f, %.3f)" % (datum['name'], datum['city'], datum.geometry().GetX(), datum.geometry().GetY())
 			#_p = "FID%d:{FLEXSPACE}(%.3f, %.3f)" % (datum.GetFID(), datum.geometry().GetX(), datum.geometry().GetY())
-			_p = _p.replace("{FLEXSPACE}", " "*(80 - (len(_p) - len("{FLEXSPACE}"))))
-			print _p
+			#_p = _p.replace("{FLEXSPACE}", " "*(80 - (len(_p) - len("{FLEXSPACE}"))))
+			#print _p
 
 
 if __name__ == '__main__':
+	import sys
+	shapefile = sys.argv[1]
+	geojson(shapefile)
 	#main()
-	filter_to_elora_really()
+	#filter_to_elora_really()

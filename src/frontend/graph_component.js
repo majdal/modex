@@ -35,7 +35,7 @@ $(document).ready(function() {
 
     //var json_data = ws.send('hi');
 
-    d3.tsv("scratch/data.tsv", function(error, data) {
+    d3.tsv("assets/data/static_lightbulbs.tsv", function(error, data) {
       color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
 
       data.forEach(function(d) {
