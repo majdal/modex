@@ -19,7 +19,8 @@ new ol.layer.Tile({
 ```
 
  By digging through the OL3 [source code](https://github.com/openlayers/ol3/tree/master/src/ol/layer)
- you can figure out the names of properties that objects will take. This can be sort of tricky though.
+ you can figure out the names of properties that objects will take. This can be sort of tricky, but with
+ perseverance be achieved.
  For example, that "opacity" property is something that we knew _should_ be supported by a mapping library
  but it wasn't documented.
  We found [one occurence](https://github.com/openlayers/ol3/blob/315c42f0a7bad339c96f2f936d7513a498df1b12/src/ol/layer/layer.js#L20)
