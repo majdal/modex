@@ -55,7 +55,7 @@ Model Explorer's duties are:
 
 It seems like [[GarlicSIM]] does much of this already, but it's unmaintained. We need to investigate it.
 
-The backend should be CPU-bound. It should exploit parallelization as much as it can.
+The backend should be designed to be CPU-bound, not disk, network, or memory-bound. So, it should exploit parallelization as much as it can and liberally cache states.
 
 **Aspects** is a key word here, as even a simple five-object model has 5 objects each of which could have some arbitrary number of variables of interest (weight, tempurature, wealth, happiness, ...) and 5-choose-2=10 pairs which means that any relationship of interest has 10 series that need tracking, and all of this is potentially recorded over time. We need to have a tight way to record this information, and a tighter way to reduce it to useful slices.
    ([ccmsuite](http://github.com/tcstewar/ccmsuite), or whatever develops to replace it)
