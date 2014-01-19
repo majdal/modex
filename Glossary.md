@@ -6,10 +6,12 @@ Use h3s (###) to mark words, so that GitHub linkifies them and we can easily rep
 Refers to the chunking used to make displaying webmaps tolerable: a raster is divied up into tiles covering the globe (or whatever other surface in whatever coordinate system you're in love with). Z is the zoom level, X and Y are the horizontal and vertical coordinates (usually corresponding to longitude and latitude)
 
 For example of XYZ sources, try looking at:
-* http://b.tile.openstreetmap.org/4/9/7.png (**format**: Z/X/-Y)
-* http://b.tile.openstreetmap.org/4/9/8.png
-* http://b.tile.openstreetmap.org/4/9/9.png and
-* http://otile3.mqcdn.com/tiles/1.0.0/osm/4/12/5.jpg (**format**: Z/X/Y)
+* OSM:
+  * http://b.tile.openstreetmap.org/4/9/7.png (**format**: Z/X/-Y)
+  * http://b.tile.openstreetmap.org/4/9/8.png
+  * http://b.tile.openstreetmap.org/4/9/9.png and
+* MapQuest
+  * http://otile3.mqcdn.com/tiles/1.0.0/osm/4/12/5.jpg (**format**: Z/X/Y)
 
 ### widget
 
