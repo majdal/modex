@@ -1,0 +1,31 @@
+body, html {
+  margin:0;
+  padding: 0;
+  overflow:hidden;
+  font: 10px sans-serif;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  position: fixed;
+  z-index: 1000;
+  background: white;
+  bottom: 0;
+  right: 0;
+  border-radius: 3px;
+}

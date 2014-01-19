@@ -5,16 +5,23 @@ from twisted.python import log
 from twisted.web.server import Site
 from twisted.web.static import File
 
-from autobahn.websocket import WebSocketServerFactory, \
-                               WebSocketServerProtocol
+from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol
 
 from autobahn.resource import WebSocketResource, HTTPChannelHixie76Aware
 import webbrowser
 
+import json
+
 class EchoServerProtocol(WebSocketServerProtocol):
 
-   def onMessage(self, msg, binary):
-      self.sendMessage(msg)
+    def onMessage(self, msg, binary):
+        data = {'Incandescent': [-_ for _ in range(10)],
+                'CFL': [_ for _ in range(10)],
+                'Halogen': [_*2 for _ in range(10)],
+                'LED': [_*0.5 for _ in range(10)],
+        }
+        #import ipdb; ipdb.set_trace()
+        self.sendMessage(json.dumps(data))
 
 
 if __name__ == '__main__':
@@ -27,7 +34,7 @@ if __name__ == '__main__':
 
    factory = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
-                                    debugCodePaths = debug)
+                                    debugCodePaths = True)
 
    factory.protocol = EchoServerProtocol
    factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported
@@ -36,12 +43,8 @@ if __name__ == '__main__':
 
    ## we server static files under "/" ..
    root = File(".")
-   src = File("src")
-   lib = File("lib")
    ## and our WebSocket server under "/ws"
    root.putChild("ws", resource)
-   root.putChild("src", src)
-   root.putChild("lib", lib)
 
    ## both under one Twisted Web Site
    site = Site(root)

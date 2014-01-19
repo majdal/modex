@@ -1,10 +1,5 @@
 $(document).ready(function() {
   Crafty.init();
-    ws = new WebSocket("ws://localhost:8080/ws");
-
-    ws.onmessage = function(e) {
-       console.log("Got echo: " + e.data);
-    };
 
   Crafty.sprite(128, "images/sprite.png", {
     grass: [0,0,1,1],
