@@ -15,6 +15,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 * jsonp
 * Repast
 * Autobahn
+  *Tutorials do not work at this time. Re-evaluating our use of Autobahn.
 
 ## Scientific Collaboration
 * http://dat-data.com 
