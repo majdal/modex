@@ -1,3 +1,5 @@
+#!/usr/bin/python2
+
 import sys
 from os.path import dirname, abspath, join as pathjoin
 
@@ -12,7 +14,6 @@ from twisted.web.static import File
 from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol
 
 from autobahn.resource import WebSocketResource, HTTPChannelHixie76Aware
-#import webbrowser
 
 import json
 
@@ -66,7 +67,6 @@ if __name__ == '__main__':
    site.protocol = HTTPChannelHixie76Aware #  needed if Hixie76 is to be supported
    reactor.listenTCP(8080, site)
 
-   #webbrowser.open('http://127.0.0.1:8080')
    print "Now open http://127.0.0.1:8080 in your browser"
    reactor.run()
 
