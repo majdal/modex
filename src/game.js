@@ -1,7 +1,7 @@
 $(document).ready(function() {
   Crafty.init();
 
-  Crafty.sprite(128, "images/sprite.png", {
+  Crafty.sprite(128, "/assets/images/sprite.png", {
     grass: [0,0,1,1],
     stone: [1,0,1,1]
   });
