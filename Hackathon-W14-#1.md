@@ -2,6 +2,8 @@
 
 **Attendees**: n7wilson, kousu, majdal
 
+We're stumped and frozen because we have no stable skeleton of code that does something that can be developed. We need to get this written so that we have a base for the **frontend**, **model** and **model explorer** to get fleshed out from.
+
 **Goals** for the end of the day:
 
 1. Be able to launch a (twisted) server taking as arguments N files (including N=0) containing vector geodata (GDAL should allow us to be agnostic about this) and load them up
