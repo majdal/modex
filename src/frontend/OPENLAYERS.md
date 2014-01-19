@@ -12,7 +12,10 @@ each constructor takes a single dictionary (aka javascript object aka something 
  "{ ... name: value, name: value, ... }").
 This looks like
 ```javascript
-          new ol.layer.Tile({     opacity: .5,        source: new ol.source.OSM()          })
+new ol.layer.Tile({
+                   opacity: .5,
+                   source: new ol.source.OSM()
+                  })
 ```
 
  By digging through the OL3 [source code](https://github.com/openlayers/ol3/tree/master/src/ol/layer)
