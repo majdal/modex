@@ -12,6 +12,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 * WebSockets
 * jsonp
 * Repast
+* Autobahn
 
 ## Scientific Collaboration
 * http://dat-data.com 
