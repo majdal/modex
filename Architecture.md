@@ -11,9 +11,9 @@ The model is probably not parallelizable. Subparts of it may be--and depending o
   The frontend should appear to be an attractive video game, but one where graphs and data can be brought up at a moments' notice. We're ambitiously attempting to gamify science.
 
 The frontend does:
-* render layered maps (_[openlayers_](http://ol3js.org/)_)
+* render layered maps (_[openlayers](http://ol3js.org/)_)
   * allow the user to choose what layers they are looking at (to some degree; we don't want to overwhelm)
-  * allows interaction with the map. OpenLayers provides [widgets](http://ol3js.org/en/master/apidoc/ol.control.html)) and "[interactions](http://ol3js.org/en/master/apidoc/ol.interaction.html)" which we can extend and patch upstream as needed
+  * allows interaction with the map. OpenLayers provides [widgets](http://ol3js.org/en/master/apidoc/ol.control.html) and "[interactions](http://ol3js.org/en/master/apidoc/ol.interaction.html)" which we can extend and patch upstream as needed
 * allow comparison of 'any' (upper bounded by cognitive load) user-chosen set of variables (_[D3](http://d3js.org)_)
   * this means plots, with a way to mouseover something and export numbers
   * 1d and 2d distributions with confidence indicated
