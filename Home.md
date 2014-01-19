@@ -16,6 +16,7 @@ Check out our gameplan:
 * [[Datasets]]
 * [[Visualizations]]
 
+And our [PR Media] goals.
 
 There are very disorganized notes scattered on these shared docs:
 http://piratepad.net/xQTNPECqcj
