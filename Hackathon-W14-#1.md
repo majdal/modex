@@ -7,7 +7,7 @@
 1. Be able to launch a (twisted) server taking as arguments N files (including N=0) containing vector geodata (GDAL should allow us to be agnostic about this) and load them up
 2. Pass these geodata layers to the frontend over a websocket and have them rendered overtop of the OpenLayers basemap--the frontend should distinguish between
 3. Make sure the frontend *only* loads the geodata for the tile---OpenLayers handles this for rasters properly (by asking a tile server for an 'z/x/y' file) but we're not sure if it does something similar with vectors or if we need to implement that ourselves --- this might require emailing the ol3 devs and asking them what their plan is
-4. Write a hook that implements the 'identify' button: ol3 provides hooks for clicking on vectors on the map, so we want a way to click on them and then ask the backend for what that iesult is and display it somewhere, like on a spare <p> tag sitting below the map. This is our **UI _prototype_**.
+4. Write a hook that implements the 'identify' button: ol3 provides hooks for clicking on vectors on the map, so we want a way to click on them and then ask the backend for what that iesult is and display it somewhere, like on a spare &lt;p&gt; tag sitting below the map. This is our **UI _prototype_**.
 
 1. Provide a d3 canvas on the frontend and a corresponding (over a websocket) feed from the backend giving a stream of numbers (for testing, use something simple like a gaussian or a sin function). This is our **indicator variable _prototype_**.
   * investigate whether it makes sense to multiplex events over the same socket, perhaps with Autobahn
