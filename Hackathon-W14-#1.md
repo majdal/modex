@@ -15,6 +15,7 @@
 **Extensions** if there's time left over after all that:
 
 1. write a skeleton farm model. This probably means reimplementing [FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel) on top of GDAL. Initially, just write it in the same server as the rest; we'll figure out how to factor out the model from the explorer later ((and ideally the model doesn't have to be in python to work))
-1. Investigate (and document in the src/ dir!) what it takes to create raster sources for. Can we get our twisted server to host an http endpoint producing (dynamically, even) [XYZ](Glossary#XYZ) maps
+1. Investigate (and document in the src/ dir!) what it takes to create raster sources for. Can we get our twisted server to host an http endpoint producing (dynamically, even) [XYZ](Glossary#XYZ) maps?
 1. Investigate colouring the different vectors according to some properties. This is our **spatial visualization _prototype_**
 1. Investigate pushing update events to the vector layers: e.g. can we get it to display a rainbow wave? This is our **spatial simulation _prototype_**
+1. Once we can render arbitrary rasters over to the frontend, figure out what it takes to convince ol3 to invalidate and redownload rasters.
