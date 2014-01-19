@@ -9,9 +9,11 @@ Browsers tend to be even more restrictive when running locally: that is, when th
  Now, something (???) about these rules blocks OpenLayers from working locally in Firefox (and IE? and Opera??), but not in Chrome.
 Thus in order to do any proper debugging you must launch an **http server** (and, as the project develops, you'll need one anyway).
  In the long run, we will eventually have to support running on 'heavy' **servers** like
- Apache, nginx, or lighttpd,
- but in the meantime
-There's [Twisted's server](http://twistedmatrix.com/trac/wiki/TwistedWeb),
+ Apache,
+ nginx,
+ or lighttpd,
+ but in the meantime there's
+ [Twisted's server](http://twistedmatrix.com/trac/wiki/TwistedWeb),
  [Ruby on Rails' server](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/webrick/rdoc/index.html),
  [django's server](https://docs.djangoproject.com/en/dev/ref/django-admin/#runserver-port-or-address-port).
 On linux, [thttpd]() and [webfs](http://linux.bytesex.org/misc/webfs.html) are very viable options ("cd frontend; webfsd -d . & firefox localhost:8000" will get you up and hacking)
