@@ -28,7 +28,7 @@ For certain in-depth debugging scenarios like **tracking the flow of call-respon
 you might need to investigate [Fiddler](http://fiddler2.com/) which 
 h
 
-When using Chrome you should disable the cache to avoid problems. To do this open the Developer Tools (option+command+J), click on Settings (the gear in the top left) and then check the box marked "Disable cache (while DevTools is open)".
+When developing with Chrome you should disable the cache to avoid problems. To do this open the Developer Tools (option+command+J), click on Settings (the gear in the top left) and then check the box marked "Disable cache (while DevTools is open)".
 
 ## Compatibility
 
