@@ -33,7 +33,7 @@ The frontend should be graphics and network-bound; it should not be doing any nu
  Probably Python/Scipy
  GDAL (for geographic data)
  [http://repast.sourceforge.net/](Repast)?
- 
+ If it is useful, build the db on Postgres with the PostGIS extension
 
    current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [[GarlicSIM]] models, and handles recording data
 
