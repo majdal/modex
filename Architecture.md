@@ -1,18 +1,7 @@
-**Backend**
 
 ![Architecture Diagram](Architecture.png)
 
-# Major Components
-## Backend
-
- Probably Python/Scipy
- GDAL (for geographic data)
- [http://repast.sourceforge.net/](Repast)?
- 
-
-   current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [[GarlicSIM]] models, and handles recording data
 ## Model
-
 ????????
 * [[Modelling]]
 
@@ -33,7 +22,18 @@ The frontend does:
 
 See also [[Visualizations]] for in-depth details about the rainbow of ways to render data at our beck and call.
 
-## Model Explorer
+
+
+## Backend
+
+ Probably Python/Scipy
+ GDAL (for geographic data)
+ [http://repast.sourceforge.net/](Repast)?
+ 
+
+   current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [[GarlicSIM]] models, and handles recording data
+
+### Model Explorer
   A major component for us is a tool at some remove from the nitty details of the rest of the system for exploring models in general. This wiki is in the "modex" repository right now, reflecting the importance of this tool. It might also be called the Simulation Host, which in an [IoC](http://en.wikipedia.org/wiki/Inversion_of_control) way, loads and collects results from simulation runs. It should be able to easily record, slice and visualize any aspect of the simulation. The closest work we have in mind is tcstewar's [ccmsuite](https://github.com/tcstewar/ccmsuite) and (the unmaintained) [GarlicSim](https://github.com/cool-RR/GarlicSim) (in fact we might just take up maintenance GarlicSim). Also, for the sake of getting other research groups interesting, using, and eating our own dogfood, the simulation host should be as platform agnostic as possible.
 
 Model Explorer's duties are:
@@ -43,8 +43,11 @@ Model Explorer's duties are:
  * provide a consistent data API (similar to how Repast collects several timestepping and geographic APIs in one place)
  * provide a consistent data logging API
  * generate plots
- * generate statistics (estimates, probability densities, condidence intervals) -- and plots of these where relevant (eg estimated temperature on a map, estimated sensitivity field across a state space plot)
- * 
+ * generate statistics, all using the bootstrap method so we can get accurate (ie nonparametric) values
+  * estimates
+  * probability densities
+  * condidence intervals
+  * **And** plots of these where relevant (eg estimated temperature on a map, estimated sensitivity field across a state space plot)
 
 It seems like [[GarlicSIM]] does much of this already, but it's unmaintained. We need to investigate it.
 
