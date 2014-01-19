@@ -20,8 +20,8 @@ We have been calling these "salience plots" but you can't google that. There is 
 (But a _**warning**_: make sure to actually use an estimator that provides densities, not confidence intervals. CIs are not defined to produce estimates of where it is certain that something is.)
 
 
-Here's an example of a timeseries plot with uncertainty listed as a heatmap ![Salience Plot](https://github.com/majdal/modex/raw/master/wiki_overflow/salience.png)
-And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression](https://github.com/majdal/modex/raw/master/wiki_overflow/smooth_overlaid.jpg)
+Here's an example of a timeseries plot with uncertainty listed as a heatmap ![Salience Plot](salience.png)
+And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression](smooth_overlaid.jpg)
 
 ## Cartographic
 
