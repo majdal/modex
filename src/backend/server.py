@@ -15,6 +15,8 @@ from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol
 
 from autobahn.resource import WebSocketResource, HTTPChannelHixie76Aware
 
+#TODO: import gdal and take vector layers to load as arguments
+
 import json
 
 class EchoServerProtocol(WebSocketServerProtocol):
@@ -37,7 +39,7 @@ if __name__ == '__main__':
       debug = False
    
    if debug:
-     print("Starting server in", PROJECT_ROOT)
+     print "Starting server in", PROJECT_ROOT
 
    factory = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
