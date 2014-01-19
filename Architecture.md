@@ -1,8 +1,9 @@
-
 ![Architecture Diagram](Architecture.png)
 
 ## Model
 ????????
+
+The model is probably not parallelizable. Subparts of it may be--and depending on what the model is written in some parts might nicely parallelize and others might be impossibly serial
 * [[Modelling]]
 
 ## Frontend
@@ -21,6 +22,8 @@ The frontend does:
 * also the frontend must be responsive, on the order of 10ms (**todo: tcstewart's citation**) 
 
 See also [[Visualizations]] for in-depth details about the rainbow of ways to render data at our beck and call.
+
+The frontend should be graphics and network-bound; it should not be doing any numerical computations itself.
 
 
 
@@ -51,6 +54,8 @@ Model Explorer's duties are:
 
 It seems like [[GarlicSIM]] does much of this already, but it's unmaintained. We need to investigate it.
 
+The backend should be CPU-bound. It should exploit parallelization as much as it can.
+
 **Aspects** is a key word here, as even a simple five-object model has 5 objects each of which could have some arbitrary number of variables of interest (weight, tempurature, wealth, happiness, ...) and 5-choose-2=10 pairs which means that any relationship of interest has 10 series that need tracking, and all of this is potentially recorded over time. We need to have a tight way to record this information, and a tighter way to reduce it to useful slices.
    ([ccmsuite](http://github.com/tcstewar/ccmsuite), or whatever develops to replace it)
 
@@ -59,13 +64,5 @@ It seems like [[GarlicSIM]] does much of this already, but it's unmaintained. We
 
 ### Exporting (csv, graphs)
 
-
-## Unstructured Comments That Should Be Reorganized Please
-
-### Parallelization
- A single run of the model will probably be highly CPU bound and serialized, but we have a chances for parallelization at these points:
- * rendering
- * running multiple model runs, to get better statistics
- * getting bootstrap statistics
 
  
