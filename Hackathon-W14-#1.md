@@ -24,3 +24,8 @@ We're stumped and frozen because we have no stable skeleton of code that does so
 1. Investigate d3.geo: why are/aren't we using it? does it do basemaps? it doesn't do canvases, only svgs, but maybe that's okay?
 
 1. Move the wiki under the repo (so that we can have folders for minutes/ and so that uploading images is easier). Github renders .md files that it finds in repos, so having the wiki there isn't really all that different
+
+### What actually happened
+1. kousu showed up late and was confused about where we were meeting :P
+1. run.py was moved to src/backend/server.py and a slew of related organizational cleanups were done
+1. Autobahn gave lots of trouble and we almost tossed it out
