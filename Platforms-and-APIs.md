@@ -14,7 +14,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 ## Networking
 
-* WebSockets
+* [WebSockets](http://www.websocket.org/quantum.html)
 * jsonp
 
 * Autobahn
