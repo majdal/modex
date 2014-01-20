@@ -16,6 +16,8 @@ We're stumped and frozen because we have no stable skeleton of code that does so
 
 **Extensions** if there's time left over after all that:
 
+1. Nicify the css so that the map takes up 70% of the width and the graphs take up the other 30%, or so that the graphs sit under the map
+
 1. write a skeleton farm model. This probably means reimplementing [FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel) on top of GDAL. Initially, just write it in the same server as the rest; we'll figure out how to factor out the model from the explorer later ((and ideally the model doesn't have to be in python to work))
 1. Investigate (and document in the src/ dir!) what it takes to create raster sources for. Can we get our twisted server to host an http endpoint producing (dynamically, even) [XYZ](Glossary#XYZ) maps?
 1. Investigate colouring the different vectors according to some properties. This is our **spatial visualization _prototype_*
