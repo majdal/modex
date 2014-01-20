@@ -4,6 +4,8 @@
 
 ### To Sort
 
+we should just scrape http://www.agr.gc.ca/atlas/data_donnees/ (sketchy redhat server ftw)
+
 1. **Soils:** Canada>Ontario>Provincial ont_omafra: soils from omafra - Ontario's ministry of food and agriculture 1.75 GB
 1. **Soils:** Agriculture department also gives soils.. (soils dataset is 130 MB) 
 canada_dept_agriculture>waterloo soils_cansis>
