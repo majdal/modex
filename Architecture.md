@@ -39,6 +39,9 @@ The frontend should be graphics and network-bound; it should not be doing any nu
 
  The backend is a Twisted server hosting some static content and a bunch of dynamic endpoints. ((should we go for a RESTful situation or try to use Autobahn?)). Layout is:
 
+* ```index.html```  -- the main action occurs on this stage
+* ```/css```
+* ```/js```
 * ```/assets```
   * ```/assets/images``` -- sprites, art
   * ```/assets/maps```   -- GIS datasets ((do we really want to expose these literally here?))
