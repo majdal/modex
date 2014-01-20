@@ -1,4 +1,4 @@
-1. Download the [OS X Github client](http://mac.github.com/ 
+1. Download the [OS X Github client](http://mac.github.com/)
 2. Open GITHUB and sign in
 3. Navigate to [https://github.com/majdal/modex](https://github.com/majdal/modex) and click "Clone in Desktop"
 1. Make sure that you have Xcode installed, and up to date, including commandline tools 
