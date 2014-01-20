@@ -1,4 +1,4 @@
-## Relevant Modelling Citations
+## Academic
 
 ### GIS
 http://corridordesign.org/
@@ -44,3 +44,7 @@ Here's some software which has aspects of the data-modelling-visualization ideas
 * http://insightmaker.com/
 
 (small tip: use search.crossref.org to find DOIs and cite them into MLA format)
+
+# Essays
+http://www.wired.com/business/2014/01/quants-dont-know-everything/
+ -- on the ignored self-referential effect of systemetization and "objective" measures on the systems they are measuring
