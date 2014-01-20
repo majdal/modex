@@ -41,7 +41,7 @@
     <div id="map" class="map"></div>
     
     <!-- NB: temporarily disable the graph to make debugging the map easier -->
-    <div id='graph' class='nothidden'></div>
+    <div id='graph' class='hidden'></div>
 
     <style>
       .hidden { display: none } 
@@ -73,7 +73,18 @@ var styleArray = [new ol.style.Style({
   })
 })];
 
-var vectorLayer = new ol.layer.Vector({
+var styleArray2 = [new ol.style.Style({
+  fill: new ol.style.Fill({
+    color: 'rgba(255, 22, 255, 0.6)'
+  }),
+  stroke: new ol.style.Stroke({
+    color: 'yellow',
+    width: 2
+  })
+})];
+
+
+var countries = new ol.layer.Vector({
   source: new ol.source.GeoJSON({
     url: 'assets/maps/countries.geojson'
   }),
@@ -83,14 +94,26 @@ var vectorLayer = new ol.layer.Vector({
   }
 });
 
+var meat = new ol.layer.Vector({
+  source: new ol.source.GeoJSON({
+    url: 'assets/maps/meatplants_test.geojson'
+  }),
+  styleFunction: function(feature, resolution) {
+    return styleArray2;
+  }
+
+});
+
+
 //          new ol.layer.Tile({     opacity: .5,        source: new ol.source.OSM()          }), //partially transparent
 
       var map = new ol.Map({
         renderer: ol.RendererHint.CANVAS, //the vector layer crashes without this. Go figure.
         target: 'map',
         layers: [
-          new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) }),
-          vectorLayer,
+    //      new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) }),
+          countries,
+          meat
         ],
         view: new ol.View2D({
           center: ol.proj.transform([-80.5, 43.45], 'EPSG:4326', 'EPSG:3857'), //these coordinates are not what you'll find on Wikipedia or in the World Fact Book. The Wikipedia coordinates, 43,28,0 N by 80,30,0W are A) in Degrees-Minutes-Seconds B) in WGS84 (so even once converted to decimal degrees they're slightly off)
