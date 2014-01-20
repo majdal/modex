@@ -32,3 +32,4 @@ We're stumped and frozen because we have no stable skeleton of code that does so
 1. [Documented](Step by step installation instructions for Mac users) how to install all the necessary dependencies on OS X 
 1. run.py was moved to src/backend/server.py and a slew of related organizational cleanups were done
 1. Autobahn gave lots of trouble and we almost tossed it out
+1. Reimplemented Viktor's layer of farm data on top of the basemap, but now merged into the mainline twisted-based workflow
