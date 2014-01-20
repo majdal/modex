@@ -1,7 +1,7 @@
 {
 "type": "FeatureCollection",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::4269" } },
-                                                                                
+"DISABLEDcrs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::4269" } },
+"crsCOMMENT":  "ol3 chokes on the. it doesn't just ignore it like it does when the name is change, so it is trying to use it, but it deeply dislikes something about it",
 "features": [
 { "type": "Feature", "properties": { "Name": "Len & Patti Butcher Block" }, "geometry": { "type": "Point", "coordinates": [ -78.749196, 44.325031, 0.0 ] } },
 { "type": "Feature", "properties": { "Name": "Julius Meat Packers Inc." }, "geometry": { "type": "Point", "coordinates": [ -79.525634, 43.077592, 0.0 ] } },

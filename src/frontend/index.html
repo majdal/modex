@@ -75,9 +75,9 @@ var styleArray = [new ol.style.Style({
 
 var pointStyle = [new ol.style.Style({
     image: new ol.style.Circle({
-      radius: 5,
-      fill: new ol.style.Fill({color: '#666666'}),
-      stroke: new ol.style.Stroke({color: '#bada55', width: 1})
+      radius: 3,
+      fill: new ol.style.Fill({color: 'red'}),
+      stroke: new ol.style.Stroke({color: '#222222', width: 1.5})
     }),
 
   fill: new ol.style.Fill({
@@ -122,7 +122,7 @@ var countries = new ol.layer.Vector({
 
 var meat = new ol.layer.Vector({
   source: new ol.source.GeoJSON({
-    url: 'assets/maps/meatplants_test.geojson'
+    url: 'assets/maps/meatplants.geojson'
   }),
   styleFunction: function(feature, resolution) {
     return styleArray2;
@@ -137,7 +137,7 @@ var meat = new ol.layer.Vector({
         renderer: ol.RendererHint.CANVAS, //the vector layer crashes without this. Go figure.
         target: 'map',
         layers: [
-    //      new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) }),
+          new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) }),
           countries,
           meat
         ],
