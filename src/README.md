@@ -1,5 +1,16 @@
 # Model Explorer Developer's Guide
 
+## Layout
+
+Each folder should have a README that describes its content in more detail, but as an overview:
+
+* ```assets/``` -- static content, like data
+  * ```assets/libs/``` -- external javascript libraries
+  * ```assets/images```-- sprites, textures, icons, etc
+* ```src/frontend```   -- internal html, javascript, and css 
+* ```src/backend```    -- model explorer and the twisted server that feeds it to the frontend
+* ```src/models```     -- (_tentative_) different model instances to be hosted by the model explorer
+* ```src/scripts```    -- batch scripts, like geoprocessing hacks, one-off webcrawlers, and database cleaners
 
 ## Dependencies
 
@@ -11,6 +22,7 @@ We depend on several libraries, tools, and sources. The frontend libraries are a
 * An HTML5-supporting browser (so, any recent Firefox, Chrome, Opera, or even IE)
 * [GIS Datasets](../assets/maps/README.md) (not all are open; for some you need to be part of [OGDE](www.lio.mnr.gov.on.ca/) to legally obtain them).
 
+* A spreadsheet. Excel, [LibreOffice Calc](http://www.libreoffice.org/download). You need to be able to work with and debug tabular data. You should be able to do reliable preprocessing of it (sums, averages, subsets) and plotting. (if you are comfortable doing this in matlab, R, or scipy, then by all means stick with what you know).
 * A GIS. You can get [ArcGIS](http://esri.com) [from the school](https://uwaterloo.ca/information-systems-technology/services/software-students/microsoft-office-students) at a discount, or you can install [QGIS](http://qgis.org/) which is frankly perhaps better
 
 1. Prepare your system
