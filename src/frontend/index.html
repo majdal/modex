@@ -54,19 +54,50 @@
 
     <script type="text/javascript">
  //todo: move this to a jquery oninit() handler
-      var map = new ol.Map({
 
+var labels =  new ol.style.Text({
+        color: '#bada55',
+        text: 'hello', //grrrrr. this doesn't work.
+        fontFamily: 'Calibri,sans-serif',
+        fontSize: 14
+      })
+
+var styleArray = [new ol.style.Style({
+  //fill: new ol.style.Fill({
+  //  color: 'rgba(255, 255, 255, 0.6)'
+  //}),
+  //symbolizers: [labels],
+  stroke: new ol.style.Stroke({
+    color: '#319FD3',
+    width: 1
+  })
+})];
+
+var vectorLayer = new ol.layer.Vector({
+  source: new ol.source.GeoJSON({
+    url: 'assets/maps/countries.geojson'
+  }),
+  
+  styleFunction: function(feature, resolution) {
+    return styleArray;
+  }
+});
+
+//          new ol.layer.Tile({     opacity: .5,        source: new ol.source.OSM()          }), //partially transparent
+
+      var map = new ol.Map({
+        renderer: ol.RendererHint.CANVAS, //the vector layer crashes without this. Go figure.
         target: 'map',
         layers: [
-//          new ol.layer.Tile({            source: new ol.source.MapQuest({layer: 'hyb'})          }),
-          new ol.layer.Tile({            source: new ol.source.MapQuest({layer: 'osm'})          }),
-//          new ol.layer.Tile({     opacity: .5,        source: new ol.source.OSM()          })
+          new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) }),
+          vectorLayer,
         ],
         view: new ol.View2D({
           center: ol.proj.transform([-80.5, 43.45], 'EPSG:4326', 'EPSG:3857'), //these coordinates are not what you'll find on Wikipedia or in the World Fact Book. The Wikipedia coordinates, 43,28,0 N by 80,30,0W are A) in Degrees-Minutes-Seconds B) in WGS84 (so even once converted to decimal degrees they're slightly off)
           zoom: 11
         })
       });
+
     </script>
 
 </body>
