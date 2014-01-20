@@ -37,6 +37,28 @@ The frontend should be graphics and network-bound; it should not be doing any nu
 
    current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [[GarlicSIM]] models, and handles recording data
 
+ The backend is a Twisted server hosting some static content and a bunch of dynamic endpoints. ((should we go for a RESTful situation or try to use Autobahn?)). Layout is:
+
+* ```/assets```
+  * ```/assets/images``` -- sprites, art
+  * ```/assets/maps```   -- GIS datasets ((do we really want to expose these literally here?))
+  * ```/assets/data```   -- more typical tabular data
+  * ```/assets/libs```   -- external frontend dependencies, like d3 and ol3
+* ```/maps```
+  * ```/maps/raster```
+    * index is a json listing of available rasters
+    * ```/maps/raster/<rastername>/z/x/y.png``` -- a (potentially dynamically drawn) bitmap of the map at tile coordinates (x,y,z) on layer ```rastername```. some of these rasters are typical mappy maps, most are fields like rainfall amounts or pollutant concentration or albedo
+  * ```/maps/vector```
+    * index is a json listing of available vectors
+    * each vector might actually be dynamic!
+    * ((how do we handle only asking for regional subsets of vectors?))
+* ```/data/indicators```  -- websockets giving streams of data for plotting
+  * ```/data/indicators/carbon/```
+  * ```/data/indicators/happiness```
+* ```/control``` 
+
+((in all this we haven't talked at all about sessioning: how do we let users choose to either collab or to start their own simulation instance))
+
 ### Model Explorer
   A major component for us is a tool at some remove from the nitty details of the rest of the system for exploring models in general. This wiki is in the "modex" repository right now, reflecting the importance of this tool. It might also be called the Simulation Host, which in an [IoC](http://en.wikipedia.org/wiki/Inversion_of_control) way, loads and collects results from simulation runs. It should be able to easily record, slice and visualize any aspect of the simulation. The closest work we have in mind is tcstewar's [ccmsuite](https://github.com/tcstewar/ccmsuite) and (the unmaintained) [GarlicSim](https://github.com/cool-RR/GarlicSim) (in fact we might just take up maintenance GarlicSim). Also, for the sake of getting other research groups interesting, using, and eating our own dogfood, the simulation host should be as platform agnostic as possible.
 
