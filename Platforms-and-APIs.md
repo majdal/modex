@@ -17,6 +17,10 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 * Autobahn
   * Tutorials do not work at this time. Re-evaluating our use of Autobahn.
 
+## Tools
+
+* [GeoHack](https://tools.wmflabs.org/geohack/) (all lat/lon coordinates on Wikipedia link to GeoHack)
+
 ## Scientific Collaboration
 * http://dat-data.com 
 * (there's at least two other dataset-version-control/archival sites; what are they?)
