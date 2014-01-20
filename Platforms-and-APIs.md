@@ -31,6 +31,12 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 * PostGIS
 
+## Patterns
+* REST
+* Pub/Sub
+* Events
+* Declarative (e.g. d3)
+
 ## Modelling
 * Repast
 * GarlicSIM
