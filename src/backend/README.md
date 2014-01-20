@@ -1,6 +1,11 @@
 # Backend Developer's Readme
 
-To start the server, run this command
+First review the [generic developer's guide](../README.md).
+
+As a backend developer, it is worthwhile to learn how to run the server directly.
+While you can develop portions of it under a simple ```run.py```,
+running it directly removes the source of potential bugs from that one layer of indirection
+ and lets you tweak command line arguments. To run the server directly, use:
 ```bash
 $ python src/backend/server.py
 ```

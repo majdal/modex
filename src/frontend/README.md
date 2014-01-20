@@ -1,5 +1,15 @@
 # Frontend Developer's Readme
 
+First review the [generic developer's guide](../README.md).
+
+As that guide suggests, get started with by starting the server:
+```bash
+$ python run.py
+````
+
+Once the server is up, you can mostly just leave it going and do all your work on the html, javascript, and css files here.
+The server passes static files through HTTP unchanged, so you need only reload the page to see you changes as you work.
+
 ## Code Structure
 Code written for this project goes under src/ (so your javascripts should be src/frontend/*.js and your css under src/frontend/css/*.css).
 Code dependencies (external javascripts like OpenLayers and D3), being relatively static and _not_ part of our project, are considered assets and go under assets/libs/.
