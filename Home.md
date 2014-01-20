@@ -2,11 +2,13 @@ We are building a simulation of agriculture in southern Ontario for policy maker
 
 Check out our **gameplan**:
 * [[Architecture]]
+* [[Explaining Ourselves|Media]] 
 * [[Modelling]]
 * [[Datasets]]
 * [[Visualizations]]
+* [[Statistics]]
 
-Get [hacking](https://github.com/majdal/modex/tree/master/src/README.md), mediate on our our [[PR|Media]] goals, or read our [[References]].
+Get [hacking](https://github.com/majdal/modex/tree/master/src/README.md), meditate on our [[Philosophy]] or add to our [[References]].
 
 There are very disorganized notes scattered on these shared docs which **should be read, digested, and then merged into this wiki or tossed**
 http://piratepad.net/xQTNPECqcj
