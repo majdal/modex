@@ -8,6 +8,7 @@ We own a server at digitalocean. The username is __________ and you can get the 
 * Git repos, the same
 * irc or jabber chat server (with a web interface! very important!)
 * Host our canonical demo simulation
+* mailing list with archives
 
 ## Issues
 
