@@ -16,4 +16,4 @@ which should open a browser window pointed at the twisted web application server
 Because of the complicated web-based nature of this project you must always be running the server
 while developing, and you need to have a network connectin for at least for the maps.
 
-Next, depending on your purposes, see [[frontend]] or [[backend]].
+Next, depending on your purposes, see [frontend](frontend) or [backend](backend).
