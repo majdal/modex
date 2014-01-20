@@ -1,6 +1,7 @@
-1. Download [Github](http://mac.github.com/) from 
+1. Download the [OS X Github client](http://mac.github.com/ 
 2. Open GITHUB and sign in
 3. Navigate to [https://github.com/majdal/modex](https://github.com/majdal/modex) and click "Clone in Desktop"
+1. Make sure that you have Xcode installed, and up to date, including commandline tools 
 4. Download and install "Homebrew" from [here](http://brew.sh/)
 5. Download and install Python 2.x.y from [here](http://www.python.org/download/). Choose “Python 2.7.6 Mac OS X 64-bit/32-bit x86-64/i386 Installer".
 6. Open `Terminal` from the start menu
