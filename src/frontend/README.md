@@ -1,4 +1,4 @@
-# Frontend Developer's Readme
+# Frontend Developer's Guide
 
 First review the [generic developer's guide](../README.md).
 
