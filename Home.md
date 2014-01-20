@@ -1,26 +1,27 @@
-This is a project building off of [sig.uwaterloo.ca's](Social Innovation Group) work at the Univeristy of Waterloo. We are building a simulation of agriculture in southern ontario which we will then be able to fork, edit, and play with to invent and investigate hypotheses. Our perspective is holistic: we see agriculture as simultaneously economic, ecological, cultural and as involving both urban humans, rural humans, and animal life.
+We are building a simulation of agriculture in southern Ontario for policy makers and the lay public alike to be able to edit to invent and investigate hypotheses. Our perspective on the problem is holistic: we see agriculture as simultaneously economic, ecological, cultural and as involving both urban humans, rural humans, and animal life, and we think that anything less than modelling all aspects of the world will miss critical decision boundaries.
 
-Some allies, tangible and desired
-* [http://schoolofdata.org/](School of Data)
-* [http://data.marsdd.com](MaRS)
-* 
-
-
-* [[Step-by-step-installation-instructions-for-Windows-users]]
-* [[References]]
-
-
-Check out our gameplan:
+Check out our **gameplan**:
 * [[Architecture]]
 * [[Modelling]]
 * [[Datasets]]
 * [[Visualizations]]
 
-And our [[PR|Media]] goals.
+Get [hacking](https://github.com/majdal/modex/tree/master/src/README.md), mediate on our our [[PR|Media]] goals, or read our [[References]].
 
-There are very disorganized notes scattered on these shared docs:
+There are very disorganized notes scattered on these shared docs which **should be read, digested, and then merged into this wiki or tossed**
 http://piratepad.net/xQTNPECqcj
 http://piratepad.net/uud1vW5W5e
+
+
+Our allies, tangible 
+* [SiG](http://sig.uwaterloo.ca)
+* [MaRS](http://data.marsdd.com)
+* [McConnell Foundation](http://www.mcconnellfoundation.ca/en)
+* [WICI](http://wici.ca)
+
+and desired
+* [School of Data](http://schoolofdata.org/)
+
 
 When we want to get off github, know that this wiki itself is simply a git repo with URL https://github.com/majdal/modex.wiki.git and the issue tracker can be extracted with the REST API ([this ruby project](http://github.com/sorich87/github-to-bitbucket-issues-migration) is a one-click export solution).
 
