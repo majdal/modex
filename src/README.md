@@ -3,13 +3,15 @@
 
 ## Dependencies
 
-We depend on several libraries and sources. The frontend libraries are all in javascript and are either referenced by hyperlink or included under ```assets/```, but the backend libraries require some work on your end. To get this project running, you need to install these dependencies:
+We depend on several libraries, tools, and sources. The frontend libraries are all in javascript and are either referenced by hyperlink or included under ```assets/```, but the backend libraries require some work on your end. To get this project running, you need to install these dependencies:
 
 * [Python 2.x](FIXME)
 * [Twisted](FIXME)
 * [GDAL](FIXME)
 * An HTML5-supporting browser (so, any recent Firefox, Chrome, Opera, or even IE)
 * [GIS Datasets](../assets/maps/README.md) (not all are open; for some you need to be part of [OGDE](www.lio.mnr.gov.on.ca/) to legally obtain them).
+
+* A GIS. You can get [ArcGIS](http://esri.com) [from the school](https://uwaterloo.ca/information-systems-technology/services/software-students/microsoft-office-students) at a discount, or you can install [QGIS](http://qgis.org/) which is frankly perhaps better
 
 1. Prepare your system
   - If you're on Ubuntu, use install the following packages `sudo apt-get install build-essential python-dev`
