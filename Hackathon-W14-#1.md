@@ -29,5 +29,6 @@ We're stumped and frozen because we have no stable skeleton of code that does so
 
 ### What actually happened
 1. kousu showed up late and was confused about where we were meeting :P
+1. [Documented](Step by step installation instructions for Mac users) how to install all the necessary dependencies on OS X 
 1. run.py was moved to src/backend/server.py and a slew of related organizational cleanups were done
 1. Autobahn gave lots of trouble and we almost tossed it out
