@@ -43,3 +43,10 @@ while developing, and you need to have a network connection available for at lea
 Next, depending on your interest, see [frontend](frontend) or [backend](backend).
 Some changes, namely API changes, which are going to be especially common in the early stage,
 require working on both sides simultaneously. To do that work, keep both subfolders open and liberally restart the server: press Ctrl-C, wait for it to terminate, and then rerun 'run.py'.
+
+### Gotchas
+
+You can use qgis to fiddle with geodata: subset it, reorder it, remove or add columns, do precomputation, convert formats...
+but it's tricky. Some gotchas with qgis:
+* SQL joins are hidden under 'properties' of a layer
+* to edit a layer it MUST be in ESRI Shapefile format and you need to find the "Toggle Editing" button (which shows up in the rightclick menu on the layer, once its in that format)
