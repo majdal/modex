@@ -15,13 +15,14 @@ http://piratepad.net/xQTNPECqcj
 http://piratepad.net/uud1vW5W5e
 
 
-Our allies, tangible 
-* [SiG](http://sig.uwaterloo.ca)
+Our allies,
+* [SiG@UWaterloo](http://sig.uwaterloo.ca)
+* The [UW Games Institute](https://uwaterloo.ca/games-institute/)
 * [MaRS](http://data.marsdd.com)
-* [McConnell Foundation](http://www.mcconnellfoundation.ca/en)
+* The [McConnell Foundation](http://www.mcconnellfoundation.ca/en)
 * [WICI](http://wici.ca)
 
-and desired
+and some of our inspiration
 * [School of Data](http://schoolofdata.org/)
 
 
