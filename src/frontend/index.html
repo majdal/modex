@@ -73,7 +73,13 @@ var styleArray = [new ol.style.Style({
   })
 })];
 
-var styleArray2 = [new ol.style.Style({
+var pointStyle = [new ol.style.Style({
+    image: new ol.style.Circle({
+      radius: 5,
+      fill: new ol.style.Fill({color: '#666666'}),
+      stroke: new ol.style.Stroke({color: '#bada55', width: 1})
+    }),
+
   fill: new ol.style.Fill({
     color: 'rgba(255, 22, 255, 0.6)'
   }),
@@ -81,7 +87,27 @@ var styleArray2 = [new ol.style.Style({
     color: 'yellow',
     width: 2
   })
-})];
+
+
+  })]
+
+var styleArray2 = [new ol.style.Style({
+  //image: new ol.style.Circle({
+  fill: new ol.style.Fill({
+    color: 'rgba(255, 22, 255, 0.6)'
+  }),
+  stroke: new ol.style.Stroke({
+    color: 'yellow',
+    width: 2
+  })
+  //})
+
+})
+];
+
+styleArray2 = pointStyle;
+
+
 
 
 var countries = new ol.layer.Vector({
