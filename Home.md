@@ -2,7 +2,7 @@ We are building a simulation of agriculture in southern Ontario for policy maker
 
 Check out our **gameplan**:
 * [[Architecture]]
-* [[Explaining Ourselves|Media]] 
+* [[Explaining Ourselves|Media]] (_can anyone think of a pithier link title?_)
 * [[Modelling]]
 * [[Datasets]]
 * [[Visualizations]]
@@ -11,8 +11,8 @@ Check out our **gameplan**:
 Get [hacking](https://github.com/majdal/modex/tree/master/src/README.md), meditate on our [[Philosophy]] or add to our [[References]].
 
 There are very disorganized notes scattered on these shared docs which **should be read, digested, and then merged into this wiki or tossed**
-http://piratepad.net/xQTNPECqcj
-http://piratepad.net/uud1vW5W5e
+* http://piratepad.net/xQTNPECqcj
+* http://piratepad.net/uud1vW5W5e
 
 
 Our allies,
@@ -24,7 +24,7 @@ Our allies,
 
 and some of our inspiration
 * [School of Data](http://schoolofdata.org/)
-
+* [CorridorDesign](http://corridordesign.org/)
 
 When we want to get off github, know that this wiki itself is simply a git repo with URL https://github.com/majdal/modex.wiki.git and the issue tracker can be extracted with the REST API ([this ruby project](http://github.com/sorich87/github-to-bitbucket-issues-migration) is a one-click export solution).
 
