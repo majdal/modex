@@ -2,6 +2,8 @@
 
 ## Modeling
 
+[Multiphysics simulation](http://en.wikipedia.org/wiki/Multiphysics)
+
 ### GIS
 http://corridordesign.org/
 
@@ -15,6 +17,9 @@ This guy is kewl: http://fromgistors.blogspot.ca/search/label/Tutorial
 ## Relevant Visualization Citations
 
 Brosz, John et al. [http://dx.doi.org/10.1145/2501988.2502046](“Transmogrification.”) Proceedings of the 26th annual ACM symposium on User interface software and technology - UIST  13. Association for Computing Machinery, 2013. 97-106. ((also available direct [http://innovis.cpsc.ucalgary.ca/Publications/_Brosz:2013:TCM](here)).
+
+Borland, David, and Russell Taylor Ii. “Rainbow Color Map (Still) Considered Harmful.” IEEE Computer Graphics and Applications 27.2 (2007): 14-17.
+
 
 
 ### Symbology
