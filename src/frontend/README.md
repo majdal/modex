@@ -29,7 +29,8 @@ You could also invest in learning a heavier server like
  IIS (Windows-only),
  Apache,
  nginx,
- or lighttpd.
+ or lighttpd,
+ or [mongoose](https://code.google.com/p/mongoose)
 
 It behooves you to have a web **developer console** open. Chrome and Firefox have built-in inspectors accessible with ctrl-shift-i,
 Firefox has the option of installing the Firebug extension which is
