@@ -10,19 +10,17 @@ Check out our **gameplan**:
 
 Get [hacking](https://github.com/majdal/modex/tree/master/src/README.md), meditate on our [[Philosophy]] or add to our [[References]].
 
-There are very disorganized notes scattered on these shared docs which **should be read, digested, and then merged into this wiki or tossed**
-* http://piratepad.net/xQTNPECqcj
-* http://piratepad.net/uud1vW5W5e
+There are very disorganized notes scattered on these shared docs which **should be read, digested, and then merged into this wiki or tossed**: http://piratepad.net/xQTNPECqcj, http://piratepad.net/uud1vW5W5e
 
 
-Our allies,
+Our **allies**,
 * [SiG@UWaterloo](http://sig.uwaterloo.ca)
 * The [UW Games Institute](https://uwaterloo.ca/games-institute/)
 * [MaRS](http://data.marsdd.com)
 * The [McConnell Foundation](http://www.mcconnellfoundation.ca/en)
 * [WICI](http://wici.ca)
 
-and some of our inspiration
+and some of our **inspiration**
 * [School of Data](http://schoolofdata.org/)
 * [CorridorDesign](http://corridordesign.org/)
 
