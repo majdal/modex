@@ -28,8 +28,8 @@ We depend on several libraries, tools, and sources. The frontend libraries are a
 1. Prepare your system
   - If you're on Ubuntu, use install the following packages `sudo apt-get install build-essential python-dev`
     - if you're on another Linux, you're on your own, but feel free to pressure us to support you: it makes the code better
-  - If you're on OSX, see [here](Step by step installation instructions for Mac users)
-  - If you're on Windows, see [here](Step by step installation instructions for Windows users)
+  - If you're on OSX, see [here](https://github.com/majdal/modex/wiki/Step-by-step-installation-instructions-for-Mac-users)
+  - If you're on Windows, see [here]https://github.com/majdal/modex/wiki/Step-by-step-installation-instructions-for-Windows-users)
 2. Optionally, set up a [virtualenv](http://www.virtualenv.org/) (this is not quite so optional on Windows and OS X)
 2. Install the package dependencies: `pip install -r requirements.txt`
   - if you read requirements.txt you might find that you already have several dependencies installed or that you can install them from your package manager.
