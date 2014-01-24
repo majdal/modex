@@ -35,6 +35,12 @@ The frontend should be graphics and network-bound; it should not be doing any nu
  [http://repast.sourceforge.net/](Repast)?
  If it is useful, build the db on Postgres with the PostGIS extension
 
+### Rough API idea for querying the model
+```
+farmmodel[7].products["wheat"]  #at time-step 7, what is the amount of production of 'wheat'
+```
+
+
    current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [[GarlicSIM]] models, and handles recording data
 
  The backend is a Twisted server hosting some static content and a bunch of dynamic endpoints. ((should we go for a RESTful situation or try to use Autobahn?)). Layout is:
