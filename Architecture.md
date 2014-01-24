@@ -6,6 +6,8 @@
 The model is probably not parallelizable. Subparts of it may be--and depending on what the model is written in some parts might nicely parallelize and others might be impossibly serial
 * [[Modelling]]
 
+We need to distinguish in our mind and our code stochastic (randomized) models from nonstochastic models (nonstochastic models can still show complex and/or chaotic behaviour!!)
+
 ## Frontend
 
   The frontend should appear to be an attractive video game, but one where graphs and data can be brought up at a moments' notice. We're ambitiously attempting to gamify science.
@@ -75,8 +77,9 @@ Model Explorer's duties are:
  * load models
  * batch run lots of copies of a model
    * clearly distinguish and provide hooks for handling deterministic models sampled at different initial conditions, nondeterministic models sampled several times at the same initial conditions, and mixtures
- * provide a consistent data API (similar to how Repast collects several timestepping and geographic APIs in one place)
- * provide a consistent data logging API
+ * provide a consistent data API (similar to how Repast collects several timestepping and geographic APIs in one place) ([[Architecture#wiki-rough-api-idea-for-querying-the-model]]?)
+   * to be clear: **modex must record the entire history of the state machine**
+   * and this log must be as close to efficiently queryable along any dimension as possible ((TODO: find a reference on why it is impossible to totally normalize a database along every dimension))
  * generate plots
  * generate statistics, all using the bootstrap method so we can get accurate (ie nonparametric) values
   * estimates
