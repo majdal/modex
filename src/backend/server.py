@@ -11,16 +11,28 @@ from twisted.python import log
 from twisted.web.server import Site
 from twisted.web.static import File
 
-from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol
+import autobahn
 
-from autobahn.resource import WebSocketResource, HTTPChannelHixie76Aware
+# autobahn changed their API between (which happens to be within the last month of so as of this commit)
+# they added asyncio (which is py3.4-native) as an alternate option to twisted (which is py2-native),
+# and hence moved moved classes from autobahn.* to autobahn.twisted.*
+# evidence:
+#  https://raw.github.com/tavendo/AutobahnPython/v0.7.0/examples/twisted/websocket/echo/server.py
+#   ~~ the change happened here, now  ~~
+#  https://raw.github.com/tavendo/AutobahnPython/v0.6.5/examples/websocket/echo/server.py
+#  https://raw.github.com/tavendo/AutobahnPython/v0.6.4/examples/websocket/echo/server.py
+#  https://raw.github.com/tavendo/AutobahnPython/v0.5.14/examples/websocket/echo/server.py
+#  https://raw.github.com/tavendo/AutobahnPython/e1dae070e67a9361f14beba775c66961e06d43ff/demo/echo/echo_server.py
+
+from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
+from autobahn.twisted.resource import WebSocketResource, HTTPChannelHixie76Aware
 
 #TODO: import gdal and take vector layers to load as arguments
+#TODO: Autobahn as of 0.7.4 actually supports py3, even though Twisted doesn't; this might be worth investigating.
 
 import json
 
 class EchoServerProtocol(WebSocketServerProtocol):
-
    def onMessage(self, msg, binary):
         data = {'Incandescent': [-_ for _ in range(10)],
                 'CFL': [_ for _ in range(10)],
@@ -44,10 +56,9 @@ if __name__ == '__main__':
    factory = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
                                     debugCodePaths = True)
-   
    factory.protocol = EchoServerProtocol
-   factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported
-   
+   #factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported   
+
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
    assets = pathjoin(PROJECT_ROOT,"assets")
    if debug:
@@ -62,11 +73,11 @@ if __name__ == '__main__':
    resource = WebSocketResource(factory)
 
    root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
-   root.putChild("ws", resource)
+   root.putChild("ws", resource)    #this puts the websocket at /ws. You cannot put both the site and the websocket at the same endpoint; whichever comes last wins, in Twisted
   
    ## both under one Twisted Web Site
    site = Site(root)
-   site.protocol = HTTPChannelHixie76Aware #  needed if Hixie76 is to be supported
+   #site.protocol = HTTPChannelHixie76Aware #  needed if Hixie76 is to be supported
    reactor.listenTCP(8080, site)
 
    print "Now open http://127.0.0.1:8080 in your browser"

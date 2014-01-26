@@ -37,6 +37,27 @@ $ python server.py debug
 
 ????
 
+## WebSocket Notes
+
+Here's some guidance on debugging websockets. Debugging them means tweaking things in ```server.py``` and then opening up
+a javascript console from a browser. These notes are in this **README** and not **[[../frontend/README.md]]** since this is really more of an issue--but both sides can and should refer and add to these notes.
+
+When you're in the browser console, you can make a websocket to test with by:
+```
+   ws = new WebSocket("ws://server:9000/endpoint");
+```
+   If you drop the ```new``, it'll still work. The difference [is](http://trephine.org/t/index.php?title=Understanding_the_JavaScript_new_keyword) and [occasionally non-existent](
+
+   Using 'wss' is a good idea (it causes the websocket to connect over SSL), but unless you've got SSL set up on the server it'll hang with nothing in the log either client or server side 
+The hostname MUST be the same as the site you are on due to the same-origin policy (unless you do some server side black magic which we shall avoid)
+ * In particular, when debugging, you should first open up the server in your webbrowser (autobahn gives a useful response if you hit it with http:// instead of ws://, so just do that before trying to debug stuff)
+
+Tthis one-liner lets you test if a websocket is listening:
+ ```
+  s = new WebSocket("ws://localhost:8080"); s.onmessage = function(d) { console.log("recv: " + d.data); }; setTimeout(function() { s.send("butts")},1000);
+```
+  (the setTimeout is because the websocket needs a moment to wake up and handshake; better would be 'onopen'... but with this method you get an error instead of a silent an inexplicable hang)
+
 ## Gotchas
 
 
