@@ -18,6 +18,7 @@ We depend on several libraries, tools, and sources. The frontend libraries are a
 
 * [Python 2.x](FIXME)
 * [Twisted](FIXME)
+* [Autobahn](http://autobahn.ws/) -- between version 7.0 and 7.4
 * [GDAL](FIXME)
 * An HTML5-supporting browser (so, any recent Firefox, Chrome, Opera, or even IE)
 * [GIS Datasets](../assets/maps/README.md) (not all are open; for some you need to be part of [OGDE](www.lio.mnr.gov.on.ca/) to legally obtain them).
