@@ -39,6 +39,17 @@ $ python server.py debug
 
 ## WebSocket Notes
 
+We're using [autobahn](https://github.com/tavendo/AutobahnPython) as our backend implementation of the websocket protocol (it's a protocol that rides on top of HTTP, just to make the web stack even deeper).
+WebSockets provide a (**TODO**: summarize and/or link why websockets) more efficient protocol--less bandwidth and much better latency--than typical request-response HTTP. We are using them because we expect (though we don't actually have any)
+
+* [Server-side WebSocket API reference](https://github.com/tavendo/AutobahnPython/tree/master/doc)
+* [Browser-side WebSocket API reference](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants).
+
+WebSockets, like the _webservice_ protocols that came before them, are referenced like any other HTTP or object: with a URL.
+A websocket URL looks like "ws://server:port/path/to/endpoint" or "wss://server:port/path/to/endpoint", the difference being that the latter causes the websocket to connect over SSL.
+
+Autobahn is functional, but it's [website](http://autobahn.ws/python/tutorials/echo/) is currently (**TODO**: update this when this changes) out of date. The github docs and examples seem to be reasonably up to date (they have test cases and stuff, so they better be) so for now, use that as your reference.
+
 Here's some guidance on debugging websockets. Debugging them means tweaking things in ```server.py``` and then opening up
 a javascript console from a browser. These notes are in this **README** and not **[[../frontend/README.md]]** since this is really more of an issue--but both sides can and should refer and add to these notes.
 
@@ -48,11 +59,12 @@ When you're in the browser console, you can make a websocket to test with by:
 ```
    If you drop the ```new``, it'll still work. The difference [is](http://trephine.org/t/index.php?title=Understanding_the_JavaScript_new_keyword) and [occasionally non-existent](
 
-   Using 'wss' is a good idea (it causes the websocket to connect over SSL), but unless you've got SSL set up on the server it'll hang with nothing in the log either client or server side 
+Using 'wss' is a good idea, but unless you've got SSL set up on the server it'll hang and you won't know why because neither the browser API nor Autobahn explicitly mention "SSL" when such a connection fails.
+
 The hostname MUST be the same as the site you are on due to the same-origin policy (unless you do some server side black magic which we shall avoid)
  * In particular, when debugging, you should first open up the server in your webbrowser (autobahn gives a useful response if you hit it with http:// instead of ws://, so just do that before trying to debug stuff)
 
-Tthis one-liner lets you test if a websocket is listening:
+This one-liner lets you test if a websocket is listening:
  ```
   s = new WebSocket("ws://localhost:8080"); s.onmessage = function(d) { console.log("recv: " + d.data); }; setTimeout(function() { s.send("butts")},1000);
 ```
