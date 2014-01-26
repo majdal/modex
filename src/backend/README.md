@@ -43,7 +43,7 @@ We're using [autobahn](https://github.com/tavendo/AutobahnPython) as our backend
 WebSockets provide a (**TODO**: summarize and/or link why websockets) more efficient protocol--less bandwidth and much better latency--than typical request-response HTTP. We are using them because we expect (though we don't actually have any)
 
 * [Server-side WebSocket API reference](https://github.com/tavendo/AutobahnPython/tree/master/doc)
-* [Browser-side WebSocket API reference](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants).
+* [Browser-side WebSocket API reference](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
 
 WebSockets, like the _webservice_ protocols that came before them, are referenced like any other HTTP or object: with a URL.
 A websocket URL looks like "ws://server:port/path/to/endpoint" or "wss://server:port/path/to/endpoint", the difference being that the latter causes the websocket to connect over SSL.
@@ -62,7 +62,7 @@ When you're in the browser console, you can make a websocket to test with by:
 Using 'wss' is a good idea, but unless you've got SSL set up on the server it'll hang and you won't know why because neither the browser API nor Autobahn explicitly mention "SSL" when such a connection fails.
 
 The hostname MUST be the same as the site you are on due to the same-origin policy (unless you do some server side black magic which we shall avoid)
- * In particular, when debugging, you should first open up the server in your webbrowser (autobahn gives a useful response if you hit it with http:// instead of ws://, so just do that before trying to debug stuff)
+ * In particular, when debugging, you should first open up the server in your webbrowser (autobahn gives a useful response if you hit it with http:// instead of ws://, so if your websocket is supposed to be ws://localhost:9242/ws, then first open http://localhost:9242/ws before trying to debug stuff)
 
 This one-liner lets you test if a websocket is listening:
  ```
