@@ -58,6 +58,13 @@ WAMP provides events for websockets (which sort of seems to reintroduce what HTT
   So you can either subscribe and publish to event queues (like)
   Or you can do RPC (but if you're going to do RPC /anyway/ why bother running it over a single websocket? just make lottts of websockets. is it really that much faster?)
 
+## D3
+
+Dynamic d3 graphs:
+
+* https://github.com/square/cubism (uses d3 with canvas??)
+* http://www.pubnub.com/blog/create-real-time-graphs-with-pubnub-and-d3-js/
+
 ## Compatibility
 
 Since this is a web app, it needs to be tested in all browsers on all platforms.
