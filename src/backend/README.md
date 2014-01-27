@@ -36,11 +36,20 @@ $ python server.py debug
 ## Developer's Tools
 
 ????
+http://phantomjs.org/ might come in handy
 
 ## WebSocket Notes
 
 We're using [autobahn](https://github.com/tavendo/AutobahnPython) as our backend implementation of the websocket protocol (it's a protocol that rides on top of HTTP, just to make the web stack even deeper).
-WebSockets provide a (**TODO**: summarize and/or link why websockets) more efficient protocol--less bandwidth and much better latency--than typical request-response HTTP. We are using them because we expect (though we don't actually have any)
+WebSockets provide a (**TODO**: summarize and/or link why websockets) more efficient protocol--less bandwidth and much better latency--than typical request-response HTTP. We are using them because we expect (though we don't actually have any).
+
+In Twisted, a "protocol" is a class which knows how to send and receive data in some particular way,
+ and gets instantiated anew **for each connection**(!).
+ To hook up a "protocol" to a server, you must wrap the protocol in a "ServerFactory" and pass that as a node to the actual server (this is already done and shouldn't have to be tweaked too much).
+The tricky part of this for development is that since each 'protocol' happens new for each connection from each client,
+you should not build any statefulness into your "protocols" even though they feel in some ways like the heart of the server. You need to make a tertiary class . Think of protocols as _views_ on your _model_ (and the twisted server which holds the listening TCP connections as the _controller_).
+ You _can_ remember the position of your database cursor or your file's seek position within a single "protocol", but anything, updating the database needs to be external (and make the assumption that the connection can die at piece).
+However, Twisted thought ahead and covered this situation: every instance of a protocol gains, as .factory, the Factory which created it; so any shared state can (and in most of the [examples](http://twistedmatrix.com/documents/current/core/examples/), is) shared there.
 
 * [Server-side WebSocket API reference](https://github.com/tavendo/AutobahnPython/tree/master/doc)
 * [Browser-side WebSocket API reference](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).

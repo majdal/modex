@@ -24,7 +24,7 @@ Browsers tend to be even more restrictive when running locally: that is, when th
 Thus in order to do any proper debugging you must launch an **http server**. Luckily, ```run.py``` spawns such a server for you.
 However, if you need to test something quickly and the dense project stack is getting in your way, you can fall back on
 a standard webserver.
-On linux, [thttpd]() and [webfs](http://linux.bytesex.org/misc/webfs.html) are very viable options ("cd frontend; webfsd -d . & firefox localhost:8000" will get you up and hacking).
+On linux, [thttpd]() and [webfs](http://linux.bytesex.org/misc/webfs.html) are very viable options ("cd frontend; webfsd -d . & firefox localhost:8000" will get you up and hacking). ```python2 -m SimpleHTTPServer 8008``` works too.
 You could also invest in learning a heavier server like
  IIS (Windows-only),
  Apache,
@@ -43,6 +43,15 @@ you might need to investigate [Fiddler](http://fiddler2.com/) which is a traffic
 Another resource, useful for doing remote (ie non-LAN) debugging, is nodejs's [localtunnel](http://localtunnel.me/) service.
 
 When developing with Chrome you should disable the cache to avoid problems. To do this open the Developer Tools (ctrl-shift-i or option+command+J), click on Settings (the gear in the top left) and then check the box marked "Disable cache (while DevTools is open)".
+
+For testing, [Selenium](http://seleniumhq.org) is worthwhile.
+
+## WebSockets
+(see also [[../backend/README.md#WebSockets]])
+
+Some definitions:
+
+WA
 
 ## Compatibility
 

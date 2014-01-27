@@ -1,4 +1,6 @@
 #!/usr/bin/python2
+# the main server code
+# make sure to read src/backend/README.md if this confuses you.
 
 import sys
 from os.path import dirname, abspath, join as pathjoin
@@ -32,15 +34,71 @@ from autobahn.twisted.resource import WebSocketResource, HTTPChannelHixie76Aware
 
 import json
 
-class EchoServerProtocol(WebSocketServerProtocol):
-   def onMessage(self, msg, binary):
-        data = {'Incandescent': [-_ for _ in range(10)],
+data = {'Incandescent': [-_ for _ in range(10)],
                 'CFL': [_ for _ in range(10)],
                 'Halogen': [_*2 for _ in range(10)],
                 'LED': [_*0.5 for _ in range(10)],
         }
-        #import ipdb; ipdb.set_trace()
-        self.sendMessage(json.dumps(data))
+
+
+# we are trying to set up a producer-consumer system, and twisted has this built in:
+# https://twistedmatrix.com/documents/12.2.0/core/howto/producers.html
+# ah, simpler: reactor.callLater
+
+import csv
+
+class JsonDataServer(WebSocketServerProtocol):
+   def onConnect(self, request):
+      print("Client connecting: {}".format(request.peer))
+
+   def onOpen(self):
+      print("WebSocket connection open.")
+      
+      #I want to speak dynamically: so, as data comes in, push it to the client
+      # but I don't see how to do this?? what thread am I running on???
+      # ah!
+      dat = pathjoin(PROJECT_ROOT, "assets/data/static_lightbulbs.tsv")
+      dat = open(dat)
+      dat = csv.reader(dat, dialect=csv.excel_tab)
+      header = next(dat)
+      print("read header:", header)
+      
+      # this
+      def feed():  #a coroutine, meant to be pumped by the twisted event loop
+        for row in dat:
+          J = dict(zip(header, row))
+          print "pushing", J, "to the client"
+          self.speak(J)
+          yield
+      g = feed()
+      def loop():  #wrap the coroutine (there's probably a cleaner way to do this, but shh)
+        try:
+          next(g)
+          reactor.callLater(3, loop)
+        except StopIteration:
+          pass
+      loop()  #kick it off
+
+   def onMessage(self, payload, isBinary):
+      if isBinary:
+         print("Binary message received: {} bytes".format(len(payload)))
+      else:
+         print("Text message received: |{}|".format(payload.decode('utf8')))
+
+      #self.sendMessage(json.dumps(data), isBinary)
+
+   def onClose(self, wasClean, code, reason):
+      print("WebSocket connection closed: {}".format(reason))
+   
+   def speak(self, o):
+     "send object o across the wire to the listener"
+     "the idea is that in our setup, the clients mostly listen to us"
+     if not isinstance(o, dict): #coerce 
+       o = o.__dict__ #security risk?
+     self.sendMessage(json.dumps(o), False)
+      
+
+#def WebSocket( #can i wrap it to be les stupid?
 
 if __name__ == '__main__':
 
@@ -56,7 +114,7 @@ if __name__ == '__main__':
    factory = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
                                     debugCodePaths = True)
-   factory.protocol = EchoServerProtocol
+   factory.protocol = JsonDataServer
    #factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported   
 
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
@@ -69,7 +127,7 @@ if __name__ == '__main__':
    ## except for some which are under assets/
    ## and we have our WebSocket server under "/ws"
    root = File(webroot)
-   assets = File(assets)  
+   assets = File(assets)
    resource = WebSocketResource(factory)
 
    root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
