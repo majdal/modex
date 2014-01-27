@@ -87,6 +87,7 @@ This one-liner lets you test if a websocket is listening:
 You must run the server under python2. Twisted is [the largest](https://wiki.python.org/moin/Python2orPython3) library yet to be ported to python3.
 
 In twisted, node.putChild() must have its first argument **NOT** end with a '/'. That will cause mysterious 404s with no clue in the log.
+[Here](http://krondo.com/?p=1209)'s a fun (very poetic) book about Twisted.
 
 In OL3, when loading Vector layers, you (for some currently unknown reason) must pass 'renderer: ol.RendererHint.CANVAS' to the Map constructor or else they will fail with a nil ptr exception in the bowels of OL.
 
