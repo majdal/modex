@@ -62,7 +62,7 @@ farmmodel[7].products["wheat"]  #at time-step 7, what is the amount of productio
   * ```/maps/vector```
     * index is a json listing of available vectors
     * each vector might actually be dynamic!
-    * ((how do we handle only asking for regional subsets of vectors?))
+    * OSM and d3 handle treating vectors as tiled blocks: see [Vector Tiles](http://bl.ocks.org/mbostock/5616813) at the d3 examples, and look at http://b.tile.openstreetmap.us/vectiles-highroad/13/1309/3167.json for an example of the format given.
 * ```/data/indicators```  -- websockets giving streams of data for plotting
   * ```/data/indicators/carbon/```
   * ```/data/indicators/happiness```
