@@ -10,6 +10,8 @@ $ python run.py
 Once the server is up, you can mostly just leave it going and do all your work on the html, javascript, and css files here.
 The server passes static files through HTTP unchanged, so you need only reload the page to see you changes as you work.
 
+**Special WebSocket Notice Jan 26th 2014**: to see the websocket, pop open the server, load up the page, pop open the web inspector, and watch the server's output as it pushes data and data_socket.onmessage in the js console as it receives it.
+
 ## Code Structure
 Code written for this project goes under src/ (so your javascripts should be src/frontend/*.js and your css under src/frontend/css/*.css).
 Code dependencies (external javascripts like OpenLayers and D3), being relatively static and _not_ part of our project, are considered assets and go under assets/libs/.
@@ -51,7 +53,10 @@ For testing, [Selenium](http://seleniumhq.org) is worthwhile.
 
 Some definitions:
 
-WA
+WAMP is the [WebSocket Application Messaging Protocol](http://wamp.ws/) and it builds __*yet another*__ protocol on top of WebSockets, which are already on top of HTTP.
+WAMP provides events for websockets (which sort of seems to reintroduce what HTTP in RESTful mode gives...., (except now it's bidirectional, I guess)).
+  So you can either subscribe and publish to event queues (like)
+  Or you can do RPC (but if you're going to do RPC /anyway/ why bother running it over a single websocket? just make lottts of websockets. is it really that much faster?)
 
 ## Compatibility
 

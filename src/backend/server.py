@@ -34,16 +34,17 @@ from autobahn.twisted.resource import WebSocketResource, HTTPChannelHixie76Aware
 
 import json
 
-data = {'Incandescent': [-_ for _ in range(10)],
-                'CFL': [_ for _ in range(10)],
-                'Halogen': [_*2 for _ in range(10)],
-                'LED': [_*0.5 for _ in range(10)],
-        }
-
+#data = {'Incandescent': [-_ for _ in range(10)],
+#                'CFL': [_ for _ in range(10)],
+#                'Halogen': [_*2 for _ in range(10)],
+#                'LED': [_*0.5 for _ in range(10)],
+#        }
 
 # we are trying to set up a producer-consumer system, and twisted has this built in:
 # https://twistedmatrix.com/documents/12.2.0/core/howto/producers.html
 # ah, simpler: reactor.callLater
+
+# TODO(kousu): set up WAMP and use it to push messages instead of using a 'raw' websocket
 
 import csv
 
@@ -63,7 +64,7 @@ class JsonDataServer(WebSocketServerProtocol):
       header = next(dat)
       print("read header:", header)
       
-      # this
+      # this could probably be cleaner
       def feed():  #a coroutine, meant to be pumped by the twisted event loop
         for row in dat:
           J = dict(zip(header, row))
@@ -71,7 +72,8 @@ class JsonDataServer(WebSocketServerProtocol):
           self.speak(J)
           yield
       g = feed()
-      def loop():  #wrap the coroutine (there's probably a cleaner way to do this, but shh)
+      
+      def loop():  #wrap the coroutine in a callback that causes a loop setTimeout()-style playing nice with Twisted's loop (there's probably a cleaner way to do this, but shh)
         try:
           next(g)
           reactor.callLater(3, loop)
@@ -97,8 +99,6 @@ class JsonDataServer(WebSocketServerProtocol):
        o = o.__dict__ #security risk?
      self.sendMessage(json.dumps(o), False)
       
-
-#def WebSocket( #can i wrap it to be les stupid?
 
 if __name__ == '__main__':
 
