@@ -13,5 +13,6 @@ ipython==1.1.0
 klein==0.2.1
 -e git+https://github.com/majdal/lightbulb.git@3c01c724552d081437cb0a0762b9d7505db9d56a#egg=lightbulb-dev
 mock==1.0.1
+msgpack-python==0.4.0
 numpy==1.8.0
 zope.interface==4.0.5
