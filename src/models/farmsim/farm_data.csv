@@ -1,0 +1,4 @@
+name,market_price,fertilizer_cost,labor_cost,seed_cost
+Wheat,100,25,35,15
+Corn,200,40,90,25
+Potatoes,50,5,15,5
