@@ -1,6 +1,3 @@
 [submodule "simpacks/lightbulb"]
       path = simpacks/lightbulb
       url = https://github.com/majdal/lightbulb-simpack.git
-[submodule "simpacks/farm"]
-	path = simpacks/farm
-	url = https://github.com/vchynarov/farming-simpack
