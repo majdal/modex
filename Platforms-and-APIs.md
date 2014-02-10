@@ -10,6 +10,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 * craftyjs
 * d3js
 
+
 * HTML5
 
 ## Networking
@@ -27,6 +28,8 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 ## Backend
 * Twisted
 * Django
+* [RPy](http://rpy.sourceforge.net/rpy2.html) and its child [rmagic](http://ipython.org/ipython-doc/dev/config/extensions/rmagic.html) to hook out
+* Jython to wrap java code??
 
 
 * PostGIS
