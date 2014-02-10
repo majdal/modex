@@ -16,13 +16,17 @@ There are very disorganized notes scattered on these shared docs which **should 
 Our **allies**,
 * [SiG@UWaterloo](http://sig.uwaterloo.ca)
 * The [UW Games Institute](https://uwaterloo.ca/games-institute/)
-* [MaRS](http://data.marsdd.com)
+* [MaRS Data Catalyst](http://data.marsdd.com) - _a source of open data and direction for application_
+* [Dawn Parker](http://wici.ca/new/2011/08/dawn-parker/) and her [SLUCE II](http://vserver1.cscs.lsa.umich.edu/sluce/) land use simulation
 * The [McConnell Foundation](http://www.mcconnellfoundation.ca/en)
 * [WICI](http://wici.ca)
 
 and some of our **inspiration**
 * [School of Data](http://schoolofdata.org/)
+* The [Global Land Project](http://www.globallandproject.org/) 
 * [CorridorDesign](http://corridordesign.org/)
+* [CoMSES Network](http://www.openabm.org/) out of [Arizona State University](https://csdc.asu.edu/)
+* 
 
 When we want to get off github, know that this wiki itself is simply a git repo with URL https://github.com/majdal/modex.wiki.git and the issue tracker can be extracted with the REST API ([this ruby project](http://github.com/sorich87/github-to-bitbucket-issues-migration) is a one-click export solution).
 
