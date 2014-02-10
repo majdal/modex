@@ -11,6 +11,6 @@ See our [blog](http://socialinnovationsimulation.com/), our [people](FIXME), and
 
 
 ## Getting Started ##
-1. Clone this repository: `git clone --recursive https://github.com/majdal/modex.git`. Notice the `--recursive` flag: it is used to clone the repositories under `simpacks`, which makes the lightbulb mode work with garlicsim. 
+1. Clone this repository: `git clone https://github.com/majdal/modex.git`.
 2. To install dependencies, see [the developer's guide](src/README.md).
 3. To run the application, run `python run.py` in a terminal. A new browser window should open automatically, pointing to `http://127.0.0.1:8080`.
