@@ -75,7 +75,11 @@ if __name__ == '__main__':
   #if not PYTHON:
   #  PYTHON = which("python")
   #PYTHON = PYTHON[0] #just take the first result as the final result, because whatever
+<<<<<<< HEAD
   PYTHON = 'python'  #at the moment, 'python2' vs 'python3' seems to be the more cross-compatible method this way
+=======
+  PYTHON = sys.executable # simply use the same python that called the run.py script. 
+>>>>>>> cd6a967085f37749715dce059305bf278e6e8e35
   
   browser = threading.Thread(target=browse) 
   browser.start()  #open a browser to the webapp's page (nonblocking)
