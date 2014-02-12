@@ -1,11 +1,11 @@
 //Setup Screen
 
 "use strict"
-Crafty.scene("setup", function() {
-
+Crafty.scene("goals", function() {
+//three buttons
 	
 
-	Crafty.e("2D, DOM, setupTitle").attr({	
+	Crafty.e("2D, DOM, goalTitle").attr({	
 		x : 375,
 		y : 30	
 	});
@@ -21,10 +21,10 @@ Crafty.scene("setup", function() {
     	x: 10,
         y: 600
     }).bind('Click', function() {
-    	Crafty.scene("menu")
+    	Crafty.scene("setup")
     });
 
-    //load scenario
+    //load goals
     Crafty.e("2D, DOM, menuBtn, Mouse").attr({
     	x: 225,
         y: 600
@@ -34,11 +34,11 @@ Crafty.scene("setup", function() {
     	x: 225,
         y: 600
     }).bind('Click', function() {
-    	Crafty.scene("loadscenario")
+    	Crafty.scene("loadgoals")
     });
 
 
-    //save scenario
+    //save goals
     Crafty.e("2D, DOM, menuBtn, Mouse").attr({
     	x: 525,
         y: 600
@@ -48,7 +48,7 @@ Crafty.scene("setup", function() {
     	x: 525,
         y: 600
     }).bind('Click', function() {
-    	Crafty.scene("savescenario")
+    	Crafty.scene("savegoals")
     });
 
 
@@ -73,14 +73,14 @@ Crafty.scene("setup", function() {
    });
 
 
-   // Government
+   // Happiness
 
-   Crafty.e("2D, DOM, govtIcon").attr({
+   Crafty.e("2D, DOM, happinessIcon").attr({
    		x: 340,
    		y: 125
    });
 
-   Crafty.e("2D, DOM, govtText").attr({
+   Crafty.e("2D, DOM, happinessText").attr({
    		x: 450,
    		y: 135
    });
@@ -89,16 +89,17 @@ Crafty.scene("setup", function() {
    		x: 450,
    		y: 225
    });
-   //Starting Conditions
 
-   Crafty.e("2D, DOM, condIcon, Mouse").attr({
+   //Corn Output
+
+   Crafty.e("2D, DOM, cornIcon").attr({
    		x: 340,
    		y: 235
    }).bind('Click', function() {
     	Crafty.scene("goals");
     });
 
-   Crafty.e("2D, DOM, condText").attr({
+   Crafty.e("2D, DOM, cornText").attr({
    		x: 450,
    		y: 235
    });
@@ -108,14 +109,14 @@ Crafty.scene("setup", function() {
    		y: 335
    });
 
-   //Natural Disasters
+   //GDP
 
-   Crafty.e("2D, DOM, natIcon").attr({
+   Crafty.e("2D, DOM, gdpIcon").attr({
    		x: 340,
    		y: 345
    });
 
-   Crafty.e("2D, DOM, natText").attr({
+   Crafty.e("2D, DOM, gdpText").attr({
    		x: 450,
    		y: 345
    });
@@ -125,16 +126,6 @@ Crafty.scene("setup", function() {
    		y: 445
    });
 
-   //Game Time
-
-   Crafty.e("2D, DOM, timeIcon").attr({
-   		x: 340,
-   		y: 455
-   });
-
-   Crafty.e("2D, DOM, timeText").attr({
-   		x: 450,
-   		y: 455
-   });
+   
 });
 
