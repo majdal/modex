@@ -5,6 +5,24 @@
  <script type="text/javascript" src="/assets/libs/autobahn.js"></script>
  <script>
   window.onload = function() {  //demo code from https://github.com/tavendo/AutobahnJS
+   
+    //attempt a simple ws connection, to make sure that works
+    data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
+    console.log("big fancy free range chickens")
+    data_socket.onopen = function() { 
+       console.log("opened to " +        this.url)
+       this.send(""); //poke the server to get data out
+    }
+    data_socket.onerror = function(evt) {
+      console.log("error occurred:")
+      console.log(evt)
+    }
+    data_socket.onmessage = function(evt) {
+      d = JSON.parse(evt.data);
+      console.log("received data from websocket:")
+      console.log(d);
+    }
+
 
    // WAMP server
    
