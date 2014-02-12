@@ -26,7 +26,7 @@ import autobahn
 #  https://raw.github.com/tavendo/AutobahnPython/v0.5.14/examples/websocket/echo/server.py
 #  https://raw.github.com/tavendo/AutobahnPython/e1dae070e67a9361f14beba775c66961e06d43ff/demo/echo/echo_server.py
 
-from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
+from autobahn.twisted.websocket import WebSocketServerFactory, WampWebSocketServerFactory, WebSocketServerProtocol, WampWebSocketServerProtocol
 from autobahn.twisted.resource import WebSocketResource, HTTPChannelHixie76Aware
 
 #TODO: import gdal and take vector layers to load as arguments
@@ -47,6 +47,25 @@ import json
 # TODO(kousu): set up WAMP and use it to push messages instead of using a 'raw' websocket
 
 import csv
+
+from twisted.internet.defer import inlineCallbacks
+from autobahn.twisted.util import sleep
+from autobahn.twisted.wamp import ApplicationSession, ApplicationSessionFactory
+
+class PubSubServer(ApplicationSession): #this is a .. Protocol?
+  """
+  An application component that publishes an event every second.
+  """
+  def onConnect(self):
+    self.join("realm1")
+  
+  @inlineCallbacks
+  def onJoin(self, details):
+    counter = 0
+    while True:
+      self.publish('com.myapp.topic1', counter)
+      counter += 1
+      yield sleep(1)
 
 class JsonDataServer(WebSocketServerProtocol):
    def onConnect(self, request):
@@ -111,27 +130,38 @@ if __name__ == '__main__':
    if debug:
      print "Starting server in", PROJECT_ROOT
 
-   factory = WebSocketServerFactory("ws://localhost:8080",
+   ws_factory = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
                                     debugCodePaths = True)
-   factory.protocol = JsonDataServer
-   #factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported   
+   ws_factory.protocol = JsonDataServer
+   #ws_factory.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported   
+
+     # why do i have to state the URL twice, Autobahn??
+   wamp_factory = ApplicationSessionFactory() #"ws://localhost:8080", debug = debug, debugCodePaths = True)
+   wamp_factory.protocol = PubSubServer
 
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
    assets = pathjoin(PROJECT_ROOT,"assets")
    if debug:
      print "putting", webroot,"at root"
      print "putting", assets,"at assets"
-
+   
+   
+   
+   
    ## we serve static files (most of the frontend html, js, and css) under "/" ..
    ## except for some which are under assets/
    ## and we have our WebSocket server under "/ws"
    root = File(webroot)
    assets = File(assets)
-   resource = WebSocketResource(factory)
+   resource = WebSocketResource(ws_factory)
+   wamp = WebSocketResource(wamp_factory)
 
    root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
    root.putChild("ws", resource)    #this puts the websocket at /ws. You cannot put both the site and the websocket at the same endpoint; whichever comes last wins, in Twisted
+   if debug:
+     root.putChild("scratch", File(pathjoin(PROJECT_ROOT,"scratch")))
+   root.putChild("wamp", wamp)
   
    ## both under one Twisted Web Site
    site = Site(root)

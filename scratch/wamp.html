@@ -1,0 +1,51 @@
+<html>
+
+<head>
+ <title>Experimental WAMP.ws code</title>
+ <script type="text/javascript" src="/assets/libs/autobahn.js"></script>
+ <script>
+  window.onload = function() {  //demo code from https://github.com/tavendo/AutobahnJS
+
+   // WAMP server
+   
+   ab.connect("ws://localhost:8080/wamp",
+
+      // WAMP session was established
+      function (session) {
+
+         // subscribe to topic
+         session.subscribe("http://example.com/event#myevent1", //..wait, this url is.. a broken URL? whyyyyy
+
+            // on event publication callback
+            function (topic, event) {
+               console.log("got event1: " + event);
+            }
+         );
+
+         // publish event on a topic
+         session.publish("http://example.com/event#myevent1", {a: 23, b: "foobar"});
+      },
+
+      // WAMP session is gone
+      function (code, reason) {
+         console.log(reason);
+      }
+   );
+};
+
+ </script>
+</head>
+<body>
+
+<p>I'm concerned that WAMP is wasteful. It seems ..sort of silly.
+ It screams overengineered to me. It's entirely possible I'm just being picky.
+
+ Do we ~need~ it? It seems simpler to run a separate WebSocket endpoint for each feed
+  (we might have scaling issues with that)
+ I suppose Autobahn transparently handles multiple subscribers to the same stream, and that ~is~ a difficult feature that we need
+  
+ The flash of the website combined with how out of date it is is give me jiggies.
+ -kousu</p>
+
+</body>
+</html>
