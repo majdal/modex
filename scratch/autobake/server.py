@@ -1,25 +1,7 @@
 ###############################################################################
 ##
+## Partially derived from example code from:
 ##  Copyright (C) 2011-2014 Tavendo GmbH
-##
-##  Licensed under the Apache License, Version 2.0 (the "License");
-##  you may not use this file except in compliance with the License.
-##  You may obtain a copy of the License at
-##
-##      http://www.apache.org/licenses/LICENSE-2.0
-##
-##  Unless required by applicable law or agreed to in writing, software
-##  distributed under the License is distributed on an "AS IS" BASIS,
-##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-##  See the License for the specific language governing permissions and
-##  limitations under the License.
-##
-###############################################################################
-
-
-###############################################################################
-##
-##  Copyright (C) 2014 Tavendo GmbH
 ##
 ##  Licensed under the Apache License, Version 2.0 (the "License");
 ##  you may not use this file except in compliance with the License.
@@ -44,7 +26,14 @@ from autobahn.wamp.types import SubscribeOptions
 from autobahn.twisted.util import sleep
 from autobahn.twisted.wamp import ApplicationSession
 
-class Component(ApplicationSession):
+
+#TODO(kousu): figure out how to get the backend to receive pubsub events; do we need to make a separte ApplicationSession or something?
+
+def favouritePolygon():
+   POLYGONS = [[1,2,3], [4,5,6], ["cat","mess","empty"]]
+   return random.choice(POLYGONS)
+
+class PubSubComponent(ApplicationSession):
    """
    An application component that publishes events with no payload
    and with complex payloads every second.
@@ -53,10 +42,11 @@ class Component(ApplicationSession):
    def onConnect(self):
       self.join("realm1")
 
-
    @inlineCallbacks
    def onJoin(self, details):
 
+      self.register(favouritePolygon, "favouritePolygon")
+      
       counter = 0
       while True:
          self.publish('lovetriangle')
@@ -102,7 +92,7 @@ if __name__ == '__main__':
    session_factory = RouterSessionFactory(router_factory)
    
    ## [ ... ... ]
-   session_factory.add(Component())
+   session_factory.add(PubSubComponent())
 
    ## create a WAMP-over-WebSocket transport server factory
    ##

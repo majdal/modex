@@ -4,11 +4,14 @@
  <title>Experimental WAMP.ws code</title>
  <script type="text/javascript" src="autobahn.js"></script>
  <script type="text/javascript">
-  var global = this;
+  var global = this;  //stash the global namespace so we have somewhere to stash objects we want to inspect in the web console
+  
   window.onload = function() {  //demo code from https://github.com/tavendo/AutobahnJS
     // careful: using var makes a local that shadows the global autobahn (python scoping rules)
+  
+  // this code uses JSON.stringify to pretty-print objects to the js console; it's not anything to do with sending data back (Autobahn does that part internally)
+  
   console.log("loading");
-  autobahn._debugpubsub = true;
 
 var connection = new autobahn.Connection({
    url: 'ws://127.0.0.1:9000/',
@@ -34,9 +37,25 @@ connection.onopen = function (session) {
      console.log("metadata details: " + JSON.stringify(evtDetails))
    }
 
-   session.subscribe(heartbeatHandler, "lovetriangle");
-   session.subscribe(dataHandler, "haterhombus");
-   session.subscribe(metaLooker, "lovetriangle");
+  session.subscribe(heartbeatHandler, "lovetriangle");
+  session.subscribe(dataHandler, "haterhombus");
+  session.subscribe(metaLooker, "lovetriangle");
+
+  
+   // RPC is done with session.call(), which returns a Promise/A+ object -- something with a .then() method that lets you attach callbacks
+   function askForPolygon() { 
+     console.log("calling favouritePolygon");
+     session.call('favouritePolygon').then(
+         function (r) {
+            console.log("the server likes this polygon", JSON.stringify(r));
+         },
+         function (error) {
+            console.log("Call failed: " + JSON.stringify(error));
+         }
+      );
+      setTimeout(askForPolygon, 3000);
+    }
+   askForPolygon();
   
   console.log(connection._websocket.readyState);
   global.session = session; //stash for debugging
@@ -73,15 +92,6 @@ console.log(connection._websocket.readyState);
 
 Run server.py (found in the same folder), open up the web inspector to the JS console, and reload this page.
 
-<h2>Known Bugs</h2>
-The API versions are inconsistent amongst the varieties of Autobahn, so there's some issues to work through.
-<ol>
-<li>heartbeatHandler() is crashing and I don't know why; maybe because it's not getting an argument?</li>
-<li>The data that is passed through to dataHandler() is only the first element in the list of args, though the server appears to be formatting it as if it knows what it's doing (e.g. 
- <code><pre>
-2014-02-12 21:19:02-0500 [-] TX Frame to 127.0.0.1:60876 : fin = True, rsv = 0, opcode = 1, mask = -, length = 95, repeat_length = None, chopsize = None, sync = False, payload = [36,6491576786669246,6795983798931556,{},[69,23],{"c":"Hello","d":{"counter":9,"foo":[1,2,3]}}]
-</pre></code></li>
-</ol>
 
 </body>
 </html>
