@@ -85,6 +85,8 @@ exports.WebSocket = websocket.WebSocket;
 exports.Connection = connection.Connection;
 
 exports.Session = session.Session;
+exports.CallDetails = session.CallDetails;
+exports.EventDetails = session.EventDetails;
 exports.Result = session.Result;
 exports.Error = session.Error;
 exports.Subscription = session.Subscription;
@@ -155,45 +157,9 @@ Connection.prototype.close = function () {
    self._websocket.close();
 };
 
+
 exports.Connection = Connection;
 
-
-/*
-function main (session) {
-
-   session.call('com.myapp.time').then(...)
-
-   session.publish('com.myapp.topic1', [1, 2, 'hello'], null, {acknowledge: true});
-
-   session.publish({topic: 'com.myapp.topic1', acknowledge: true}, 'hello');
-   session.publish({topic: 'com.myapp.topic1', acknowledge: true}, [1, 2, 'hello']);
-
-   session.publish('com.myapp.topic1', {acknowledge: true}, [1, 2, 'hello']);
-}
-
-var transport = autobahn.FallbackTransport({appname: 'com.myapp.ultimate'});
-
-transport.add(new autobahn.WebSocket(false, 'ws://127.0.0.1:9000/', ['wamp.2.json']), {retries: 5});
-transport.add(new autobahn.LongPoll(), {retries: 3});
-transport.add(new autobahn.Alert({redirect: 'http://fallback.com/myapp'});
-
-transport.onopen = function (session) {
-   main(session);
-};
-
-transport.onretry = function (retry) {
-   next();
-};
-
-transport.onclose = function (why) {
-};
-
-transport.open({realm: 'realm1'});
-
-transport.next();
-
-transport.close();
-*/
 },{"./session.js":4,"./websocket.js":5}],4:[function(_dereq_,module,exports){
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -225,6 +191,15 @@ var CallDetails = function (caller, progress) {
 
    self.caller = caller;
    self.progress = progress;
+};
+
+
+var EventDetails = function (publication, publisher) {
+
+   var self = this;
+
+   self.publication = publication;
+   self.publisher = publisher;
 };
 
 
@@ -549,19 +524,24 @@ var Session = function (socket, options) {
       //
       // process EVENT message
       //
-      var subscription = msg[1];
-      var publication = msg[2];
-      var details = msg[3];
+      // [EVENT, SUBSCRIBED.Subscription|id, PUBLISHED.Publication|id, Details|dict, PUBLISH.Arguments|list, PUBLISH.ArgumentsKw|dict]
 
+      var subscription = msg[1];
 
       if (subscription in self._subscriptions) {
 
-         var fn = self._subscriptions[subscription];
+         var fun = self._subscriptions[subscription];
+
+         var publication = msg[2];
+         var details = msg[3];
+
+         var args = msg[4] || [];
+         var kwargs = msg[5] || {};
+
+         var ed = new EventDetails(publication, details.publisher);
 
          try {
-
-            fn(msg[4][0]);
-
+            fun(args, kwargs, ed);
          } catch (e) {
             console.log("Exception raised in event handler", e);
          }
@@ -717,10 +697,14 @@ var Session = function (socket, options) {
          var d = r[0];
          var options = r[1];
 
-         d.resolve(result);
-
-         delete self._call_reqs[request];
-
+         if (details.progress) {
+            if (options && options.receive_progress) {
+               d.notify(result);
+            }
+         } else {
+            d.resolve(result);
+            delete self._call_reqs[request];
+         }
       } else {
          self._protocol_violation("CALL-RESULT received for non-pending request ID " + request);
       }
@@ -831,7 +815,24 @@ var Session = function (socket, options) {
             function (err) {
                // construct ERROR message
                // [ERROR, REQUEST.Type|int, REQUEST.Request|id, Details|dict, Error|uri, Arguments|list, ArgumentsKw|dict]
-               var reply = [MSG_TYPE.ERROR, MSG_TYPE.INVOCATION, request, {}, "wamp.error"];
+
+               var reply = [MSG_TYPE.ERROR, MSG_TYPE.INVOCATION, request, {}];
+
+               if (err instanceof Error) {
+
+                  reply.push(err.error);
+
+                  var kwargs_len = Object.keys(err.kwargs).length;
+                  if (err.args.length || kwargs_len) {
+                     reply.push(err.args);
+                     if (kwargs_len) {
+                        reply.push(err.kwargs);
+                     }
+                  }
+               } else {
+                  reply.push('wamp.error.runtime_error');
+                  reply.push([err]);
+               }
 
                // send WAMP message
                //
@@ -993,11 +994,7 @@ Session.prototype.call = function (procedure, pargs, kwargs, options) {
    // construct CALL message
    //
    var msg = [MSG_TYPE.CALL, request];
-   if (options) {
-      msg.push(options);
-   } else {
-      msg.push({});
-   }
+   msg.push(options || {})
    msg.push(procedure);
    if (pargs) {
       msg.push(pargs);
@@ -1180,6 +1177,9 @@ Session.prototype._unregister = function (registration) {
 
 
 exports.Session = Session;
+
+exports.CallDetails = CallDetails;
+exports.EventDetails = EventDetails;
 exports.Result = Result;
 exports.Error = Error;
 exports.Subscription = Subscription;
@@ -2575,7 +2575,7 @@ if (WebSocket) ws.prototype = WebSocket.prototype;
 },{}],9:[function(_dereq_,module,exports){
 module.exports={
    "name": "autobahn",
-   "version": "0.9.0-2",
+   "version": "0.9.0-3",
    "description": "An implementation of The Web Application Messaging Protocol (WAMP).",
    "main": "index.js",
    "scripts": {
