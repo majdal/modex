@@ -20,9 +20,9 @@ connection.onopen = function (session) {
    console.log("opening session:");
    console.log(session)
    
-   session.subscribe(" haterhombus ", function(topic, evt) { 
+   session.subscribe(function(topic, evt) { 
      console.log("got pinged with topic " + topic);
-   })
+   }, "haterhombus", {})
    //console.log(session.subscribe.toSource());
   console.log(connection._websocket.readyState);
   global.session = session;

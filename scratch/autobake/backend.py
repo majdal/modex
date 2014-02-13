@@ -45,7 +45,7 @@ class Component(ApplicationSession):
          self.publish('com.myapp.heartbeat')
 
          obj = {'counter': counter, 'foo': [1, 2, 3]}
-         self.publish('com.myapp.topic2', random.randint(0, 100), 23, c = "Hello", d = obj)
+         self.publish('haterhombus', random.randint(0, 100), 23, c = "Hello", d = obj)
 
          counter += 1
          yield sleep(1)
