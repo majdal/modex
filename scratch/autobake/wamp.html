@@ -76,40 +76,5 @@ The API versions are inconsistent amongst the varieties of Autobahn, so there's 
 </pre></code></li>
 </ol>
 
-<h2>Complaints and Disentangling Thoughts</h2>
-
-<p>I'm concerned that WAMP is wasteful. It seems ..sort of silly.
- It screams overengineered to me. It's entirely possible I'm just being picky.
-
-<p> Do we ~need~ it? It seems simpler to run a separate WebSocket endpoint for each feed
-  (we might have scaling issues with that)
- I suppose Autobahn transparently handles multiple subscribers to the same stream, and that ~is~ a difficult feature that we need
-  </p>
-
-<p>
- The flash of the website combined with how out of date it is is give me jiggies.
- They link to a bunch of implementations, making it look like it has wide support,
- but every implementation has only one contributor, less than 50 commits, or is explicitly alpha software.
- WAMP is hardly a protocol; it's Oberstet (aka Tavendo)'s baby. See: http://xkcd.com/927/</p>
-
-<p>
- oh brother: they just recently redesigned the protocol to version 2; all the docs on autobahn.ws/python are
- out of date and full of broken links, and they moved all the python code to "wamp1/".
-</p>
-
-<p>And if that wasn't enough, this should be: their own list of exports is incorrect:<pre><code>
-In [1]: from autobahn.wamp.websocket import *
----------------------------------------------------------------------------
-AttributeError                            Traceback (most recent call last)
-<ipython-input-1-6a1d1416c112> in <module>()
-----> 1 from autobahn.wamp.websocket import *
-
-AttributeError: 'module' object has no attribute 'WampServerProtocol'
-
-</code></pre>
-</p>
-
-<p> -kousu</p>
-
 </body>
 </html>
