@@ -35,8 +35,8 @@ connection.onopen = function (session) {
    }
 
    session.subscribe(heartbeatHandler, "lovetriangle");
-   session.subscribe(metaLooker, "lovetriangle");
    session.subscribe(dataHandler, "haterhombus");
+   session.subscribe(metaLooker, "lovetriangle");
   
   console.log(connection._websocket.readyState);
   global.session = session; //stash for debugging
