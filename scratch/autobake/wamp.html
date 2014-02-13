@@ -41,7 +41,10 @@ connection.onopen = function (session) {
   session.subscribe(dataHandler, "haterhombus");
   session.subscribe(metaLooker, "lovetriangle");
 
-  
+  function rpcFail(error) {
+            console.log("Call failed: " + JSON.stringify(error));
+         }
+ 
    // RPC is done with session.call(), which returns a Promise/A+ object -- something with a .then() method that lets you attach callbacks
    function askForPolygon() { 
      console.log("calling favouritePolygon");
@@ -49,13 +52,20 @@ connection.onopen = function (session) {
          function (r) {
             console.log("the server likes this polygon", JSON.stringify(r));
          },
-         function (error) {
-            console.log("Call failed: " + JSON.stringify(error));
-         }
+         rpcFail
       );
       setTimeout(askForPolygon, 3000);
     }
    askForPolygon();
+
+   // RPC the parrot function with varous arguments  
+   function parrotHandler(r) {
+            console.log("this is not a parrot nevermore:", JSON.stringify(r));
+         }
+     session.call('sumOfParrots', ["sixtycockatiels"]).then(parrotHandler, rpcFail);
+     //session.call('sumOfParrots', "sixtycockatiels", "nuthing doing").then(parrotHandler, rpcFail);
+     //session.call('sumOfParrots', "sixtycockatiels", "nuthing doing").then(parrotHandler);
+   
   
   console.log(connection._websocket.readyState);
   global.session = session; //stash for debugging

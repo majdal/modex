@@ -27,11 +27,17 @@ from autobahn.twisted.util import sleep
 from autobahn.twisted.wamp import ApplicationSession
 
 
+#TODO(kousu): switch to MsgPack, to compress the JSON down as far as possible
 #TODO(kousu): figure out how to get the backend to receive pubsub events; do we need to make a separte ApplicationSession or something?
 
 def favouritePolygon():
-   POLYGONS = [[1,2,3], [4,5,6], ["cat","mess","empty"]]
+   POLYGONS = [[-1,2,-3], [44,-5,66], ["cat","mess","empty"]] # admittedly, real TopoJSON or GeoJSON polygons don't look much like this.
    return random.choice(POLYGONS)
+
+def sumOfParrots(parrot, duck = None):
+   if duck is not None:
+     raise ValueError("You cannot add a parrot to a duck, that's just silly.")
+   return [[parrot] + [duck]*3]*7
 
 class PubSubComponent(ApplicationSession):
    """
@@ -40,12 +46,13 @@ class PubSubComponent(ApplicationSession):
    """
 
    def onConnect(self):
-      self.join("realm1")
+      self.join("realm1") # only one "realm" can be joined at a time
 
    @inlineCallbacks
    def onJoin(self, details):
 
       self.register(favouritePolygon, "favouritePolygon")
+      self.register(sumOfParrots, "sumOfParrots")
       
       counter = 0
       while True:
