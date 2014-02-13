@@ -18,17 +18,25 @@ connection.onopen = function (session) {
    console.log("opening session:");
    console.log(session)
    
-   function heartbeatHandler(e) { 
+
+   //pubsub handlers can either take no args (JS just ignores extra args)
+   function heartbeatHandler() { 
      console.log("heartbeat");
    }
 
-   function dataHandler(e) { 
-     console.log("got data:");
-     console.log(e);
+   //or args and kwargs (python-style, matching the args and kwargs passed from the python server side)
+   function dataHandler(args,kwargs) { 
+     console.log("got data: " + "args = " + JSON.stringify(args) + ", kwargs = " + JSON.stringify(kwargs))
    }
 
-   session.subscribe(heartbeatHandler, "lovetriangle", {});
-   session.subscribe(dataHandler, "haterhombus", {});
+   // or an additional "EventDetails" object which gives connection metadata
+   function metaLooker(args, kwargs, evtDetails) { 
+     console.log("metadata details: " + JSON.stringify(evtDetails))
+   }
+
+   session.subscribe(heartbeatHandler, "lovetriangle");
+   session.subscribe(metaLooker, "lovetriangle");
+   session.subscribe(dataHandler, "haterhombus");
   
   console.log(connection._websocket.readyState);
   global.session = session; //stash for debugging
