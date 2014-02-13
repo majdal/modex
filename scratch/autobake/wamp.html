@@ -13,92 +13,70 @@
 
 var connection = new autobahn.Connection({
    url: 'ws://127.0.0.1:9000/',
-   realm: 'realm1'}
-);
+   realm: 'realm1'});
 
 connection.onopen = function (session) {
    console.log("opening session:");
    console.log(session)
    
-   session.subscribe(function(topic, evt) { 
-     console.log("got pinged with topic " + topic);
-   }, "haterhombus", {})
-   //console.log(session.subscribe.toSource());
-  console.log(connection._websocket.readyState);
-  global.session = session;
-};
+   function heartbeatHandler(e) { 
+     console.log("heartbeat");
+   }
 
-global.connection = connection;
+   function dataHandler(e) { 
+     console.log("got data:");
+     console.log(e);
+   }
+
+   session.subscribe(heartbeatHandler, "lovetriangle", {});
+   session.subscribe(dataHandler, "haterhombus", {});
+  
+  console.log(connection._websocket.readyState);
+  global.session = session; //stash for debugging
+}
+
+
+
+global.connection = connection; //stash for debugging
 
 connection.open();
 console.log(connection._websocket.readyState);
 
 connection._websocket.onerror = function(evt) {
-  console.log("websocket error: " + evt.reason);
+  console.log("websocket error: " + evt.reason)
   console.log(evt)
 }
 
 connection._websocket.onclose = function(evt) {
-  console.log("websocket close: " + evt.reason);
+  console.log("websocket close: " + evt.reason)
   console.log(evt)
 }
 
 console.log(connection._websocket.readyState);
+}
 
-
-return;
-   
-    //attempt a simple ws connection, to make sure that works
-    data_socket = new WebSocket("ws://" + location.host + "/wamp") //our websocket sits at /ws (TODO(kousu): reorg this)
-    console.log("big fancy free range chickens")
-    data_socket.onopen = function() { 
-       console.log("opened to " +        this.url)
-       this.send(""); //poke the server to get data out
-    }
-    data_socket.onerror = function(evt) {
-      console.log("error occurred:")
-      console.log(evt)
-    }
-    data_socket.onmessage = function(evt) {
-      d = JSON.parse(evt.data);
-      console.log("received data from websocket:")
-      console.log(d);
-    }
-
-
-   // WAMP server
-   
-   ab.connect("ws://" + location.host + "/wamp",
-
-      // WAMP session was established
-      function (session) {
-
-         // subscribe to topic
-         session.subscribe("http://example.com/event#myevent1", //..wait, this url is.. a broken URL? whyyyyy
-
-            // on event publication callback
-            function (topic, event) {
-               console.log("got event1: " + event);
-            }
-         );
-
-         // publish event on a topic
-         session.publish("http://example.com/event#myevent1", {a: 23, b: "foobar"});
-      },
-
-      // WAMP session is gone
-      function (code, reason) {
-         console.log(reason);
-      }
-   );
-};
-
- </script>
+</script>
 
 
 
 </head>
 <body>
+
+<h1>WAMP with AutobahnJS and AutobahnPython</h1>
+
+Run server.py (found in the same folder) and reload this page.
+
+<h2>Known Bugs</h2>
+The API versions are inconsistent amongst the varieties of Autobahn, so there's some issues to work through.
+<ol>
+<li>heartbeatHandler() is crashing and I don't know why; maybe because it's not getting an argument?</li>
+<li>The data that is passed through to dataHandler() is only the first element in the list of args, though the server appears to be formatting it as if it knows what it's doing (e.g. 
+ <code><pre>
+2014-02-12 21:19:02-0500 [-] TX Frame to 127.0.0.1:60876 : fin = True, rsv = 0, opcode = 1, mask = -, length = 95, repeat_length = None, chopsize = None, sync = False, payload = [36,6491576786669246,6795983798931556,{},[69,23],{"c":"Hello","d":{"counter":9,"foo":[1,2,3]}}]
+</pre></code></li>
+</ol>
+
+<h2>Complaints and Disentangling Thoughts</h2>
 
 <p>I'm concerned that WAMP is wasteful. It seems ..sort of silly.
  It screams overengineered to me. It's entirely possible I'm just being picky.

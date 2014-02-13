@@ -17,6 +17,57 @@
 ###############################################################################
 
 
+###############################################################################
+##
+##  Copyright (C) 2014 Tavendo GmbH
+##
+##  Licensed under the Apache License, Version 2.0 (the "License");
+##  you may not use this file except in compliance with the License.
+##  You may obtain a copy of the License at
+##
+##      http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+##  See the License for the specific language governing permissions and
+##  limitations under the License.
+##
+###############################################################################
+
+import random
+
+#from twisted.internet import reactor
+from twisted.internet.defer import inlineCallbacks
+
+from autobahn.wamp.types import SubscribeOptions
+from autobahn.twisted.util import sleep
+from autobahn.twisted.wamp import ApplicationSession
+
+class Component(ApplicationSession):
+   """
+   An application component that publishes events with no payload
+   and with complex payloads every second.
+   """
+
+   def onConnect(self):
+      self.join("realm1")
+
+
+   @inlineCallbacks
+   def onJoin(self, details):
+
+      counter = 0
+      while True:
+         self.publish('lovetriangle')
+
+         obj = {'counter': counter, 'foo': [1, 2, 3]}
+         self.publish('haterhombus', random.randint(0, 100), 23, c = "Hello", d = obj)
+
+         counter += 1
+         yield sleep(1)
+
+
 if __name__ == '__main__':
 
    import sys, argparse
@@ -24,39 +75,20 @@ if __name__ == '__main__':
    from twisted.python import log
    from twisted.internet.endpoints import serverFromString
 
-
    ## parse command line arguments
    ##
    parser = argparse.ArgumentParser()
-
-   parser.add_argument("-d", "--debug", action = "store_true",
-                       help = "Enable debug output.")
-
-   parser.add_argument("-c", "--component", type = str, default = None,
-                       help = "Start WAMP-WebSocket server with this application component, e.g. 'timeservice.TimeServiceBackend', or None.")
-
-   parser.add_argument("--websocket", type = str, default = "tcp:9000",
-                       help = 'WebSocket server Twisted endpoint descriptor, e.g. "tcp:9000" or "unix:/tmp/mywebsocket".')
-
-   parser.add_argument("--wsurl", type = str, default = "ws://localhost:9000",
-                       help = 'WebSocket URL (must suit the endpoint), e.g. "ws://localhost:9000".')
-
    args = parser.parse_args()
 
-
+   args.websocket = "tcp:9000"
+   args.wsurl = "ws://localhost:9000"
    ## start Twisted logging to stdout
    ##
-   if args.debug:
-      log.startLogging(sys.stdout)
+   log.startLogging(sys.stdout)
 
-
-   ## we use an Autobahn utility to install the "best" available Twisted reactor
-   ##
    from autobahn.twisted.choosereactor import install_reactor
    reactor = install_reactor()
-   if args.debug:
-      print("Running on reactor {}".format(reactor))
-
+   print("Running on reactor {}".format(reactor))
 
    ## create a WAMP router factory
    ##
@@ -68,29 +100,14 @@ if __name__ == '__main__':
    ##
    from autobahn.twisted.wamp import RouterSessionFactory
    session_factory = RouterSessionFactory(router_factory)
-
-
-   ## if asked to start an embedded application component ..
-   ##
-   if args.component:
-      ## dynamically load the application component ..
-      ##
-      import importlib
-      c = args.component.split('.')
-      mod, klass = '.'.join(c[:-1]), c[-1]
-      app = importlib.import_module(mod)
-      SessionKlass = getattr(app, klass)
-
-      ## .. and create and add an WAMP application session to
-      ## run next to the router
-      ##
-      session_factory.add(SessionKlass())
-
+   
+   ## [ ... ... ]
+   session_factory.add(Component())
 
    ## create a WAMP-over-WebSocket transport server factory
    ##
    from autobahn.twisted.websocket import WampWebSocketServerFactory
-   transport_factory = WampWebSocketServerFactory(session_factory, args.wsurl, debug = args.debug)
+   transport_factory = WampWebSocketServerFactory(session_factory, args.wsurl, debug = True)
    transport_factory.setProtocolOptions(failByDrop = False)
 
 
