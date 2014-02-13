@@ -1,0 +1,134 @@
+<html>
+
+<head>
+ <title>Experimental WAMP.ws code</title>
+ <script type="text/javascript" src="../../assets/libs/autobahn.js"></script>
+ <!--<script type="text/javascript" src="frontend.js"></script>-->
+ <script type="text/javascript">
+  var global = this;
+  window.onload = function() {  //demo code from https://github.com/tavendo/AutobahnJS
+    // careful: using var makes a local that shadows the global autobahn (python scoping rules)
+  console.log("loading");
+  autobahn._debugpubsub = true;
+
+var connection = new autobahn.Connection({
+   url: 'ws://127.0.0.1:9000/',
+   realm: 'realm1'}
+);
+
+connection.onopen = function (session) {
+   console.log("opening session:");
+   console.log(session)
+   
+   session.subscribe(" haterhombus ", function(topic, evt) { 
+     console.log("got pinged with topic " + topic);
+   })
+   //console.log(session.subscribe.toSource());
+  console.log(connection._websocket.readyState);
+  global.session = session;
+};
+
+global.connection = connection;
+
+connection.open();
+console.log(connection._websocket.readyState);
+
+connection._websocket.onerror = function(evt) {
+  console.log("websocket error: " + evt.reason);
+  console.log(evt)
+}
+
+connection._websocket.onclose = function(evt) {
+  console.log("websocket close: " + evt.reason);
+  console.log(evt)
+}
+
+console.log(connection._websocket.readyState);
+
+
+return;
+   
+    //attempt a simple ws connection, to make sure that works
+    data_socket = new WebSocket("ws://" + location.host + "/wamp") //our websocket sits at /ws (TODO(kousu): reorg this)
+    console.log("big fancy free range chickens")
+    data_socket.onopen = function() { 
+       console.log("opened to " +        this.url)
+       this.send(""); //poke the server to get data out
+    }
+    data_socket.onerror = function(evt) {
+      console.log("error occurred:")
+      console.log(evt)
+    }
+    data_socket.onmessage = function(evt) {
+      d = JSON.parse(evt.data);
+      console.log("received data from websocket:")
+      console.log(d);
+    }
+
+
+   // WAMP server
+   
+   ab.connect("ws://" + location.host + "/wamp",
+
+      // WAMP session was established
+      function (session) {
+
+         // subscribe to topic
+         session.subscribe("http://example.com/event#myevent1", //..wait, this url is.. a broken URL? whyyyyy
+
+            // on event publication callback
+            function (topic, event) {
+               console.log("got event1: " + event);
+            }
+         );
+
+         // publish event on a topic
+         session.publish("http://example.com/event#myevent1", {a: 23, b: "foobar"});
+      },
+
+      // WAMP session is gone
+      function (code, reason) {
+         console.log(reason);
+      }
+   );
+};
+
+ </script>
+
+
+
+</head>
+<body>
+
+<p>I'm concerned that WAMP is wasteful. It seems ..sort of silly.
+ It screams overengineered to me. It's entirely possible I'm just being picky.
+
+<p> Do we ~need~ it? It seems simpler to run a separate WebSocket endpoint for each feed
+  (we might have scaling issues with that)
+ I suppose Autobahn transparently handles multiple subscribers to the same stream, and that ~is~ a difficult feature that we need
+  </p>
+
+<p>
+ The flash of the website combined with how out of date it is is give me jiggies. They link to a bunch of implementations, making it look like it has wide support, but every implementation has 1 contributor and/or is unfinished</p>
+
+<p>
+ oh brother: they just recently redesigned the protocol to version 2; all the docs on autobahn.ws/python are out of date and full of broken links
+ and they moved all the python code to "wamp1/"
+</p>
+
+<p>And if that wasn't enough, this should be: their own list of exports is incorrect:<pre><code>
+In [1]: from autobahn.wamp.websocket import *
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-1-6a1d1416c112> in <module>()
+----> 1 from autobahn.wamp.websocket import *
+
+AttributeError: 'module' object has no attribute 'WampServerProtocol'
+
+</code></pre>
+</p>
+
+<p> -kousu</p>
+
+</body>
+</html>
