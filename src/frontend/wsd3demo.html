@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+   
+   <!-- libraries -->
+   <!-- TODO: investigate using require.js or some other js dependency manager -->
+   <script type="text/javascript" src="/assets/libs/jquery.min.js"></script>
+   <script type="text/javascript" src="/assets/libs/json2.js"></script>
+
+   <script type="text/javascript" src="/assets/libs/autobahn.js"></script>
+   
+   <script type="text/javascript" src="/assets/libs/ol.js"></script>
+   <link rel="stylesheet" href="/assets/libs/ol.css" type="text/css">
+   <script type="text/javascript" src="/assets/libs/d3.v3.js" charset="utf-8"></script>
+
+   <title>ModEx all the things!!!</title>
+   <style>
+
+   </style>
+   
+     <style type="text/css">
+div{
+    background-color: #dd9;
+    margin: 5px;
+    font-size: 10px;
+    color: #007;
+    padding: 10px;
+    float: left;
+    
+}
+
+.panel {
+    float: left;
+    background-color: black;
+    color: white;
+}
+
+
+</style>
+
+</head>
+<body>
+    
+    <script>
+        //web socket loading and shit
+    function data() {
+        this.timeline = [];
+        this.amounts = [];
+    }
+    
+    var simrun = new data;
+    data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
+    data_socket.onopen = function() { 
+       this.send(""); //poke the server to get data out
+    }
+    data_socket.onmessage = function(d) {
+      d = JSON.parse(d.data);
+      //console.log("received data from websocket:")
+      //console.log(d);
+      var amount = d["Incandescent"];
+      var date = d["date"];
+      simrun.timeline.push(date);
+      simrun.amounts.push(amount);
+      console.log(simrun.amounts);
+      console.log(amount);
+      loadGraph();
+      
+    }
+    function loadGraph() {
+        if(simrun.amounts.length==0) { return; }
+        // prevents initial bar from displaying
+        
+        d3.select("body")
+            .append("div")
+            .attr("class", "graph_col");
+            
+        d3.selectAll(".graph_col")
+            .data(simrun.amounts)
+            .style("height", function(d) { return  d + "px"; })
+            .text(function(d) {return d;});
+            
+    }        
+    
+  </script>
+  
+
+</body>
+</html>
