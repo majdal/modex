@@ -38,6 +38,7 @@ For networks that are actually trees: [egonetwork pandemic visualization](http:/
 * http://flowingdata.com/
 * http://popchartlab.com/
 * http://eagereyes.org/techniques/graphs-hairball
+* http://insightmaker.com/
 * http://store.axismaps.co.uk/
 * [ManyEyes](http://www-958.ibm.com/software/analytics/manyeyes/)
 * anything on [/r/dataisbeautiful](http://www.reddit.com/r/dataisbeautiful/)
