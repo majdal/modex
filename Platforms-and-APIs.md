@@ -50,6 +50,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 ## Tools
 
 * [GeoHack](https://tools.wmflabs.org/geohack/) (all lat/lon coordinates on Wikipedia link to GeoHack)
+* [MapBox Collaboratory](https://www.mapbox.com/)
 
 ## Scientific Collaboration
 
