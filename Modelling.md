@@ -53,3 +53,6 @@ Since farmers are assumed (**by who?**) to be price-takers (i.e. agents who are 
 (also very disorganized. there are themes here, but they need to be brought out -nick)
 http://corridordesign.org/
 http://en.wikipedia.org/wiki/Ecosystem_services
+
+### Inspiration
+http://insightmaker.com/
