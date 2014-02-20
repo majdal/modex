@@ -2,6 +2,9 @@
 
 ## Potential Datasets
 
+* [USA](http://www.data.gov/)
+* [Canada](http://data.gc.ca)
+
 ### To Sort
 
 we should just scrape http://www.agr.gc.ca/atlas/data_donnees/ (sketchy redhat server ftw)
