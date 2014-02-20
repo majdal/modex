@@ -23,9 +23,9 @@ Our **allies**,
 
 and some of our **inspiration**
 * [School of Data](http://schoolofdata.org/)
-* The [Global Land Project](http://www.globallandproject.org/) 
+* The [Global Land Collaboratory](http://www.globallandproject.org/) 
 * [CorridorDesign](http://corridordesign.org/)
-* [CoMSES Network](http://www.openabm.org/) out of [Arizona State University](https://csdc.asu.edu/)
+* [CoMSES Collaboratory](http://www.openabm.org/) out of [Arizona State University](https://csdc.asu.edu/)
 * [The People who lobbied for data.gc.ca](http://datadotgc.ca/)
 * [CODE](https://canadianopendataexperience.com/)
 
