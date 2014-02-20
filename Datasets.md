@@ -2,13 +2,13 @@
 
 ## Potential Datasets
 
+### Scrapbucket
+* [UK](http://data.gov.uk/)
 * [USA](http://www.data.gov/) (_incidentally, they make verrry good use of OpenLayers in their [dataset pages](http://catalog.data.gov/dataset/gender-persons-by-sex-sds-2000/resource/9a87571f-e945-4ff4-971a-607530d19358)_)
 * [Canada](http://data.gc.ca)
 * http://datamarket.com
 * datahub.io
-* 
 
-### To Sort
 
 we should just scrape http://www.agr.gc.ca/atlas/data_donnees/ (sketchy redhat server ftw)
 
