@@ -26,7 +26,7 @@ and some of our **inspiration**
 * The [Global Land Project](http://www.globallandproject.org/) 
 * [CorridorDesign](http://corridordesign.org/)
 * [CoMSES Network](http://www.openabm.org/) out of [Arizona State University](https://csdc.asu.edu/)
-* 
+* [The People who lobbied for data.gc.ca](http://datadotgc.ca/)
 
 When we want to get off github, know that this wiki itself is simply a git repo with URL https://github.com/majdal/modex.wiki.git and the issue tracker can be extracted with the REST API ([this ruby project](http://github.com/sorich87/github-to-bitbucket-issues-migration) is a one-click export solution).
 
