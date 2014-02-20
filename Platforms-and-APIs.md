@@ -59,6 +59,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 ### Dataset Management
 * http://dat-data.com 
+* http://datahub.io
 * (there's at least two other dataset-version-control/archival sites; what are they?)
 * https://exversion.com
 
