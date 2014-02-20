@@ -39,5 +39,6 @@ For networks that are actually trees: [egonetwork pandemic visualization](http:/
 * http://popchartlab.com/
 * http://eagereyes.org/techniques/graphs-hairball
 * http://store.axismaps.co.uk/
+* [ManyEyes](http://www-958.ibm.com/software/analytics/manyeyes/)
 * anything on [/r/dataisbeautiful](http://www.reddit.com/r/dataisbeautiful/)
 * http://graphicdesign.stackexchange.com/questions/15788/examples-of-well-designed-software-architecture-diagrams
