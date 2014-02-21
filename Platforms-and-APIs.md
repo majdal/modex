@@ -3,11 +3,18 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 ## Frontend
 
+* craftyjs?
 
+### Maps
 
-* openlayers / ol3js
+* OpenLayers: [2](http://openlayers.org) and [3](http://ol3js.org)
   * we should see if we can divert some part of our budget to them: http://www.indiegogo.com/ol3
-* craftyjs
+* http://tilestache.org/
+* http://polymaps.org/
+* [ModestMaps](http://modestmaps.com/examples/)
+(_these all seem like they overlap a bit; what's the deal?_)
+
+### Data
 * d3js
 
 
