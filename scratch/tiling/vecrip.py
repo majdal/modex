@@ -31,7 +31,7 @@ def rip(root, depth=20):
       while True: #loop over y
         url = template.format(server = random.choice(["a","b","c"]),
                               archive = archive,
-                              z = zoom, x = x, y = y)
+                              z = z, x = x, y = y)
         tile = requests.get(url)
         if tile.status_code != 200:
           print("OpenStreetMap ran out of tiles at y =", y)
