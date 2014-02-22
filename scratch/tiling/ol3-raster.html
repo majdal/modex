@@ -18,7 +18,7 @@ var _view = new ol.View2D({
 
 var _source = new ol.source.XYZ({
         attributions: [_attribution],
-        url: 'leser/{z}/{y}/{x}.png',
+        url: 'leser/{z}/{x}/{y}.png',
         maxZoom: 8
       })
 
@@ -40,7 +40,7 @@ var map = new ol.Map({
 </head>
 
 <body>
-  <div id='map' class='map' style='width: 100%; height: 50%'></div>
+  <div id='map' class='map' style='width: 100%; height: 90%'></div>
 </body>
 
 </html>

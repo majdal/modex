@@ -22,7 +22,7 @@ def generate(root, depth=20, size=256):
 	T = Image.new('RGB', (size,size)) 
 	brush = ImageDraw.Draw(T)
 	
-	#TODO: demarque the borders of the world by putting something on the tiles with 0 as a coordinate
+
 
 	for z in range(depth):
 		os.mkdir(str(z))
@@ -54,6 +54,12 @@ def generate(root, depth=20, size=256):
 				
 				brush.rectangle([(0,0), T.size], fill=RGB)
 				
+				# demarque the borders of the world by putting something on the tiles with 0 as a coordinate
+				if x == 0: #vertical
+					brush.line([(0,0), (0, T.size[1])], fill="steelblue", width=2)
+				if y == 0: #horizontal
+					brush.line([(0,0), (T.size[0], 0)], fill="steelblue", width=4) #for some reason the top is harder to distinguish than the side
+
 				T.save(str(y)+".png")
 			os.chdir("..") #unixism
 		os.chdir("..")
