@@ -42,7 +42,7 @@ and firefox simply doesn't render anything:
 ## OpenLayers
 
 * Raster: http://ol3js.org/en/master/apidoc/ol.source.TileImage.html or one of its subclasses, like 
-* Vector: http://ol3js.org/en/master/apidoc/ol.source.TileJSON.html ??
+* Vector: ??
 
 ## Polymaps
 
