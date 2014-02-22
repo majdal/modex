@@ -2,6 +2,12 @@ This project has people from all difference backgrounds, and hopefully even wide
 
 Use h3s (###) to mark words, so that GitHub linkifies them and we can easily reprocess this file into a sorted and publishable pdf or latex file.
 
+## Mapping
+
+### Choropleths
+
+[Choropleths](https://en.wikipedia.org/wiki/Choropleth_map) are maps that show data by shading map areas. For them to convey the correct information, the plotted data should be a density (so, per capita or per area) and the map projection used should preserve area (so, Mercator is a poor choice).
+
 ### XYZ
 Refers to the chunking used to make displaying webmaps tolerable: a raster is divied up into tiles covering the globe (or whatever other surface in whatever coordinate system you're in love with). Z is the zoom level, X and Y are the horizontal and vertical coordinates (usually corresponding to longitude and latitude)
 
