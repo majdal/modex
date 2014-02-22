@@ -43,7 +43,7 @@ def generate(root, depth=20, size=256):
 				if (x % 2 != y % 2):
 					HSV = (HSV[0], HSV[1]-10, HSV[2]-10)
 				
-				RGB = ImageColor.getrgb("hsl(%d, %d%%, %d%%)" % HSV)
+				RGB = ImageColor.getrgb("hsl(%d, %d%%, %d%%)" % HSV) #note: this can also be done with the built-in "colorsys" module
 				
 				#RGB = (x,y,z)
 				#
