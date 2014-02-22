@@ -3,7 +3,7 @@
 
 import sys, os, os.path
 #using the pillow fork of PIL http://pillow.readthedocs.org/en/latest/reference/ImageDraw.html
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageOps
 
 def generate(root):
 	"create a repository of zoom/longitude/latitude (ie z/x/y)"
@@ -31,7 +31,12 @@ def generate(root):
 			os.chdir(str(x))
 			for y in range(256):
 				colour = (z,x,y)
+				
+				# to cause a checkerboard pattern, tiles with different x-y parities are inverted
+				if (x % 2 != y % 2):
+					colour = tuple([255-e for e in colour])
 				brush.rectangle([(0,0), T.size], fill=colour)
+				
 				T.save(str(y)+".png")
 			os.chdir("..") #unixism
 		os.chdir("..")
