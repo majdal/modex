@@ -2,10 +2,12 @@
 # copy down OSM's vectiles-buildings archive
 # depends on python-requests
 
+import sys
 import os.path
 import requests
+import random
 archive = "vectiles-buildings"
-template = "http://{server}.tile.openstreetmap.us/{archive}/{z}/{x}/{y}.json
+template = "http://{server}.tile.openstreetmap.us/{archive}/{z}/{x}/{y}.json"
 
 # OSM's standard is zoom/x/y
 #...why are OSM's vector tiles in z/x/y
@@ -13,7 +15,7 @@ template = "http://{server}.tile.openstreetmap.us/{archive}/{z}/{x}/{y}.json
 
 def rip(root, depth=20):
   if os.path.exists(root):
-    raise ValueError("'%s' already exists; delete or move it before trying again")
+    raise ValueError("'%s' already exists; delete or move it before trying again" % root)
   os.mkdir(root)
   os.chdir(root)
 

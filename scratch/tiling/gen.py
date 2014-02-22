@@ -14,7 +14,7 @@ def generate(root, depth=20, size=256):
 	# gotcha: the file structure is not totally standardized: the meaning of tiles is.. unclear; the; Bing uses a different scheme
 	# hmmm somehow ol3js knows how to deal with running off the end 
 	if os.path.exists(root):
-		raise ValueError("'%s' already exists; delete or move it before trying again")
+		raise ValueError("'%s' already exists; delete or move it before trying again" % root)
 	os.mkdir(root)
 	os.chdir(root)
 
