@@ -24,6 +24,12 @@ libs is to cache heavily; the initial motivation of tiling is to cache
 
 people have got dynamic maps with d3 here and there...
 
+Hm. It seems that OpenLayers demands tiles to be 256x256; if not, Chrome renders as so:
+![borkychrome](tiles64x64-borkychrome.png)
+and firefox simply doesn't render anything:
+![emptyfox](tiles64x64-emptyfox.png)
+
+
 # APIs for Comparison
 
 ## 
