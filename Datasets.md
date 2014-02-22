@@ -9,6 +9,7 @@
 * http://datamarket.com
 * datahub.io
 
+* http://geocommons.com/
 
 we should just scrape http://www.agr.gc.ca/atlas/data_donnees/ (sketchy redhat server ftw)
 
