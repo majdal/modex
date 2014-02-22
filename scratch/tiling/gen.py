@@ -26,10 +26,11 @@ def generate(root):
 		os.mkdir(str(z))
 		os.chdir(str(z))
 		print("zoom level", z)
-		for x in range(256):
+		# each zoom level has a resolution of 2**z tiles each way
+		for x in range(2**z):
 			os.mkdir(str(x))
 			os.chdir(str(x))
-			for y in range(256):
+			for y in range(2**z):
 				colour = (z,x,y)
 				
 				# to cause a checkerboard pattern, tiles with different x-y parities are inverted

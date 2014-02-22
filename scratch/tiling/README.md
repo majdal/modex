@@ -1,6 +1,13 @@
 
 # Goal
 
+# Guide
+
+To try out the raster tiling demos,
+make sure you have the python imaging library installed (currently it must be the PILlow fork) and
+run 'gen.py leser/' and wait for a bunch of pure-colour demo tiles to be made. These tiles are not committed to the repo because they're half a gig in all.
+You might need to run a local web server (see our frontend developer's guide) in this directory depending on the combination of browser and example.
+
 # Issues
 
 We need to solve
