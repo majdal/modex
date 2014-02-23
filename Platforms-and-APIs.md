@@ -80,3 +80,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 ## Blogs
 * wordpress
 * mezzanine (on django)
+
+## Inspiration
+
+* [Tributary.IO](https://github.com/enjalot/tributary.io): Rapid Collaborative D3 Prototyping
