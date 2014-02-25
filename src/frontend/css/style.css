@@ -10,12 +10,14 @@ body, html {
 /* layout */
 #map {
   height: 100%;
-  width: 60%;
+  width: 61%; /* golden ratio */
+  float: left;
 }
 
 #graph {
   height: 100%;
-  width: 40%;
+  width: 35%;
+  float: right;
 }
 
 /* d3 properties */

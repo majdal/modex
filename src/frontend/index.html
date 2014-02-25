@@ -18,27 +18,32 @@
 
    <!-- project code -->
    <link rel='stylesheet' href='css/style.css' type='text/css'/>
-
+   
+   <!-- networking -->
    <script type="text/javascript" src="wamp.js"></script>
    
-   <!-- crafty -->
-   <script type="text/javascript" src="game.js"></script>
-   <script type="text/javascript" src="controller.js"></script>
-   
+   <!-- ol3 --> 
+   <script type="text/javascript" src="map.js"></script>
+  
    <!-- d3 -->
-   <script type="text/javascript" src="graph_component.js"></script>
+   <script type="text/javascript" src="graph_component.js"></script>  
+
+   <!-- crafty -->
+   <!-- warning: crafty sets overflow: hidden unilaterally on the body element,
+        which interferes with any attempts at non-Crafty layout -->
+   <!--<script type="text/javascript" src="game.js"></script>
+   <script type="text/javascript" src="controller.js"></script>
    <script type="text/javascript" src="farm.js"></script>
    <script type="text/javascript" src="scenes/menu.js"></script>
    <script type="text/javascript" src="scenes/setup.js"></script>
    <script type="text/javascript" src="scenes/goals.js"></script>
-   <script type="text/javascript" src="scenes/intro.js"></script>
+   <script type="text/javascript" src="scenes/intro.js"></script>-->
 
-   <title>Farming Simulation (viewer)</title>
+   <title>Model Explorer -- Farming Simulation</title>
 
 </head>
 <body>
-    <h2></h2>
-    <script type="text/javascript" src="map.js"></script>
+    <h2>Model Explorer -- Farming Simulation</h2>
     <div id="map"></div>
     
     <!-- NB: temporarily disable the graph to make debugging the map easier -->
