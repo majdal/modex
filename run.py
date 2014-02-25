@@ -92,3 +92,5 @@ if __name__ == '__main__':
   # because call() hooks SIGINT (or your local system's favourite shutdown signal)
   # and politely but firmly kills the server no matter how run.py ends
   subprocess.call([PYTHON, pathjoin(PROJECT_ROOT, "src", "backend", "server.py"), debug])
+  # TODO(kousu): only browser.start() if the server comes up (requires some kind of pegging; ugh)
+  # TODO(kousu): figure out why the browser opens twice (sometimes) if you press ctrl-c or the server fails

@@ -1,10 +1,47 @@
+
+.hidden { display: none } /* use this CSS class to disable elements temporarily */
+
 body, html {
-  margin:0;
-  padding: 0;
-  overflow:hidden;
-  font: 10px sans-serif;
+  background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
+
+  height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
 }
 
+body > h2 { color: steelblue }
+
+/* layout */
+
+/* wrapper div so that inner divs will bunch up against each other proper-like */
+/* this is sometimes called "shrinkwrapping" */
+#layout { height: 100%; }
+#layout>* { display: inline-block; height: 100% } 
+
+/* the ideal layout:
+   - automatically figures out if it has enough space to render the two elements side by side (to some minimum definition of "enough space", say 200px)
+   - if not, splits them onto multiple lines, and on those lines spreads them as wide as possible
+I know i've done this before, I just have to remember how -kousu
+*/
+
+#map {
+  position: fixed;
+  z-index: 900;
+  float: left;
+  width: 61%; /* golden ratio */
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  overflow: hidden; /* make the radius affect the inner map rendering elements */
+}
+
+#graph {
+  width: 35%; /*it would be nice if this could be autocalculated from the available space*/
+  background: white;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-left: black solid 2px ;
+  overflow: hidden; /* make the radius affect the inner map rendering elements */
+}
+
+/* d3 properties */
 .axis path, .axis line {
   fill: none;
   stroke: #000;
@@ -20,7 +57,7 @@ body, html {
   stroke: steelblue;
   stroke-width: 1.5px;
 }
-
+/*
 #graph {
   position: fixed;
   z-index: 1000;
@@ -28,8 +65,4 @@ body, html {
   bottom: 0;
   right: 0;
   border-radius: 3px;
-}
-#map {
-  position: fixed;
-  z-index: 900;
-}
+}*/

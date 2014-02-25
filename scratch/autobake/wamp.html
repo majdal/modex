@@ -1,0 +1,116 @@
+<html>
+
+<head>
+ <title>Experimental WAMP.ws code</title>
+ <script type="text/javascript" src="autobahn.js"></script>
+ <script type="text/javascript">
+
+// This is written against AutobahnJS version 0.9.0-3, which is NOT compatible with 0.9.1
+
+var global = this;  //stash the global namespace so we have somewhere to stash objects we want to inspect in the web console
+  
+window.onload = function() {  //demo code from https://github.com/tavendo/AutobahnJS
+  // careful: using var makes a local that shadows the global autobahn (python scoping rules)
+  // this code uses JSON.stringify to pretty-print objects to the js console; it's not anything to do with sending data back (Autobahn does that part internally)
+  // careful: this is indented one-level wrong
+  
+console.log("loading");
+
+var connection = new autobahn.Connection({
+   url: 'ws://127.0.0.1:9000/',
+   realm: 'realm1'});
+
+connection.onopen = function (session) {
+  console.log("opening session:");
+  console.log(session)
+   
+  //pubsub handlers can either take no args (JS just ignores extra args)
+  function heartbeatHandler() { 
+    console.log("heartbeat");
+  }
+  
+  //or args and kwargs (python-style, matching the args and kwargs passed from the python server side)
+  function dataHandler(args,kwargs) { 
+    console.log("got data: " + "args = " + JSON.stringify(args) + ", kwargs = " + JSON.stringify(kwargs))
+  }
+
+  // or an additional "EventDetails" object which gives connection metadata
+  function metaLooker(args, kwargs, evtDetails) { 
+    console.log("metadata details: " + JSON.stringify(evtDetails))
+  }
+
+  session.subscribe(heartbeatHandler, "lovetriangle");
+  session.subscribe(dataHandler, "haterhombus");
+  session.subscribe(metaLooker, "lovetriangle");  //Warning: AutobahnJS silently overwrites previous subscriptions with new ones; this line tosses out the one two above
+
+ 
+  // RPC is done with session.call(), which returns a Promise/A+ object -- something
+  // with a .then() method that lets you attach callbacks
+  
+  // rpcFail is used as the error handler for RPC calls; it is optional.
+  function rpcFail(error) {
+    console.log("Call failed: " + JSON.stringify(error));
+  }
+
+  // RPC a simple arg-less function, favouritePolygon()
+  function askForPolygon() { 
+    console.log("calling favouritePolygon");
+    session.call('favouritePolygon').then(
+      function (r) {
+        console.log("the server likes this polygon", JSON.stringify(r));
+      },
+      rpcFail
+    );
+    setTimeout(askForPolygon, 3000);
+  }
+  askForPolygon();
+  
+  // RPC the parrot function with varous arguments  
+  function parrotHandler(r) {
+    console.log("this is not a parrot nevermore:", JSON.stringify(r));
+  }
+  session.call('sumOfParrots', ["sixtycockatiels"]).then(parrotHandler, rpcFail);
+  session.call('sumOfParrots', "sixtycockatiels", "nuthing doing").then(parrotHandler, rpcFail);
+  session.call('sumOfParrots', "sixtycockatiels", "nuthing doing").then(parrotHandler);
+   
+  
+  console.log(connection._websocket.readyState);
+  global.session = session; //stash for debugging
+}
+
+
+global.connection = connection; //stash for debugging
+
+connection.open();
+console.log(connection._websocket.readyState);
+
+// hook the low-level handlers on the websocket to help debug what Autobahn thinks it is doing
+// these must be done here because _websocket doesn't exist until connection.open()
+connection._websocket.onerror = function(evt) {
+  console.log("websocket error: " + evt.reason)
+  console.log(evt)
+}
+
+connection._websocket.onclose = function(evt) {
+  console.log("websocket close: " + evt.reason)
+  console.log(evt)
+}
+
+console.log(connection._websocket.readyState);
+
+} //end onload()
+
+</script>
+
+
+
+</head>
+<body>
+
+<h1>WAMP with AutobahnJS and AutobahnPython</h1>
+
+Run server.py (found in the same folder), open up the web inspector to the JS console, and reload this page.
+
+
+</body>
+</html>

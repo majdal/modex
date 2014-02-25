@@ -1,18 +1,11 @@
-$(document).ready(function() {
-
-    data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
-    ws.onopen = function() { 
-       this.send(""); //poke the server to get data out
-    }
-    ws.onmessage = function(d) {
-      d = JSON.parse(d.data);
-      console.log("received data from websocket:")
-      console.log(d);
-    }
+$(function() {
 
     var margin = {top: 20, right: 80, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    
+    //width = 960 - margin.left - margin.right,
+    //height = 500 - margin.top - margin.bottom;
+    width = $("#graph").width() - margin.left - margin.right
+    height = $("#graph").height() - margin.top - margin.bottom;
 
     var parseDate = d3.time.format("%Y%m%d").parse;
 
@@ -41,7 +34,18 @@ $(document).ready(function() {
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")"
+        );
+    
+    data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
+    data_socket.onopen = function() { 
+       this.send(""); //poke the server to get data out
+    }
+    data_socket.onmessage = function(d) {
+      d = JSON.parse(d.data);
+      console.log("received data from (plain) websocket:")
+      console.log(d);
+    }
 
     d3.tsv("assets/data/static_lightbulbs.tsv", function(error, data) {
       color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
@@ -98,5 +102,4 @@ $(document).ready(function() {
           .attr("dy", ".35em")
           .text(function(d) { return d.name; });
       });
-    //$('#cr-stage').hide();
 });

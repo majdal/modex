@@ -1,5 +1,5 @@
+$(function() {
  //todo: move this to a jquery oninit() handler
-
 var labels =  new ol.style.Text({
         color: '#bada55',
         text: 'hello', //grrrrr. this doesn't work.
@@ -91,3 +91,6 @@ var meat = new ol.layer.Vector({
           zoom: 11
         })
       });
+
+
+}) //end oninit

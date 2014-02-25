@@ -3,7 +3,7 @@ MarkupSafe==0.18
 -e git+https://github.com/tcstewar/model-explorer.git@eca6d4f89fd37d252a1dfa5ad5e515b4657b3c08#egg=Model_Explorer-dev
 Twisted==13.2.0
 Werkzeug==0.9.4
-autobahn==0.6.4
+autobahn
 autobahntestsuite==0.5.6
 distribute==0.7.3
 garlicsim==0.6.3

@@ -5,6 +5,7 @@
   * We're thattempting to use v3, but there's still lots of undocumented parts that require good guesswork and knowledge of object orientated style.
   * This file is a kludge to fill in those gaps until OL3 gets stable
 
+There's a glitch with CSS + ol3. It's not ol3's fault, but if you change the size of its container on it its aspect ratio will probably go screwy. The reason is that the browser is resizing the <canvas> that ol3 is rendering to as if it were a bitmap (which it is) and ol3 doesn't know anything about that.. But if you force a redraw somehow (say, jiggle the size of your browser window a bit) it should snap back 
 
 ### Setting object properties
 Properties are given json-style to class constructors:

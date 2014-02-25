@@ -1,0 +1,49 @@
+<html>
+<head>
+
+<script src="jquery.min.js"></script>
+<script src="ol.js"></script>
+
+<script>
+$(function() {
+
+var _attribution = new ol.Attribution({
+  html: 'Tiles &copy; `gen.py leser/`'
+});
+
+var _view = new ol.View2D({
+    center: ol.proj.transform([-121.1, 47.5], 'EPSG:4326', 'EPSG:3857'),
+    zoom: 2 
+  })
+
+var _source = new ol.source.XYZ({
+        attributions: [_attribution],
+        url: 'leser/{z}/{x}/{y}.png',
+        maxZoom: 8
+      })
+
+_layer = new ol.layer.Tile({
+      source: _source
+    })
+
+var map = new ol.Map({
+  target: 'map',
+  layers: [
+    _layer
+  ],
+  renderer: 'canvas',
+  view: _view
+});
+
+})
+</script>
+</head>
+
+<body>
+  There is a strange bug: if this is loaded from file://
+  , whether using 'canvas' or 'dom', though OL does seem to create all the right DOM elements
+  , the tiles seem to not get loaded. 
+  <div id='map' class='map' style='border: 1px black; width: 100%; height: 90%'></div>
+</body>
+
+</html>
