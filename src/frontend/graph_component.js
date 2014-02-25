@@ -39,7 +39,7 @@ $(document).ready(function() {
     }
     data_socket.onmessage = function(d) {
       d = JSON.parse(d.data);
-      console.log("received data from websocket:")
+      console.log("received data from (plain) websocket:")
       console.log(d);
     }
 
