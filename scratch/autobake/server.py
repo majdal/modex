@@ -104,9 +104,12 @@ if __name__ == '__main__':
    ## create a WAMP-over-WebSocket transport server factory
    ##
    from autobahn.twisted.websocket import WampWebSocketServerFactory
+   
+   # NB: args.wsurl MUST NOT INCLUDE a path; hence it is not really a URL; all it supports is protocol (which must be ws or wss), hostname, and port. anything after that gives a mysterious 
+   #   File "/usr/lib/python2.7/site-packages/autobahn/websocket/protocol.py", line 3383, in setSessionParameters
+   # raise Exception("path specified for server WebSocket URL")
    transport_factory = WampWebSocketServerFactory(session_factory, args.wsurl, debug = True)
    transport_factory.setProtocolOptions(failByDrop = False)
-
 
    ## start the WebSocket server from an endpoint
    ##
