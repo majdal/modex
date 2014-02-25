@@ -13,11 +13,20 @@ h1, h2, h3, h4, h5, h6 { color: steelblue }
 
 /* layout */
 
-#layout {
+#cr-stage { 
+  z-index: 11;
+  position: fixed;
+}
+
+#layout { /* outline div, giving the overall space available */
   height: 100%;
-  width: 80%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
+  
+  //position: fixed; /* interweave with crafty */
+  //z-index: 3;
+  //opacity: .6;
 }
 
 /* wrapper div so that inner divs will bunch up against each other proper-like */
@@ -26,6 +35,7 @@ h1, h2, h3, h4, h5, h6 { color: steelblue }
 #view > * { display: inline-block; height: 100% } 
 
 #controls { 
+   height: 20%;
    background: grey;
    padding: .3em 1em;
 }
@@ -51,7 +61,7 @@ display: inline-block
   color: white;
   margin: .1em;
   padding-left: .1em;
-  padding-right; .1em;
+  padding-right: .1em;
   border: black dotted 1px;
 }
 
@@ -65,10 +75,11 @@ I know i've done this before, I just have to remember how -kousu
   border-top-left-radius: 20px;
   overflow: hidden; /* make the radius affect the inner map rendering elements */
 
-  position: fixed;
-  z-index: 900;
+  /*position: relative;
+  z-index: 900;*/
 
-  width: 100%; /* full screen */
+  width: 61%; /*golden ratio*/
+  /*width: 100%;*//* full screen */
   height: 100%;
 }
 
@@ -76,10 +87,11 @@ I know i've done this before, I just have to remember how -kousu
   background-color: white;
   border-left: black solid 2px ;
 
-  position: fixed;
-  z-index: 1000;
+  /*position: relative;
+  z-index: 1000;*/
+  
   /* height: 50px; */
-  width: 35%; /* it would be nice if this could be autocalculated from the available space*/
+  width: 38%; /* it would be nice if this could be autocalculated from the available space*/
 
   bottom: 5px;
   right: 5px;
