@@ -1,4 +1,4 @@
-
+$(function() {
  //todo: move this to a jquery oninit() handler
 var labels =  new ol.style.Text({
         color: '#bada55',
@@ -93,3 +93,4 @@ var meat = new ol.layer.Vector({
       });
 
 
+}) //end oninit
