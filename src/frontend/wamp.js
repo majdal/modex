@@ -35,43 +35,63 @@ $(function() {
   }
   
   function hookup() {
+  //hook up event handlers
+
   session.subscribe("heartbeat", function() {
     console.log("heartbeat");
   })
+
   session.subscribe("data", function (args, kwargs, evtDetails) {
     console.log("got data: " + "args = " + JSON.stringify(args) +
                  ", kwargs = " + JSON.stringify(kwargs),
                  ", metadata details: " + JSON.stringify(evtDetails));
   });
-   
-  // RPC is done with session.call(), which returns a Promise/A+ object -- something                                                   
-  // with a .then() method that lets you attach callbacks
-   
 
-    // RPC the parrot function with varous arguments
-    function parrotHandler(r) {
-      console.log("this is not a parrot nevermore:", JSON.stringify(r));
-    }
-    //session.call('start').then(parrotHandler);
     
     $("#connected").css("color", "green") //mark connected
     $("#connected").html("Connected.")
 
     global.session = session; //stash for debugging
-    
-    start = $("#controls #start") //ack; my spider sense wants this to be 
+
+
+    start = $("#controls #start")
     stop = $("#controls #stop")
+    
+    function doStart() {
+        session.call('start').then(function() { //this stuff has to happen after the call succeeds
+           start.css("opacity", .1)
+           stop.css("opacity", 1)
+           stop.attr("href","#"); start.attr("href",null);
+           stop.click(doStop)
+           start.unbind()   //especially this; we want to be able to click *until*
+        })
+        return false; //kill the href
+    }
+    function doStop() {
+        session.call('stop').then(function() { //this stuff has to happen after the call succeeds
+           start.css("opacity", 1)
+           stop.css("opacity", .1)
+           start.attr("href","#"); stop.attr("href",null)
+           start.click(doStart)
+           stop.unbind()   //especially this; we want to be able to click *until*
+        })
+        return false; //kill the href
+    }
+    
     start.css("opacity", 1) //mark ready to start (XXX not sync'd with server side _running/not _runningx state)
-    //start.click(function() {
-    //  start.opacity("
-    //})
+    start.click(doStart);
+    
     global.start = start;
     global.stop = stop;
-   }
-  setTimeout(hookup, 6000)
-  }
 
- setTimeout(function() {
-  connection.open()}, 6000)
+
+   }  //end deferred
+  setTimeout(hookup, 6000)
+  
+ 
+  }
+ 
+ connection.open()
+ //setTimeout(connection.open, 6000)
 
 }) //end oninit
