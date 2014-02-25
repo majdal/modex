@@ -18,6 +18,8 @@
 
    <!-- project code -->
    <link rel='stylesheet' href='css/style.css' type='text/css'/>
+
+   <script type="text/javascript" src="wamp.js"></script>
    
    <!-- crafty -->
    <script type="text/javascript" src="game.js"></script>
@@ -31,33 +33,17 @@
    <script type="text/javascript" src="scenes/goals.js"></script>
    <script type="text/javascript" src="scenes/intro.js"></script>
 
-
-
-
-   <title>ModEx all the things!!!</title>
-   <style>
-
-   </style>
+   <title>Farming Simulation (viewer)</title>
 
 </head>
 <body>
-    <h2>My Map</h2>
-    <div id="map" class="map"></div>
+    <h2></h2>
+    <script type="text/javascript" src="map.js"></script>
+    <div id="map"></div>
     
     <!-- NB: temporarily disable the graph to make debugging the map easier -->
-    <div id='graph' class='nothidden'></div>
-
-    <style>
-      .hidden { display: none } 
-      .map {
-        height: 600px;
-        width: 100%;
-      }
-    </style>
-
+    <div id="graph"></div>
   
-  <script type="text/javascript" src="wamp.js"></script>
 
-<script type="text/javascript" src="map.js"></script>
 </body>
 </html>
