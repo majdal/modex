@@ -4,20 +4,37 @@
 body, html {
   background-color: #778; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
 
-  height: 100%;   width: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
+  height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
 }
 
 /* layout */
+
+/* wrapper div so that inner divs will bunch up against each other proper-like */
+/* this is sometimes called "shrinkwrapping" */
+#layout { height: 100%; }
+#layout>* { display: inline-block; height: 100% } 
+
+/* the ideal layout:
+   - automatically figures out if it has enough space to render the two elements side by side (to some minimum definition of "enough space", say 200px)
+   - if not, splits them onto multiple lines, and on those lines spreads them as wide as possible
+I know i've done this before, I just have to remember how -kousu
+*/
+
 #map {
-  height: 100%;
-  width: 61%; /* golden ratio */
   float: left;
+  width: 61%; /* golden ratio */
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  overflow: hidden; /* make the radius affect the inner map rendering elements */
 }
 
 #graph {
-  height: 100%;
-  width: 35%;
-  float: right;
+  width: 35%; /*it would be nice if this could be autocalculated from the available space*/
+  background: white;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-left: black solid 2px ;
+  overflow: hidden; /* make the radius affect the inner map rendering elements */
 }
 
 /* d3 properties */
