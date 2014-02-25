@@ -18,8 +18,11 @@ Code dependencies (external javascripts like OpenLayers and D3), being relativel
 
 ## Developer's Tools
 
+HTML5 (javascript, jquery, <canvas>, CSS3, <audio>, et al.) is a large and confoundingly ugly and stunningly elegant environment.
 
-Since web browsers have a wide attack surface they have many many security restrictions.
+Get to know your browser's debug console. Use [jsFiddle](http://jsfiddle.net/) to edit code live and online, and share it with people over the internet.
+
+Learn the limitations (mostly due to security estrictions) on what browsers can and cannot do.
 The [same-origin policy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Same_origin_policy_for_JavaScript) is one major limitation that needs to be respected.
 Browsers tend to be even more restrictive when running locally: that is, when the URL starts with "file://" instead of "http://", more rules kick in;
  Now, something (???) about these rules blocks OpenLayers from working locally in Firefox (and IE? and Opera??), but not in Chrome.
