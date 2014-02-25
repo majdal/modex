@@ -5,6 +5,8 @@ body, html {
   background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
 
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
+  padding: 0px;
+  margin: 0px;
 }
 
 body > h2 { color: steelblue }
@@ -25,20 +27,21 @@ I know i've done this before, I just have to remember how -kousu
 #map {
   position: fixed;
   z-index: 900;
-  float: left;
-  width: 61%; /* golden ratio */
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+  /* float: left; */
+  width: 100%; /* full screen */
+  height: 100%;
   overflow: hidden; /* make the radius affect the inner map rendering elements */
 }
 
 #graph {
-  width: 35%; /*it would be nice if this could be autocalculated from the available space*/
-  background: white;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  border-left: black solid 2px ;
+  position: fixed;
+  z-index: 1000;
+  /* height: 50px; */
+  width: 35%; /* it would be nice if this could be autocalculated from the available space*/
+  background-color: white;
   overflow: hidden; /* make the radius affect the inner map rendering elements */
+  bottom: 5px;
+  right: 5px;
 }
 
 /* d3 properties */

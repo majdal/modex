@@ -15,9 +15,10 @@
    <script type="text/javascript" src="/assets/libs/d3.v3.js" charset="utf-8"></script>
    <script type="text/javascript" src="/assets/libs/crafty.js"></script>
 
-
    <!-- project code -->
-   <link rel='stylesheet' href='css/style.css' type='text/css'/>
+   <!-- <link rel='stylesheet' href='css/style.css' type='text/css'/> -->
+   <link rel="stylesheet/less" type="text/css" href="css/style.less" />
+
    
    <!-- networking -->
    <script type="text/javascript" src="wamp.js"></script>
@@ -43,12 +44,18 @@
 
 </head>
 <body>
-    <h2>Model Explorer -- Farming Simulation</h2>
+    <!-- <h2>Model Explorer -- Farming Simulation</h2> -->
 
   <div id="layout">
     <div id="map"></div><!-- hide whitespace from parser
     --><div id="graph"></div>
   </div>
-
+   
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.6.2/less.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    less.watch();
+  });
+  </script>
 </body>
 </html>
