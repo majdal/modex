@@ -25,15 +25,32 @@ h1, h2, h3, h4, h5, h6 { color: steelblue }
 
 #controls { 
    background: grey;
+   padding: .3em 1em;
+}
+// ugh
+// to center a bunch of elements at once you
+// a) need to shrink wrap them into a div (so the div must be inline-block??)
+// b) wrap that in another div so that margin works right
+.shrinkwrap { 
+
+}
+#controls > div {
    margin-left: auto;
    margin-right: auto;
+display: inline-block 
 }
-#controls > * { display: inline-block }
+
+#controls {
+  text-align: center; /* this is unsatisfying; I really want to center an entire div; but CSS makes that devilish -kousu*/
+}
+
 #controls a { 
   opacity: .2; /*initially grey out since it's inactive*/
   color: white;
-  margin: 0;
-  padding: .2em;
+  margin: .1em;
+  padding-left: .1em;
+  padding-right; .1em;
+  border: black dotted 1px;
 }
 
 /* the ideal layout:
@@ -51,7 +68,7 @@ I know i've done this before, I just have to remember how -kousu
 }
 
 #graph {
-  width: 35%; /*it would be nice if this could be autocalculated from the available space*/
+  width: 38%; /*it would be nice if this could be autocalculated from the available space instead of have to slightly understate the amount of space*/
   background: white;
   border-top-right-radius: 20px;
   /*border-bottom-right-radius: 20px;*/
