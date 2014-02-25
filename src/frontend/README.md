@@ -21,6 +21,7 @@ Code dependencies (external javascripts like OpenLayers and D3), being relativel
 HTML5 (javascript, jquery, <canvas>, CSS3, <audio>, et al.) is a large and confoundingly ugly and stunningly elegant environment.
 
 Get to know your browser's debug console. Use [jsFiddle](http://jsfiddle.net/) to edit code live and online, and share it with people over the internet.
+Do try out the code on other platforms, like Android and iOS; recent Firefox includes a "responsive design view" which lets you try out a site at different orientations and screen resolutions at a single click.
 
 Learn the limitations (mostly due to security estrictions) on what browsers can and cannot do.
 The [same-origin policy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Same_origin_policy_for_JavaScript) is one major limitation that needs to be respected.
