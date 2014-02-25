@@ -60,8 +60,7 @@ class Model(object):
         self._running = False
     def __iter__(self): return self
     def next(self):
-	while True:
-		yield random.betavariate(ALPHA, BETA) 
+	return random.betavariate(ALPHA, BETA) 
 model = Model()
 
 import csv
@@ -218,8 +217,8 @@ if __name__ == '__main__':
    ## create a WAMP-over-WebSocket transport server factory
    ##
    from autobahn.twisted.websocket import WampWebSocketServerFactory
-   transport_factory = WampWebSocketServerFactory(session_factory, "ws://localhost:8080", debug = True)
-   transport_factory.setProtocolOptions(failByDrop = False)
+   wamp_factory = WampWebSocketServerFactory(session_factory, "ws://localhost:8080", debug = True)
+   wamp_factory.setProtocolOptions(failByDrop = False)
    
    
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
@@ -236,13 +235,13 @@ if __name__ == '__main__':
    assets = File(assets)
    data_resource = WebSocketResource(data_endpoint)
    ctl_resource = WebSocketResource(ctl_endpoint)
-   #wamp = WebSocketResource(wamp_factory)
+   wamp = WebSocketResource(wamp_factory)
    
    root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
    root.putChild("ws", data_resource)    #this puts the websocket at /ws. You cannot put both the site and the websocket at the same endpoint; whichever comes last wins, in Twisted
    if debug:
      root.putChild("scratch", File(pathjoin(PROJECT_ROOT,"scratch")))
-   #root.putChild("wamp", wamp) #okay, this is not behaving itself; crud
+   root.putChild("wamp", wamp) #okay, this is not behaving itself; crud
    root.putChild("ctl", ctl_resource) #this whole file is so not pythonic. Where's the D.R.Y. at, yo? --kousu
    
    #. <- /

@@ -55,6 +55,75 @@
       }
     </style>
 
+  
+  <script type="text/javascript">
+global = this;
+  $(function() {
+ 
+ var connection = new autobahn.Connection({
+   url: 'ws://127.0.0.1:8080/wamp',
+   realm: 'realm1'});  //FEATURE REQUEST: error handling for autobahn plzkthx
+ global.connection = connection;
+
+connection.onopen = function (session) {
+  console.log("opening session:");
+  console.log(session)
+  console.log(connection._websocket.readyState);
+
+// hook the low-level handlers on the websocket to help debug what Autobahn thinks it is doing
+// these must be done here because _websocket doesn't exist until connection.open()
+connection._websocket.onerror = function(evt) {
+  console.log("websocket error: " + evt.reason)
+  console.log(evt)
+}
+
+connection._websocket.onclose = function(evt) { 
+  console.log("websocket close: " + evt.reason)
+  console.log(evt)
+}
+
+
+  //pubsub handlers can either take no args (JS just ignores extra args)
+  function heartbeatHandler() {
+    console.log("heartbeat");
+  }
+
+  //or args and kwargs (python-style, matching the args and kwargs passed from the python server side)
+  function dataHandler(args,kwargs) {
+    console.log("got data: " + "args = " + JSON.stringify(args) + ", kwargs = " + JSON.stringify(kwargs))
+  }
+
+  // or an additional "EventDetails" object which gives connection metadata
+  function metaLooker(args, kwargs, evtDetails) {
+    console.log("metadata details: " + JSON.stringify(evtDetails))
+  }
+
+  session.subscribe(heartbeatHandler, "heartbeat");
+  session.subscribe(dataHandler, "data");
+  session.subscribe(metaLooker, "heartbeat");
+   
+  // RPC is done with session.call(), which returns a Promise/A+ object -- something                                                   
+  // with a .then() method that lets you attach callbacks
+   
+  // rpcFail is used as the error handler for RPC calls; it is optional.
+  function rpcFail(error) {
+    console.log("Call failed: " + JSON.stringify(error));
+  }
+
+  // RPC the parrot function with varous arguments
+  function parrotHandler(r) {
+    console.log("this is not a parrot nevermore:", JSON.stringify(r));
+  }
+  session.call('start').then(parrotHandler);
+
+  global.session = session; //stash for debugging
+}
+
+connection.open() 
+ 
+  })
+  </script>
+
 
     <script type="text/javascript">
  //todo: move this to a jquery oninit() handler
