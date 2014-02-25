@@ -13,8 +13,8 @@ body > h2 { color: steelblue }
 
 /* wrapper div so that inner divs will bunch up against each other proper-like */
 /* this is sometimes called "shrinkwrapping" */
-#layout { height: 100%; }
-#layout>* { display: inline-block; height: 100% } 
+#view { height: 100%; }
+#view>* { display: inline-block; height: 100% } 
 
 /* the ideal layout:
    - automatically figures out if it has enough space to render the two elements side by side (to some minimum definition of "enough space", say 200px)
