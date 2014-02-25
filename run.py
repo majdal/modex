@@ -69,6 +69,12 @@ def browse():
   webbrowser.open('http://127.0.0.1:8080')  #the URL here is hardcoded and needs to match what server.py spins up on
 
 if __name__ == '__main__':
+
+  if len(sys.argv) > 1 and sys.argv[1] == 'debug':
+      debug = 'debug'
+  else:
+      debug = ''
+   
   # attempt, in a reasonably cross-platform way, to find the python2 interpreter
   # this depends on twisted which means this script itself depends on python2, which is sort of irritating
   #PYTHON = which("python2")
@@ -85,7 +91,6 @@ if __name__ == '__main__':
   # it is cleaner to run everything else in the background and run the server on the mainthread
   # because call() hooks SIGINT (or your local system's favourite shutdown signal)
   # and politely but firmly kills the server no matter how run.py ends
-  subprocess.call([PYTHON, pathjoin(PROJECT_ROOT, "src", "backend", "server.py"), "debug"])
-
+  subprocess.call([PYTHON, pathjoin(PROJECT_ROOT, "src", "backend", "server.py"), debug])
   # TODO(kousu): only browser.start() if the server comes up (requires some kind of pegging; ugh)
   # TODO(kousu): figure out why the browser opens twice (sometimes) if you press ctrl-c or the server fails

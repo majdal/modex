@@ -137,7 +137,7 @@ class JsonDataServer(WebSocketServerProtocol):
       #I want to speak dynamically: so, as data comes in, push it to the client
       # but I don't see how to do this?? what thread am I running on???
       # ah!
-      dat = pathjoin(PROJECT_ROOT, "assets/data/static_lightbulbs.tsv")
+      dat = pathjoin(PROJECT_ROOT, "assets", "data", "static_lightbulbs.tsv")
       dat = open(dat)
       dat = csv.reader(dat, dialect=csv.excel_tab)
       header = next(dat)
