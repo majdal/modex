@@ -36,6 +36,7 @@ $(function() {
   
   function hookup() {
   //hook up event handlers
+  //in a subroutine so that it can be sloweeeeed dooowwwwn
 
   session.subscribe("heartbeat", function() {
     console.log("heartbeat");
@@ -45,6 +46,7 @@ $(function() {
     console.log("got data: " + "args = " + JSON.stringify(args) +
                  ", kwargs = " + JSON.stringify(kwargs),
                  ", metadata details: " + JSON.stringify(evtDetails));
+    $("h2").width((10000*args[0])+"px") //in lieu of having a nice d3 graph to plot the results of the simulation, just have them resize the title
   });
 
     
@@ -86,12 +88,11 @@ $(function() {
 
 
    }  //end deferred
-  setTimeout(hookup, 6000)
-  
- 
+  setTimeout(hookup, 3000)
+   
   }
  
- connection.open()
- //setTimeout(connection.open, 6000)
-
+ //connection.open()
+ setTimeout(function() { connection.open() }, 2000) //must be wrapped; see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this#Method_binding
+                                                    //                     https://developer.mozilla.org/en-US/docs/Web/API/window.setTimeout?redirectlocale=en-US&redirectslug=DOM%2Fwindow.setTimeout#The_.22this.22_problem
 }) //end oninit
