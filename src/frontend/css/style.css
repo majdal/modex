@@ -2,10 +2,12 @@
 .hidden { display: none } /* use this CSS class to disable elements temporarily */
 
 body, html {
-  background-color: #778; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
+  background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
 
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
 }
+
+body > h2 { color: steelblue }
 
 /* layout */
 
