@@ -17,6 +17,8 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 ### Data
 * d3js
 * [cubism.js](http://square.github.io/cubism/) for visualizing live time series data
+* [cube](http://square.github.io/cube/)
+* [graphite](http://graphite.wikidot.com/)
 
 * HTML5
 
