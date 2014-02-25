@@ -7,14 +7,34 @@ body, html {
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
 }
 
-body > h2 { color: steelblue }
+h1, h2, h3, h4, h5, h6 { color: steelblue }
 
 /* layout */
 
+#layout {
+  height: 100%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* wrapper div so that inner divs will bunch up against each other proper-like */
 /* this is sometimes called "shrinkwrapping" */
-#view { height: 100%; }
-#view>* { display: inline-block; height: 100% } 
+#view { height: 80%; }
+#view > * { display: inline-block; height: 100% } 
+
+#controls { 
+   background: grey;
+   margin-left: auto;
+   margin-right: auto;
+}
+#controls > * { display: inline-block }
+#controls a { 
+  opacity: .2; /*initially grey out since it's inactive*/
+  color: white;
+  margin: 0;
+  padding: .2em;
+}
 
 /* the ideal layout:
    - automatically figures out if it has enough space to render the two elements side by side (to some minimum definition of "enough space", say 200px)
@@ -26,7 +46,7 @@ I know i've done this before, I just have to remember how -kousu
   float: left;
   width: 61%; /* golden ratio */
   border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+  /*border-bottom-left-radius: 20px;*/
   overflow: hidden; /* make the radius affect the inner map rendering elements */
 }
 
@@ -34,7 +54,7 @@ I know i've done this before, I just have to remember how -kousu
   width: 35%; /*it would be nice if this could be autocalculated from the available space*/
   background: white;
   border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+  /*border-bottom-right-radius: 20px;*/
   border-left: black solid 2px ;
   overflow: hidden; /* make the radius affect the inner map rendering elements */
 }
