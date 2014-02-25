@@ -52,16 +52,14 @@ import random
 ALPHA = .5
 BETA = 10
 class Model(object):
-    def __init__(self):
-        self._running = False
-    def start(self):
-        self._running = True
-    def stop(self):
-        self._running = False
+    "a stub 'model' that gives values from a beta distribu"
+    "this model is an iterator and is time-stepped by calling next() on it"
+    def __init__(self, alpha, beta):
+        self._alpha = alpha
+        self._beta = beta
     def __iter__(self): return self
     def next(self):
-	return random.betavariate(ALPHA, BETA) 
-model = Model()
+	return random.betavariate(self._alpha, self._beta)
 
 import csv
 
@@ -76,21 +74,34 @@ class ModelServer(ApplicationSession):
    An application component that publishes events with no payload
    and with complex payloads every second.
    """
+   def __init__(self):
+      ApplicationSession.__init__(self)
+      self._model = Model(ALPHA, BETA) #NB must be before join since .join() causes onJoin()... though.. uh.. @inlineCallbacks is weird
+      self._running = False #NB: models don't know about real time, but ModelServer does
 
    def onConnect(self):
       self.join("realm1") # only one "realm" can be joined at a time
-
+   
+   def start(self):
+      self._running = True
+   
+   def stop(self):
+      self._running = False
+   
    @inlineCallbacks
    def onJoin(self, details):
 
-      self.register(lambda: model.start(), "start")
-      self.register(lambda: model.stop(), "stop")
+      self.register(self.start, "start")
+      self.register(self.stop, "stop")
       
       counter = 0
       while True:
          self.publish('heartbeat')
          
-         self.publish('data', next(model)) #NB: model is an iterator
+         if self._running:
+           state = next(self._model) #NB: model is an iterator
+           self.publish('data', state) # ... this seems.. poor.. in the long run. The models internally need to be able to register data streams on themselves,
+                                       # and then we need 
 
          yield sleep(2)
 
