@@ -28,7 +28,17 @@ Hm. It seems that OpenLayers demands tiles to be 256x256; if not, Chrome renders
 ![borkychrome](tiles64x64-borkychrome.png)
 and firefox simply doesn't render anything:
 ![emptyfox](tiles64x64-emptyfox.png)
+There's some provision for custom tile sizes; there's a "tileSize" arg you can put in as a param to a TileGrid..
+but I don't see how to, and the [co](https://github.com/openlayers/ol3/blob/d9437e469d8bec9c908e7e336785fb2c1a36a54b/src/ol/tilegrid/xyztilegrid.js#L32)/[de](https://github.com/openlayers/ol3/blob/d9437e469d8bec9c908e7e336785fb2c1a36a54b/src/ol/source/bingmapssource.js#L86) makes it seem
+like it's only really meant as an internal property.
+More hints [here](https://groups.google.com/forum/#!searchin/ol3-dev/tile/ol3-dev/nIkURl6aXSE/TDp6ywwDQx4J) and [here](https://groups.google.com/forum/#!searchin/ol3-dev/tile/ol3-dev/oG1lQYTiVSA/gIlC7CtvqsoJ).
 
+
+
+It seems that 
+OpenStreetMap provides vector tiles; however they are generated from their backend DB, and asking for an empty area
+or even an area that's not even valid just gives """{"type":"FeatureCollection","features":[]}""". So we need to
+understand a priori what the right area codes to use are; simply ripping down tiles isn't going to help us.
 
 # APIs for Comparison
 
