@@ -52,8 +52,10 @@ import random
 ALPHA = .5
 BETA = 10
 class Model(object):
-    "a stub 'model' that gives values from a beta distribu"
-    "this model is an iterator and is time-stepped by calling next() on it"
+    """
+    a stub 'model' that gives values from a beta distribu
+    this model is an iterator and is time-stepped by calling next() on it
+    """
     def __init__(self, alpha, beta):
         self._alpha = alpha
         self._beta = beta

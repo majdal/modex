@@ -3,20 +3,57 @@
 
 body, html {
   background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
-
+  //background-color: red; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
   padding: 0px;
   margin: 0px;
 }
 
-body > h2 { color: steelblue }
+h1, h2, h3, h4, h5, h6 { color: steelblue }
 
 /* layout */
 
+#layout {
+  height: 100%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* wrapper div so that inner divs will bunch up against each other proper-like */
 /* this is sometimes called "shrinkwrapping" */
-#layout { height: 100%; }
-#layout>* { display: inline-block; height: 100% } 
+#view { height: 80%; }
+#view > * { display: inline-block; height: 100% } 
+
+#controls { 
+   background: grey;
+   padding: .3em 1em;
+}
+// ugh
+// to center a bunch of elements at once you
+// a) need to shrink wrap them into a div (so the div must be inline-block??)
+// b) wrap that in another div so that margin works right
+.shrinkwrap { 
+
+}
+#controls > div {
+   margin-left: auto;
+   margin-right: auto;
+display: inline-block 
+}
+
+#controls {
+  text-align: center; /* this is unsatisfying; I really want to center an entire div; but CSS makes that devilish -kousu*/
+}
+
+#controls a { 
+  opacity: .2; /*initially grey out since it's inactive*/
+  color: white;
+  margin: .1em;
+  padding-left: .1em;
+  padding-right: .1em;
+  border: black dotted 1px;
+}
 
 /* the ideal layout:
    - automatically figures out if it has enough space to render the two elements side by side (to some minimum definition of "enough space", say 200px)
@@ -25,23 +62,28 @@ I know i've done this before, I just have to remember how -kousu
 */
 
 #map {
+  border-top-left-radius: 20px;
+  overflow: hidden; /* make the radius affect the inner map rendering elements */
+
   position: fixed;
   z-index: 900;
-  /* float: left; */
+
   width: 100%; /* full screen */
   height: 100%;
-  overflow: hidden; /* make the radius affect the inner map rendering elements */
 }
 
 #graph {
+  background-color: white;
+  /* border-left: black solid 2px ; */
   position: fixed;
   z-index: 1000;
-  /*height: 35%;  */
+  /* height: 50px; */
   width: 35%; /* it would be nice if this could be autocalculated from the available space*/
-  background-color: white;
-  overflow: hidden; /* make the radius affect the inner map rendering elements */
   bottom: 5px;
   right: 5px;
+  border-top-right-radius: 20px;
+  /*border-bottom-right-radius: 20px;*/
+  overflow: hidden; /* make the radius affect the inner map rendering elements */
 }
 
 /* d3 properties */
@@ -60,12 +102,3 @@ I know i've done this before, I just have to remember how -kousu
   stroke: steelblue;
   stroke-width: 1.5px;
 }
-/*
-#graph {
-  position: fixed;
-  z-index: 1000;
-  background: white;
-  bottom: 0;
-  right: 0;
-  border-radius: 3px;
-}*/

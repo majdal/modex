@@ -39,14 +39,16 @@ $(function() {
   //in a subroutine so that it can be sloweeeeed dooowwwwn
 
   session.subscribe("heartbeat", function() {
-    console.log("heartbeat");
+    //console.log("heartbeat");
   })
 
   session.subscribe("data", function (args, kwargs, evtDetails) {
+    /* 
     console.log("got data: " + "args = " + JSON.stringify(args) +
                  ", kwargs = " + JSON.stringify(kwargs),
                  ", metadata details: " + JSON.stringify(evtDetails));
-    $("h2").width((10000*args[0])+"px") //in lieu of having a nice d3 graph to plot the results of the simulation, just have them resize the title
+    */
+    $("h2").toggle();//in lieu of having a nice d3 graph to plot the results of the simulation, just have them resize the title
   });
 
     

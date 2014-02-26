@@ -43,8 +43,8 @@ $(function() {
     }
     data_socket.onmessage = function(d) {
       d = JSON.parse(d.data);
-      console.log("received data from (plain) websocket:")
-      console.log(d);
+      //console.log("received data from (plain) websocket:")
+      //console.log(d);
     }
 
     d3.tsv("assets/data/static_lightbulbs.tsv", function(error, data) {
