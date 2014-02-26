@@ -22,7 +22,7 @@ var farm = function($) {
 
             // init Crafty
             Crafty.init(this.config.width, this.config.height);
-            Crafty.canvas.init();
+            //Crafty.canvas.init();
 
             
 

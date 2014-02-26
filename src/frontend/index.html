@@ -31,9 +31,10 @@
    <!-- crafty -->
    <!-- warning: crafty sets overflow: hidden unilaterally on the body element,
         which interferes with any attempts at non-Crafty layout -->
-   <script type="text/javascript" src="game.js"></script>
+   <!-- script type="text/javascript" src="game.js"></script -->
    <script type="text/javascript" src="controller.js"></script>
    <script type="text/javascript" src="farm.js"></script>
+    <script type="text/javascript" src="main.js"></script>
    <script type="text/javascript" src="scenes/menu.js"></script>
    <script type="text/javascript" src="scenes/setup.js"></script>
    <script type="text/javascript" src="scenes/goals.js"></script>
@@ -42,27 +43,8 @@
    <title>Model Explorer -- Agriculture Simulation</title>
 
 </head>
-<body>
 
-  <div id="layout">
-    <!--<h2>Model Explorer -- Agriculture Simulation</h2>-->
-    <div id="view">
-      <div id="map"></div><!-- hide whitespace from parser
-      --><div id="graph"></div>
-    </div>
-    <div id="controls">      
-     <div class="shrinkwrap">
-      Status: <span id="connected">Disconnected</span>
-      Model: <a id="start">Start</a><!--hidewhitespace--><a id="stop">Stop</a> <!-- these are buttons, wired up via jQuery, to start and stop the simulation -->
-     </div>
-    </div>  
-  </div>
-   
-  <script type="text/javascript">
-    less = {
-      logLevel: 1,
-    }
-  </script>
+
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.6.2/less.min.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
