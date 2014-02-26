@@ -17,7 +17,7 @@ Our **allies**,
 * [SiG@UWaterloo](http://sig.uwaterloo.ca)
 * The [UW Games Institute](https://uwaterloo.ca/games-institute/)
 * [MaRS Data Catalyst](http://data.marsdd.com) - _a source of open data and direction for application_
-* [Dawn Parker](http://wici.ca/new/2011/08/dawn-parker/) and her [SLUCE II](http://vserver1.cscs.lsa.umich.edu/sluce/) land use simulation
+* [Dawn Parker](http://wici.ca/new/2011/08/dawn-parker/) and her [SLUCE II](http://slice.wici.ca) land use simulation
 * The [McConnell Foundation](http://www.mcconnellfoundation.ca/en)
 * [WICI](http://wici.ca)
 
