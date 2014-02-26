@@ -91,4 +91,5 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 ## Inspiration
 
+* [jsFiddle](http://jsfiddle.net) -- [example](http://jsfiddle.net/sharavsambuu/s7QjN/9/light/)
 * [Tributary.IO](https://github.com/enjalot/tributary.io): Rapid Collaborative D3 Prototyping
