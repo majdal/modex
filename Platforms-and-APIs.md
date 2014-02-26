@@ -4,6 +4,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 ## Frontend
 
 * craftyjs?
+* [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
 
 ### Maps
 
