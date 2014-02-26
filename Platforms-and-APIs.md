@@ -67,7 +67,13 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 * [GeoHack](https://tools.wmflabs.org/geohack/) (all lat/lon coordinates on Wikipedia link to GeoHack)
 * [MapBox Collaboratory](https://www.mapbox.com/)
 
-## Scientific Collaboration
+## Collaboratories
+
+* [StackExchange](http://stackoverflow.com/) - _they've thought long and hard -- and have measured -- about the right way to do comment systems; the link escapes me right now, though -kousu_
+
+* [DIY.org](http://diy.org/)
+* [jsFiddle](http://jsfiddle.net) -- [example](http://jsfiddle.net/sharavsambuu/s7QjN/9/light/)
+* [Tributary.IO](https://github.com/enjalot/tributary.io): Rapid Collaborative D3 Prototyping
 
 * asana.com -- project management
 * github
@@ -88,8 +94,3 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 ## Blogs
 * wordpress
 * mezzanine (on django)
-
-## Inspiration
-
-* [jsFiddle](http://jsfiddle.net) -- [example](http://jsfiddle.net/sharavsambuu/s7QjN/9/light/)
-* [Tributary.IO](https://github.com/enjalot/tributary.io): Rapid Collaborative D3 Prototyping
