@@ -80,6 +80,8 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 * academia.edu??
 * 
 
+* [nbviewer](http://nbviewer.ipython.org/) which lets scientific people show off their [ipython notebooks](http://ipython.org/notebook.html), like [this one](http://nbviewer.ipython.org/urls/raw2.github.com/damontallen/Orbitals/master/Hydrogen%20Orbitals%20-%20working.ipynb)
+
 ### Dataset Management
 * http://dat-data.com 
 * http://datahub.io
