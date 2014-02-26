@@ -61,7 +61,7 @@ class Model(object):
         self._beta = beta
     def __iter__(self): return self
     def next(self):
-	return random.betavariate(self._alpha, self._beta)
+        return random.betavariate(self._alpha, self._beta)
 
 import csv
 

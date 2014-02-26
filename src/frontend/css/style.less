@@ -3,7 +3,7 @@
 
 body, html {
   background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
-  //background-color: red; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
+
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
   padding: 0px;
   margin: 0px;
@@ -13,11 +13,20 @@ h1, h2, h3, h4, h5, h6 { color: steelblue }
 
 /* layout */
 
-#layout {
+#cr-stage { 
+  z-index: 11;
+  position: fixed;
+}
+
+#layout { /* outline div, giving the overall space available */
   height: 100%;
-  width: 80%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
+  
+  //position: fixed; /* interweave with crafty */
+  //z-index: 3;
+  //opacity: .6;
 }
 
 /* wrapper div so that inner divs will bunch up against each other proper-like */
@@ -26,6 +35,7 @@ h1, h2, h3, h4, h5, h6 { color: steelblue }
 #view > * { display: inline-block; height: 100% } 
 
 #controls { 
+   height: 20%;
    background: grey;
    padding: .3em 1em;
 }
@@ -65,22 +75,27 @@ I know i've done this before, I just have to remember how -kousu
   border-top-left-radius: 20px;
   overflow: hidden; /* make the radius affect the inner map rendering elements */
 
-  position: fixed;
-  z-index: 900;
+  /*position: relative;
+  z-index: 900;*/
 
-  width: 100%; /* full screen */
+  width: 61%; /*golden ratio*/
+  /*width: 100%;*//* full screen */
   height: 100%;
 }
 
 #graph {
   background-color: white;
-  /* border-left: black solid 2px ; */
-  position: fixed;
-  z-index: 1000;
+  border-left: black solid 2px ;
+
+  /*position: relative;
+  z-index: 1000;*/
+  
   /* height: 50px; */
-  width: 35%; /* it would be nice if this could be autocalculated from the available space*/
+  width: 38%; /* it would be nice if this could be autocalculated from the available space*/
+
   bottom: 5px;
   right: 5px;
+
   border-top-right-radius: 20px;
   /*border-bottom-right-radius: 20px;*/
   overflow: hidden; /* make the radius affect the inner map rendering elements */
@@ -102,3 +117,12 @@ I know i've done this before, I just have to remember how -kousu
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+/*
+#graph {
+  position: fixed;
+  z-index: 1000;
+  background: white;
+  bottom: 0;
+  right: 0;
+  border-radius: 3px;
+}*/
