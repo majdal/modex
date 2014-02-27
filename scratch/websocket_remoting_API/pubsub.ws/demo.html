@@ -1,0 +1,34 @@
+<html>
+<head>
+
+<script language="javascript" src="jquery.min.js"></script>
+<script>
+$(function() {
+
+channel = WebSocket("ws://localhost:8080/chatrooms/ireland/")
+channel.send({nickname: "McSkills"+Math.floor(Math.random()*222)})
+channel.onmessage = function(evt) {
+   $("#chatwindow").append("li").content(evt.data['nickname'] + ": " + evt.data['message'])
+}
+inputbox = $("#inputbox")
+inputbox.click(function() {
+  channel.send(inputbox.content)
+  inputbox.content = null;
+})
+
+
+})
+</script>
+
+</head>
+<body>
+<form id="chatwindow">
+<textarea>
+The chat
+goes here
+</textarea>
+<input type="text" id="inputbox"></input>
+</form>
+
+</body>
+</html>
