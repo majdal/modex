@@ -9,7 +9,7 @@ It lets you do this:
 ```
 s = state(WebSocket("ws://example.com/spreadsheets/debts"))
 
-setInterval(function() { console.log(s.data()) }, 31415)
+setInterval(function() { console.log(s.data) }, 31415)
 ```
 
 When the object at ws://example.com/spreadsheets/debts is updated, state.ws computes a delta 
@@ -17,7 +17,7 @@ When the object at ws://example.com/spreadsheets/debts is updated, state.ws comp
 Updates can happen server side (e.g. by the database getting updated, by another user editing the object, etc) or by you editing s.data.
 
 ```
-s.['col1'][0] += 42)
+s.data['col1'][0] += 42)
 s.commit()
 ```
 
