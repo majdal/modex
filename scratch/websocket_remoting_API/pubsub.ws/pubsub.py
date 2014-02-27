@@ -100,7 +100,7 @@ if __name__ == "__main__":
     from twisted.web.static import File
     
     root = File(".")
-    reactor.listenTCP(8080, Site(root)) 
+    reactor.listenTCP(port, Site(root)) 
     # this is handy: Resources can be created after the Site is 'running'
     
     url = "ws://localhost:"+str(port)
