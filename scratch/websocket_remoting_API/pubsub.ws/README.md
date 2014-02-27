@@ -1,11 +1,11 @@
 pubsub.ws
 =========
 
-Pubsub should be drastically simplified so that a "topic" should be WebSocket URL.
-Then "subscribing" is just connecting to that URL, and "publishing"is .send()ing to it.
+WebSocket PubSub can be drastically simplified over [the competition](http://wamp.ws/faq/#pubsub)
+so that there is no need for a [new protocol](https://github.com/tavendo/WAMP/blob/master/spec/advanced.md).
+Simply equate "topics" with URLs; then "subscribing" is connecting and "publishing" is sending.
 
 Since this makes nothing that WebSocket doesn't already do, the implementation can be handled entirely server side.
-The one tip to "pubsub"iness might be that if you hit the websocket address over http, it gives a note.
 
 Examples
 ========
@@ -53,3 +53,11 @@ roomroot.putChild("images", otherinterestingHTTPresource())
 send_roomid_somewhere_useful_so_the_users_can_join(roomid)
 
 ```
+
+Missing Pieces
+==============
+
+As of this commit, this file does not support a thoughtful server. The server has no means to influence messages it relays.
+That can change, but it will require some API design considerations.
+
+See [TODO](TODO.md) for gorey details.
