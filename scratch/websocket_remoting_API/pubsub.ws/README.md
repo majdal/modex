@@ -5,7 +5,7 @@ WebSocket PubSub can be drastically simplified over [the competition](http://wam
 so that there is no need for a [new protocol](https://github.com/tavendo/WAMP/blob/master/spec/advanced.md).
 Simply equate "topics" with URLs; then "subscribing" is connecting and "publishing" is sending.
 
-Since this makes nothing that WebSocket doesn't already do, the implementation can be handled entirely server side.
+Since this uses nothing that WebSocket doesn't already do, the implementation can be handled entirely server side, making the client side code dead simple:
 
 Examples
 ========
@@ -33,6 +33,8 @@ inputbox.click(function() {
   inputbox.content = null;
 })
 ```
+
+(no server example yet, since there's literally nothing interesting in the server yet)
 
 
 Tips and Tricks
