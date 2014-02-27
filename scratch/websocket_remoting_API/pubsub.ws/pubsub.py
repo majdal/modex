@@ -68,7 +68,7 @@ class PubSubBroker(WebSocketServerFactory):
     def send(self, payload, isBinary):
         "enqueue a message to send to all listeners -- but don't actually send it yet"
         "payload must be a str or a unicode"
-        print "relaying", payload, "to", len(self._listeners), "clients"
+        print "relaying", payload, "to", len(self._listeners), "clients:", str.join(", ", [lsnr.peer for lsnr in self._listeners])
         for lsnr in self._listeners: #iterate over all PubSubProtocols that have attached to this "topic"
             reactor.callLater(0, lsnr.sendMessage, payload, isBinary)  #XXX is it safe to use reactor here??
 
@@ -79,29 +79,29 @@ class PubSubResource(WebSocketResource):
       site.putChild("path", PubSubResource())
     """
     def __init__(self, url):
-        WebSocketResource.__init__(self, PubSubBroker(url, debug = True, debugCodePaths = True))
+        WebSocketResource.__init__(self, PubSubBroker(url))
 
 if __name__ == "__main__":
-	# usage: pubsub.py 8080 /path/to/bind/to [/path2/to/bind/to /and/path3 /and/of/course/path4]
+    # usage: pubsub.py 8080 /path/to/bind/to [/path2/to/bind/to /and/path3 /and/of/course/path4]
+    # TODO(kousu): make a proper usage(); support -v (turns on logging) and make port into an optional -p flag
     # run with arguments, this file brings up an arbitrary number
     # (one for each path given) of plain pubsub m
-    from twisted.web.resource import Resource
-    from twisted.web.server import Site
-    from twisted.web.static import File
-    from twisted.python import log
+    
     
     port = int(sys.argv[1])
     paths = sys.argv[2:]
     assert all(p.startswith('/') for p in paths), "URLs to bring up must be absolute paths"
     
+    #from twisted.python import log
     #log.startLogging(sys.stdout)
-
-
+    
+    from twisted.web.resource import Resource
+    from twisted.web.server import Site
+    from twisted.web.static import File
+    
     root = File(".")
-    
-    
-    site = Site(root)
-    reactor.listenTCP(8080, site)
+    reactor.listenTCP(8080, Site(root)) 
+    # this is handy: Resources can be created after the Site is 'running'
     
     url = "ws://localhost:"+str(port)
     _resource_memos = {}
@@ -109,12 +109,12 @@ if __name__ == "__main__":
         components = p.split("/")[1:] #we asserted above that paths are absolute, so the first entry will be ""
         # dynamically construct the desired URL inductively
         r = root
-        p = "/" #XXX overwriting
+        p = "/" #XXX be mindful of the overwriting
         for c in components[:-1]: #skip the last one; it needs to be bound to the PubSubResource
             p += c + "/"
-            if p not in _resource_memos:   #if the resouce for this path already exists (say you bring up /chat/1 and /chat/2)
-                _resource_memos[p] = Resource() # it will destroy it and any pubsub endpoints along with it; so we memoize
-            r.putChild(c, _resource_memos[p])
+            if p not in _resource_memos:        # if the Resouce for this path exists (say you bring up /chat/1 and /chat/2)
+                _resource_memos[p] = Resource() # simply .putChild()ing will destroy it _and_ the pubsub endpoints along with it;
+            r.putChild(c, _resource_memos[p])   # so we memoize
             r = _resource_memos[p]
         r.putChild(components[-1], PubSubResource(url))
 		# it is a wart of Autobahn that
@@ -123,4 +123,5 @@ if __name__ == "__main__":
     print len(paths), "PubSub brokers listening on:"
     for e in paths:
 		print(url+e) #not correct! it would be good to be able to query Twisted itself for what paths it knows
-    reactor.run()
+    
+    reactor.run()   #Twisted event loop
