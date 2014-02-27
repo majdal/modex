@@ -54,6 +54,9 @@ send_roomid_somewhere_useful_so_the_users_can_join(roomid)
 
 ```
 
+Since this just uses the plain WebSocket API, it is agnostic about serialization. You can use JSON, msgpack, plain string buffers, or anything else.
+You will need to implement handling of that yourself, but the flexibility to use different types for different data without the overhead of headers is worth it.
+
 Missing Pieces
 ==============
 
