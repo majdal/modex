@@ -20,7 +20,7 @@ temperature_subscription.onmessage = function(evt) {
 ```
 
 
-A simple room (see [chat.html](chat.html)/[chat.py](chat.py) for the working example):
+A simple room (see [chat.html](chat.html) for the working example):
 ```
 channel = WebSocket("ws://example.com/chatrooms/ireland/")
 channel.onmessage = function(evt) {
