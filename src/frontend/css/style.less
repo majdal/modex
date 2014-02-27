@@ -2,8 +2,8 @@
 .hidden { display: none } /* use this CSS class to disable elements temporarily */
 
 body, html {
-  background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
-
+  //background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
+  background-color: white;
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
   padding: 0px;
   margin: 0px;
@@ -72,15 +72,21 @@ I know i've done this before, I just have to remember how -kousu
 */
 
 #map {
-  border-top-left-radius: 20px;
-  overflow: hidden; /* make the radius affect the inner map rendering elements */
+  //border-top-left-radius: 20px;
+  //overflow: hidden; /* make the radius affect the inner map rendering elements */
 
   /*position: relative;
   z-index: 900;*/
 
-  width: 61%; /*golden ratio*/
-  /*width: 100%;*//* full screen */
+  //width: 61%; /*golden ratio*/
+  width: 100%; /* full screen */
   height: 100%;
+  position: fixed;
+  z-index: 0;
+  //display: none;
+  .ol-zoom, .ol-logo {
+    .hidden
+  }
 }
 
 #graph {
