@@ -38,7 +38,7 @@ $ cat >> ~/.bashrc <<EOF
 export WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
 EOF
-$ source ~/.bashrc              #pull in that change
+$ source ~/.bashrc              #temporarily pull in that change; it will become permanent next login
 $ mkdir $WORKON_HOME            #setup a place to put virtualenvs
 ```
 
