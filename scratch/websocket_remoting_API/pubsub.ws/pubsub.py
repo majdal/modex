@@ -16,10 +16,6 @@ Since we're using WebSockets in Python, we're using Autobahn on Twisted, so make
 import sys
 
 from twisted.internet import reactor
-from twisted.web.resource import Resource
-from twisted.web.server import Site
-from twisted.web.static import File
-from twisted.python import log
 
 import autobahn.twisted.websocket
 from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
@@ -82,14 +78,41 @@ class PubSubResource(WebSocketResource):
         WebSocketResource.__init__(self, PubSubBroker(url, debug = True, debugCodePaths = True))
 
 if __name__ == "__main__":
+	# usage: pubsub.py 8080 /path/to/bind/to [/path2/to/bind/to /and/path3 /and/of/course/path4]
+    # run with arguments, this file brings up an arbitrary number
+    # (one for each path given) of plain pubsub m
+    from twisted.web.resource import Resource
+    from twisted.web.server import Site
+    from twisted.web.static import File
+    from twisted.python import log
     
-    log.startLogging(sys.stdout)
+    port = int(sys.argv[1])
+    paths = sys.argv[2:]
+    assert all(p.startswith('/') for p in paths), "URLs to bring up must be absolute paths"
+    
+    #log.startLogging(sys.stdout)
 
     root = File(".")
-    chatrooms = Resource()
-    root.putChild("chatrooms", chatrooms)
-    chatrooms.putChild("ireland", PubSubResource("ws://localhost:8080")) # it is a wart of Autobahn that
-                                                                         # PubSubBroker needs to know its URL
+    url = "ws://localhost:"+str(port)
+    _resource_memos = {}
+    for p in paths:
+        components = p.split("/")[1:] #we asserted above that paths are absolute, so the first entry will be ""
+        # dynamically construct the desired URL inductively
+        r = root
+        p = "/" #XXX overwriting
+        for c in components[:-1]: #skip the last one; it needs to be bound to the PubSubResource
+            p += c + "/"
+            if p not in _resource_memos:   #if the resouce for this path already exists (say you bring up /chat/1 and /chat/2)
+                _resource_memos[p] = Resource() # it will destroy it and any pubsub endpoints along with it; so we memoize
+            r.putChild(c, _resource_memos[p])
+            r = _resource_memos[p]
+        r.putChild(components[-1], PubSubResource(url))
+		# it is a wart of Autobahn that
+		# PubSubBroker needs to know its URL
     
-    reactor.listenTCP(8080, Site(root))
+    site = Site(root)
+    reactor.listenTCP(8080, site)
+    print len(paths), "PubSub brokers listening on:"
+    for e in paths:
+		print(url+e) #not correct! it would be good to be able to query Twisted itself for what paths it knows
     reactor.run()
