@@ -27,7 +27,7 @@ We depend on several libraries, tools, and sources. The frontend libraries are a
 
 
 
-You also need several python-specific requirements. They are listed in ```requirements.txt```. **You must put some effort in to decide how you want to install these**. You can either _**install into your system python**_ directory or setup a **_```virtualenv```**_ to isolate the packages.
+You also need several python-specific requirements. They are listed in ```requirements.txt```. **You must put some effort in to decide how you want to install these**. You can either _**install into your system python**_ directory or setup a **_```virtualenv```_** to isolate the packages.
 
 If you want to use ```virtualenv``` first make sure it is installed properly (something like this -- sorry, very much linux specific at the moment; should work on Mac too, but leave a comment if it doesn't)
 ```
