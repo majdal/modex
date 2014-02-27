@@ -19,15 +19,15 @@ Since we're using WebSockets in Python, we're using Autobahn on Twisted, so make
 import sys
 
 from twisted.internet import reactor
+from twisted.web.resource import Resource
+from twisted.web.server import Site
+from twisted.web.static import File
 from twisted.python import log
-from autobahn.twisted.websocket import WebSocketServerFactory, WampWebSocketServerFactory, WebSocketServerProtocol, WampWebSocketServerProtocol
 
+import autobahn.twisted.websocket
+from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
+from autobahn.twisted.resource import WebSocketResource
 
-
-class PubSubBroker(WebSocketServerFactory):
-    protocol = PubSubProtocol
-    def __init__(self, *args, **kwargs):
-        super(WebSocketServerFactory, self).__init__(*args, **kwargs)
 
 
 class PubSubProtocol(WebSocketServerProtocol):
@@ -48,13 +48,23 @@ class PubSubProtocol(WebSocketServerProtocol):
     def onClose(self, wasClean, code, reason):
         print("WebSocket connection closed: {}".format(reason))
 
+class WebSocketServerFactory(autobahn.twisted.websocket.WebSocketServerFactory, object): pass #hack around python2
+
+class PubSubBroker(WebSocketServerFactory):
+    protocol = PubSubProtocol
+    def __init__(self, *args, **kwargs):
+        super(PubSubBroker, self).__init__(*args, **kwargs)
+
+
 if __name__ == "__main__":
     
     log.startLogging(sys.stdout)
-    broker = PubSubBroker("ws://localhost:8080", debug = debug, debugCodePaths = True)
+    broker = PubSubBroker("ws://localhost:8080", debug = True, debugCodePaths = True)
     # it is a wart that PubSubBroker needs to know the URL it comes up on
     root = File(".")
-    root.putChild("/chatrooms/ireland", broker)
+    chatrooms = Resource()
+    root.putChild("chatrooms", chatrooms)
+    chatrooms.putChild("ireland", WebSocketResource(broker))
     
-    reactor.listenTCP(Site(root), 8080)
+    reactor.listenTCP(8080, Site(root))
     reactor.run()
