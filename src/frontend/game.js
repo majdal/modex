@@ -1,4 +1,6 @@
-$(document).ready(function() {
+"use strict";
+
+Crafty.scene("game", function() {
   Crafty.init();
 
   Crafty.sprite(128, "/assets/images/sprite.png", {
