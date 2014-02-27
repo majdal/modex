@@ -22,33 +22,37 @@ from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerPr
 from autobahn.twisted.resource import WebSocketResource
 
 
-
 class PubSubProtocol(WebSocketServerProtocol):
     """
     Handle talking to a single web
     The way this works is by cooperating with PubSubBroker, which is meant to be this class's Twisted Factory
     Everytime a connection opens or gets a message, this class notifies its Factory, which represents the particular endpoint (aka URL (aka topic, in the pubsub abstraction))
     and in turn its factory has a queue of messages to send to instances of this class
+    
+    You can override any of these; return False from onOpen or onConnect to cancel the connection
     """
+    _listening = False #flag of whether we're in our parent factory's list of listeners (this could be done better...)
+    
     def onConnect(self, request):
-        print("Client connecting: {}".format(request.peer))
+        pass #TODO(kousu): stash request.headers here for great win
+#note-to-self:
+#request.extensions  request.host        request.params      request.peer        request.version     
+#request.headers     request.origin      request.path        request.protocols  
+#
     
     def onOpen(self):
-        print("WebSocket connection open.")
+        #TODO(kousu): ask the parent factory if it's okay if we join, here? like, self.factory.subscribe(), which has the option of returning false?
         self.factory._listeners.append(self)
     
     def onMessage(self, payload, isBinary):
         self.factory.send(payload, isBinary)
-        if isBinary:
-            print("Binary message received: {} bytes".format(len(payload)))
-        else:
-            print("Text message received: |{}|".format(payload.decode('utf8')))
-    
-      #self.sendMessage(json.dumps(data), isBinary)
     
     def onClose(self, wasClean, code, reason):
         print("WebSocket connection closed: {}".format(reason))
-        self.factory._listeners.remove(self)
+        try:
+          self.factory._listeners.remove(self)
+        except ValueError:
+          warnings.warn("%s unable to remove itself from parent %s during close." % (self, self.factory))
 
 
 class PubSubBroker(WebSocketServerFactory):
@@ -62,11 +66,11 @@ class PubSubBroker(WebSocketServerFactory):
         self._listeners = []
     
     def send(self, payload, isBinary):
-        "enqueue a message to send to all listener -- but don't actually send it yet"
+        "enqueue a message to send to all listeners -- but don't actually send it yet"
         "payload must be a str or a unicode"
         print "relaying", payload, "to", len(self._listeners), "clients"
         for lsnr in self._listeners: #iterate over all PubSubProtocols that have attached to this "topic"
-            reactor.callLater(0, lsnr.sendMessage, payload, isBinary)  #XXX is it okay to use reactor here??
+            reactor.callLater(0, lsnr.sendMessage, payload, isBinary)  #XXX is it safe to use reactor here??
 
 
 class PubSubResource(WebSocketResource):
@@ -92,7 +96,13 @@ if __name__ == "__main__":
     
     #log.startLogging(sys.stdout)
 
+
     root = File(".")
+    
+    
+    site = Site(root)
+    reactor.listenTCP(8080, site)
+    
     url = "ws://localhost:"+str(port)
     _resource_memos = {}
     for p in paths:
@@ -110,8 +120,6 @@ if __name__ == "__main__":
 		# it is a wart of Autobahn that
 		# PubSubBroker needs to know its URL
     
-    site = Site(root)
-    reactor.listenTCP(8080, site)
     print len(paths), "PubSub brokers listening on:"
     for e in paths:
 		print(url+e) #not correct! it would be good to be able to query Twisted itself for what paths it knows
