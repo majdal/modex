@@ -2,6 +2,7 @@
 <head>
 
 <script language="javascript" src="jquery.min.js"></script>
+<script language="javascript" src="json2.js"></script>
 <script>
 global = this;
 $(function() {
@@ -9,10 +10,12 @@ $(function() {
 channel = WebSocket("ws://localhost:8080/chatrooms/ireland/")
 channel.onopen = function(evt) {
   console.log("channel open;", evt);
-  channel.send({nickname: "McSkills"+Math.floor(Math.random()*222)})
+  channel.send(JSON.stringify({nickname: "McSkills"+Math.floor(Math.random()*222)}))
 }
 channel.onmessage = function(evt) {
-  console.log("channel message;", evt);
+ console.log("channel message;", evt);
+ msg = evt.data
+ console.log("it contained", msg) 
 
 }
 

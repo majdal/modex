@@ -31,13 +31,21 @@ from autobahn.twisted.resource import WebSocketResource
 
 
 class PubSubProtocol(WebSocketServerProtocol):
+    """
+    Handle talking to a single web
+    The way this works is by cooperating with PubSubBroker, which is meant to be this class's Twisted Factory
+    Everytime a connection opens or gets a message, this class notifies its Factory, which represents the particular endpoint (aka URL (aka topic, in the pubsub abstraction))
+    and in turn its factory has a queue of messages to send to instances of this class
+    """
     def onConnect(self, request):
         print("Client connecting: {}".format(request.peer))
     
     def onOpen(self):
         print("WebSocket connection open.")
+        self.factory._listeners.append(self)
     
     def onMessage(self, payload, isBinary):
+        self.factory.send(payload, isBinary)
         if isBinary:
             print("Binary message received: {} bytes".format(len(payload)))
         else:
@@ -47,13 +55,21 @@ class PubSubProtocol(WebSocketServerProtocol):
     
     def onClose(self, wasClean, code, reason):
         print("WebSocket connection closed: {}".format(reason))
+        self.factory._listeners.remove(self)
 
-class WebSocketServerFactory(autobahn.twisted.websocket.WebSocketServerFactory, object): pass #hack around python2
 
 class PubSubBroker(WebSocketServerFactory):
     protocol = PubSubProtocol
     def __init__(self, *args, **kwargs):
-        super(PubSubBroker, self).__init__(*args, **kwargs)
+        WebSocketServerFactory.__init__(self, *args, **kwargs) #can't use super(); twisted and autobahn do not derive their classes from `object`
+        self._listeners = []
+    
+    def send(self, payload, isBinary):
+        "enqueue a message to send to all listener -- but don't actually send it yet"
+        "payload must be a str or a unicode"
+        print "relaying", payload, "to", len(self._listeners), "clients"
+        for lsnr in self._listeners: #iterate over all PubSubProtocols that have attached to this "topic"
+            reactor.callLater(0, lsnr.sendMessage, payload, isBinary)  #is it okay to use reactor here??
 
 
 if __name__ == "__main__":
