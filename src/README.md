@@ -1,6 +1,6 @@
 # Model Explorer Developer's Guide
 
-## Layout
+## Folder Layout
 
 Each folder should have a README that describes its content in more detail, but as an overview:
 
