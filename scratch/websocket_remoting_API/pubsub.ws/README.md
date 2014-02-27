@@ -15,16 +15,17 @@ A simple server feed:
 temperature_subscription = WebSocket("ws://example.com/feeds/sensors/temperature")
 temperature_subscription.onmessage = function(evt) {
   console.log("Temp is ", evt.data['t'])
+}
 
 ```
 
 
-A simple room:
+A simple room (see [chat.html](chat.html) for the working example):
 ```
 channel = WebSocket("ws://example.com/chatrooms/ireland/")
-channel.send({nickname: "McSkills"+Math.floor(Math.random()*222)})
 channel.onmessage = function(evt) {
-   $("#chatwindow").append("li").content(evt.data['nickname'] + ": " + evt.data['message'])
+   evt.data = JSON.parse(evt.data)
+   $("#chatwindow").val(evt.data['nickname'] + ": " + evt.data['message'])
 }
 inputbox = $("#inputbox")
 inputbox.click(function() { 
