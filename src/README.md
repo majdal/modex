@@ -13,6 +13,7 @@ Each folder should have a README that describes its content in more detail, but 
 * ```src/scripts```    -- batch scripts, like geoprocessing hacks, one-off webcrawlers, and database cleaners
 * ```tests/```         -- unit, integration, acceptance, etc tests
 * ```scratch/```       -- demo, testing, and API-learning code goes here. If a demo is at all complicated it should get its own subfolder and include all js libraries it needs locally. Once it cycles through a few iterations its lessons should be merged in ```src/```, but the demo should (within reason) stay put for future reference. 
+* ```mockups/```       -- drawings and vision documents
 
 ## Dependencies
 
