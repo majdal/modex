@@ -32,3 +32,23 @@ inputbox.click(function() {
   inputbox.content = null;
 })
 ```
+
+
+Tips and Tricks
+===============
+
+In true RESTful fashion, this gimmick forces every single pubsub endpoint to be unique.
+So if you want to have some sort of sessioning going on, like different instances of a games,
+you must arrange 
+You can do this in Twisted with something like
+
+```
+roomid = uuid.uuid4().hex
+site.putchild(roomid, roomroot
+roomroot = twisted.web.resource.Resource()
+roomroot.putchild("event1", PubSubBroker())  #actually this is wrong, because Autobahn insists on knowing 
+roomroot.putchild("event2", PubSubBroker())  #WebSocket URLs twice over
+roomroot.putChild("images", otherinterestingHTTPresource())
+send_roomid_somewhere_useful_so_the_users_can_join(roomid)
+
+```

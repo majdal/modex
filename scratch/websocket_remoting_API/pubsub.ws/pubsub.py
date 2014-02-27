@@ -13,9 +13,6 @@ Since we're using WebSockets in Python, we're using Autobahn on Twisted, so make
 
 """
 
-#TODO(kousu): support old Autobahn (the only change should be an exception handler around the imports to try importing the old paths
-#TODO(kousu): figure out how to peg messages to users
-
 import sys
 
 from twisted.internet import reactor
@@ -59,6 +56,10 @@ class PubSubProtocol(WebSocketServerProtocol):
 
 
 class PubSubBroker(WebSocketServerFactory):
+    """
+    a publish-subscribe message broker,
+    implemented as a Twisted factory for websockets
+    """
     protocol = PubSubProtocol
     def __init__(self, *args, **kwargs):
         WebSocketServerFactory.__init__(self, *args, **kwargs) #can't use super(); twisted and autobahn do not derive their classes from `object`
@@ -69,18 +70,26 @@ class PubSubBroker(WebSocketServerFactory):
         "payload must be a str or a unicode"
         print "relaying", payload, "to", len(self._listeners), "clients"
         for lsnr in self._listeners: #iterate over all PubSubProtocols that have attached to this "topic"
-            reactor.callLater(0, lsnr.sendMessage, payload, isBinary)  #is it okay to use reactor here??
+            reactor.callLater(0, lsnr.sendMessage, payload, isBinary)  #XXX is it okay to use reactor here??
 
+
+class PubSubResource(WebSocketResource):
+    """
+    convenience class so you can say
+      site.putChild("path", PubSubResource())
+    """
+    def __init__(self, url):
+        WebSocketResource.__init__(self, PubSubBroker(url, debug = True, debugCodePaths = True))
 
 if __name__ == "__main__":
     
     log.startLogging(sys.stdout)
-    broker = PubSubBroker("ws://localhost:8080", debug = True, debugCodePaths = True)
-    # it is a wart that PubSubBroker needs to know the URL it comes up on
+
     root = File(".")
     chatrooms = Resource()
     root.putChild("chatrooms", chatrooms)
-    chatrooms.putChild("ireland", WebSocketResource(broker))
+    chatrooms.putChild("ireland", PubSubResource("ws://localhost:8080")) # it is a wart of Autobahn that
+                                                                         # PubSubBroker needs to know its URL
     
     reactor.listenTCP(8080, Site(root))
     reactor.run()
