@@ -18,7 +18,7 @@ chatwindow.chatlines = Array(chatwindow.backlog)
 
 
 
-channel = WebSocket("ws://" + location.host + "/chatrooms/ireland/")
+channel = new WebSocket("ws://" + location.host + "/chatrooms/ireland/")
 channel.onopen = function(evt) {
   console.log("channel open;", evt);
   channel.send(JSON.stringify({username: "", message: username + " has entered the channel."}))
