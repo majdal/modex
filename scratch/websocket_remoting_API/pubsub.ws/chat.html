@@ -17,16 +17,17 @@ inputbox = $("#inputbox")
 chatwindow.chatlines = Array(chatwindow.backlog)
 
 
+
 channel = WebSocket("ws://localhost:8080/chatrooms/ireland/")
 channel.onopen = function(evt) {
   console.log("channel open;", evt);
   channel.send(JSON.stringify({username: "", message: username + " has entered the channel."}))
 }
-
 channel.onmessage = function(evt) {
  data = JSON.parse(evt.data)
  recvchat(data['username'], data['message'])
 }
+
 
 function recvchat(username, message) {
   chatwindow.chatlines.push(username + ": " + message);
@@ -34,11 +35,17 @@ function recvchat(username, message) {
     chatwindow.chatlines.shift() //keep scrollback buffer a constant size
   }
   chatwindow.val(chatwindow.chatlines.join("\n"))
-  chatwindow.scroll().scrollTop(chatwindow.height() + 500) //weird invocation....
+  
+  //make sure new output scrolls the view to the bottom
+  chatwindow.scroll().scrollTop(chatwindow.height() + 500) //the +500 is a weird invocation that fixes it over here; YMMV
 }
 
 function sendchat() {
-  channel.send(JSON.stringify({username: username, message: inputbox.val()}))
+  //because the server is just a relay, all logic--including who we are
+  //needs to be included in each message
+  data = JSON.stringify({username: username, message: inputbox.val()}) 
+  
+  channel.send(data)
   inputbox.val(null);
 }
 
@@ -47,9 +54,9 @@ inputbox.keydown(function(evt) {
     sendchat()
   }
 })
-
 $("#send").click(sendchat)
 
+//for debugging; lets you access these in the js console
 global.inputbox = inputbox;
 global.channel = channel;
 
@@ -57,6 +64,12 @@ global.channel = channel;
 </script>
 
 <style>
+
+
+body { background-color: #82D2F5 }
+p { border: black solid 1px;
+    background-color: grey;
+    opacity: .6 }
 
 #chatwindow {
   width: 100%;
@@ -67,11 +80,19 @@ global.channel = channel;
 
 #inputbox {
   display: inline-block;
+  width: 75%;
 }
+
+#send {
+  width: 20%;
+}
+
 #inputwrapper {
   display: block;
-  float: right;
+  width: 40%; margin-right: 0; margin-left: auto; /*right align*/
 }
+
+
 
 </style>
 
@@ -79,15 +100,25 @@ global.channel = channel;
 <body>
 
 <h2>Avast! Ireland Chat</h2>
-<form onsubmit="return false;">
+<p>This demo shows how to--very very simply--construct a <i>publish-subscribe</i> channel that anyone can push to and anyone can read from.</p>
+
+<form style="position: relative" onsubmit="return false;"> <!-- return false so that the form become inert GUI elements instead of something that causes page reloads -->
 <textarea id="chatwindow" rows=18 cols=80>
 
 </textarea>
-<div id="inputwrapper">
+<div id="inputwrapper" style="">
  <input type="text" id="inputbox"></input>
  <input type="button" id="send" value="send"></input>
 </div>
 </form>
+
+<p>The channel in question is <u>ws://localhost:8080/chatrooms/ireland</u>, which you can start running by <u>./chat.sh</u> (you'll need to reload the page if you started them in the wrong order)</p>
+<p>This is not a terribly gooood chatroom. For one thing, there is zero security, because the server blindly relays messages.
+   But the advantage of that design is that the <em>entire</em> application logic is in this file (view the source to check it out).</p>
+<p>You had better use this to talk about Ireland, or else!</p>
+<p></p>
+<p>UI in jQuery, Networking in raw WebSockets with the backend in pubsub.py on top of Autobahn's WebSocket implementation</p>
+
 
 </body>
 </html>
