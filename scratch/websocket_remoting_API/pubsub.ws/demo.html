@@ -3,26 +3,47 @@
 
 <script language="javascript" src="jquery.min.js"></script>
 <script>
+global = this;
 $(function() {
 
 channel = WebSocket("ws://localhost:8080/chatrooms/ireland/")
-channel.send({nickname: "McSkills"+Math.floor(Math.random()*222)})
-channel.onmessage = function(evt) {
-   $("#chatwindow").append("li").content(evt.data['nickname'] + ": " + evt.data['message'])
+channel.onopen = function(evt) {
+  console.log("channel open;", evt);
+  channel.send({nickname: "McSkills"+Math.floor(Math.random()*222)})
 }
+channel.onmessage = function(evt) {
+  console.log("channel message;", evt);
+
+}
+
 inputbox = $("#inputbox")
-inputbox.click(function() {
-  channel.send(inputbox.content)
-  inputbox.content = null;
+
+function recvchat(username, message) {
+  // $("#chatwindow").append("li").content(evt.data['nickname'] + ": " + evt.data['message'])
+}
+
+function sendchat() {
+  channel.send(inputbox.val())
+  inputbox.val(null);
+}
+
+inputbox.keydown(function(evt) {
+  console.log(evt)
+  if(evt.which == 13) { //enter
+    sendchat()
+    return false; //make the form not submit
+  }
 })
 
+global.inputbox = inputbox;
+global.channel = channel;
 
 })
 </script>
 
 </head>
 <body>
-<form id="chatwindow">
+<form id="chatwindow" target="_NULL">
 <textarea>
 The chat
 goes here
