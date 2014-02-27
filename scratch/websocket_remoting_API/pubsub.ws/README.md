@@ -21,8 +21,8 @@ temperature_subscription.onmessage = function(evt) {
 
 A simple room:
 ```
-channel = WebSocket("ws://example.com/chatrooms/furryporn/")
-channel.send({nickname: "McSkills"})
+channel = WebSocket("ws://example.com/chatrooms/ireland/")
+channel.send({nickname: "McSkills"+Math.floor(Math.random()*222)})
 channel.onmessage = function(evt) {
    $("#chatwindow").append("li").content(evt.data['nickname'] + ": " + evt.data['message'])
 }
