@@ -16,13 +16,17 @@ channel.onmessage = function(evt) {
  console.log("channel message;", evt);
  msg = evt.data
  console.log("it contained", msg) 
-
+ recvchat("nobody", msg)
 }
 
 inputbox = $("#inputbox")
 
 function recvchat(username, message) {
-  // $("#chatwindow").append("li").content(evt.data['nickname'] + ": " + evt.data['message'])
+  display = $("#chatwindow textarea")
+  display.val(
+    display.val() + "\n" +
+    username + ": " + message
+  )
 }
 
 function sendchat() {
