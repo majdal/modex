@@ -1,0 +1,68 @@
+
+<html>
+<head>
+
+<script language="javascript" src="jquery.min.js"></script>
+<!--<script language="javascript" src="json2.js"></script>-->
+<script>
+global = this;
+console.log("oh no")
+
+
+$(function() {
+
+function onOpen(evt) {
+  console.log("channel open;", evt);
+  this.send("I can scream 'A ALAL LALAL ALALLALALALA' at " + this.url)
+}
+
+function onMessage(evt) {
+  console.log("RECIEVED", evt.data)
+}
+
+n = 20;
+
+channels = Array(n);
+for(i=0; i<channels.length; i++) {
+  console.log(i)
+  channels[i] = new WebSocket("ws://" + location.host + "/socks/" + i)
+  channels[i].onopen = onOpen;
+  channels[i].onmessage = onMessage;
+}
+
+global.channels = channels;
+
+setInterval(function() {
+  for(i=0; i<channels.length; i++) {
+     c = channels[i]     
+     console.log("attempting to use", c.url, "which is", c.readyState)
+     if(c.readyState == c.OPEN) { c.send("channels["+ i + "] making some data: " + Math.random() * i * 100) }
+  }
+
+}, 3000)
+
+})
+
+</script>
+
+</head>
+
+<body>
+<h1>WebSocket Load Test</h1>
+<p>Using the simplified pubsub backend, this test creates many WebSockets simultaneously to see how browsers behave.</p>
+<p>To see this, run</p>
+<code>loadtest.py 10</code>
+<p>You can change that 10 to other numbers, and try changing the <code>n = </code> in this own file to match (or to not match).</p>
+<h3>Results</h3>
+<ul>
+<li>Every Websocket is one TCP connection. No multiplexing is going on, natively</li>
+<li>Despite that, WebSockets don't have the standard 6/2 rule of HTTP connections apply to them:
+  Getting 10 connections at once seems stable, </li>
+  Running 50 sockets maxed out at 4 clients, but this seems to be a firefox bug
+  because splitting 20 sockets per client across 4 firefox windows and 3 chrome windows worked just fine
+  (I actually managed to get it up to 20 windows across 5 browsers; chrome hung on and off and probably firefox too but it was quieter about it)
+<li>it is possible to crash Firefox or hang its js interpreter in mysterious ways, even across page reloads, by opening too many WebSockets</li>
+</ul>
+
+</body>
+</html>

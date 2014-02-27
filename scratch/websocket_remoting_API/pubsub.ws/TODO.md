@@ -12,3 +12,12 @@ TODO
 * [ ] If the WS URL is hit with HTTP, give a note to the enduser about "I am a pubsub endpoint"
 
 * [ ] Use this code to test the intrinsic limits of WebSocket
+
+* [ ] Rewrite the chat example as chat.wamp2.html + chat.wamp2.py for comparison
+* [ ] Rewrite the chat example so that the server has some state involvement
+* [ ] Rewrite the chat example in state.ws -- the state can have two subelements: .backlog and .users
+
+* [ ] Systematically do platform testing
+  * Android Firefox works
+  * Linux Firefox works
+  * Android's old browser (Internet.apk or whatever) doesn't work?
