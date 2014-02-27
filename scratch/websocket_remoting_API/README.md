@@ -35,3 +35,8 @@ can be active per user per site at a time.
 
 But, instead of building a huge protocol, 
 I propose to construct a websocket multiplexer, which should offer the same API as native WebSockets but skims around the 6-connection limit.
+
+JSON
+====
+
+One similar task is to write a JSONWebSocket which autowraps and unwraps all messages to/from JSON so that you handlers deal in objects.
