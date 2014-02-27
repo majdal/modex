@@ -18,7 +18,7 @@ chatwindow.chatlines = Array(chatwindow.backlog)
 
 
 
-channel = WebSocket("ws://localhost:8080/chatrooms/ireland/")
+channel = WebSocket("ws://" + location.host + "/chatrooms/ireland/")
 channel.onopen = function(evt) {
   console.log("channel open;", evt);
   channel.send(JSON.stringify({username: "", message: username + " has entered the channel."}))
@@ -28,6 +28,7 @@ channel.onmessage = function(evt) {
  recvchat(data['username'], data['message'])
 }
 
+$("#ws_url").html(channel.url)
 
 function recvchat(username, message) {
   chatwindow.chatlines.push(username + ": " + message);
@@ -112,7 +113,7 @@ p { border: black solid 1px;
 </div>
 </form>
 
-<p>The channel in question is <u>ws://localhost:8080/chatrooms/ireland</u>, which you can start running by <u>./chat.sh</u> (you'll need to reload the page if you started them in the wrong order)</p>
+<p>The channel in question is <u id="ws_url">/chatrooms/ireland</u>, which you can start running by <u>./chat.sh</u> (you'll need to reload the page if you started them in the wrong order)</p>
 <p>This is not a terribly gooood chatroom. For one thing, there is zero security, because the server blindly relays messages.
    But the advantage of that design is that the <em>entire</em> application logic is in this file (view the source to check it out).</p>
 <p>You had better use this to talk about Ireland, or else!</p>

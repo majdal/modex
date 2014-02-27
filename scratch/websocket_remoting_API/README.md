@@ -40,3 +40,5 @@ JSON
 ====
 
 One similar task is to write a JSONWebSocket which autowraps and unwraps all messages to/from JSON so that you handlers deal in objects.
+
+Another one is to design a WebSocket class that understands relative links.
