@@ -7,38 +7,44 @@
 global = this;
 $(function() {
 
+username = "McSkills"+Math.floor(Math.random()*222)
+
+status = $("#status")
+chatwindow = $("#chatwindow")
+chatwindow.backlog = 30;
+inputbox = $("#inputbox")
+
+chatwindow.chatlines = Array(chatwindow.backlog)
+
+
 channel = WebSocket("ws://localhost:8080/chatrooms/ireland/")
 channel.onopen = function(evt) {
   console.log("channel open;", evt);
-  channel.send(JSON.stringify({nickname: "McSkills"+Math.floor(Math.random()*222)}))
-}
-channel.onmessage = function(evt) {
- console.log("channel message;", evt);
- msg = evt.data
- console.log("it contained", msg) 
- recvchat("nobody", msg)
+  channel.send(JSON.stringify({username: "", message: username + " has entered the channel."}))
 }
 
-inputbox = $("#inputbox")
+channel.onmessage = function(evt) {
+ data = JSON.parse(evt.data)
+ recvchat(data['username'], data['message'])
+}
 
 function recvchat(username, message) {
-  display = $("#chatwindow textarea")
-  display.val(
-    display.val() + "\n" +
-    username + ": " + message
-  )
+  chatwindow.chatlines.push(username + ": " + message);
+  if(chatwindow.chatlines.length > chatwindow.chatlines.backlog) {
+    chatwindow.chatlines.shift() //keep scrollback buffer a constant size
+  }
+  chatwindow.val(chatwindow.chatlines.join("\n"))
+  chatwindow.scroll().scrollTop(chatwindow.height() + 500) //weird invocation....
 }
 
 function sendchat() {
-  channel.send(inputbox.val())
+  channel.send(JSON.stringify({username: username, message: inputbox.val()}))
   inputbox.val(null);
 }
 
 inputbox.keydown(function(evt) {
-  console.log(evt)
-  if(evt.which == 13) { //enter
+  if(evt.which == 13) { //return key
     sendchat()
-    return false; //make the form not submit
   }
 })
 
@@ -48,14 +54,37 @@ global.channel = channel;
 })
 </script>
 
+<style>
+
+#chatwindow {
+  width: 100%;
+  height: 18em;
+  display: block;
+  text-align: right;
+}
+
+#inputbox {
+  display: inline-block;
+}
+#inputwrapper {
+  display: block;
+  float: right;
+}
+
+</style>
+
 </head>
 <body>
-<form id="chatwindow" target="_NULL">
-<textarea>
-The chat
-goes here
+
+<h2>Avast! Ireland Chat</h2>
+<form onsubmit="return false;">
+<textarea id="chatwindow" rows=18 cols=80>
+
 </textarea>
-<input type="text" id="inputbox"></input>
+<div id="inputwrapper">
+ <input type="text" id="inputbox"></input>
+ <input type="button" id="send" value="send"></input>
+</div>
 </form>
 
 </body>
