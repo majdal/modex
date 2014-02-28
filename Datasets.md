@@ -1,4 +1,4 @@
-(Nick organized a starting list based on a brainstorm we did together.)
+
 
 ## Potential Datasets
 
@@ -140,6 +140,8 @@ One of our todos, issue #22, is
 1. Farm level crop production (broadly by category)
 1. Quantity of food for (Ontario/rest of Canada)
 1. Properties of species
+
+* [CEA data](http://www.electricity.ca/resources/industry-data.php) (not really, but its a start)
 
 ### Tabular: [Resource/Product I/O Rates](https://en.wikipedia.org/wiki/Input-output_model)
 * Farming methods
