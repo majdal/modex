@@ -1,0 +1,72 @@
+<html>
+<head>
+</head>
+
+<body>
+
+<p>jQuery has a feature/bug: if one of its <code>.ready()</code> handlers crashes, it reruns all of them. This page demonstrates this behaviour,
+and shows that it doesn't happen if you use the built in.</p>
+
+<p>Discovered with jquery 1.4.3</p>
+<script src="jquery-1.4.3.js"></script>
+
+<p>Quirk vanishes with jquery 1.10.0</p>
+<!-- <script src="http://code.jquery.com/jquery-1.11.0.js"></script> -->
+
+<p>If you're playing with this source code, make sure in the above two lines to only load one version of jquery of the other ;)</p>
+
+<p>Simple table of outcomes (TODO: rewrite as an html table):
+
+<pre>
+ Number of times crash() runs:
+
+        body.onload    $(document).ready
+1.4.3       1                 2      
+1.10.0      1                 1
+</p>
+
+</body>
+
+<script>
+
+function crash() {
+
+ console.log("crash()")
+ a = {}
+ a.f = {}
+ a.f.z = function() {
+   console.log(this, "calling z()")
+ }
+ a.f.z()
+ a.f.ninty() //crash here
+
+}
+
+//if you use this line, then crash() happens once
+//note that document.onload is read-only and initialized to null
+//so you must use body.onload
+body = document.getElementsByTagName("body")[0]
+//body.onload = crash
+
+//somehow, jQuery has evaded this restriction, and lets you pass 'document' in as the object to listen to
+// this is immaterial to the point though, because no matter which object you attach to,
+//if you use this line instead of the above, crash() happens **twice**:
+$(document).ready(crash)
+//$(body).ready(crash)
+
+
+//as an aside, look at this observation:
+//for some reason, document.addEventListener("load", ..) doesn't work, though document.addEventListener("click", ...") does
+document.addEventListener("load", function(event) {
+  console.log("loaded");
+})
+
+document.addEventListener("click", function(event) {
+  console.log("clicked");
+})
+
+
+</script>
+
+
+</html>
