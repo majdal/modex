@@ -32,37 +32,54 @@ $(function() {
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.temperature); });
 
-    console.log("creating svg")
-    var svg = d3.select("#graph").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")"
-        );
     
-    /*
+    scope.data = []
+    
+    
     data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
     data_socket.onopen = function() { 
        this.send(""); //poke the server to get data out
     }
     data_socket.onmessage = function(d) {
       d = JSON.parse(d.data);
-      //console.log("received data from (plain) websocket:")
-      //console.log(d);
-    }*/
-
-    d3.tsv("assets/data/static_lightbulbs.tsv", function(error, data) {
-      scope.data = data;
+      console.log("received data from (plain) websocket:")
+      d.date = parseDate(d.date)
+      console.log(d);
+      scope.data.push(d)
       draw()
-      })
-      
-   function draw() {
-      data = scope.data; //hacks
-      color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
-
+    }
+    
+    /*
+    d3.tsv("assets/data/static_lightbulbs.tsv", function(error, data) {
+    
       data.forEach(function(d) {
         d.date = parseDate(d.date);
       });
+      
+      scope.data = data;
+      
+      draw()
+      })
+      */
+      
+   // the trickiest part of this problem is that it is several line graphs, not just ones
+   
+   function draw() {
+      data = scope.data; //hacks
+      
+      
+    console.log("creating svg")
+    $("svg").detach() //kill old svg, if there is one
+    var svg = d3.select("#graph").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")"
+        );
+      
+      console.log("plotting this data array:", data)
+      color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
 
       var cities = color.domain().map(function(name) {
         return {

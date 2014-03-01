@@ -157,7 +157,7 @@ class JsonDataServer(WebSocketServerProtocol):
       def loop():  #wrap the coroutine in a callback that causes a loop setTimeout()-style playing nice with Twisted's loop (there's probably a cleaner way to do this, but shh)
         try:
           next(g)
-          reactor.callLater(3, loop)
+          reactor.callLater(.3, loop)
         except StopIteration:
           pass
       loop()  #kick it off
