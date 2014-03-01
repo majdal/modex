@@ -1,5 +1,7 @@
 $(function() {
-
+   console.log("graph_component onload")
+   scope = {} //hacks
+   
     var margin = {top: 20, right: 80, bottom: 30, left: 50},
     
     //width = 960 - margin.left - margin.right,
@@ -30,6 +32,7 @@ $(function() {
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.temperature); });
 
+    console.log("creating svg")
     var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -37,6 +40,7 @@ $(function() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")"
         );
     
+    /*
     data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
     data_socket.onopen = function() { 
        this.send(""); //poke the server to get data out
@@ -45,9 +49,15 @@ $(function() {
       d = JSON.parse(d.data);
       //console.log("received data from (plain) websocket:")
       //console.log(d);
-    }
+    }*/
 
     d3.tsv("assets/data/static_lightbulbs.tsv", function(error, data) {
+      scope.data = data;
+      draw()
+      })
+      
+   function draw() {
+      data = scope.data; //hacks
       color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
 
       data.forEach(function(d) {
@@ -101,5 +111,5 @@ $(function() {
           .attr("x", 3)
           .attr("dy", ".35em")
           .text(function(d) { return d.name; });
-      });
+   }
 });
