@@ -9,7 +9,9 @@
 </head>
 <body>
 <h1>Event Bubbling</h1>
-Demonstrates how native html5 handles event bubbling: by sending it up the hierarchy until one level decides to cancel the bubble by <code>return false;</code>.
+<p>Demonstrates how native html5 handles event bubbling: by sending it up the hierarchy until one level decides to cancel the bubble by <code>return false;</code>.</p>
+
+<p>No jQuery or any other library here, to make the example as pure as possible.</p>
 
 <style>
 
@@ -56,9 +58,9 @@ div {
   </div>
   <div id=middle_cancelling_box>
     Cancelling Middle
-    <div id=bottom1_box>Bottom 1</div>
-    <div id=bottom2_box>Bottom 2</div>
-    <div id=bottom3_box>Bottom 3</div>
+    <div id=bottom1_cancelling_box>Bottom 1</div>
+    <div id=bottom2_cancelling_box>Bottom 2</div>
+    <div id=bottom3_cancelling_box>Bottom 3</div>
   </div>
 </div>
 
@@ -66,38 +68,34 @@ div {
 
 function blink(element) {
   console.log("blink()", element)
-  original_color = element.style.backgroundColor
   element.style.backgroundColor = "yellow"
   setTimeout(function() {
-	element.style.backgroundColor = original_color;
+	element.style.backgroundColor = element.original_color;
 	}, 500)
 }
 
 // attach event handlers to each div
 body = document.getElementsByTagName("body")[0]
 
-top_box = document.getElementById("top_box")
-middle_box = document.getElementById("middle_box")
-middle_cancelling_box = document.getElementById("middle_cancelling_box")
-bottom1_box = document.getElementById("bottom1_box")
-bottom2_box = document.getElementById("bottom2_box")
-bottom3_box = document.getElementById("bottom3_box")
-
-
 function click_handler(evt) {
-	console.log("`"+this.id+"` clicked; event object = ", evt)
+	console.log("`"+this.id+"` clicked via `"+evt.originalTarget.id+"`; event object = ", evt)
 	blink(this)
 }
 
-top_box.onclick = click_handler
-middle_box.onclick = click_handler
-middle_cancelling_box.onclick = function(evt) {
-  click_handler(evt)
+// automagically assign the same click_handler to every box in the example
+divs = body.getElementsByTagName("div"); //
+for(i=0; i<divs.length; i++) { //would be cleaner as an iterator, but naive iteration in js iterates over object properties and I don't know what I'm suppose to do instead
+    divs[i].onclick = click_handler;
+    divs[i].original_color = divs[i].style.backgroundColor
+}
+
+document.getElementById("middle_cancelling_box").onclick = function(evt) {
+  //click_handler(evt)
   return false;
 }
-bottom1_box.onclick = click_handler
-bottom2_box.onclick = click_handler
-bottom3_box.onclick = click_handler
+
+
+
 //body.style.whatever
 
 setInterval(function() { console.log("-------------------------------------------------------")}, 1000)
