@@ -83,7 +83,7 @@ I know i've done this before, I just have to remember how -kousu
   height: 100%;
   position: fixed;
   z-index: 0;
-  //display: none;
+  
   .ol-zoom, .ol-logo {
     .hidden
   }
@@ -93,8 +93,8 @@ I know i've done this before, I just have to remember how -kousu
   background-color: white;
   border-left: black solid 2px ;
 
-  /*position: relative;
-  z-index: 1000;*/
+  position: relative; //need this or else z-index does nothing
+  z-index: 2;  //put overtop of the map (I dislike this immensely; HTML is NOT meant to be used like this)
   
   /* height: 50px; */
   width: 38%; /* it would be nice if this could be autocalculated from the available space*/
