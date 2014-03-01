@@ -1,0 +1,108 @@
+<html>
+<head>
+  <script>
+    window.onload = function() {
+    	
+    	
+    }
+  </script>
+</head>
+<body>
+<h1>Event Bubbling</h1>
+Demonstrates how native html5 handles event bubbling: by sending it up the hierarchy until one level decides to cancel the bubble by <code>return false;</code>.
+
+<style>
+
+#top_box {
+	width: 100%;
+	background-color: red;
+}
+
+#middle_box {
+	width: 30%;
+	margin-left: auto; margin-right: auto; /*centering*/
+	background-color: green;
+	display: inline-block;
+}
+
+#middle_cancelling_box {
+	width: 30%;
+	margin-left: auto; margin-right: auto; /*centering*/
+	background-color: green;
+	display: inline-block;
+}
+
+#middle_box > div {
+  width: 75%;
+  height: 20%;
+  margin-left: auto; margin-right: auto; /*centering*/
+  background-color: blue;
+}
+
+div {
+	border: black dotted 1px;
+	
+}
+
+</style>
+
+<div id=top_box> <!-- warning: 'top' is a reserved word in js, but it doesn't warn you about that -->
+  Top
+  <div id=middle_box>
+    Middle
+    <div id=bottom1_box>Bottom 1</div>
+    <div id=bottom2_box>Bottom 2</div>
+    <div id=bottom3_box>Bottom 3</div>
+  </div>
+  <div id=middle_cancelling_box>
+    Cancelling Middle
+    <div id=bottom1_box>Bottom 1</div>
+    <div id=bottom2_box>Bottom 2</div>
+    <div id=bottom3_box>Bottom 3</div>
+  </div>
+</div>
+
+<script>
+
+function blink(element) {
+  console.log("blink()", element)
+  original_color = element.style.backgroundColor
+  element.style.backgroundColor = "yellow"
+  setTimeout(function() {
+	element.style.backgroundColor = original_color;
+	}, 500)
+}
+
+// attach event handlers to each div
+body = document.getElementsByTagName("body")[0]
+
+top_box = document.getElementById("top_box")
+middle_box = document.getElementById("middle_box")
+middle_cancelling_box = document.getElementById("middle_cancelling_box")
+bottom1_box = document.getElementById("bottom1_box")
+bottom2_box = document.getElementById("bottom2_box")
+bottom3_box = document.getElementById("bottom3_box")
+
+
+function click_handler(evt) {
+	console.log("`"+this.id+"` clicked; event object = ", evt)
+	blink(this)
+}
+
+top_box.onclick = click_handler
+middle_box.onclick = click_handler
+middle_cancelling_box.onclick = function(evt) {
+  click_handler(evt)
+  return false;
+}
+bottom1_box.onclick = click_handler
+bottom2_box.onclick = click_handler
+bottom3_box.onclick = click_handler
+//body.style.whatever
+
+setInterval(function() { console.log("-------------------------------------------------------")}, 1000)
+
+</script>
+
+</body>
+</html>
