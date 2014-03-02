@@ -159,3 +159,16 @@ This would allow a structure like
  *  (and the frontend/ can be hardcoded to <code>new WebSocket("data/geo/vector")</code>, assuming the relative WebSocket class is in play)
 
 
+
+
+SSE
+===
+
+There's another protocol, alternate to WebSockets, that no one uses very much called **SSE**:
+
+Some information about them:
+
+* http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket
+* http://stackoverflow.com/questions/13278365/downside-of-using-server-sent-events-for-bidirectional-client-server-communicati?rq=1
+
+The main advantage of SSE is that it respects the same-origin policy; WebSockets do not: they can send and receive data raw to any URL hosting a websocket.
