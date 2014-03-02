@@ -1,17 +1,17 @@
 $(function() {
-   /*
-   TODO
-   
-[x] make the d3 plot update
- [x] subproblem: less doesn't work because it's nonlocal
- [x] subproblem: jquery reruns .ready() handlers if one of them crashes??
- [ ] use enter() and exit() instead of redrawing everything on every update
- [ ] don't jump the axes all the time
- [ ] construct a legend instead of labelling lines
- [ ] make the lines *independent*: we should be able to throw arbitary coordinate pairs into each list and have them arrange themselves properly; it shouldn't be forced
-   
-   */
-   console.log("graph_component onload")
+/*
+ *   TODO
+ *  
+ * [x] make the d3 plot update
+ *  [x] subproblem: less doesn't work because it's nonlocal
+ *  [x] subproblem: jquery reruns .ready() handlers if one of them crashes??
+ *  [ ] use enter() and exit() instead of redrawing everything on every update
+ *  [ ] don't jump the axes all the time
+ *  [ ] construct a legend instead of labelling lines
+ *  [ ] make the lines *independent*: we should be able to throw arbitary coordinate pairs into each list and have them arrange themselves properly; it shouldn't be forced
+ *   
+ */
+
    scope = {} //hacks
    scope.data = [] //makes a data array that is safely accessible from anywhere in this file; sidesteps any weird js scoping rules that might kick in if we tried to make data a (pseudo)global
     
