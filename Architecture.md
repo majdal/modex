@@ -1,15 +1,30 @@
 
 
 
+Architecture Overview and Goal
+================================
+
+We have a sort of hyper-[MVC](https://en.wikipedia.org/wiki/Model-view-controller)
+ problem: our "model" is the union of 
+(the current state(s) of running (scientific, eg SLUCE, NetLogo, Eutopia) models,
+the raw output from those models, the aggregation (see below) of the output into statistics); our "view" is actually many views: the many open web browsers pointed at the same model page, or perhaps you can think of it as all the subcomponents (eg the graphs that user 1 has made view one slice of data, the map user 2 has open views another slice); and that leaves our "controller"-- which we've been calling "Model Explorer" for lack of a better name-- to be a broker between these components.
+
+We have two sorts of models:
+ - models being run and collected -- these are our agent-based models 
+ - models to hypothesise about the relationships in the former kind of model  -- these are things like "if we assume gaussian errors, bank accounts $ ~ B0 + B1*gdp + B2*carbon_footprint"
+
+Our intended use case looks like this:
+
+1. researchers, especially in the systems and social sciences fields, have complicated models written in ad hoc mixtures of java, R, C, python, etc. 
+2. researchers hire a developer (or become one themselves) enough to retrofit their model slightly to log its data into one of several standardized formats that we support
+3. researchers host their model in the Model Explorer (either by asking us with our canonical demo server or by putting an instance of it up themselves)
+  * question: does this require more development time, in order to make the frontend be able to understand what features are in the database from the model? it seems difficult to automate things like "make a time slider" without at least telling Model Explorer "this model is time-stepped".
+4. researcher invites colleagues to view their model; colleagues open the website and, using a collaborative interface somewhat like jsfiddle or tributary.io, make plots out of the model, ask Model Explorer to compute statistics across whatever dimensions everyone deems interesting; everything 
+
+
 
 Components we need:
 ===================
-
-We have a sort of hyper-MVC problem: our "model" is the union of 
-the current state(s) of running (scientific, eg SLUCE, NetLogo, Eutopia) models
-the raw output from those models, the aggregation (see below)
-
-
 Model Runner:
  - something that can run a model (in a separate process) and ~log states it goes through~
  - something that knows what seed parameters the model has 
@@ -28,13 +43,14 @@ Model Runner:
  (what about going back in time? is that impossible?)
  (there's a very big difference between )
 
+
 Model API(s)
  - provides common things like time series, rasters
  - inspiration: Repast, PyABM, ABCE, NetLogo
 
-Views
+View objects
  - the only true goal in exploring scientific models is finding the relationships between variables (There's some detours you need to take because of noise, probability, confidence levels, and confounding (aka hidden) variables). A key point, then, is that it needs to be as easy for someone using the frontend to say "plot the distribution of age versus quality" as it is for someone--in say R or SciPy--to say ```plot(quality, age, data=wine)``` or ```hist(quality)```.
-- a _view_ is a selection, a subset of data you are interested in. [all SQL implementations have this built in](http://www.sql-tutorial.com/sql-views-sql-tutorial/), we just need to expose something similar to the frontend
+- a _view_ is a selection, a subset of data you are interested in. [all SQL implementations have this built in](http://www.sql-tutorial.com/sql-views-sql-tutorial/), we just need to expose something similar to the frontend. The data in the view can change, but _what_ the view is showing does not. For example, a view might be defined as "bank account values of all agents with age over 35" or "all vector GIS data for the extent [[a,b][c,d]] (where the rectangle [[a,b], [c,d]] covers Alberta)" or "raster of variances of water density"; as the knowledge the server has changes (either by the simulation
  
 Networking
  - frontend needs to be able to send commands to the backend (ie RPC)
@@ -47,7 +63,10 @@ State.js (http://activerecordjs.org/ sounds very very close to what I have in mi
       - as more aggregation data comes in and our confidence intervals shrink, that can be displayed automagically
       - as the model runs--IF the model runs (some models won't be interactive themselves -- e.g. the SLUCE model -- and the 'interaction' a user has with it is choosing what columns to make scatterplots and histograms over)--we can update its state and display that
     * State.js should also allow feedback: the front end needs to be able to edit the data objects (but the server is under no obligation to listen necessarily)
-    
+
+(do we need some way to warn the enduser if they are about to download a large dataset?)
+(at the very least, we need metrics to catch that, so that model developers
+ 
 
 
 Widgets we need:
