@@ -3,6 +3,8 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 ## Frontend
 
+HTML5 is extremely powerful. It has a lot of new widgets (under form elements: sliders, numbers, dates, file uploaders, also <progress> and <meter> which lists). We can probably build most of our widgets direct in HTML.
+
 * craftyjs?
 * [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
 * [Modernizr](http://modernizr.com/) to let us write one codebase against HTML5
