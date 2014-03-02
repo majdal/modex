@@ -2,7 +2,7 @@ We are building a simulation of agriculture in southern Ontario for policy maker
 
 Check out our **gameplan**:
 * [[Architecture]]
-* [[Explaining Ourselves|Media]] (_can anyone think of a pithier link title?_)
+* [Explaining Ourselves](Media.md) (_can anyone think of a pithier link title?_)
 * [[Modelling]]
 * [[Datasets]]
 * [[Visualizations]]
