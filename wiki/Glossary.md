@@ -45,4 +45,4 @@ A quantity computed from some data. Statistics are always computable quantities;
 Synonym for "random". Statisticians and computer scientists use this to sound more technical, or especially to distinguish formal testable randomness from colloquial uses like "that's so random!!1" or "you run this algorithm and it gives you some random value that you don't care about", neither of which actually means you think the thing in question was random in the statistical sense, but just that you it is irrelevant.
 
 ### confidence
- See [[Confidence & Uncertainty]]
+ See [Confidence & Uncertainty](Confidence-&-Uncertainty.md)
