@@ -1,6 +1,5 @@
 
 
-
 Architecture Overview and Goal
 ================================
 
@@ -170,7 +169,7 @@ The [core of the 2004 SLUCE model](http://vserver1.cscs.lsa.umich.edu/sluce/mode
 ????????
 
 The model is probably not parallelizable. Subparts of it may be--and depending on what the model is written in some parts might nicely parallelize and others might be impossibly serial
-* [[Modelling]]
+* [Modelling](Modelling.md)
 
 We need to distinguish in our mind and our code stochastic (randomized) models from nonstochastic models (nonstochastic models can still show complex and/or chaotic behaviour!!)
 
@@ -190,7 +189,7 @@ The frontend does:
 * at a low enough zoom level, renders agents from one of the simulations running in the backend
 * also the frontend must be responsive, on the order of 10ms (**todo: tcstewart's citation**) 
 
-See also [[Visualizations]] for in-depth details about the rainbow of ways to render data at our beck and call.
+See also [Visualizations](Visualizations.md) for in-depth details about the rainbow of ways to render data at our beck and call.
 
 The frontend should be graphics and network-bound; it should not be doing any numerical computations itself.
 
@@ -209,7 +208,7 @@ farmmodel[7].products["wheat"]  #at time-step 7, what is the amount of productio
 ```
 
 
-   current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [[GarlicSIM]] models, and handles recording data
+   current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [GarlicSIM](GarlicSIM.md) models, and handles recording data
 
  The backend is a Twisted server hosting some static content and a bunch of dynamic endpoints. ((should we go for a RESTful situation or try to use Autobahn?)). Layout is:
 
@@ -243,7 +242,7 @@ Model Explorer's duties are:
  * load models
  * batch run lots of copies of a model
    * clearly distinguish and provide hooks for handling deterministic models sampled at different initial conditions, nondeterministic models sampled several times at the same initial conditions, and mixtures
- * provide a consistent data API (similar to how Repast collects several timestepping and geographic APIs in one place) ([[Architecture#wiki-rough-api-idea-for-querying-the-model]]?)
+ * provide a consistent data API (similar to how Repast collects several timestepping and geographic APIs in one place) ([Architecture#wiki-rough-api-idea-for-querying-the-model](Architecture.md)?)
    * to be clear: **modex must record the entire history of the state machine**
    * and this log must be as close to efficiently queryable along any dimension as possible ((TODO: find a reference on why it is impossible to totally normalize a database along every dimension))
  * generate plots
@@ -253,7 +252,7 @@ Model Explorer's duties are:
   * condidence intervals
   * **And** plots of these where relevant (eg estimated temperature on a map, estimated sensitivity field across a state space plot)
 
-It seems like [[GarlicSIM]] does much of this already, but it's unmaintained. We need to investigate it.
+It seems like [GarlicSIM](GarlicSIM.md) does much of this already, but it's unmaintained. We need to investigate it.
 
 The backend should be designed to be CPU-bound, not disk, network, or memory-bound. So, it should exploit parallelization as much as it can and liberally cache states.
 
@@ -261,7 +260,7 @@ The backend should be designed to be CPU-bound, not disk, network, or memory-bou
    ([ccmsuite](http://github.com/tcstewar/ccmsuite), or whatever develops to replace it)
 
 ### Importing (csv, shapefile, graphviz)
-  [[Datasets]]
+  [Datasets](Datasets.md)
 
 ### Exporting (csv, graphs)
 
