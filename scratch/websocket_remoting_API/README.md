@@ -121,4 +121,41 @@ a wrapping constructor, in fact-- that simply did
 the window.location parsing as a first step before opening the connection, but kept everything else identical,
 
 
-Another one is to design a WebSocket class that understands relative links.
+Indexes
+=======
+
+In the demos now, there's this code:
+<code>
+r = Resource()
+s = WebSocketResource(MyWebSocketServerFactory())
+
+root.addChild("chatrooms", r)
+r.addChild("socket", s)
+</code>
+
+It would be much more useful if it was something like this:
+<code>
+
+r = IndexingWebSocketResource()
+s = WebSocketResource(MyWebSocketServerFactory())
+
+root.addChild("chatrooms", r)
+r.addChild("socket", s)
+</code>
+
+That is, where <code>r</code> is a websocket endpoint that returns a json list of all its immediate children
+analogously to how plain HTTP returns (or maybe we actually ~want~ to support the plain http style; either instead of or as an addendum to the websocket style)
+((if we only support websockets, you MUST use websockets to navigate the site; but if all the data is over websockets anyway, that's not that surprising))
+((if we only support plain HTTP, we let spiders works but force dynamic sites to use XMLHttpRequest AND WebSocket, which is awkward because WebSocket is more or less designed to replace XMLHttpRequest))
+
+This would allow a structure like
+ *  /data <-- this is an active index page
+ * /data/geo/ <-- this too
+ * /data/geo/$LAYER <-- which is ..either..raster..or vector?
+ *  (handling rasters is going to be tricky)
+ *  (or we could do)
+ *     /data/geo/vector
+ *     /data/geo/raster
+ *  (and the frontend/ can be hardcoded to <code>new WebSocket("data/geo/vector")</code>, assuming the relative WebSocket class is in play)
+
+
