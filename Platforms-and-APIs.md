@@ -5,6 +5,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 * craftyjs?
 * [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
+* [Modernizr](http://modernizr.com/) to let us write one codebase against HTML5
 
 ### Maps
 
@@ -27,6 +28,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 ## Networking
 
 * [WebSockets](http://www.websocket.org/quantum.html)
+* [EventSource](http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket)
 * jsonp
 
 * Autobahn
