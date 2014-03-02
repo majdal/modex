@@ -1,4 +1,151 @@
+
+
+
+
+Components we need:
+===================
+
+We have a sort of hyper-MVC problem: our "model" is the union of 
+the current state(s) of running (scientific, eg SLUCE, NetLogo, Eutopia) models
+the raw output from those models, the aggregation (see below)
+
+
+Model Runner:
+ - something that can run a model (in a separate process) and ~log states it goes through~
+ - something that knows what seed parameters the model has 
+ 
+ - should be generic enough to handle all sorts of models:
+   - time-stepped simulations
+     - agent-based
+  ^ is there any hope of making it so we can arbitrary models? or do we demand that the model either
+    a) take our logging object at init (Inversion of Control)
+    b) output in a very constrained fashion (either to SQL or JSON with particular limited db schemas, and/or stdout)
+     -> there's a strong argument for forcing data to SQL; it requires some effort 
+     -> but can SQL handle changing GIS data? (TODO: learn PostGIS; it has wisdom for us)
+     (the logged variates need space for comments, which we will display on the frontend, so that the user doesn't need to dig up some painfully dense academic pdf just to find out what ```y_u7``` is)  
+ - Repast(?) (http://repast.sourceforge.net/docs/api/repastjava/repast/simphony/data/logging/package-summary.html) ActiveRecord, ccmsuite
+ 
+ (what about going back in time? is that impossible?)
+ (there's a very big difference between )
+
+Model API(s)
+ - provides common things like time series, rasters
+ - inspiration: Repast, PyABM, ABCE, NetLogo
+
+Views
+ - the only true goal in exploring scientific models is finding the relationships between variables (There's some detours you need to take because of noise, probability, confidence levels, and confounding (aka hidden) variables). A key point, then, is that it needs to be as easy for someone using the frontend to say "plot the distribution of age versus quality" as it is for someone--in say R or SciPy--to say ```plot(quality, age, data=wine)``` or ```hist(quality)```.
+- a _view_ is a selection, a subset of data you are interested in. [all SQL implementations have this built in](http://www.sql-tutorial.com/sql-views-sql-tutorial/), we just need to expose something similar to the frontend
+ 
+Networking
+ - frontend needs to be able to send commands to the backend (ie RPC)
+ - 
+
+State.js (http://activerecordjs.org/ sounds very very close to what I have in mind)
+ - we need a way to keep the frontend in sync with the backend, 
+   on "whatever" (to be defined) data objects it cares to watch
+    * this has all sorts of useful effects:
+      - as more aggregation data comes in and our confidence intervals shrink, that can be displayed automagically
+      - as the model runs--IF the model runs (some models won't be interactive themselves -- e.g. the SLUCE model -- and the 'interaction' a user has with it is choosing what columns to make scatterplots and histograms over)--we can update its state and display that
+    * State.js should also allow feedback: the front end needs to be able to edit the data objects (but the server is under no obligation to listen necessarily)
+    
+
+
+Widgets we need:
+ - a map viewer AND editor
+ - time series viewer
+ - scatterplots
+ - histograms
+^ some (but not all!) of these should be overlayable; that is, if it makae sense (they share an axis or something), the histograms should be able to plop onto the scatterplots. Easy overlaying is going to be a big feature, as far as the scientists are concerned. can we overlay onto the map?
+^ the widgets should understand State.js: we must not need to explicitly do updates, all that should be internal to the widgets; when we get to polishing, they should do nice transitions (when called for??) and harsh ones (when not: if you reset the model to 6 steps back) 
+^ all of these can be done in d3, except the map viewer will probably be nicer in OpenLayers (but we should build out bo)
+  raster tiles in d3: http://bl.ocks.org/mbostock/4132797
+  old thread on d3 vs openlayers vs the competition: https://groups.google.com/forum/#!topic/d3-js/4CQ7tmpDi-E
+    -> gotcha with GeoJSON https://groups.google.com/forum/#!topicsearchin/d3-js/openlayers|sort:date|spell:true/d3-js/eaZvrWq9pu0
+   ...do we need openlayers? what does it give us?
+  
+
+Aggregation (Statistical) Tools we need:
+ - sums
+ - confidence intervals (by bootstrapping?)
+   - and estimates of the stability, because we want to discover and work around unstable regions we 
+ - density estimates (both by histograms and by kernel)
+ ^ all of these should be invokable from the frontend; which is tricky, because they are heavy-lifting and should probably be computed on the backend
+ ^ another way to look at this is that aggregations should _cache_  eg. on sluce.wici.ca, the "visuaization" is mostly just plain SQL table dumps and the visual part is a raster, plotted using R, and cached to sluce.wici.ca/data/2011_07_27/graphs/ (and they need to defined in a declarative, so
+ that we can write careful framework code which knows when it can use the cache and when the cache is dirty).
+ 
+We see a few of these components in [Dawn et. al's LMM](http://sluce.wici.ca/visualization/results/?marketLevel=%2BResource+Constraints&worldSize=&neighborhoodSize=&unitTransportCost=&worldXCenter=&worldYCenter=&numBuyer=&numSeller=&maxBiddingTries=&agResPrice=100&numSearchParcel=4000&maxBidNums=1&utilityBeta=&sdUtilBeta=&rangeUtilBeta=&meanBudget=&sdBudget=&randomSeed=&runIndex=0)
+ --> data is at http://sluce.wici.ca/data/
+also, 
+we need to ask Terry Stewart about how they handle recording data from models that are interactive,
+like their Dalek example wherein the Dalek has some neurons for eyes and its motors and will wander around by itself,
+**but also can be picked up and dropped on things**.
+
+The [core of the 2004 SLUCE model](http://vserver1.cscs.lsa.umich.edu/sluce/models/ARMSR-Swarmfest04.tar.gz)/src/ARMSR/Model.java lines 1104 - 1184, for comparison
+```
+	public void step() {
+		
+		// See if there are any farms for sale
+		sellFarms();
+
+		// develop farms into subdivisions
+		developFarms();
+		
+		// sell lots within subdivisions
+		sellLots();
+
+		// have some residents move out
+		moveOut();
+
+		// checks to make sure the distributtion is okay
+		checkDistribution();
+
+	}
+
+	// stepReport
+	// each step write out:
+	//   time  avgUnhappiness  avgSize
+	// Note: put a header line in via the startReportFile (below in this file)
+	public void stepReport () {
+		// set up a string with the values to write
+		String s = Format.sprintf( "%5.0d", p.add( getTickCount() ) );
+
+		// go through each township
+		for (int i=0; i<townshipList.size(); i++) {
+
+			// get the current township
+			Township t = (Township)townshipList.get(i);
+
+			// calculate the income
+			s += Format.sprintf("  %6.0d  ", 
+								p.add( t.calculateIncome() ) );
+
+			// calculate the avg forest
+			s += Format.sprintf("  %6.3f  ", 
+								p.add( t.calculateAvgForest() ) );
+
+			// count the number of country subs
+			s += Format.sprintf("  %6.0d  ", 
+								p.add( t.countSubs( (int) Subdivision.COUNTRY) ) );
+
+			// count the number of horticultural subs
+			s += Format.sprintf("  %6.0d  ", 
+								p.add( t.countSubs( (int) Subdivision.HORT) ) );
+			// count the number of remnant subs
+			s += Format.sprintf("  %6.0d  ", 
+								p.add( t.countSubs( (int) Subdivision.REMNANT) ) );
+		}
+
+		// write it to the xml and plain text report files
+		writeLineToReportFile ( "<stepreport>" + s + "</stepreport>" );
+		writeLineToPlaintextReportFile( s );
+
+		getReportFile().flush();
+		getPlaintextReportFile().flush();
+	}
+```
+
 ![Architecture Diagram](Architecture.png)
+^ note that this architecture diagram is out of date slightly.
 
 ## Model
 ????????
