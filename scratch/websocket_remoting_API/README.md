@@ -28,17 +28,97 @@ Now, in addition to these, there is a third pattern not covered by either of the
 Multiplexing
 ============
 
-One major stumbling block that Autobahn does (or should be--we don't actually have performance numbers yet) solve
-is multiplexing multiple data streams over a single websocket. AFAIK, every WebSocket means one TCP connection,
-which if standard HTTP rules apply, means no more than [6](citation goes here) (in ye olden days [two](FIXME))
-can be active per user per site at a time.
+One major stumbling block that Autobahn solves
+is multiplexing multiple data streams over a single websocket.
+
+loadtest.html demonstrates that we can probably get away with just opening distinct websockets,
+and that standard HTTP rules--meaning no more than [6](citation goes here) (in ye olden days [two](FIXME))
+can be active per user per site at a time--do not apply. 
+
+Still, there is some
 
 But, instead of building a huge protocol, 
-I propose to construct a websocket multiplexer, which should offer the same API as native WebSockets but skims around the 6-connection limit.
+I propose to construct a websocket multiplexer, which should offer the same API as native WebSockets
+but skims around the 6-connection limit.
 
+This will require some backend support: a WebSocketProtocol that proxies to other WebSocketProtocols
+In fact, if we write it in Twisted, we can probably exploit [Resource.getChild()](https://twistedmatrix.com/documents/current/api/twisted.web.resource.Resource.html#getChild)
+to automagically translate requests for websockets to their handlers
+and not have to open up and localhost-to-localhost sockets.
+
+The goal would be to have the multiplexer be transparent.
+
+These codes should be interchangable, simply by adding or removing the <code>M.</code>:
+<code>
+w1 = WebSocket("ws://example.com/ws1")
+w2 = WebSocket("ws://example.com/ws2")
+w2.send("data!")
+</code>
+
+<code>
+M = MultiWebSocket("ws://example.com/multiplexer")
+w1 = M.WebSocket("ws://example.com/ws1")
+w2 = M.WebSocket("ws://example.com/ws2")
+
+w2.send("data!")
+</code>
+
+with the only difference being noticeable 
 JSON
 ====
 
-One similar task is to write a JSONWebSocket which autowraps and unwraps all messages to/from JSON so that you handlers deal in objects.
+Similarly, a drop-in WebSocket-compatible JSONWebSocket which autowraps and unwraps all messages to/from JSON would be useful, and probably not that long.
+
+
+Relative WebSocket
+==================
+
+An apparently oversight (or purposeful lack?) is that WebSockets do not understand relative links.
+This is too bad, because if we use URLs to denote simulation instances, e.g. http://example.com/games/Af354BGq/
+it means that we can't write code like
+<code>
+$(function() {
+  pieces = WebSocket("pieces/")
+  pieces.onmessage = function(.....)
+  //...
+  chat = WebSocket("chat/")
+  chat.onmessage = function(.....)
+}
+</code>
+
+Instead, we would have to either:
+
+ make a single global WebSocket endpoint and have it distinguish what
+game ID ("Af354BGq") you're talking to by cookies/sessions or by you sending <code>{'session': 'Af354BGq'}</code>
+<code>
+$(function() {
+  room = {}
+  room.id = parse window.location to extract the ID
+  
+  pieces = WebSocket("pieces/")
+  pieces.send(JSON.stringify({"session": room.id}))
+  pieces.onmessage = function(.....)
+  //...
+  chat = WebSocket("chat/")
+  pieces.send(JSON.stringify({"session": room.id}))
+  chat.onmessage = function(.....)
+}
+</code>
+
+or 
+<code>
+$(function() {
+  root = parse window.location to extract the base link
+  pieces = WebSocket(root + "pieces/")
+  //...
+  chat = WebSocket(root + "chat/")
+}
+</code>
+
+kousu thinks the cleanest design either way is to have the WebSocket URLs similar to the user-facing URLs:
+  so, each active room should bring up WebSocket endpoints as child Resources. So, if we wrote a RelativeWebSocket class--or even just
+a wrapping constructor, in fact-- that simply did
+the window.location parsing as a first step before opening the connection, but kept everything else identical,
+
 
 Another one is to design a WebSocket class that understands relative links.
