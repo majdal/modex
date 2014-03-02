@@ -1,14 +1,14 @@
 We are building a simulation of agriculture in southern Ontario for policy makers and the lay public alike to be able to edit to invent and investigate hypotheses. Our perspective on the problem is [holistic](http://www.sigeneration.ca/making-systems-thinking-slogan/): we see agriculture as simultaneously economic, ecological, cultural and as involving both urban humans, rural humans, and animal life, and we think that anything less than modelling all aspects of the world will miss critical decision boundaries.
 
 Check out our **gameplan**:
-* [[Architecture]]
+* [Architecture](Architecture.md)
 * [Explaining Ourselves](Media.md) (_can anyone think of a pithier link title?_)
-* [[Modelling]]
-* [[Datasets]]
-* [[Visualizations]]
-* [[Statistics]]
+* [Modelling](Modelling.md)
+* [Datasets](Datasets.md)
+* [Visualizations](Visualizations.md)
+* [Statistics](Statistics.md)
 
-Get [hacking](https://github.com/majdal/modex/tree/master/src/README.md), meditate on our [[Philosophy]] or add to our [[References]].
+Get [hacking](https://github.com/majdal/modex/tree/master/src/README.md), meditate on our [Philosophy](Philosophy.md) or add to our [References](References.md).
 
 There are very disorganized notes scattered on these shared docs which **should be read, digested, and then merged into this wiki or tossed**: http://piratepad.net/xQTNPECqcj, http://piratepad.net/uud1vW5W5e
 
