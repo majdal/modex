@@ -9,6 +9,62 @@ class Scenario:
 class Simulation:
     def __init__(self):
         self.scenarios = {}
+        self.simpack = None # this will be eutopia.py, the simpack.
+        self.current_interventions = None
+        self.activities = []
+        self.stepper = None
+            
+    def internal_step(self):
+        """
+        This iterates through all the interventions
+        in the current scenario and runs the simpack
+        specific stepping.
+        """
+        
+        global time #time has to be global for Terry's simpack to work.
+        for intervention in self.current_interventions:
+            if time >= intervention.time:
+                intervention.apply(eutopia, time)
+        time += 1
+        self.simpack.step()
+        
+    def set_scenario(self, scenario_id):
+        self.current_interventions = self.scenarios[scenario_id]
+        
+    def create_stepper(self, end):
+        """
+        Returns a generator defined with a start year and end
+        year of the simulation.
+        
+        """     
+        def internal_stepper():
+            for year in xrange(1, end):
+                self.internal_step()
+                current_activity = self.simpack.get_activity_count()
+                yield current_activity
+        
+        self.stepper = internal_stepper()
+            
+            
+    def step(self):
+        """
+        step() is called externally and it returns
+        a datum of current activity if a stepper was 
+        created.
+        
+        """
+        try:
+            return next(self.stepper)
+        
+        except TypeError:
+            print "Internal stepper not created."
+            
+        except StopIteration:
+            print "Simulation range exceeded."
+        
+        
+            
+
 
 def read_interventions(interventions):
     """
@@ -19,7 +75,6 @@ def read_interventions(interventions):
     and returns a simulation object, which in turn contains
     a dict of scenario objects, which each contain Intervention objects
     """
-    
     simulation = Simulation()
     
     for intervention in interventions:
@@ -32,7 +87,6 @@ def read_interventions(interventions):
         elif intervention["type"] == "newActivityIntervention":
             intervention_obj = NewActivityIntervention(*data)
         
-        
         if simulation.scenarios.has_key(scenario):
             simulation.scenarios[scenario].append(intervention_obj)
             
@@ -42,34 +96,23 @@ def read_interventions(interventions):
     return simulation
     
 
+time = 0 # has to be global as per simpack format
+
         
 if __name__ == "__main__":
-    eutopia = Eutopia()
-    
     with open("interventions.json", "r") as input_json:
         interventions_json = json.load(input_json)
     
-    simulation = read_interventions(interventions_json)
-    interventions = simulation.scenarios[1] # indexed by scenario 1
-    
-    time = 0
-    def step():
-        global time
-        for intervention in interventions:
-            if time >= intervention.time:
-                intervention.apply(eutopia, time)
-        time += 1
-    
-        eutopia.step()
-    
-    
+    sim = read_interventions(interventions_json)
     activities = []
-    for i in range(10):
-        step()
-        activities.append(eutopia.get_activity_count())
-        print eutopia.get_activity_count() # this is on a year to year basis.
-        
-    print activities    
+    eutopia = Eutopia()
+    sim.simpack = (eutopia)
+    sim.set_scenario(1) # indexed by scenario 1
+    sim.create_stepper(10) # creates a generator from simulation start and end dates.
+    
+    for i in xrange(1, 10):
+        print sim.step()
+        # this data will be sent whenever the web socket sends data.
         
     
         
