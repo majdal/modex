@@ -13,6 +13,7 @@ class Simulation:
         self.current_interventions = None
         self.activities = []
         self.stepper = None
+        self.years = 0
             
     def internal_step(self):
         """
@@ -24,7 +25,7 @@ class Simulation:
         global time #time has to be global for Terry's simpack to work.
         for intervention in self.current_interventions:
             if time >= intervention.time:
-                intervention.apply(eutopia, time)
+                intervention.apply(self.simpack, time)
         time += 1
         self.simpack.step()
         
@@ -44,6 +45,7 @@ class Simulation:
                 yield current_activity
         
         self.stepper = internal_stepper()
+        self.years = end
             
             
     def step(self):
@@ -88,7 +90,6 @@ def read_interventions(interventions):
             intervention_obj = NewActivityIntervention(*data)
                     
         simulation.scenarios.setdefault(scenario, [intervention_obj])
-            
     return simulation
     
 
@@ -100,13 +101,12 @@ if __name__ == "__main__":
         interventions_json = json.load(input_json)
     
     sim = read_interventions(interventions_json)
-    activities = []
     eutopia = Eutopia()
-    sim.simpack = (eutopia)
+    sim.simpack = eutopia
     sim.set_scenario(1) # indexed by scenario 1
-    sim.create_stepper(10) # creates a generator from simulation start and end dates.
+    sim.create_stepper(100) # creates a generator from simulation start and end dates.
     
-    for i in xrange(1, 10):
+    for i in xrange(1, 100):
         print sim.step()
         # this data will be sent whenever the web socket sends data.
         
