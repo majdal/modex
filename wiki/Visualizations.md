@@ -43,3 +43,4 @@ For networks that are actually trees: [egonetwork pandemic visualization](http:/
 * [ManyEyes](http://www-958.ibm.com/software/analytics/manyeyes/)
 * anything on [/r/dataisbeautiful](http://www.reddit.com/r/dataisbeautiful/)
 * http://graphicdesign.stackexchange.com/questions/15788/examples-of-well-designed-software-architecture-diagrams
+* The use of d3 + javascript + and html5 slider widget on [this page](http://scott.fortmann-roe.com/docs/BiasVariance.html) is glorious
