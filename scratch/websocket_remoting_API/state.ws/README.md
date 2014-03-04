@@ -1,5 +1,4 @@
 
-
 state.ws
 ========
 
@@ -36,3 +35,10 @@ s.watch(function(delta){ //.watch()? maybe we should use whenjs for this?
 ```
 
 state.ws does not yet but will soon support [delta compression](https://en.wikipedia.org/wiki/Delta_encoding).
+
+
+Related Work
+============
+
+* http://www.activejs.org/
+* http://www.jazzrecord.org/
