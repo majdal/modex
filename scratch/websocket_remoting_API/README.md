@@ -97,7 +97,9 @@ class Multiplex2(ApplicationSession):
 ```
 
 SockJS-Multiplex has no security, and clients can cause servers to (un)subscribe (from)to channels and vice-versa. That might be a feature.
-Its rationale is [in a enthusiastic but concise blog post](https://www.rabbitmq.com/blog/2012/02/23/how-to-compose-apps-using-websockets/), wherein it sounds like all of their concerns are my concerns: resuability, composability, simplicity.
+Its rationale is [in a enthusiastic but concise blog post](https://www.rabbitmq.com/blog/2012/02/23/how-to-compose-apps-using-websockets/), wherein it sounds like all of their concerns are my concerns: resuability, composability, simplicity. **The one thing we need to check out before diving into SockJS is whether we can take their server-side multiplexer and drop it on top of Autobahn; if they've really done it cleanly then there should be no trouble doing that --- actually, SockJS-Multiplex isn't implemented in twisted yet; we can maybe snitch their protocol though and implement it our way)
+
+One nit though: in my design, I want the multiplexing to be totally transparent: every channel (aka topic) should be a ws:// URL and there should be no channels open that you couldn't open directly. SockJS-multiplex hangs arbitrary-name channels off their pubsub protocol. --it might be tricky determining which URL corresponds to which node, but I think we can do it, and then we have a SINGLE namespace instead of hiding.
 )
 
 JSON
