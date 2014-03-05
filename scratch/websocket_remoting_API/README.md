@@ -39,11 +39,7 @@ can be active per user per site at a time--do not apply.
 Still, there should be some benefit to being able. I expect latency should be reduced if a single TCP stream is used instead of N. But, instead of building a huge protocol, 
 I propose to simply construct a websocket multiplexer, offering exactly the same API as native WebSockets.
 
-This will require backend support and a small protocol to handle the wrapping and unwrapping. In Twisted, we can probably exploit [Resource.getChild()](https://twistedmatrix.com/documents/current/api/twisted.web.resource.Resource.html#getChild) to automagically translate requests for websockets to their handlers; what to do if that doesn't work is undefined (we could open a relay?)
-
-The goal would be to have the multiplexer be transparent.
-
-These codes should be 100% API-interchangable. Adding or removing the <code>M.</code> should give the same functionality, but one should be(? todo: actually write this and load-test it) faster:
+The goal would be to have the multiplexer be totally transparent. In other words, these codes should be 100% API-interchangable. Adding or removing the <code>M.</code> should give the same functionality, but one should be(? todo: actually write this and load-test it) faster:
 ```
 w1 = WebSocket("ws://example.com/ws1")
 w2 = WebSocket("ws://example.com/ws2")
@@ -57,6 +53,10 @@ w2 = M.WebSocket("ws://example.com/ws2")
 
 w2.send("data!")   //calls something like M._websocket.send({url: "ws://example.com/ws2", payload: "data!"})
 ```
+
+
+This will require backend support and a small protocol to handle the wrapping and unwrapping. In Twisted, we can probably exploit [Resource.getChild()](https://twistedmatrix.com/documents/current/api/twisted.web.resource.Resource.html#getChild) to automagically translate requests for websockets to their handlers; ((what to do if that doesn't work is undefined (we could open a relay?)))
+
 
 A MultiWebSocket should probably only be able to request intra-server connections--it shouldn't even be allowed to connect to ports other than the one that ```multiplexer/``` is running on (but see Relay below)--but deciding where we break that is a bit tricky if we allow servers to have more than one hostname. Further, it might be a good idea that ws://example.com/path/to/game/instances/multiplexer is **only** able to 'plex to websockets even further down that URL tree (so ws://example.com/path/to/game/instances/abc is okay but ws://example.com/path/to/users is not) (or maybe this should be a subclass of MultiWebSocketProtocol: Protocol > WebSocketServerProtocol > MultiWebSocketServerProtocol > SecureMultiWebSocketServerProtocol)
 
