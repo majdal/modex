@@ -5,6 +5,7 @@ but the rest of API is questionable.
 These folders give proposals for replacements that can be done to simplfify.
 
 Implementation will be done on AutobahnPython's WebSocket support.
+(note: there's [other options](../../wiki/Platforms-and-APIs.md#networking))
 
 Messaging Patterns
 ==================
