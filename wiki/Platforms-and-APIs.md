@@ -30,15 +30,17 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 ## Networking
 
 * [WebSockets](http://www.websocket.org/quantum.html)
+  * Autobahn
+    * Tutorials do not work at this time. Re-evaluating our use of Autobahn.
+  * [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/); see also [SockJS-client](https://github.com/sockjs/sockjs-client) for drop-in websocket support for older browsers
+  * [twisted.web.websockets](https://twistedmatrix.com/trac/ticket/4173) is in [the works](http://twistedmatrix.com/trac/attachment/ticket/4173/4173-5.patch), but not ready yet
+  * [ws4py](https://github.com/Lawouach/WebSocket-for-Python)
+  * [cherrypy](http://www.cherrypy.org/)
+  * [txWS](https://github.com/MostAwesomeDude/txWS)
+
 * [EventSource](http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket)
 * jsonp
 
-* Autobahn
-  * Tutorials do not work at this time. Re-evaluating our use of Autobahn.
-
-* [ws4py](https://github.com/Lawouach/WebSocket-for-Python)
-* [cherrypy](http://www.cherrypy.org/)
-* [txWS](https://github.com/MostAwesomeDude/txWS)
 
 
 
