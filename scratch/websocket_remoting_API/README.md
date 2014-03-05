@@ -1,4 +1,3 @@
-
 wamp.ws is overengineered. There is no reason to shove that much state on top of stateless HTTP.
 AutobahnPython has a solid WebSocket implementation,
 but the rest of API is questionable.
@@ -48,7 +47,7 @@ and not have to open up and localhost-to-localhost sockets.
 
 The goal would be to have the multiplexer be transparent.
 
-These codes should be interchangable, simply by adding or removing the <code>M.</code>:
+These codes should be 100% API-interchangable. Adding or removing the <code>M.</code> should give the same functionality, but one should be(? todo: actually write this and load-test it) faster:
 <code>
 w1 = WebSocket("ws://example.com/ws1")
 w2 = WebSocket("ws://example.com/ws2")
@@ -63,7 +62,8 @@ w2 = M.WebSocket("ws://example.com/ws2")
 w2.send("data!")
 </code>
 
-with the only difference being noticeable 
+[SockJS](https://github.com/sockjs/websocket-multiplex) has an implementation of this.
+
 JSON
 ====
 
