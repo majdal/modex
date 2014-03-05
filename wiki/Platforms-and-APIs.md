@@ -35,6 +35,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 
 * Autobahn
   * Tutorials do not work at this time. Re-evaluating our use of Autobahn.
+* [SockJS-twisted](https://github.com/DesertBus/sockjs-twisted/); see also [SockJS-client](https://github.com/sockjs/sockjs-client) for drop-in websocket support for older browsers
 
 * [ws4py](https://github.com/Lawouach/WebSocket-for-Python)
 * [cherrypy](http://www.cherrypy.org/)
