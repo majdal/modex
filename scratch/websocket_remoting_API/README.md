@@ -62,7 +62,39 @@ w2 = M.WebSocket("ws://example.com/ws2")
 w2.send("data!")
 </code>
 
-[SockJS](https://github.com/sockjs/websocket-multiplex) has an implementation of this.
+
+(
+[SockJS](https://github.com/sockjs/websocket-multiplex) has an implementation of this; they've done it reasonably cleanly on top of Twisted+their own Twisted-WebSocket implementation, and indeed have done just what I thought they'd have to: designed a small protocol ([it consists](https://github.com/sockjs/websocket-multiplex/blob/master/multiplex_client.js) of wrapping "data" in "sub,channel" to subscribe, "msg,channel,data" to send data, and "uns,channel" for detaching) and written client-side and server-side implementations of it. On the backend the multiplexer simply redirects messages transparently to WebSocketProtocols
+```
+multiplex.addFactory("channel1", Factory.forProtocol(EchoProtocol))
+multiplex.addFactory("channel2", Factory.forProtocol(ChatProtocol))
+```
+and even has provisions (via subclassing) for dynamic channel (aka topic aka endpoint) creation.
+
+which is much cleaner than in Autobahn where to run multiple streams over a single channel you need to change how you write your code:
+```
+#....
+# suppose we have jumped through the hoops neessary to construct an ApplicationSession object; call it multiplex
+
+# you /could/ do this, but this gives no way to react, because ~you aren't a websocket~
+multiplex.subscribe(echo_handler, "channel1") 
+multiplex.subscribe(chat_handler, "channel2") 
+
+# ...
+
+# to respond, you need to
+# a) shove unrelated code (echo_handler and chat_handler) into the same class, or abuse python's dynamicness
+# b) hard-code the channel names (because you must know where to publish to; that isn't hidden in your class)
+class Multiplex2(ApplicationSession):
+  #...
+  def __init__(self):
+     self.subscribe(self.echo_handler, "channel1")
+     self.subscribe(self.chat_handler, "channel2")
+  def echo_handler(self, *data):
+     self.publish("channel1", data)
+#....
+```
+)
 
 JSON
 ====
