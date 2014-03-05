@@ -100,6 +100,10 @@ SockJS-Multiplex has no security, and clients can cause servers to (un)subscribe
 Its rationale is [in a enthusiastic but concise blog post](https://www.rabbitmq.com/blog/2012/02/23/how-to-compose-apps-using-websockets/), wherein it sounds like all of their concerns are my concerns: resuability, composability, simplicity. **The one thing we need to check out before diving into SockJS is whether we can take their server-side multiplexer and drop it on top of Autobahn; if they've really done it cleanly then there should be no trouble doing that --- actually, SockJS-Multiplex isn't implemented in twisted yet; we can maybe snitch their protocol though and implement it our way)
 
 One nit though: in my design, I want the multiplexing to be totally transparent: every channel (aka topic) should be a ws:// URL and there should be no channels open that you couldn't open directly. SockJS-multiplex hangs arbitrary-name channels off their pubsub protocol. --it might be tricky determining which URL corresponds to which node, but I think we can do it, and then we have a SINGLE namespace instead of hiding.
+
+Oo, and another problem: they've conflated pubsub with multiplexing. But those are orthogonal: pubsub is when you have a channel that lots of people can post to and all hear the same messages from at the same time, like an IRC room or a BB. Multiplexing is when you use one channel as many channels. You can have a server hosting only 1 pubsub topic with 1000 listeners, or you can have a single server hosting 1000 topics with only 1 client. Having both at the same time is just bonus.
+
+Yes, I am suffering from N.I.H. syndrome. That doesn't make my reasons invalid :P
 )
 
 JSON
