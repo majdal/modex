@@ -28,6 +28,25 @@ A data bind and a data flow are related problems, and several of these libraries
 * Miso's [Dataset](http://misoproject.com/dataset/)
 * Vega's [Triflow](https://github.com/trifacta/triflow/tree/master/test) - _not actually sure if this is a dataflow library; it seems to too tiny to do anything; maybe it's just clever - nick_
 
+### Reusable d3 visualizations
+
+* [Mike Bostock's Reusable d3 chart spec](http://bost.ocks.org/mike/chart/)
+  * and the [official results](https://github.com/d3/d3-plugins), so far 
+* [Vega](https://github.com/trifacta/vega)
+* [NVD3](http://nvd3.org/)
+* [Miso](http://misoproject.com/) (this one looks super promising)
+* [DexCharts](https://github.com/PatMartin/DexCharts)
+* Scrap examples:
+  * http://jsfiddle.net/johnwun/8hSGP/
+  * [textrotate()](http://bl.ocks.org/ezyang/4236639)
+  * [pie-chart](https://github.com/gajus/pie-chart)
+  * [interactive histograms](https://github.com/gajus/interdependent-interactive-histograms)
+  * ["slopegraph"](http://bl.ocks.org/biovisualize/4348024) (actually a very basic network visualization)
+  * [demo of building a reusable component from a nonreusable one](http://bl.ocks.org/milroc/5519642)
+  * [messy errorbar scatterplot](http://bl.ocks.org/chrisbrich/5044999)
+  * ["hello world" in reusable d3](http://bl.ocks.org/cpbotha/5073718)
+  * [simple bar chart](http://jsfiddle.net/johnwun/8hSGP/)
+
 
 ### Maps
 
@@ -38,10 +57,12 @@ A data bind and a data flow are related problems, and several of these libraries
 * [ModestMaps](http://modestmaps.com/examples/)
 (_these all seem like they overlap a bit; what's the deal?_)
 
-### Data
+### 
+
+### Visualization
 * d3js
-* [cubism.js](http://square.github.io/cubism/) for visualizing live time series data
-* [cube](http://square.github.io/cube/)
+* Square's [cubism.js](http://square.github.io/cubism/) for visualizing live time series data
+* Square's [cube](http://square.github.io/cube/)
 * [graphite](http://graphite.wikidot.com/)
 * [dimplejs](http://dimplejs.org/)
 
