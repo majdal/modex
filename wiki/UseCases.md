@@ -9,7 +9,9 @@ Case: researchers in the world at large, collaborating, github-like.
  implications: sessioning, flexibility, forking of models, comments, and reasonable permalinks.
 
 
-Case: a running model-explorer instance that can be linked from a news article and invite
+Case: a running model-explorer instance that can be linked from a news article and invite the general public to come see for themselves
+
+Case: propaganda? (is that evil?)
 
 
 
@@ -22,4 +24,4 @@ He knows he wants to have agents, and he knows he wants them to be interacting o
 
 Alice is a skilled Java programmer and is interested in _helping the world_. She thinks that she could make an impact by getting into computational social science, but she doesn't know where to start. She has never done visualization work in her life.
 
-Terry has a model which generates terabytes of plain text output per second. Currently, he is analysing this output with a mixture of shell scripts which animate it using igraph and matplotlib and by dumping it into R, which sometimes crashes and always needs to be babied.
+Terry has a model which generates terabytes of plain text output per second. Currently, he is analysing this output with a mixture of shell scripts which animate it using igraph and matplotlib and by dumping it into R, which sometimes crashes and always needs to be babied. A major feature of his work is _model validation_: finding efficient and _**true**_ comparisons betweeen measurements from real brains to measurements from his model brain. 
