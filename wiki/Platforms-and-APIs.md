@@ -9,17 +9,25 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
 * [Modernizr](http://modernizr.com/) to let us write one codebase against HTML5
 
-Javascript Data-Binding Libraries (an obscene number of them)
+### Javascript Data View/Flow/Binding Libraries  (an obscene number of them)
 
- - since our problem is so data-centric, not using data-binding will be a giant pain of always writing new update handlers.
- - whatever data-binding method we go with (including writing our own), we need it to support both unidirectional (server updates data) and bidirectional (server can update data, but user can edit it too) binds
+Since our problem is so data-centric, not using data-binding will be a giant pain of always writing new update handlers. 
+
+A data bind and a data flow are related problems, and several of these libraries solve them together. A data _bind_ is when some object (something in-memory or output like a visualization widget or a slider) is marked as being a consumer of some other object, and they are kept in sync. A data _flow_ is a chain of dependent computations; most useful of all is a flow over a series of binds (_think: Microsoft Excel, which lets you edit any non-formula cell and then reupdated all dependent cells automatically; and that is **really, really useful**_)
+
+**Question**: do we support bidirectional binds? Bidirectional binds are much much much harder than unidirectional; the alternative is to manually expose an API for everything modifiable (and this is safer, because is gaurds against accidentally making a model--which is more likely than not written quick-and-dirty--inconsistent)
+
 * [LavaJS](http://lava.codeplex.com/) - _this one is promising; it is small and claims to be unobtrusive
 * http://jqxb.codeplex.com/
 * [Knockout](http://knockoutjs.com/); 
   * rave reviews [here](http://blog.stevensanderson.com/2010/07/05/introducing-knockout-a-ui-library-for-javascript/) and [here](http://visualstudiomagazine.com/articles/2012/02/01/2-great-javascript-data-binding-libraries.aspx)
   * supports functional definitions of quantities--quantities that get recomputed as the underlying data updates
-* [jsViews](https://github.com/BorisMoore/jsviews), which is a jQuery plugin 
+* [jsViews](https://github.com/BorisMoore/jsviews) seems to be jQuery's official plugin to do this 
 * [simpli5](https://github.com/jacwright/simpli5) is a bigger thing, but it [features data-binding](http://jacwright.com/438/javascript-data-binding/). It hasn't had an update in 4 years, though (perhaps jQuery superseded it?). Regardless, we can pick through it (and the others) for ideas.; [its magic](https://github.com/jacwright/simpli5/blob/master/src/binding.js) is mostly done with js's built in ```__lookupSetter__```
+* Square's [Crossfilter](http://square.github.io/crossfilter/)
+* Miso's [Dataset](http://misoproject.com/dataset/)
+* Vega's [Triflow](https://github.com/trifacta/triflow/tree/master/test) - _not actually sure if this is a dataflow library; it seems to too tiny to do anything; maybe it's just clever - nick_
+
 
 ### Maps
 
