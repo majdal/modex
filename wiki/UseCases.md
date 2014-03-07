@@ -1,6 +1,7 @@
 Use Cases and Stories
 =====================
 
+## Use Cases
 
 Case: policy makers in a room together with some iPads out, an old Windows XP laptop, and a programmer-researcher presenting them a model to play with.
 
@@ -16,6 +17,8 @@ Case: propaganda? (is that evil?)
 
 
 ------
+
+## Stories
 
 Bib has written some models in NetLogo. He is slowly learning programming concepts like loops, lists and subroutines, but is not totally comfortable yet.
 Still, he is trying because he has a strong background in group-dynamics sociology, and feels a strong need to bring computational power to his problems.
