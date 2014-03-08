@@ -24,10 +24,13 @@ Our intended use case looks like this:
   * question: does this require more development time, in order to make the frontend be able to understand what features are in the database from the model? it seems difficult to automate things like "make a time slider" without at least telling Model Explorer "this model is time-stepped".
 4. researcher invites colleagues to view their model; colleagues open the website and, using a collaborative interface somewhat like jsfiddle or tributary.io, make plots out of the model, ask Model Explorer to compute statistics across whatever dimensions everyone deems interesting; everything 
 
+Case: looking for correlations in high-dimensional data
 
-Case: display stats?
- uhh
-fuck
+Case: looking for sensitive parts of statespace
+
+Case: looking for chaotic regions of statespace
+
+Case: looking for path-dependency in complex systems
 
 # Lofty Goals
 
