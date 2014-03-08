@@ -15,13 +15,14 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * Square's [cubism.js](http://square.github.io/cubism/) for visualizing live time series data
 * Square's [cube](http://square.github.io/cube/)
 * [graphite](http://graphite.wikidot.com/)
-* [dimplejs](http://dimplejs.org/)
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
 
 ### Reusable d3 visualizations
 
 * [Mike Bostock's Reusable d3 chart spec](http://bost.ocks.org/mike/chart/)
   * and the [official results](https://github.com/d3/d3-plugins), so far 
+  * 
+* [dimplejs](http://dimplejs.org/) - _this looks pretty underpowered_
 * [Vega](https://github.com/trifacta/vega)
 * [NVD3](http://nvd3.org/)
 * [Miso](http://misoproject.com/)   - _this one looks super promising_
