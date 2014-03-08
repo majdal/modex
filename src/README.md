@@ -86,7 +86,7 @@ You will probably also want **_these tools_** to make dealing with data easier:
 * [IPython](http://ipython.org), which gives a python command shell _with tab-completion_, and Mathematica-style [notebooks](http://nbviewer.ipython.org).
 
 
-For a brain dump of everything you might need to know about getting set up on OS X, see [here](https://github.com/majdal/modex/wiki/Step-by-step-installation-instructions-for-Mac-users). Similarly, see [here]https://github.com/majdal/modex/wiki/Step-by-step-installation-instructions-for-Windows-users) for Windows.
+For a brain dump of everything you might need to know about getting set up on OS X, see [here](../wiki/TechGuides/Step-by-step-installation-instructions-for-Mac-users). Similarly, see [here](../wiki/TechGuides/Step-by-step-installation-instructions-for-Windows-users) for Windows.
 
 
 ## Hacking
