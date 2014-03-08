@@ -111,6 +111,7 @@ What would it take for us to feel that modex was "feature complete"?
   3. Map widgets(????)
 1. Data export
 1. A small but effective suite of **forkable** example visualizations
+1. Dataset metadata: explanations of what each column is, change tracking (GIS is big on that)
 1. A useful set of unit tests
 
 ## V1.5
@@ -122,10 +123,13 @@ What would it take for us to feel that modex was "feature complete"?
   2. Multiuser (so sessions)
   1. (optional) user identities (Facebook connect, Mozilla Persona, OpenID, plus a site-custom account db)
   2. Comments, comments, everywhere
-  2. Forking of explorations
+    * on visualizations
+    * on models
+  2. Forking of explorations (an "exploration" is the set of html5 code that makes the pretty visualizations and chooses what charts to plot)
 
 ## V2.5
 1. More unit tests
+1. a nice way to track exploration forks, like [github's repo graph feature](https://github.com/majdal/modex/network)
 
 ## V3
 
