@@ -29,9 +29,10 @@ What would it take for us to feel that modex was "feature complete"?
 1. Still single-user
 1. Running a single instance of a model and "watching" it (see NetLogo for great examples of this)
 1.  Interacting with a model it as it runs
-  * Terry and Nick think that the only way to deal with this is for each model to define an API (eg "move forward", "implement this tax intervention", "drag), and Nick thinks that _modex_ should be agnostic about sending the interventions; if you want to record you must go onto the server and edit the model to do that
+  * Terry and Nick think that the only way to deal with this is for each model to define an API (eg "move forward", "implement this tax intervention", "drag), and Nick thinks that _modex_ should be agnostic about sending the interventions: if you want to record that an intervention happened you must go onto the server and edit the model to do record it as a piece of data, which then becomes plottable in the usual modex way
 1. Able to host **any** (computational) model in **any** programming language, except that the model might need to be modified to output data in a particular way
 1. Running many copies of a model in parallel and saving the results all to a single database
+  * this feature includes the feature of parameter sweeps, which are super useful and superhard
 1. Automated statistics generation
   * variances
   * means
@@ -86,16 +87,12 @@ What would it take for us to feel that modex was "feature complete"?
 
 1. Forking of models
   * if we are supporting _any_ model in _any_ language, then in general this is impossible: to fork a model you must fork that codebase. But we can ease the pain if we make setting up the server on your own machine easier and help model writers make their models easier to fork (by reducing or including dependencies)
-1. Windows installer
-2. Mac installer
-3. Clean builds for linux, and attempts to get it into package managers (especially arch and debian)
-
+1. (painlessly) Locally runnable:
+  1. Windows installer
+  2. Mac installer
+  3. Clean builds for linux, and attempts to get it into package managers (especially arch and debian)
 2. Datasource mashups (so, Stanford should be able to host a repo of websocket-accessible (well, maybe RESTful, and then we wrap that in websockets) data sources 
-
+3. Examples of mashups taking modex-server sources + links at data.gc.ca to do model validation (or to do model invalidation!)
 
 ## V3.5
 1. More unit tests
-
-# Unknowns
-
-How do we support model validation? It seems like that is a very natural and "why didn't you support **that**" [use case](UseCases.md), but it also necessarily involves pulling in non-model data; can

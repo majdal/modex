@@ -8,19 +8,9 @@ We have a sort of hyper-[MVC](https://en.wikipedia.org/wiki/Model-view-controlle
 (the current state(s) of running (scientific, eg SLUCE, NetLogo, Eutopia) models,
 the raw output from those models, the aggregation (see below) of the output into statistics); our "view" is actually many views: the many open web browsers pointed at the same model page, or perhaps you can think of it as all the subcomponents (eg the graphs that user 1 has made view one slice of data, the map user 2 has open views another slice); and that leaves our "controller"-- which we've been calling "Model Explorer" for lack of a better name-- to be a broker between these components.
 
-We have two sorts of models:
- - models being run and collected -- these are our agent-based models 
+Model exploring deals in two classes of things which are unfortunately both called models:
+ - models being run and collected -- these are our simulations, e.g. agent-based models, spatially-explicit models, random die-roll models
  - models to hypothesise about the relationships in the former kind of model  -- these are things like "if we assume gaussian errors, bank accounts $ ~ B0 + B1*gdp + B2*carbon_footprint"
-
-Our intended use case looks like this:
-
-1. researchers, especially in the systems and social sciences fields, have complicated models written in ad hoc mixtures of java, R, C, python, etc. 
-2. researchers hire a developer (or become one themselves) enough to retrofit their model slightly to log its data into one of several standardized formats that we support
-3. researchers host their model in the Model Explorer (either by asking us with our canonical demo server or by putting an instance of it up themselves)
-  * question: does this require more development time, in order to make the frontend be able to understand what features are in the database from the model? it seems difficult to automate things like "make a time slider" without at least telling Model Explorer "this model is time-stepped".
-4. researcher invites colleagues to view their model; colleagues open the website and, using a collaborative interface somewhat like jsfiddle or tributary.io, make plots out of the model, ask Model Explorer to compute statistics across whatever dimensions everyone deems interesting; everything 
-
-
 
 Components we need:
 ===================
