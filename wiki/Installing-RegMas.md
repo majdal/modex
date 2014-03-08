@@ -1,5 +1,6 @@
 # Instructions to install RegMAS on Debian/Ubuntu
 
+```
 wget http://regmas.org/snapshots/regmas_daily.tgz
 tar xvzf regmas_daily.tgz
 cd regmas
@@ -10,3 +11,4 @@ make
 MAYBE: add "-lz" to end of line starting with "LIBS =" in src/Makefile
 make
 ./regmas
+```
