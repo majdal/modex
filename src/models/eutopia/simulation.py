@@ -89,7 +89,12 @@ def read_interventions(interventions):
         elif intervention["type"] == "newActivityIntervention":
             intervention_obj = NewActivityIntervention(*data)
                     
-        simulation.scenarios.setdefault(scenario, [intervention_obj])
+        try:
+            simulation.scenarios[scenario].append(intervention_obj)
+            
+        except KeyError, scenario_id:
+            simulation.scenarios[scenario_id.message] = [intervention_obj]
+    
     return simulation
     
 
