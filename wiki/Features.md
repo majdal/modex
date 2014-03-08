@@ -6,7 +6,17 @@ See [UseCases](UseCases.md) for the motivation behind all of these
 (or, if you can't find it there, challenge the feature in a comment here or write up a case study there)
 
 
-## V0.01
+# Unknowns
+
+Unknowns are up top here so that our warts are out in public for all to see (and hopefully cleverly repair).
+
+How do we support model validation? It seems like that is a very natural and "why didn't you support **that**" [use case](UseCases.md), but it also necessarily involves pulling in non-model data; can
+
+How do we support sparsity?
+
+How do we support branching scenarios (this is what GarlicSIM was supposed to provide)
+
+## V0.01 (due date: March 15th, 2014, the first symposium)
 
 1. A running farm model
   * State:
@@ -20,7 +30,24 @@ See [UseCases](UseCases.md) for the motivation behind all of these
 1. Able to trivially open up a web browser and see the farm model -- basically NetLogo but better
   * so we need data-binds or at leastt o fake them
 2. Aesthetically pleasing
-3. A single user
+3. A single user and a single scenario
+4. 
+
+## V0.1 (due date: _______ 2014, the first [Social Innovation Lab](http://sig.uwaterloo.ca/feature/social-innovation-labs) of the year)
+
+TODO(kousu): what parts of the V1 do we want done by this?
+
+## V0.2 (due date: end of term April 2014)
+
+TODO(kousu): what parts of the V1 do we want done by this?
+
+having a working demo that we can drop co-ops into quickly is key. If they can't get started they can't help us and then they'll be gone.
+
+## V0.5 (due date: end of term, August 2014)
+
+TODO(kousu): what parts of the V1 do we want done by this?
+
+by this date we need to have something useful. We need to be able to say to people "look, we'll take your model and import it, and then you can poke around at all the graphs".
 
 ## V1
 
@@ -32,13 +59,30 @@ What would it take for us to feel that modex was "feature complete"?
   * Terry and Nick think that the only way to deal with this is for each model to define an API (eg "move forward", "implement this tax intervention", "drag), and Nick thinks that _modex_ should be agnostic about sending the interventions; if you want to record you must go onto the server and edit the model to do that
 1. Able to host **any** (computational) model in **any** programming language, except that the model might need to be modified to output data in a particular way
 1. Running many copies of a model in parallel and saving the results all to a single database
-1. Automated statistics generation
+2. Supported Data Types (on both front- and back- end):
+  * Tables
+    * Datetimes
+    * Integers
+    * Floats
+    * "Factors" (ie Categories) (which is very much different
+  * GIS
+    * Vectors
+    * Rasters
+  * Relatively unstructured JSON-like object trees
+  * 
+1. Automated statistics generation (probably everything that pandas supports we should expose)
   * variances
+  * correlations (XXX the standard correlation formula assumes a linear model; is there a generalization? can we simply fit a lot of [GLM](https://duckduckgo.com/Generalized_linear_model)s and take the correlations from the best one?)
   * means
   * medians
-  * kernel density estimates
-1. A way to write an expression which slices a subset of data from the backend
-1. Handy, composable, data widgets, which are data-bindable (ie automagically update as new data comes):
+  * resampling
+    * kernel density estimates
+  * stacking/reshaping
+  * moving versions of all of these
+  * basically everything that pandas supports
+1. An in-browser code editor (see: jsfiddle, tributary.io, and the nice 'source' button every example at http://paperjs.org/ has)
+1. A way to write an javascript expression which slices a subset of data from the backend
+1. Handy, composable, data widgets, which are data-bindable (ie automagically update as new data comes **INCLUDING THE FEATURE SHOWN [HERE](http://square.github.io/crossfilter/): clicking one widget can update the others**):
   * the ability for end-users to compose new visualizations in-browser
   * these widgets need to be pretty
   1. Spreadsheets (ie tables)
@@ -95,7 +139,3 @@ What would it take for us to feel that modex was "feature complete"?
 
 ## V3.5
 1. More unit tests
-
-# Unknowns
-
-How do we support model validation? It seems like that is a very natural and "why didn't you support **that**" [use case](UseCases.md), but it also necessarily involves pulling in non-model data; can
