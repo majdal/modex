@@ -102,7 +102,7 @@ What would it take for us to feel that modex was "feature complete"?
     1. Line graphs with confidence and/or credible intervals
   1. Histograms
   1. Scatterplots
-  1. 
+  1. Scenario-comparison plots (what this means is hazy at this point, but it definitely involves plotting two datasets on the same axes and might involve something like tweening their colours together in the parts where their "inputs" (whatever those were) were more similar)
 1. Data-binds
 2. Data-flows
 2. Handy, composable, control widgets
