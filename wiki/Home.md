@@ -29,7 +29,3 @@ and some of our **inspiration**
 * [CoMSES Collaboratory](http://www.openabm.org/) out of [Arizona State University](https://csdc.asu.edu/)
 * [The People who lobbied for data.gc.ca](http://datadotgc.ca/)
 * [CODE](https://canadianopendataexperience.com/)
-
-When we want to get off github, know that this wiki itself is simply a git repo with URL https://github.com/majdal/modex.wiki.git and the issue tracker can be extracted with the REST API ([this ruby project](http://github.com/sorich87/github-to-bitbucket-issues-migration) is a one-click export solution).
-
-Wiki syntax protips: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
