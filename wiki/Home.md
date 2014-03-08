@@ -1,7 +1,7 @@
 We are building a simulation of agriculture in southern Ontario for policy makers and the lay public alike to be able to edit to invent and investigate hypotheses. Our perspective on the problem is [holistic](http://www.sigeneration.ca/making-systems-thinking-slogan/): we see agriculture as simultaneously economic, ecological, cultural and as involving both urban humans, rural humans, and animal life, and we think that anything less than modelling all aspects of the world will miss critical decision boundaries.
 
 
-Check out our [goals](Goals.md) and then read through our **gameplan**:
+Check out our [goals](UseCases.md) and then read through our **gameplan**:
 * [Spec](Spec.md)
 * [Architecture](Architecture.md)
 * [Explaining Ourselves](Media.md) (_can anyone think of a pithier link title?_)
