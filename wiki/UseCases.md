@@ -25,6 +25,21 @@ Our intended use case looks like this:
 4. researcher invites colleagues to view their model; colleagues open the website and, using a collaborative interface somewhat like jsfiddle or tributary.io, make plots out of the model, ask Model Explorer to compute statistics across whatever dimensions everyone deems interesting; everything 
 
 
+Case: display stats?
+ uhh
+fuck
+
+# Lofty Goals
+
+"encourage policy makers to use data and models in their decisions"
+
+"help people become data literate" ((XXX this requires ourselves to be data literate too, and requires a good dose of [tutorials](Media.md)))
+
+"we want to encourage reproducible science"
+
+"we want people to start imagining alternate worlds to fight T.I.N.A. thinking"
+
+"we want 
 
 
 
@@ -39,4 +54,9 @@ He knows he wants to have agents, and he knows he wants them to be interacting o
 
 Alice is a skilled Java programmer and is interested in _helping the world_. She thinks that she could make an impact by getting into computational social science, but she doesn't know where to start. She has never done visualization work in her life.
 
-Terry has a model which generates terabytes of plain text output per second. Currently, he is analysing this output with a mixture of shell scripts which animate it using igraph and matplotlib and by dumping it into R, which sometimes crashes and always needs to be babied. There is no way to fit the output from the complete space of model runs into any computer on Earth. Still, a major feature of his work is _model validation_: finding efficient and _**true**_ comparisons betweeen measurements from real brains to measurements from his model brain. 
+Terry has a model which generates terabytes of plain text output per second.
+Currently, he is analysing this output with a mixture of shell scripts which animate it using igraph and matplotlib and by dumping it into R,
+which sometimes crashes and always needs to be babied.
+There is no way to fit the output from the complete space of model runs into any computer on Earth.
+To get around this, Terry has been sampling model instances sparsely (that is, only (x,y,z) from {1:10}^3 instead of R^3) and even logging data sparsely (not logging data every timestep, but only every 1000th, and when he logs he logs summary statistics instead of the inner state of the model).
+Still, a major feature of his work is _model validation_: finding efficient and _**true**_ comparisons betweeen measurements from real brains to measurements from his model brain. 
