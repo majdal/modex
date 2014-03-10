@@ -3,7 +3,7 @@
 <link href="nv.d3.css" rel="stylesheet" type="text/css">
 <body class='with-3d-shadow with-transitions'>
 
-<button onclick="updateChart();">Generate More Data</button>
+<button onclick="makeData();">Generate More Data</button>
 
 <div id="chart1" style="width: 500px; height: 300px;" >
   <svg></svg>
@@ -40,7 +40,7 @@ nv.addGraph(function() {
     
   chart.x(function(d, i) { return d.x});   // use the .x value for x-axis 
                                            //  location (rather than i)
-  updateChart();
+  makeData();
 
   nv.utils.windowResize(chart.update);
 
@@ -50,7 +50,7 @@ nv.addGraph(function() {
 
 // PUT NEW DATA INTO THE CHART
 
-function updateChart() {
+function makeData() {
     generateMoreData();      // make some more data
   
     d3.select('#chart1 svg') // update the chart with the data
@@ -75,6 +75,7 @@ function getRandomColor() {
 }
 
 // All the data to be plotted in the chart
+// in a global variable
 var graphData = [];
 
 // the data format for the chart looks like this:
