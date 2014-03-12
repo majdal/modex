@@ -93,10 +93,12 @@ class Person(Agent):
         orientation = -gender;
 
         # at this point, gender is a on a -Inf to +Inf scale,
-        #gender = squish_spectrum(gender)
+        gender = squish_spectrum(gender) #to keep this flat
         #orientation = squish_spectrum(orientation)
         
-        return Person(hotness, gender, orientation)
+        p = Person(hotness, gender, orientation)
+        p._sex = sex
+        return p
         
         
 ## Model Runner:
@@ -126,13 +128,22 @@ if __name__ == '__main__':
     
     W = World()
     # extract distributions
-    table = scipy.array([(a.hotness, a.gender, a.orientation) for a in W.agents])
+    table = scipy.array([(a.hotness, a.gender, a.orientation, {"male": -1, "female": 1}[a._sex]) for a in W.agents])
     plt.hist(table[:,0])
     plt.title("hotness")
     plt.show()
     plt.hist(table[:,1])
     plt.title("gender")
     plt.show()
+
+    plt.hist(table[table[:,3]==-1,][:,1])
+    plt.title("gender (sex=m)")
+    plt.show()
+
+    plt.hist(table[table[:,3]==1,][:,1])
+    plt.title("gender (sex=f)")
+    plt.show()
+
     plt.hist(table[:,2])
     plt.title("orientation")
     plt.show()
