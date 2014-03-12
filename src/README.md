@@ -2,7 +2,7 @@
 
 Welcome to Modex! Please excuse the construction dust.
 
-If your copy of modex isn't working, make sure your [dependencies](#Dependencies) are up to date. 
+If your copy of modex isn't working, make sure your [dependencies](#dependencies) are up to date. 
 
 ## Folder Layout
 
