@@ -1,11 +1,12 @@
 We are building a simulation of agriculture in southern Ontario for policy makers and the lay public alike to be able to edit to invent and investigate hypotheses. Our perspective on the problem is [holistic](http://www.sigeneration.ca/making-systems-thinking-slogan/): we see agriculture as simultaneously economic, ecological, cultural and as involving both urban humans, rural humans, and animal life, and we think that anything less than modelling all aspects of the world will miss critical decision boundaries.
 
 
-Check out our **gameplan**:
+Check out our [goals](UseCases.md) and then read through our **gameplan**:
+* [Spec](Spec.md)
 * [Architecture](Architecture.md)
 * [Explaining Ourselves](Media.md) (_can anyone think of a pithier link title?_)
-* [Modelling](Modelling.md)
 * [Datasets](Datasets.md)
+* [Modelling](Modelling.md)
 * [Visualizations](Visualizations.md)
 * [Statistics](Statistics.md)
 
@@ -29,7 +30,3 @@ and some of our **inspiration**
 * [CoMSES Collaboratory](http://www.openabm.org/) out of [Arizona State University](https://csdc.asu.edu/)
 * [The People who lobbied for data.gc.ca](http://datadotgc.ca/)
 * [CODE](https://canadianopendataexperience.com/)
-
-When we want to get off github, know that this wiki itself is simply a git repo with URL https://github.com/majdal/modex.wiki.git and the issue tracker can be extracted with the REST API ([this ruby project](http://github.com/sorich87/github-to-bitbucket-issues-migration) is a one-click export solution).
-
-Wiki syntax protips: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
