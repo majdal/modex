@@ -1,4 +1,6 @@
-# Academic
+# Academic References
+
+_(Tip: use search.crossref.org to find [DOI](http://www.doi.org/)s for refere ces and automatically cite them into MLA format)_
 
 ## Modeling
 
@@ -35,10 +37,16 @@ Harter, Jonathan M. et al. [http://dx.doi.org/10.1117/12.907486](“Increasing t
 ### Network Maps
 Alice Thudt, Dominikus Baur and Sheelagh Carpendale. [http://innovis.cpsc.ucalgary.ca/Publications/_Thudt:2013:Visits](Visits: A Spatiotemporal Visualization of Location Histories.) EuroVis 2013. _a clever rearrangement of timeseries-map data; we could use this to show the flow of goods_
 
-[https://en.wikipedia.org/wiki/Sankey_diagram](Sankey Diagrams) _which display weighted, directed networks by size of the edges (e.g. the [http://www.opensecrets.org/outsidespending/nonprof_growth.php](OpenSecrets Lobbying Pulse Chart) or the famous [https://en.wikipedia.org/wiki/File:Minard.png](Minard plot of Napoleon's march on Russian)). Available to us in d3.js and matplotlib and R._. For more inspiration, check out [http://www.sankey-diagrams.com/](this blog).
+[https://en.wikipedia.org/wiki/Sankey_diagram](Sankey Diagrams) _which display weighted, directed networks by size of the edges (e.g. the [OpenSecrets Lobbying Pulse Chart](http://www.opensecrets.org/outsidespending/nonprof_growth.php) or the famous [Minard plot of Napoleon's march on Russian](https://en.wikipedia.org/wiki/File:Minard.png). Available to us in d3.js and matplotlib and R._. For more inspiration, check out [http://www.sankey-diagrams.com/](this blog).
+
+# Gaming References and Inspiration
+
+* Simutrans / OpenTTD
+* SimCity (all editions)
+* Civ4 and Civ5 (nb: Civ5 is scriptable in Lua, and [InfoAddict](http://forums.civfanatics.com/showthread.php?t=391069) makes the charts and graphs we need)
 
 
-## Software
+# Software References
 Here's some software which has aspects of the data-modelling-visualization ideas we are looking at
 
 * http://sunlightfoundation.com/tools/
@@ -52,7 +60,6 @@ Here's some software which has aspects of the data-modelling-visualization ideas
 * http://repast.sourceforge.net/
 * http://insightmaker.com/
 
-(small tip: use search.crossref.org to find DOIs and cite them into MLA format)
 
 # Essays
 http://www.wired.com/business/2014/01/quants-dont-know-everything/
