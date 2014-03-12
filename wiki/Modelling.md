@@ -70,3 +70,21 @@ http://en.wikipedia.org/wiki/Ecosystem_services
 
 * The [uClassify Collaboratory](http://www.uclassify.com/browse)
 * [InsightMaker Collaboratory](http://insightmaker.com/)
+
+### Ideas for sample models
+
+* Drug markets
+  * [NARCsim](http://staffwww.dcs.shef.ac.uk/people/D.Romano/Romano_NARCSim_ICE-GIC09.pdf)
+  * [SimDrug](http://cormas.cirad.fr/en/applica/simDrug.htm) (2005) from the [DPMP](http://www.dpmp.unsw.edu.au/); see also their [up to date models](http://www.dpmp.unsw.edu.au/resource/model)
+  * [Lee Hoffer](http://www.case.edu/artsci/anth/PublicationsPresentations.html) of the IDMS (e.g. see this [2009 paper](http://www.seiservices.com/nida/1014059/Materials/06%20Hoffer_Network_workshop.pdf)
+    *  http://code.google.com/p/drug-market (in Repast)
+
+* Dating: a social network with utility functions determining "attractiveness", and some simple dynamics on that
+* EvilBankerSim
+* SIR
+* Dumb random number generators
+* Dumb linear-model generators
+* Dumb non-linear model generators
+* Dumb multivariate random number generators with tunable cross-correlation
+* [SLUCE](http://sluce.wici.ca)
+* [FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel)
