@@ -1,4 +1,4 @@
-A small-to-medium-sized model on human attraction.
+A small-to-medium-sized model on human attraction for demonstration, concreteness, and debate.
 
 Features:
  * social network
