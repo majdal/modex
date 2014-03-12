@@ -76,7 +76,7 @@ Finally, once that is done, run
 $ cd ~/modex
 $ sudo pip2 install -r requirements.txt
 ```
-to get any leftovers.
+to get any leftovers. **You also need to run this when requirements.txt changes**.
 
 Arranging your install this way is more immediately tedious, but it saves you from having to ```workon modexenv``` every day, and saves space on your disk. Do be aware that when you do system updates the updates have a small chance of conflicting with the pip-installed packages, and that if that happens remember you did it yourself.
 
