@@ -1,5 +1,8 @@
 # Model Explorer Developer's Guide
 
+Welcome to Modex! Please excuse the construction dust.
+
+If your copy of modex isn't working, make sure your [dependencies](#Dependencies) are up to date. 
 
 ## Folder Layout
 
