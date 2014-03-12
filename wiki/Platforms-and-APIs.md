@@ -137,6 +137,7 @@ Webby stuff:
 * [DIY.org](http://diy.org/)
 * [jsFiddle](http://jsfiddle.net) -- [example](http://jsfiddle.net/sharavsambuu/s7QjN/9/light/)
 * [Tributary.IO](https://github.com/enjalot/tributary.io): Rapid Collaborative D3 Prototyping
+* [SSVD](https://www.icpsr.umich.edu/icpsrweb/ICPSR/ssvd/index.jsp) - _this is both a data archive and a great example of including tools (in this case crosstabs) online and in the browser__
 
 * asana.com -- project management
 * github
