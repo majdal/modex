@@ -2,6 +2,12 @@
 
 _(Tip: use search.crossref.org to find [DOI](http://www.doi.org/)s for refere ces and automatically cite them into MLA format)_
 
+## Complexity
+
+Anderson, P. W. “More Is Different.” Science 177.4047 (1972): 393–396. [doi:science.177.4047.393](http://dx.doi.org/10.1126/science.177.4047.393)
+
+Bak, Per, Chao Tang, and Kurt Wiesenfeld. “Self-Organized Criticality: An Explanation of the 1/f Noise.” Physical Review Letters 59.4 (1987): 381–384. [doi](http://dx.doi.org/10.1103/physrevlett.59.381)
+
 ## Modeling
 
 [Multiphysics simulation](http://en.wikipedia.org/wiki/Multiphysics)
@@ -18,7 +24,7 @@ This guy is kewl: http://fromgistors.blogspot.ca/search/label/Tutorial
 
 ![SOME Model, E2](ArcGIS-SOME.jpg)
 
-## Relevant Visualization Citations
+## Visualization
 
 Brosz, John et al. [http://dx.doi.org/10.1145/2501988.2502046](“Transmogrification.”) Proceedings of the 26th annual ACM symposium on User interface software and technology - UIST  13. Association for Computing Machinery, 2013. 97-106. ((also available direct [http://innovis.cpsc.ucalgary.ca/Publications/_Brosz:2013:TCM](here)).
 

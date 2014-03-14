@@ -152,7 +152,7 @@ The [core of the 2004 SLUCE model](http://vserver1.cscs.lsa.umich.edu/sluce/mode
 	}
 ```
 
-![Architecture Diagram](Architecture.png)
+![Architecture Diagram](Architecture.svg)
 ^ note that this architecture diagram is out of date slightly.
 
 ## Model

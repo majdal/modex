@@ -21,17 +21,26 @@ How do we support branching scenarios (this is what GarlicSIM was supposed to pr
 
 1. A running farm model
   * State:
-    1. Farms (polygons)
-    2. Farmers (agents)
-    3. Distributors (agents)
-    4. Tax policy (parameter)
+    2. Families (farm owners) (agents)
+      * bank_balance
+      * resource (that they farm)
+    4. Tax/Subsidy policy (interventions) (parameter)
+    1. Farms (polygons) (_maybe_)
   * Output:
-    1. Some estimate of GDP
-    2. Carbon?
+    2. Resource Plots
+      * Carbon
+      * GDP
+      * DurumWheat
+2. Aesthetically pleasing
+3. A single user
+5. Multiple scenarios
+
+**Scrapped:**
+    3. Distributors (agents)
+
 1. Able to trivially open up a web browser and see the farm model -- basically NetLogo but better
   * so we need data-binds or at leastt o fake them
-2. Aesthetically pleasing
-3. A single user and a single scenario
+
 
 ## V0.1 (due date: _______ 2014, the first [Social Innovation Lab](http://sig.uwaterloo.ca/feature/social-innovation-labs) of the year)
 
