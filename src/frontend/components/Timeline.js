@@ -8,7 +8,7 @@ Crafty.c('AddScenario', {
     this.requires('2D, Canvas, Mouse, plusButton');
 
     // position the button at the bottom of the page
-    var positionY = Crafty.viewport.height-50-20;
+    var positionY = Crafty.viewport.height-110;
 
     this.attr({x: 20, y: positionY, w: 100, h: 100})
         // to create a new scenario/timeline, press this button
@@ -87,7 +87,7 @@ Crafty.c('InterventionDialogue', {
     $("#dialogue").dialog({
       buttons: [
         {
-          text: "Create",
+          text: "Save",
           click: function() {
             $(this).dialog("destroy");
             // TODO send code to backend to create an intervention
