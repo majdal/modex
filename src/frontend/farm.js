@@ -22,7 +22,7 @@ var farm = function($) {
 
             // init Crafty
             Crafty.init(this.config.width, this.config.height);
-            //Crafty.canvas.init();
+            Crafty.canvas.init();
 
             
 
@@ -78,7 +78,7 @@ var farm = function($) {
 
 
                 //Set End Goals Screen
-                happinessIcon : [40, 156, 20, 20],
+                happinessIcon : [40, 156, 16, 20],
                 cornIcon : [20, 156, 20, 20],
                 gdpIcon : [0, 156, 20, 20],
                 loadgText : [106, 90, 50, 20],
@@ -92,18 +92,22 @@ var farm = function($) {
             });
 
 
-            // load map sprite
-            Crafty.sprite(1, "images/map_sprite.png", {
-                mapImage : [0, 0, 1280, 270]
-            });
+           //Load game screen sprite sheet
+           Crafty.sprite(5, "images/game_sprite.png", {
+
+            pauseBtn : [0, 0, 16, 11],
+            playBtn : [16, 0, 16, 11],
+
+
+           });
 
 
             // load game scene sprite
-            Crafty.sprite(1, "images/game_components.png", {
-                plusButton : [10, 10, 50, 50],
-                timelineBackground : [70, 20, 500, 25],
-                taxMark : [70, 20, 500, 25],
-                subsidyMark : [70, 20, 500, 25],
+            Crafty.sprite(5, "images/game_components.png", {
+                plusButton : [0, 0, 19, 19],
+                timelineBackground : [20, 3, 138, 5],
+                taxMark : [4, 4, 100, 5],
+                subsidyMark : [35, 4, 100, 5],
             });
 
 
