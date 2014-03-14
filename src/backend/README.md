@@ -74,10 +74,20 @@ The hostname MUST be the same as the site you are on due to the same-origin poli
  * In particular, when debugging, you should first open up the server in your webbrowser (autobahn gives a useful response if you hit it with http:// instead of ws://, so if your websocket is supposed to be ws://localhost:9242/ws, then first open http://localhost:9242/ws before trying to debug stuff)
 
 This one-liner lets you test if a websocket is listening:
- ```
+```
   s = new WebSocket("ws://localhost:8080"); s.onmessage = function(d) { console.log("recv: " + d.data); }; setTimeout(function() { s.send("butts")},1000);
 ```
   (the setTimeout is because the websocket needs a moment to wake up and handshake; better would be 'onopen'... but with this method you get an error instead of a silent an inexplicable hang)
+
+## GIS Notes
+
+"Shapefiles" are actually 4 (or sometimes 5 or 6) separate files all with the same name but different extensions in a folder. However, most tools can deal with the same files zipped up.
+```
+cd location_of_shapefile
+zip myshapefile.zip *
+````
+
+```myshapefile.zip``` is now loadable into most GIS tools (try it in Arc or QGIS)
 
 ## Gotchas
 
