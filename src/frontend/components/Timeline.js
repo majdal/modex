@@ -47,7 +47,7 @@ Crafty.c('Timeline', {
     var positionY = Crafty.viewport.height - this.scenarioCount*10 - this.scenarioCount*25;
     //              viewport height        - padding               - timeline height
     this.positionY = positionY;
-    this.attr({x: 90, y: positionY, w: 700, h: 25});
+    this.attr({x: 150, y: positionY, w: 700, h: 25});
   }
 });
 
