@@ -102,6 +102,15 @@ var farm = function($) {
            });
 
 
+            // load game scene sprite
+            Crafty.sprite(5, "images/game_components.png", {
+                plusButton : [0, 0, 19, 19],
+                timelineBackground : [20, 3, 138, 5],
+                taxMark : [4, 4, 100, 5],
+                subsidyMark : [35, 4, 100, 5],
+            });
+
+
 
 
 

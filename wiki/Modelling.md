@@ -48,6 +48,18 @@ Since farmers are assumed (**by who?**) to be price-takers (i.e. agents who are 
 
 
 
+-------------------
+
+# Coarse Graining of Models
+
+It is typical that a first pass model can be very detailed and very slow, and that in working with it pieces of it are discovered to be simplifiable. We call this _coarse graining_, because a "microscopic" model has "macroscopic" pieces.
+
+A model is "simplifiable" if it can be replaced and still get "the same" outputs (what "the same" is is another huge topic). For example, a random-walk generating weather temperatures could be replaced by a sin function plus some gaussian noise. If the only output of an agent model is some lines ("count of sheep population", "count of wolf population") then it could perhaps be replaced by some ODEs solved numerically (or even symbolically!).
+
+(Modelica)[http://openmodelica.org] has some interesting ideas on plugging submodels together, which we can steal for great justice.
+
+Historically, coarse-graining has been the sugardaddy of western science. Science was all about discovering immutable, eternal laws, like "the earth orbits in an ellipse plus or minus some noise", though now there's more of a recognition that in many systems--especially complex ones--exceptions are the norm.
+
 ### References
 
 (also very disorganized. there are themes here, but they need to be brought out -nick)

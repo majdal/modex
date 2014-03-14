@@ -29,8 +29,20 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 
 ## Network
 
+
 (idea: check out Sheelagh Carpendale's transmogrification and Visits work)
-For networks that are actually trees: [egonetwork pandemic visualization](http://rocs.hu-berlin.de/projects/hidden/index.html)
+
+### Trees
+
+Trees are special cases of networks: they have no cycles; often you designate one node the "root". have 
+
+
+
+Root-centric visualizations
+
+* [egonetwork pandemic visualization](http://rocs.hu-berlin.de/projects/hidden/index.html)
+* [dendrograms](http://bl.ocks.org/mbostock/2429963)
+* 
 
 ## Inspiration
 * http://visual.ly
