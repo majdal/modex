@@ -87,7 +87,7 @@ cd location_of_shapefile
 zip myshapefile.zip *
 ````
 
-```myshapefile.zip``` is now loadable into most GIS tools (try it in Arc or QGIS)
+```myshapefile.zip``` is now loadable into most GIS tools (try it in Arc or QGIS). The one tool which doesn't like zipped shapefiles is, frustratingly, GDAL. GDAL can handle folder shapefiles though using this definition "a shapefile is a folder with a .shp file inside of it"
 
 ## Gotchas
 
