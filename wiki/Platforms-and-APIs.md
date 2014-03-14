@@ -146,10 +146,12 @@ Webby stuff:
 * [nbviewer](http://nbviewer.ipython.org/) which lets scientific people show off their [ipython notebooks](http://ipython.org/notebook.html), like [this one](http://nbviewer.ipython.org/urls/raw2.github.com/damontallen/Orbitals/master/Hydrogen%20Orbitals%20-%20working.ipynb)
 
 ### Dataset Management
+
 * http://dat-data.com 
 * http://datahub.io
 * (there's at least two other dataset-version-control/archival sites; what are they?)
 * https://exversion.com
+* [FigShare](http://figshare.com/)
 
 ### Citation Management
 * http://www.zotero.org/
