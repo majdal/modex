@@ -29,7 +29,7 @@ Crafty.c('AddScenario', {
 Crafty.c('Timeline', {
   scenarioCount: 1, // the ordinal number of the scenario
   scenarioName: '',
-  positionY: 0,
+  positionY: 0, // keeping track  of the y position of the timeline, for reference 
 
   init: function() {
     this.requires('2D, Canvas, Color, Mouse, timelineBackground');
@@ -64,7 +64,23 @@ Crafty.c('Tax', {
 
   tax: function(xCoord, yCoord, year) {
     this.year = year;
-    this.attr({x: xCoord, y: yCoord, w: 3, h: 25})
+    this.attr({x: xCoord-2, y: yCoord, w: 4, h: 25})
         .color('red');
+  }
+});
+
+Crafty.c('InterventionDialogue', {
+  _element: 'dialogue',
+  
+  init: function() {
+    this.requires('2D, DOM, Color, Mouse');
+  },
+
+  interventionDialogue: function(){
+    this.attr({x: 100, y:100, w: 300, h: 200})
+        .css({'background-color': 'red',
+              'color': 'black'
+        });
+
   }
 });
