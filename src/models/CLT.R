@@ -14,6 +14,12 @@ normal = function(n) { rnorm(n, NORMAL.VARIANCE, NORMAL.MEAN) }
 # Model Parameters
 # 
 
-dist = "binomial"
+dist = "binomial" #which distribution is currently being sampled is a 
+                  # effects: if the distributions keep changing then how does that change the CLT?
 NORMAL.VARIANCE = 7
 NORMAL.MEAN = -3
+
+
+## Model Runner
+
+hist(mean

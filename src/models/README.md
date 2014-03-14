@@ -86,3 +86,12 @@ Features:
 
 **[SLUCE](http://sluce.wici.ca)**
 **[FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel)**
+
+**Conversion Events**: religious, tech, or other subculture
+  * See the Lofland/Stark model, which is the dominant theory in Cult & New Religious Movement research
+  * Related cite: Lorne L. Dawson. Comprehending Cults: The Sociology of New Religious Movements. Toronto: Oxford University Press. 1998
+  * main mechanisms to test: a) internal strain, b) social networks c) 
+
+**Thought Communities**: (related to the cult model)
+  * the dynamics are driven (?) by the need to maintain ones own worldview
+  * intution: the system dynamics when two thought communities bump up against each other are metastable (see "An explanation of 1/f noise" for def'n of _metastable_)
