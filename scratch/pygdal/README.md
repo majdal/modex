@@ -6,5 +6,6 @@ As it is, it is not very pythonic:
  errors are noted as "None" + asking for what the error was,
  loops must be written by index (there's no iterators, despite the datastructures that GDAL deals with largely being lists)
  properties are accessed by layer.gethtepropertysomethingiforgetthenameofthismethod("name") instead of layer["name"] or layer.name
+ as far as I can tell, it ~doesn't~ support zipped shapefiles which is just unnecessary
  
 We can do better.
