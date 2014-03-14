@@ -8,7 +8,7 @@ Crafty.c('AddScenario', {
     this.requires('2D, Canvas, Mouse, plusButton');
 
     // position the button at the bottom of the page
-    var positionY = Crafty.viewport.height-50-20;
+    var positionY = Crafty.viewport.height-110;
 
     this.attr({x: 20, y: positionY, w: 100, h: 100})
         // to create a new scenario/timeline, press this button
@@ -47,7 +47,7 @@ Crafty.c('Timeline', {
     var positionY = Crafty.viewport.height - this.scenarioCount*10 - this.scenarioCount*25;
     //              viewport height        - padding               - timeline height
     this.positionY = positionY;
-    this.attr({x: 90, y: positionY, w: 700, h: 25});
+    this.attr({x: 150, y: positionY, w: 700, h: 25});
   }
 });
 
@@ -66,12 +66,11 @@ Crafty.c('Tax', {
     this.year = year;
     this.attr({x: xCoord-2, y: yCoord, w: 4, h: 25})
         .color('red');
+    Crafty.e('InterventionDialogue').interventionDialogue();
   }
 });
 
 Crafty.c('InterventionDialogue', {
-  _element: 'dialogue',
-  
   init: function() {
     this.requires('2D, DOM, Color, Mouse');
   },
@@ -81,6 +80,47 @@ Crafty.c('InterventionDialogue', {
         .css({'background-color': 'red',
               'color': 'black'
         });
+    this.createDialogue();
+  },
 
+  createDialogue: function() {
+    $("#dialogue").dialog({
+      buttons: [
+        {
+          text: "Save",
+          click: function() {
+            $(this).dialog("destroy");
+            // TODO send code to backend to create an intervention
+          }
+        },        
+        {
+          text: "Delete",
+          click: function() {
+            $(this).dialog("destroy");
+            // TODO send code to backend to delete this particular intervention
+          }
+        },
+      ]
+    });
+    $('#intervention_type').change(function(){
+      var interventionType = $(this).val();
+      if (interventionType == 'tax') {
+        $('#intervention_unit').text('%');        
+      } else if (interventionType == 'subsidy') {
+        // this should change to $ and change the slider to an <input> with numbers only 
+        $('#intervention_unit').text('%');
+      }
+    });
+    $("#tax_slider").slider({
+      change: function(event, ui) {
+        $('#intervention_value').text(ui.value);
+        // ui.value is a value between 0 and 100% - representing the possible tax value
+      }
+    });
+  },
+
+  destroyDialogue: function () {
+    $("#dialogue").dialog("destroy");
+    $("#tax_slider").slider("destory");
   }
 });
