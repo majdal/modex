@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <script type="text/javascript" src="http://127.0.0.1:8080/assets/libs/ol.js"></script>
+   </head>
+   <style media="screen" type="text/css">
+     #map {
+       width: 1000px;
+       height: 1000px;
+     }
+   </style>
+   <body>
+      <div id="map"></div>
+
+      <script type="text/javascript">
+        // The layers
+        var watercolor = new ol.layer.Tile({
+               source: new ol.source.Stamen({
+                 layer: 'watercolor'
+               })
+             });
+
+        // lables layer, currently not used
+        var lables = new ol.layer.Tile({
+               source: new ol.source.Stamen({
+                 layer: 'terrain-labels'
+               })
+             });
+
+         var map = new ol.Map({
+           layers: [watercolor, ],
+           //renderer: exampleNS.getRendererFromQueryString(),
+           target: 'map',
+           view: new ol.View2D({
+             center: ol.proj.transform([-80.5, 43.45], 'EPSG:4326', 'EPSG:3857'),
+             zoom: 7
+           })
+         });
+      </script>
+   </body>
+ </html>

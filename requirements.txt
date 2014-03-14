@@ -1,18 +1,5 @@
-Jinja2==2.7.1
-MarkupSafe==0.18
--e git+https://github.com/tcstewar/model-explorer.git@eca6d4f89fd37d252a1dfa5ad5e515b4657b3c08#egg=Model_Explorer-dev
-Twisted==13.2.0
-Werkzeug==0.9.4
-autobahn==0.8.1
-autobahntestsuite==0.5.6
-distribute==0.7.3
-garlicsim==0.6.3
-garlicsim-lib==0.6.3
-ipdb==0.8
-ipython==1.1.0
-klein==0.2.1
--e git+https://github.com/majdal/lightbulb.git@3c01c724552d081437cb0a0762b9d7505db9d56a#egg=lightbulb-dev
-mock==1.0.1
-msgpack-python==0.4.0
-numpy==1.8.0
-zope.interface==4.0.5
+Twisted>=13.2.0
+autobahn>=0.8.1
+autobahntestsuite>=0.5.6
+msgpack-python>=0.4.0
+

@@ -69,7 +69,8 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.util import sleep
 from autobahn.twisted.wamp import ApplicationSession, ApplicationSessionFactory
 
-
+import load_sim # this collects the data
+sim = load_sim.sim
 
 class ModelServer(ApplicationSession):
    """
@@ -139,16 +140,12 @@ class JsonDataServer(WebSocketServerProtocol):
       #I want to speak dynamically: so, as data comes in, push it to the client
       # but I don't see how to do this?? what thread am I running on???
       # ah!
-      dat = pathjoin(PROJECT_ROOT, "assets", "data", "static_lightbulbs.tsv")
-      dat = open(dat)
-      dat = csv.reader(dat, dialect=csv.excel_tab)
-      header = next(dat)
-      print("read header:", header)
       
+
       # this could probably be cleaner
       def feed():  #a coroutine, meant to be pumped by the twisted event loop
-        for row in dat:
-          J = dict(zip(header, row))
+        for i in xrange(sim.years):
+          J = sim.step()
           print "pushing", J, "to the client"
           self.speak(J)
           yield
