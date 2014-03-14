@@ -7,7 +7,7 @@ Crafty.scene("intro", function() {
 
     // set splashscreen timeout
     setTimeout(function() {
-        Crafty.scene("menu");
+        Crafty.scene("game");
     }, 500);
 
 });
