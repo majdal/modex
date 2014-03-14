@@ -6,6 +6,9 @@
    <!-- libraries -->
    <!-- TODO: investigate using require.js or some other js dependency manager -->
    <script type="text/javascript" src="/assets/libs/jquery.js"></script>
+   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+   <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
    <script type="text/javascript" src="/assets/libs/json2.js"></script>
 
    <script type="text/javascript" src="/assets/libs/autobahn.js"></script>
@@ -45,6 +48,17 @@
 
 </head>
   <div id="map"></div>
+  <div id="dialogue" title="Create an intervention">
+      <select id="intervention_type">
+        <option value="" disabled="disabled" selected="selected">Select an intervention type</option>
+        <option value="tax">Tax</option>
+        <option value="subsidy">Subsidy</option>
+      </select>
+      <div id="tax_slider"></div>
+      <span id="intervention_value">_</span>
+      <span id="intervention_unit">%</span>
+
+  </div>
   <script type="text/javascript">
     less = {
       logLevel: 1,
