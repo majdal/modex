@@ -34,7 +34,7 @@ Case: looking for path-dependency in complex systems
 
 # Lofty Goals
 
-"encourage policy makers to use data and models in their decisions"
+Make data and models accessible to people, especially policy makers, in their decisions.
 
 "help people become data literate" ((XXX this requires ourselves to be data literate too, and requires a good dose of [tutorials](Media.md)))
 
