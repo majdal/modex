@@ -22,7 +22,8 @@ var farms = new ol.layer.Vector({
     return [new ol.style.Style({
   //image: new ol.style.Circle({
   fill: new ol.style.Fill({
-    color: 'hsla(100, 50%,30%, .5)' //this would be better if colour was by MAP_CODE
+    //TODO: look at feature and colour accordingly; for example: change hue by wealth and alpha by activity or something
+    color: 'hsla(100, 50%,30%, .5)'
   }),
   stroke: new ol.style.Stroke({
     color: 'hsla(290, 50%, 50%, .3)',
