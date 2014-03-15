@@ -5,41 +5,36 @@
 import sys
 from os.path import dirname, abspath, join as pathjoin
 
-#'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
-PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the project root is two levels up from the directory the server is
+import csv
+import json
+
 
 from twisted.internet import reactor
 from twisted.python import log
 from twisted.web.server import Site
 from twisted.web.static import File
-
-# autobahn changed their API between (which happens to be within the last month of so as of this commit)
-# they added asyncio (which is py3.4-native) as an alternate option to twisted (which is py2-native),
-# and hence moved moved classes from autobahn.* to autobahn.twisted.*
-# evidence:
-#  https://raw.github.com/tavendo/AutobahnPython/v0.7.0/examples/twisted/websocket/echo/server.py
-#   ~~ the change happened here, now  ~~
-#  https://raw.github.com/tavendo/AutobahnPython/v0.6.5/examples/websocket/echo/server.py
-#  https://raw.github.com/tavendo/AutobahnPython/v0.6.4/examples/websocket/echo/server.py
-#  https://raw.github.com/tavendo/AutobahnPython/v0.5.14/examples/websocket/echo/server.py
-#  https://raw.github.com/tavendo/AutobahnPython/e1dae070e67a9361f14beba775c66961e06d43ff/demo/echo/echo_server.py
+from twisted.internet.defer import inlineCallbacks
 
 from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
 from autobahn.twisted.resource import WebSocketResource
 
-import json
 
+
+
+
+#'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
+PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the project root is two levels up from the directory the server is
+
+# models come after everything because in the Real System(TM)
+# models will be dynamically loaded somehow
+from models.eutopia.eutopia import Eutopia
+
+
+
+# NB:
 # we are trying to set up a producer-consumer system, and twisted has this built in:
 # https://twistedmatrix.com/documents/12.2.0/core/howto/producers.html
 # ah, simpler: reactor.callLater
-
-import csv
-
-from twisted.internet.defer import inlineCallbacks
-from autobahn.twisted.util import sleep
-
-
-from models.eutopia.eutopia import Eutopia
 
     
 #TODO(kousu): move this out to scratch/ for reference on how to host a web socket server using AutobahnPython
