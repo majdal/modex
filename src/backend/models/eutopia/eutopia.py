@@ -188,6 +188,8 @@ class Eutopia:
 
 
 if __name__=='__main__':
+    n = 10 #number of steps to run
+           #TODO: make this a command line param
     
     log = []
     eutopia = Eutopia(log)
@@ -211,7 +213,7 @@ if __name__=='__main__':
     eutopia.intervene(intervention.NewActivityIntervention(7, 'magic', magic_activity))
     
     #run the model
-    for i in range(17):
+    for i in range(n):
         next(eutopia)
     
     activities = [state for time, state in log]
@@ -226,5 +228,5 @@ if __name__=='__main__':
     #import pylab
     #pylab.plot(range(len(activities)), [a.get('durumWheatConventional',0) for a in activities])
     #pylab.plot(range(len(activities)), [a.get('durumWheatGreen',0) for a in activities])
-    #pylab.plot(range(len(activities)git ), [a.get('magic',0) for a in activities])
+    #pylab.plot(range(len(activities)), [a.get('magic',0) for a in activities])
     #pylab.show()
