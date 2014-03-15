@@ -43,7 +43,7 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.util import sleep
 
 
-
+from models.eutopia.eutopia import Eutopia
 
     
 #TODO(kousu): move this out to scratch/ for reference on how to host a web socket server using AutobahnPython
@@ -67,7 +67,7 @@ class CtlProtocol(WebSocketServerProtocol):
    
 
 
-class JsonDataServer(WebSocketServerProtocol):
+class ModelDataServer(WebSocketServerProtocol):
    def onConnect(self, request):
       print("Client connecting: {}".format(request.peer))
 
@@ -129,11 +129,14 @@ if __name__ == '__main__':
    
    if debug:
      print "Starting server in", PROJECT_ROOT
-
+   
+   model = Eutopia([]) #the [] becomes model.log
+   
    data_endpoint = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
                                     debugCodePaths = True)
-   data_endpoint.protocol = JsonDataServer
+   data_endpoint.protocol = ModelDataServer
+   data_endpoint.model = model
    #data_endpoint.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported   
    
    ctl_endpoint = WebSocketServerFactory("ws://localhost:8080",
