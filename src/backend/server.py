@@ -75,8 +75,8 @@ class ModelDataServer(WebSocketServerProtocol):
               self.sendMessage(json.dumps(J))
               self.time+=1
       
-      t = task.LoopingCall(push)
-      t.start(0.6)
+      self.push = task.LoopingCall(push)
+      self.push.start(0.6)
 
 
 #######################
