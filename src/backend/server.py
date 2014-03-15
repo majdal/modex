@@ -75,7 +75,17 @@ class ModelDataServer(WebSocketServerProtocol):
       print("read header:", header)
       
       # this could probably be cleaner
-      def feed():  #a coroutine, meant to be pumped by the twisted event loop
+      t = self.factory.model.time
+      model = self.factory.model
+      def feed(t=t): #t=t corrects the ever-pressing "local variable t referenced before assignment"
+          while True:
+              if t < len(model.log):                 
+                  J = model.log[t]
+                  print "pushing", J, "to the client"
+                  self.sendMessage(json.dumps(J))
+                  t+=1
+              yield
+      def feed_():  #a coroutine, meant to be pumped by the twisted event loop
         for row in dat:
           J = dict(zip(header, row))
           print "pushing", J, "to the client"
