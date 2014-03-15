@@ -92,22 +92,17 @@ var farm = function($) {
             });
 
 
-           //Load game screen sprite sheet
-           Crafty.sprite(5, "images/game_sprite.png", {
-
-            pauseBtn : [0, 0, 16, 11],
-            playBtn : [16, 0, 16, 11],
-
-
-           });
 
 
             // load game scene sprite
             Crafty.sprite(5, "images/game_components.png", {
-                plusButton : [0, 0, 19, 19],
-                timelineBackground : [20, 3, 138, 5],
+                plusButton : [0, 0, 20, 20],
+                timelineBackground : [20, 12, 140, 8],
                 taxMark : [4, 4, 100, 5],
                 subsidyMark : [35, 4, 100, 5],
+                playButton: [20, 20, 20, 20],
+                pauseButton : [0, 20, 20, 20],
+
             });
 
 
