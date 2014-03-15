@@ -18,7 +18,23 @@ var styleArray = [new ol.style.Style({
   })
 })];
 
-var pointStyle = [new ol.style.Style({
+
+var countries = new ol.layer.Vector({
+  source: new ol.source.GeoJSON({
+    url: 'assets/maps/countries.geojson'
+  }),
+  
+  styleFunction: function(feature, resolution) {
+    return styleArray;
+  }
+});
+
+var meat = new ol.layer.Vector({
+  source: new ol.source.GeoJSON({
+    url: '/assets/maps/meatplants.geojson'
+  }),
+  styleFunction: function(feature, resolution) {
+    return [new ol.style.Style({
     image: new ol.style.Circle({
       radius: 3,
       fill: new ol.style.Fill({color: 'red'}),
@@ -36,27 +52,6 @@ var pointStyle = [new ol.style.Style({
 
   })]
 
-styleArray2 = pointStyle;
-
-
-
-
-var countries = new ol.layer.Vector({
-  source: new ol.source.GeoJSON({
-    url: 'assets/maps/countries.geojson'
-  }),
-  
-  styleFunction: function(feature, resolution) {
-    return styleArray;
-  }
-});
-
-var meat = new ol.layer.Vector({
-  source: new ol.source.GeoJSON({
-    url: '/assets/maps/meatplants.geojson'
-  }),
-  styleFunction: function(feature, resolution) {
-    return styleArray2;
   }
 
 });
