@@ -40,7 +40,7 @@ $(function() {
 			.tickFormat(function(d) { return d3.time.format('%b %d, %Y')(new Date(d)) })
 			;
 		chart.yAxis
-			.axisLabel("Temperature ((ºF)")
+			.axisLabel("Quantity")
 			.tickFormat(d3.format(',.1f'))
 			;
 			
