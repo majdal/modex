@@ -2,6 +2,7 @@
 # this program requires python2 because GDAL requires python2
 
 import os
+from itertools import izip
 
 from pygdal import *
 
@@ -106,6 +107,11 @@ class FarmFamily:
 
 
 class Eutopia:
+    "The Eutopic World"
+    "The main simulation class"
+    ""
+    "There is an API here for controlling and querying the model state"
+
     def __init__(self):
         try:
             shapefile = Shapefile(MAP_SHAPEFILE)
@@ -121,6 +127,7 @@ class Eutopia:
         # modelling begins here
         self.time = 0
         self.activities = activity.Activities()
+        self.interventions = []
 
         #XXX should we write this as literally constructing a new Layer?
         # for now, a List is alright, but it's worth thinking about doing that and about what pygdal requires to support doing that
@@ -140,15 +147,23 @@ class Eutopia:
         return self.map.dumps()
 
     def step(self):
+        for intervention in self.interventions:
+            if self.time >= intervention.time:
+                intervention.apply(self, self.time)
+        
         for family in self.families:
             family.step()
         self.time += 1
+        # log data here
+    
+    def intervene(self, intervention):
+        self.interventions.append(intervention)
 
     def __iter__(self):
+        "convenience method"
         while True:
             self.step()
-            # log data here
-            yield
+            yield self.get_activity_count() #hardcode model output, for now
 
     def get_activity_count(self):
         activities = {}
@@ -163,12 +178,11 @@ class Eutopia:
 
 
 if __name__=='__main__':
-
-
+    
     eutopia = Eutopia()
 
-    interventions = [intervention.PriceIntervention(5, 'duramSeed', 10),
-                     intervention.PriceIntervention(7, 'duramSeedOrganic', 0.001)]
+    eutopia.intervene(intervention.PriceIntervention(5, 'duramSeed', 10))
+    eutopia.intervene(intervention.PriceIntervention(7, 'duramSeedOrganic', 0.001))
 
     magic_activity = {
         'equipment': ['tractor', 'wheelbarrow'],
@@ -183,25 +197,13 @@ if __name__=='__main__':
             'dolphin': -87,
             }
         }
-    interventions.append(intervention.NewActivityIntervention(7, 'magic', magic_activity))
+    eutopia.intervene(intervention.NewActivityIntervention(7, 'magic', magic_activity))
     #TODO: make 'interventions' an API of Eutopia
     # and the bit below too:
-
-    time = 0
-    def step():
-        global time
-        for intervention in interventions:
-            if time >= intervention.time:
-                intervention.apply(eutopia, time)
-        time += 1
-
-        eutopia.step()
-
-
+    
     activities = []
-    for i in range(10):
-        step()
-        activities.append(eutopia.get_activity_count())
+    for i, state in izip(range(10), eutopia):
+        activities.append(state)
 
     print activities
 
@@ -212,7 +214,7 @@ if __name__=='__main__':
 
     # optional: display summary of model outputs
     #import pylab
-    #pylab.plot(range(10), [a.get('durumWheatConventional',0) for a in activities])
-    #pylab.plot(range(10), [a.get('durumWheatGreen',0) for a in activities])
-    #pylab.plot(range(10), [a.get('magic',0) for a in activities])
+    #pylab.plot(range(len(activities)), [a.get('durumWheatConventional',0) for a in activities])
+    #pylab.plot(range(len(activities)), [a.get('durumWheatGreen',0) for a in activities])
+    #pylab.plot(range(len(activities)), [a.get('magic',0) for a in activities])
     #pylab.show()
