@@ -59,17 +59,15 @@ $(function() {
     data_socket.onmessage = function(d) {
       //console.log("received data from (plain) websocket:", d)
       d = JSON.parse(d.data);
-      
-      d.date = parseDate(d.date);
+      var time = d[0]
+      var series = d[1]
+      //d.date = parseDate(d.date);
       
       //loop through and format data into line graph data for nv
-      for (key in d){
-      	//date is always used as x value
-      	if( key != "date"){
-      		addData(key, d.date, d[key]);
-      	}
-      }
-      
+      for(key in series) {
+        console.log("adding", time, [series[key]])
+	addData(key, time, [series[key]]);
+      }      
       
       svg // update the chart with the data
         .datum(scope.data)
