@@ -5,11 +5,10 @@
 import sys
 from os.path import dirname, abspath, join as pathjoin
 
-import csv
 import json
 
-
 from twisted.internet import reactor
+from twisted.internet import task
 from twisted.python import log
 from twisted.web.server import Site
 from twisted.web.static import File
@@ -18,25 +17,27 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
 from autobahn.twisted.resource import WebSocketResource
 
-
-
-
-
 #'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
 PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the project root is two levels up from the directory the server is
 
-# models come after everything because in the Real System(TM)
-# models will be dynamically loaded somehow
-from models.eutopia.eutopia import Eutopia
+#########################
+## Models
 
+# though our single model is run via python import
+# in the Real System(TM) models will be dynamically
+# loaded somehow, so pretend you don't see this.
+from models.eutopia.eutopia import Eutopia
 
 
 # NB:
 # we are trying to set up a producer-consumer system, and twisted has this built in:
 # https://twistedmatrix.com/documents/12.2.0/core/howto/producers.html
 # ah, simpler: reactor.callLater
+# useful: <https://twistedmatrix.com/documents/current/core/howto/time.html>
 
-    
+######################
+## Twisted Components
+
 #TODO(kousu): move this out to scratch/ for reference on how to host a web socket server using AutobahnPython
 class CtlProtocol(WebSocketServerProtocol):
    def onConnect(self, request):
@@ -55,48 +56,29 @@ class CtlProtocol(WebSocketServerProtocol):
 
    def onClose(self, wasClean, code, reason):
       print("WebSocket connection closed: {}".format(reason))
-   
-
 
 class ModelDataServer(WebSocketServerProtocol):
+   """
+   a connection serving timeseries data from Eutopia.
+   self.factory.model is Eutopia and is shared amongst
+   all "Viewer" ModelDataServers.
+   """
    def onOpen(self):
-      #print("WebSocket connection open.")
-      
-      #I want to speak dynamically: so, as data comes in, push it to the client
-      # but I don't see how to do this?? what thread am I running on???
-      # ah!
-      dat = pathjoin(PROJECT_ROOT, "assets", "data", "static_lightbulbs.tsv")
-      dat = open(dat)
-      dat = csv.reader(dat, dialect=csv.excel_tab)
-      header = next(dat)
-      print("read header:", header)
-      
-      # this could probably be cleaner
-      t = self.factory.model.time
+      self.time = self.factory.model.time #stash the time we started watching the model at
       model = self.factory.model
-      def feed(t=t): #t=t corrects the ever-pressing "local variable t referenced before assignment"
-          while True:
-              if t < len(model.log):                 
-                  J = model.log[t]
-                  print "pushing", J, "to the client"
-                  self.sendMessage(json.dumps(J))
-                  t+=1
-              yield
-      def feed_():  #a coroutine, meant to be pumped by the twisted event loop
-        for row in dat:
-          J = dict(zip(header, row))
-          print "pushing", J, "to the client"
-          self.sendMessage(json.dumps(J))
-          yield
-      g = feed()
+      def push():
+          if self.time < len(model.log):                 
+              J = model.log[self.time]
+              print "pushing", J, "to", self.peer #debug
+              self.sendMessage(json.dumps(J))
+              self.time+=1
       
-      def loop():  #wrap the coroutine in a callback that causes a loop setTimeout()-style playing nice with Twisted's loop (there's probably a cleaner way to do this, but shh)
-        try:
-          next(g)
-          reactor.callLater(.3, loop)
-        except StopIteration:
-          pass
-      loop()  #kick it off      
+      t = task.LoopingCall(push)
+      t.start(0.6)
+
+
+#######################
+## Main
 
 if __name__ == '__main__':
 
@@ -110,6 +92,8 @@ if __name__ == '__main__':
      print "Starting server in", PROJECT_ROOT
    
    model = Eutopia([]) #the [] becomes model.log
+   poke_model = task.LoopingCall(lambda: next(model))
+   poke_model.start(.05)
    
    data_endpoint = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
