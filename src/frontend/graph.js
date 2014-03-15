@@ -28,7 +28,11 @@ $(function() {
 	nv.addGraph(function() {
 		chart = nv.models.lineChart()
 		.options({
-			margin: {top: 20, right: 350, bottom: 30, left: 50},
+                        width: width,    //it is super awkward that we have to define these; isn't d3 supposed to just figure this out?
+                        height: height,  //it might even be doing that, but it seems (try clicking the nvd3 legends on and off and watch
+                                         //the inspector---it resets the <rect> width exactly when you click) nvd3 has other plans in mind
+                        margin: {top: 10, right: 10, bottom: 15, left: 10}, //all these pixel measurements are hurtful
+                        
 			showXAxis: true,
 			showYAxis: true,
 			showLegend: true,
@@ -48,7 +52,7 @@ $(function() {
                                            		//  location (rather than i)
                      
         
-        nv.utils.windowResize(chart.update);
+        nv.utils.windowResize(chart.update); //what does this do? do we need this?
 
   		return chart;
 	})
