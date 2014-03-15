@@ -53,20 +53,20 @@ Crafty.c('Timeline', {
 
 
 Crafty.c('Tax', {
-  year: 0,
+  year: 0, // year that the tax is implemented 
 
   init: function() {
     this.requires('2D, Canvas, Color, Mouse');
     this.bind('Click', function(e){
-          console.log(e);
+          Crafty.e('InterventionDialogue').interventionDialogue(this);
         });
   }, 
 
   tax: function(xCoord, yCoord, year) {
     this.year = year;
-    this.attr({x: xCoord-2, y: yCoord, w: 4, h: 25})
+    this.attr({x: xCoord-2, y: yCoord, w: 4, h: 25}) // put a little red tick mark on the timeline wherever the click is. 
         .color('red');
-    Crafty.e('InterventionDialogue').interventionDialogue();
+    Crafty.e('InterventionDialogue').interventionDialogue(this);
   }
 });
 
@@ -75,15 +75,16 @@ Crafty.c('InterventionDialogue', {
     this.requires('2D, DOM, Color, Mouse');
   },
 
-  interventionDialogue: function(){
+  interventionDialogue: function(intervention) {
+    this.intervention = intervention;
     this.attr({x: 100, y:100, w: 300, h: 200})
         .css({'background-color': 'red',
               'color': 'black'
         });
-    this.createDialogue();
+    this.createDialogue(intervention);
   },
 
-  createDialogue: function() {
+  createDialogue: function(intervention) {
     $("#dialogue").dialog({
       buttons: [
         {
@@ -98,6 +99,7 @@ Crafty.c('InterventionDialogue', {
           click: function() {
             $(this).dialog("destroy");
             // TODO send code to backend to delete this particular intervention
+            intervention.destroy();
           }
         },
       ]
