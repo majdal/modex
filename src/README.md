@@ -86,6 +86,7 @@ The choice of which method: virtual or system, is up to you. You will probably h
 You will probably also want **_these tools_** to make dealing with data easier:
 * A spreadsheet. Excel, [LibreOffice Calc](http://www.libreoffice.org/download). You need to be able to work with and debug tabular data. You should be able to do reliable preprocessing of it (sums, averages, subsets) and plotting. (if you are comfortable doing this in matlab, R, or scipy, then by all means stick with what you know).
 * A GIS. You can get [ArcGIS](http://esri.com) [from the school](https://uwaterloo.ca/information-systems-technology/services/software-students/microsoft-office-students) at a discount, or you can install [QGIS](http://qgis.org/) which is frankly perhaps better
+* [topojson](https://github.com/mbostock/topojson/wiki/Installation) comes in handy (make sure to remember `-g` when installing!)
 * Some web developer tools (see [frontend/README.md](frontend/) for suggestions)
 * [IPython](http://ipython.org), which gives a python command shell _with tab-completion_, and Mathematica-style [notebooks](http://nbviewer.ipython.org).
 
@@ -124,7 +125,7 @@ but it's tricky. Some gotchas with qgis:
 
 ## Keeping Copyrighted Data Out
 
-While the Open Data movement is getting underway, not everything is freely available yet. Several of our datasets are not. It would be disastrous (not the end of the world, but pretty close) if we accidentally uploaded a copyrighted dataset to github--forcing us to delete the repositories to wipe any trace of the bad commit and recreate them from an older check in.
+While the Open Data movement is getting underway, not everything is freely available yet. Several of our datasets are not. It would be disastrous (not the end of the world, but pretty close) if we accidentally uploaded a copyrighted dataset to github--forcing us to [delete the repositories to wipe any trace of the bad commit](https://help.github.com/articles/remove-sensitive-data) and recreate them from an older check in.
 
 The convention for dealing with this problem in this project **is as follows**
 
