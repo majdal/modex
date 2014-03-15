@@ -125,7 +125,7 @@ but it's tricky. Some gotchas with qgis:
 
 ## Keeping Copyrighted Data Out
 
-While the Open Data movement is getting underway, not everything is freely available yet. Several of our datasets are not. It would be disastrous (not the end of the world, but pretty close) if we accidentally uploaded a copyrighted dataset to github--forcing us to delete the repositories to wipe any trace of the bad commit and recreate them from an older check in.
+While the Open Data movement is getting underway, not everything is freely available yet. Several of our datasets are not. It would be disastrous (not the end of the world, but pretty close) if we accidentally uploaded a copyrighted dataset to github--forcing us to [delete the repositories to wipe any trace of the bad commit](https://help.github.com/articles/remove-sensitive-data) and recreate them from an older check in.
 
 The convention for dealing with this problem in this project **is as follows**
 
