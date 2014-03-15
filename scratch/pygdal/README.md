@@ -19,6 +19,10 @@ As it is, it is not very pythonic:
 
 at least it is possible to access properties by feature.propertyname (and also feature.GetField("propertyname"))
 
+GDAL has Feature.ExportToJSON but not:
+ * Layer.ExportToGeoJSON()
+ * Shapefile.ExportToGeoJSON()
+
 We can do better.
 
 ## Competition
