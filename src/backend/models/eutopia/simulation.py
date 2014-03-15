@@ -1,5 +1,3 @@
-from intervention import PriceIntervention, NewActivityIntervention
-from eutopia import *
 import json
 
 class Scenario:
@@ -68,7 +66,7 @@ class Simulation:
             
 
 
-def read_interventions(interventions):
+def read_interventions(interventions): #XXX <-- custom to Eutopia.py
     """
     Reads a json file with the format:
     [ {'name':, 'type':, 'data':[], 'simulation':,}
@@ -96,13 +94,13 @@ def read_interventions(interventions):
             simulation.scenarios[scenario_id.message] = [intervention_obj]
     
     return simulation
-    
-
-time = 0 # has to be global as per simpack format
-
         
 if __name__ == "__main__":
-    with open("interventions.json", "r") as input_json:
+    from intervention import PriceIntervention, NewActivityIntervention
+    from eutopia import *
+
+
+    with open("test_eutopia_interventions.json", "r") as input_json:
         interventions_json = json.load(input_json)
     
     sim = read_interventions(interventions_json)
