@@ -16,7 +16,8 @@ Every dataset D.xyz in this folder is shadowed by a D.xyz.license file.
 
 Not all of these 
 
-* elora.topo.json - the farm fields in the elora area in compress topojson format (only polygons, no data fields) - _this is private__
+* elora.geo.json - the farm fields in the elora area - _this is private__
+* elora.topo.json - the same in compressed topojson format (only polygons, no data fields) - _this is private__
 * meatplants.geojson - abbatoirs and butchershops in Ontario
 * countries.geojson - countries of the world, snitched from the ol3 examples
  
