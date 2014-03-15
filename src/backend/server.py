@@ -88,7 +88,7 @@ class ModelDataServer(WebSocketServerProtocol):
         for row in dat:
           J = dict(zip(header, row))
           print "pushing", J, "to the client"
-          self.speak(J)
+          self.sendMessage(json.dumps(J))
           yield
       g = feed()
       
@@ -110,13 +110,6 @@ class ModelDataServer(WebSocketServerProtocol):
 
    def onClose(self, wasClean, code, reason):
       print("WebSocket connection closed: {}".format(reason))
-   
-   def speak(self, o):
-     "send object o across the wire to the listener"
-     "the idea is that in our setup, the clients mostly listen to us"
-     if not isinstance(o, dict): #coerce 
-       o = o.__dict__ #security risk?
-     self.sendMessage(json.dumps(o), False)
       
 
 if __name__ == '__main__':
