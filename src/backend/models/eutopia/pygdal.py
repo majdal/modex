@@ -166,6 +166,7 @@ class Feature(object):
     
     def __getattr__(self, name):
         # check: local dict, then the fields (we can't access self.fields without accessing the local dict) and only then call up
+        # TODO: provide access to .geometry()'s members directly (since, logically, a geofeature is the join of geometry and fields, not the parent fields with child geometry)
         try:
             return self.__dict__[name]
         except KeyError:

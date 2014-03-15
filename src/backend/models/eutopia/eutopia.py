@@ -18,7 +18,6 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 MAP_SHAPEFILE = os.path.join(HERE, "Elora_esque.shp/") #not in the repo due to copyright; ask a team member
 
-
 AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #non-agriculture features are commented out
    'C': 'CORN SYSTEM',
@@ -42,7 +41,6 @@ AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #'ZR': 'REFORESTATION'
 }
 
-
 class Farm(Feature):
     def __init__(self, feature):
         Feature.__init__(self, feature)
@@ -63,7 +61,6 @@ class Farm(Feature):
 
     @property
     def area(self): return self.geometry.Area()
-
 
 class FarmFamily:
     def __init__(self, eutopia):
