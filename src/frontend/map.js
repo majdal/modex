@@ -18,7 +18,23 @@ var styleArray = [new ol.style.Style({
   })
 })];
 
-var pointStyle = [new ol.style.Style({
+
+var countries = new ol.layer.Vector({
+  source: new ol.source.GeoJSON({
+    url: 'assets/maps/countries.geojson'
+  }),
+  
+  styleFunction: function(feature, resolution) {
+    return styleArray;
+  }
+});
+
+var meat = new ol.layer.Vector({
+  source: new ol.source.GeoJSON({
+    url: '/assets/maps/meatplants.geojson'
+  }),
+  styleFunction: function(feature, resolution) {
+    return [new ol.style.Style({
     image: new ol.style.Circle({
       radius: 3,
       fill: new ol.style.Fill({color: 'red'}),
@@ -36,7 +52,14 @@ var pointStyle = [new ol.style.Style({
 
   })]
 
-var styleArray2 = [new ol.style.Style({
+  }
+
+});
+
+var farms = new ol.layer.Vector({
+  source: new ol.source.TopoJSON({ url: '/assets/maps/elora.topo.json'  } ),
+  styleFunction: function(feature, resolution) {
+    return [new ol.style.Style({
   //image: new ol.style.Circle({
   fill: new ol.style.Fill({
     color: 'rgba(255, 22, 255, 0.6)'
@@ -47,32 +70,9 @@ var styleArray2 = [new ol.style.Style({
   })
   //})
 
-})
-];
-
-styleArray2 = pointStyle;
-
-
-
-
-var countries = new ol.layer.Vector({
-  source: new ol.source.GeoJSON({
-    url: 'assets/maps/countries.geojson'
-  }),
-  
-  styleFunction: function(feature, resolution) {
-    return styleArray;
+    })
+    ];
   }
-});
-
-var meat = new ol.layer.Vector({
-  source: new ol.source.GeoJSON({
-    url: 'assets/maps/meatplants.geojson'
-  }),
-  styleFunction: function(feature, resolution) {
-    return styleArray2;
-  }
-
 });
 
 
@@ -84,7 +84,8 @@ var meat = new ol.layer.Vector({
         layers: [
           new ol.layer.Tile({ source: new ol.source.MapQuest({layer: 'osm'}) }),
           countries,
-          meat
+          meat,
+          farms,
         ],
         view: new ol.View2D({
           center: ol.proj.transform([-80.5, 43.45], 'EPSG:4326', 'EPSG:3857'), //these coordinates are not what you'll find on Wikipedia or in the World Fact Book. The Wikipedia coordinates, 43,28,0 N by 80,30,0W are A) in Degrees-Minutes-Seconds B) in WGS84 (so even once converted to decimal degrees they're slightly off)

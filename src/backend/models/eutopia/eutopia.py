@@ -3,6 +3,8 @@ import os, zipfile
 import ogr #GDAL's vector library
 ogr.UseExceptions() #make ogr sane
 
+import json
+
 AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #non-agriculture features are commented out
    'C': 'CORN SYSTEM',
@@ -139,6 +141,11 @@ class FarmFamily:
 #TODO: move the map stuff into class Map
 # add a .dumps() method
 
+def features(layer): #todo factor this _hard_
+    for i in range(layer.GetFeatureCount()):
+        yield layer.GetFeature(i)
+
+
 class Eutopia:
     def __init__(self):
         if zipfile.is_zipfile(MAP_SHAPEFILE):
@@ -164,9 +171,6 @@ class Eutopia:
         
         self.activities = activity.Activities()
         
-        def features(layer): #todo factor this _hard_
-            for i in range(layer.GetFeatureCount()):
-                yield layer.GetFeature(i)
         self.farms = [Farm(f) for f in features(self.map) if f.MAP_CODE in AGRICULTURE_CODES.keys()]
         print("Constructed", len(self.farms), "farms", "out of", self.map.GetFeatureCount(), "features")
         
@@ -176,6 +180,12 @@ class Eutopia:
             family.add_farm(farm)
             self.families.append(family)
             
+    def dumpMap(self):
+        "GDAL doesn't have a layer.ExportToJSON()"
+        "So we need to write it"
+        "this line derived from the spec at http://geojson.org/geojson-spec.html#feature-collection-objects"
+        return json.dumps({"type": "FeatureCollection", "features": [stripProperties(json.loads(f.ExportToJson())) for f in features(self.map)]})
+    
     def step(self):
         for family in self.families:
             family.step()
@@ -240,6 +250,12 @@ if __name__=='__main__':
     
     print activities
     
+    # optional:
+    #write a geojson file containing the loaded map dataset
+    #with open("elora.geo.json","w") as mapjson:
+    #    mapjson.write(eutopia.dumpMap())
+    
+    # optional: display summary of model outputs
     #import pylab
     #pylab.plot(range(10), [a.get('durumWheatConventional',0) for a in activities])
     #pylab.plot(range(10), [a.get('durumWheatGreen',0) for a in activities])
