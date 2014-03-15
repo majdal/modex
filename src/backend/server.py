@@ -84,18 +84,17 @@ class ModelDataServer(WebSocketServerProtocol):
 
 if __name__ == '__main__':
 
-   if len(sys.argv) > 1 and sys.argv[1] == 'debug':
+   debug = (len(sys.argv) > 1 and sys.argv[1] == 'debug')
+   
+   if debug:
       log.startLogging(sys.stdout)
-      debug = True
-   else:
-      debug = False
    
    if debug:
      print "Starting server in", PROJECT_ROOT
    
    model = Eutopia([]) #the [] becomes model.log
    poke_model = task.LoopingCall(lambda: next(model))
-   poke_model.start(.05)
+   poke_model.start(4) //4 second intervals
    
    data_endpoint = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
