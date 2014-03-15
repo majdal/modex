@@ -256,7 +256,7 @@ if __name__ == '__main__':
    root.putChild("ws", data_resource)    #this puts the websocket at /ws. You cannot put both the site and the websocket at the same endpoint; whichever comes last wins, in Twisted
    if debug:
      root.putChild("scratch", File(pathjoin(PROJECT_ROOT,"scratch")))
-   root.putChild("wamp", wamp) #okay, this is not behaving itself; crud
+   #root.putChild("wamp", wamp) #okay, this is not behaving itself; crud
    root.putChild("ctl", ctl_resource) #this whole file is so not pythonic. Where's the D.R.Y. at, yo? --kousu
    
    #. <- /
