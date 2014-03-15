@@ -121,3 +121,17 @@ You can use qgis to fiddle with geodata: subset it, reorder it, remove or add co
 but it's tricky. Some gotchas with qgis:
 * SQL joins are hidden under 'properties' of a layer
 * to edit a layer it MUST be in ESRI Shapefile format and you need to find the "Toggle Editing" button (which shows up in the rightclick menu on the layer, once its in that format)
+
+## Keeping Copyrighted Data Out
+
+While the Open Data movement is getting underway, not everything is freely available yet. Several of our datasets are not. It would be disastrous (not the end of the world, but pretty close) if we accidentally uploaded a copyrighted dataset to github--forcing us to delete the repositories to wipe any trace of the bad commit and recreate them from an older check in.
+
+The convention for dealing with this problem in this project **is as follows**
+
+1. Given a dataset `x.ext` that you want to use
+2. Rename it: `mv x.ext x.ext.real`
+3. Create a symlink in its place: `ln -s x.ext.real x.ext`
+4. Hide `x.ext.real` from git, so it doesn't accidentally get committed: `echo x.ext.real >> .gitignore`
+   * **if x.ext.real gets expanded to any child files, add those to .gitignore as well**
+5. Distribute `x.ext.real` in some private way to those authorized (thumbdrive, Google Drive, carrier pigeon...)
+This way, 

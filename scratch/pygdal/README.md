@@ -20,3 +20,18 @@ As it is, it is not very pythonic:
 at least it is possible to access properties by feature.propertyname (and also feature.GetField("propertyname"))
 
 We can do better.
+
+## Competition
+
+* GDAL                      - raw gdal
+  * pygdal                    - "Virtualenv and setuptools friendly version of standard GDAL python bindings"
+* geometryIO                - GDAL wrapper for reading and writing geospatial data to a variety of vector formats (unfinished)
+* Python_GDAL               - _dead_
+
+not full GDAL interfaces:
+
+* gdal2mbtiles              - Converts a GDAL-readable dataset into an MBTiles file. This is used to generate web maps.
+* gdal-calculations         - Simple tiled (or untiled if desired) raster calculations
+* dap.plugins.gdal          - GDAL plugin for pydap server
+
+The competition is lacking. There is good reason *to* do better.
