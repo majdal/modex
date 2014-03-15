@@ -56,8 +56,8 @@ class Shapefile(object):
             #TODO: support writebacks to a zipped Shapefile (VERY COMPLICATED)
 
             self._unzipped = tempfile.mkdtemp()
-            with zipfile.ZipFile(open(fname, "b")) as zhp: #open the zipped shapefile
-                zhp.extractall(path=extractor)
+            with zipfile.ZipFile(open(fname, "rb")) as zhp: #open the zipped shapefile
+                zhp.extractall(path=self._unzipped)
 
             fname = self._unzipped
 

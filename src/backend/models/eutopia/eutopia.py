@@ -16,7 +16,8 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 #######################
 ## eutopia
 
-MAP_SHAPEFILE = os.path.join(HERE, "Elora_esque.shp/") #not in the repo due to copyright; ask a team member
+MAP_SHAPEFILE = os.path.join(HERE, "Elora_esque.shp.zip") #not in the repo due to copyright; ask a team member
+# TODO: test with passing a folder instead
 
 AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #non-agriculture features are commented out
