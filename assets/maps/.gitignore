@@ -1,3 +1,6 @@
 # use this .gitignore to list nonfree map datasets
 # this will hoppppefully reduce the chance of
 # the headache of illegally publishing data
+
+elora.topo.json.real
+elora.geo.json.real
