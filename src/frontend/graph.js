@@ -65,9 +65,6 @@ $(function() {
     
     
     data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
-    data_socket.onopen = function() { 
-       this.send(""); //poke the server to get data out
-    }
     data_socket.onmessage = function(d) {
       
       d = JSON.parse(d.data);
