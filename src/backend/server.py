@@ -24,18 +24,14 @@ from twisted.web.static import File
 #  https://raw.github.com/tavendo/AutobahnPython/v0.5.14/examples/websocket/echo/server.py
 #  https://raw.github.com/tavendo/AutobahnPython/e1dae070e67a9361f14beba775c66961e06d43ff/demo/echo/echo_server.py
 
-from autobahn.twisted.websocket import WebSocketServerFactory, WampWebSocketServerFactory, WebSocketServerProtocol, WampWebSocketServerProtocol
-from autobahn.twisted.resource import * #WebSocketResource, HTTPChannelHixie76Aware
-
+from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
+from autobahn.twisted.resource import WebSocketResource
 
 import json
 
 # we are trying to set up a producer-consumer system, and twisted has this built in:
 # https://twistedmatrix.com/documents/12.2.0/core/howto/producers.html
 # ah, simpler: reactor.callLater
-
-# TODO(kousu): set up WAMP and use it to push messages instead of using a 'raw' websocket
-
 
 import csv
 
@@ -130,7 +126,6 @@ if __name__ == '__main__':
                                     debugCodePaths = True)
    data_endpoint.protocol = ModelDataServer
    data_endpoint.model = model
-   #data_endpoint.setProtocolOptions(allowHixie76 = True) # needed if Hixie76 is to be supported   
    
    ctl_endpoint = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
@@ -165,7 +160,6 @@ if __name__ == '__main__':
    
    ## both under one Twisted Web Site
    site = Site(root)
-   #site.protocol = HTTPChannelHixie76Aware #  needed if Hixie76 is to be supported
    reactor.listenTCP(8080, site)
 
    print "Now open http://127.0.0.1:8080 in your browser"
