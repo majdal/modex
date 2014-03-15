@@ -28,11 +28,10 @@ Crafty.c('PlayPause', {
 	init : function(){
 		this.requires("2D, Canvas, Mouse, SpriteAnimation, pauseButton");
 		var positionY = Crafty.viewport.height-250;
-		var button = {
-			PAUSE : 0,
-		}
+		
 		this.attr({x: 20, y: positionY, w: 100, h: 100})
-		/* .bind("Click", function(){
+		.animate("press", [[20, 20]]).animate("release", [[0, 20]])
+		 .bind("Click", function(){
 			if (this.isPaused) {
 				this.addComponent("pauseButton").removeComponent("playButton");
 				this.isPaused = true;
@@ -42,12 +41,12 @@ Crafty.c('PlayPause', {
 				this.isPaused = false;
 			}
 		}) 
-	*/	
-		.animate("press", [[20, 20]]).animate("release", [[0, 20]])
-		.bind('MouseDown', function(){
+		
+		/*.animate("press", [[20, 20]]).animate("release", [[0, 20]])
+		.bind('Click', function(){
         buttonAnimate(button.PAUSE, "press");
     	})
-        .bind('MouseOut', function() { 
+        .bind('Click', function() { 
         buttonAnimate(button.PAUSE, "release");
     	})
 
@@ -61,6 +60,6 @@ Crafty.c('PlayPause', {
     		}
 
     		pauseplay.animate(action, 1, 0);
-    	}
+    	}*/
 	},
 });
