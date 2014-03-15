@@ -1,9 +1,22 @@
+#!/usr/bin/env python2
+# this program requires python2 because GDAL requires python2
 
-import os, zipfile
-import ogr #GDAL's vector library
-ogr.UseExceptions() #make ogr sane
+import os
 
-import json
+from pygdal import *
+
+import activity
+import intervention
+
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+
+
+#######################
+## eutopia
+
+MAP_SHAPEFILE = os.path.join(HERE, "Elora_esque.shp/") #not in the repo due to copyright; ask a team member
+
 
 AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #non-agriculture features are commented out
@@ -25,65 +38,18 @@ AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #'Z': 'WOODLAND',
    #'E1': 'EXTRACTION PITS AND QUARRIES',
    #'HG': 'PASTURE SYSTEM',
-   #'ZR': 'REFORESTATION'  
+   #'ZR': 'REFORESTATION'
 }
 
-ogr.CONSTANTS = dict((e, ogr.__dict__[e]) for e in ogr.__dict__.keys() if e.startswith("wkb"))
 
-def invertOGRConstant(value):
-    "given a value, find the names of the constants that goes with it"
-    "i'm sorry; this is really just a quick hack for debugging and should be replaced by wrapping the OGR constants in enum objects"
-    return [n for n in ogr.CONSTANTS if ogr.CONSTANTS[n] == value]
-
-import activity
-import intervention
-
-import os
-HERE = os.path.abspath(os.path.dirname(__file__))
-MAP_SHAPEFILE = os.path.join(HERE, "Elora_esque.shp.zip") #not in the repo due to copyright; ask a team member
-
-class Geometry(object):
-    "a simple wrapper that makes OGR objects pythonic"
-    "every row in the table is exposed as a property"
-    def __init__(self, ogr_feature):
-        assert isinstance(ogr_feature, ogr.Feature)
-        self.__dict__['fields'] = ogr_feature #speak to __dict__ directly here because of dirty __getattr__ magic
-        self.__dict__['geometry'] = ogr_feature.GetGeometryRef()
-        
-    def __getattr__(self, name):
-        print "getattr(", id(self), "," , name, ")"
-        assert ogr.GetUseExceptions() == True, "This code depends on GDAL mapping error codes to exceptions for us"
-        # check: local dict, then the fields (we can't access self.fields without accessing the local dict) and only then call up
-        try:
-            print("I AM THE BASTER MASTER", name)
-            return self.__dict__[name] #whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-        except:
-            # darn
-            # this causes infinite regress
-            try:
-                return self.fields.GetField(name)
-            except:
-                print("MAJOR FAILE.")
-                raise
-                #return getattr(self, name) #this causes infintie loop
-
-            #return object.__getattribute__(self, name) #very python2...  <http://stackoverflow.com/questions/3278077/difference-between-getattr-vs-getattribute-in-python>
-    
-    def __setattr__(self, name, value):
-        assert ogr.GetUseExceptions() == True, "This code depends on GDAL mapping error codes to exceptions for us"
-        try:
-            return self.fields.SetField(name, value) #this causes infinite regress because it calls self.fields which triggers getattr
-        except RuntimeError: #ogr gives this for all errors when UseExceptions() is on
-            return object.__setattr__(self, name, value)
-    
-class Farm(Geometry):
+class Farm(Feature):
     def __init__(self, feature):
-        Geometry.__init__(self, feature)
+        Feature.__init__(self, feature)
         #self.land_type = land_type #hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         self.county = "BestCountyInTheWorldIsMyCountyAndNotYours"
-        
+
         self.last_activity = None
-    
+
     #backwards compat
     @property
     def id(self): return self.fields.GetFID()
@@ -105,12 +71,12 @@ class FarmFamily:
         self.bank_balance = 1000000.00
         self.equipment = []
         self.preferences = {'money': True}
-        
+
     def add_farm(self, farm):
         self.farms.append(farm)
         farm.family = self
-        
-    def make_planting_decision(self, activities, farm):    
+
+    def make_planting_decision(self, activities, farm):
         best = None
         for activity in activities:
             total = 0
@@ -119,83 +85,71 @@ class FarmFamily:
                 # TODO: improve choice algorithm
                 #    - maybe by allowing different sensitivities to risk
                 #      on different income dimensions
-                
+
             if best is None or total > best_total:
                 best = activity
                 best_total = total
-        
-        return best        
-        
-    
+
+        return best
+
+
     def step(self):
         for farm in self.farms:
             # changed to self.eutopia to make it work with the sim version that is passed to Family21
             activity = self.make_planting_decision(self.eutopia.activities.activities, farm)
-            
+
             money = activity.get_product('money', farm)
             self.bank_balance += money
-            
+
             farm.last_activity = activity
 
-
-#TODO: move the map stuff into class Map
-# add a .dumps() method
-
-def features(layer): #todo factor this _hard_
-    for i in range(layer.GetFeatureCount()):
-        yield layer.GetFeature(i)
 
 
 class Eutopia:
     def __init__(self):
-        if zipfile.is_zipfile(MAP_SHAPEFILE):
-            #the logic here should be:
-            # check if zipfile, if so unzip and continue as if that didn't happen
-            #  check if folder; if so, check if ogr can read it
-            #  otherwise, check if ogr can read it
-            # but that cleanliness can come in PyGDAL (or maybe by snitching code from QGIS? actually, doesn't QGIS use GDAL? ..do they have PyGDAL written, or are they just using the SWIG interface?)
-
-            # unzip the shapefile in almost the most sketchy way possible
-            SHAPEFILE = MAP_SHAPEFILE.replace(".zip","") #XXX sketchy
-            os.system("rm -r '%s'" % (SHAPEFILE,)) #XXX sketchy
-            os.system("unzip -d '%s' '%s'" % (SHAPEFILE, MAP_SHAPEFILE)) #XXX sketchy
-        else:
+        try:
+            shapefile = Shapefile(MAP_SHAPEFILE)
+        except IOError:       #py2.7
+            #except FileNotFoundError: #py3k
             raise RuntimeError("No shapefile `%s` found; you may need to download it from a team member (privately)" % MAP_SHAPEFILE)
-        """"""
-        shapefile = ogr.Open(SHAPEFILE) 
-        self.map = shapefile.GetLayer(0) #cheating
-        self.map._source = shapefile #stash shapefile to make sure it dooesn't get freed before Map does
-        assert self.map.GetGeomType() == ogr.wkbPolygon, "Farm boundaries layer is not a wkbPolygon layer; it is a" + str.join(" or ", invertOGRConstants(self.map.GetGeomType()))
-        
+
+        self.map = shapefile[0] #cheating: assume the only layer we care about is this one
+        assert self.map.GetGeomType() == wkbPolygon, "Farm boundaries layer is not a Polygon; it is a" + str.join(" or ", invertOGRConstants(self.map.GetGeomType()))
+        #assert isinstance(self.map, PolygonLayer), "Farm boundaries layer is not a Polygon; it is a " + str(type(self.map))
+
+        #########################
+        # modelling begins here
         self.time = 0
-        
         self.activities = activity.Activities()
-        
-        self.farms = [Farm(f) for f in features(self.map) if f.MAP_CODE in AGRICULTURE_CODES.keys()]
-        print("Constructed", len(self.farms), "farms", "out of", self.map.GetFeatureCount(), "features")
-        
+
+        #XXX should we write this as literally constructing a new Layer?
+        # for now, a List is alright, but it's worth thinking about doing that and about what pygdal requires to support doing that
+        self.farms = [Farm(f) for f in self.map if f.MAP_CODE in AGRICULTURE_CODES.keys()]
+        print("Constructed", len(self.farms), "farms", "out of", len(self.map), "features")
+
         self.families = []
+        # for now, every Family goes with one single Farm on it
         for farm in self.farms:
             family = FarmFamily(self)
             family.add_farm(farm)
             self.families.append(family)
-            
+
     def dumpMap(self):
-        "GDAL doesn't have a layer.ExportToJSON()"
-        "So we need to write it"
-        "this line derived from the spec at http://geojson.org/geojson-spec.html#feature-collection-objects"
-        return json.dumps({"type": "FeatureCollection", "features": [stripProperties(json.loads(f.ExportToJson())) for f in features(self.map)]})
-    
+        "convert the map data to GeoJSON"
+        "meant to be used in a ModelExplorer endpoint"
+        return self.map.dumps()
+
     def step(self):
         for family in self.families:
             family.step()
         self.time += 1
-    
+
     def __iter__(self):
         while True:
             self.step()
+            # log data here
             yield
-            
+
     def get_activity_count(self):
         activities = {}
         for farm in self.farms:
@@ -205,17 +159,17 @@ class Eutopia:
                     activities[name] = 1
                 else:
                     activities[name] += 1
-        return activities            
-                
-        
+        return activities
+
+
 if __name__=='__main__':
-    
+
 
     eutopia = Eutopia()
 
-    interventions = [intervention.PriceIntervention(5, 'duramSeed', 10), 
+    interventions = [intervention.PriceIntervention(5, 'duramSeed', 10),
                      intervention.PriceIntervention(7, 'duramSeedOrganic', 0.001)]
-    
+
     magic_activity = {
         'equipment': ['tractor', 'wheelbarrow'],
         'products': {
@@ -229,9 +183,10 @@ if __name__=='__main__':
             'dolphin': -87,
             }
         }
-    interventions.append(intervention.NewActivityIntervention(7, 'magic', magic_activity))    
-    
-    
+    interventions.append(intervention.NewActivityIntervention(7, 'magic', magic_activity))
+    #TODO: make 'interventions' an API of Eutopia
+    # and the bit below too:
+
     time = 0
     def step():
         global time
@@ -239,27 +194,25 @@ if __name__=='__main__':
             if time >= intervention.time:
                 intervention.apply(eutopia, time)
         time += 1
-    
+
         eutopia.step()
-    
-    
+
+
     activities = []
     for i in range(10):
         step()
         activities.append(eutopia.get_activity_count())
-    
+
     print activities
-    
+
     # optional:
     #write a geojson file containing the loaded map dataset
     #with open("elora.geo.json","w") as mapjson:
     #    mapjson.write(eutopia.dumpMap())
-    
+
     # optional: display summary of model outputs
     #import pylab
     #pylab.plot(range(10), [a.get('durumWheatConventional',0) for a in activities])
     #pylab.plot(range(10), [a.get('durumWheatGreen',0) for a in activities])
     #pylab.plot(range(10), [a.get('magic',0) for a in activities])
     #pylab.show()
-
-        
