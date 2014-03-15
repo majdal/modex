@@ -67,7 +67,9 @@ class ModelDataServer(WebSocketServerProtocol):
       self.time = self.factory.model.time #stash the time we started watching the model at
       model = self.factory.model
       def push():
-          if self.time < len(model.log):                 
+          if self.time < len(model.log):
+              #TODO: if we are much behind where model is, do we want to batch all the updates at once?
+              #  - i like it the way it is now for debugging as we get settled into the new stream, since the model and the data are running at different rates and will therefore get out of sync
               J = model.log[self.time]
               print "pushing", J, "to", self.peer #debug
               self.sendMessage(json.dumps(J))
