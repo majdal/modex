@@ -9,20 +9,41 @@ Crafty.scene('game', function() {
          })
        });
 
-  // lables layer, currently not used
-  var lables = new ol.layer.Tile({
+  // labels layer, currently not used
+  var labels = new ol.layer.Tile({
          source: new ol.source.Stamen({
            layer: 'terrain-labels'
          })
        });
 
+var farms = new ol.layer.Vector({
+  source: new ol.source.TopoJSON({ url: '/assets/maps/elora.topo.json'  } ), 
+    styleFunction: function(feature, resolution) {
+    return [new ol.style.Style({
+  //image: new ol.style.Circle({
+  fill: new ol.style.Fill({
+    color: 'hsla(100, 50%,30%, .5)' //this would be better if colour was by MAP_CODE
+  }),
+  stroke: new ol.style.Stroke({
+    color: 'hsla(290, 50%, 50%, .3)',
+    width: 2
+  })
+  //})
+
+    })
+    ];
+  } //styleFunction
+ 
+});
+
   // draw the map
   var map = new ol.Map({
+    renderer: ol.RendererHint.CANVAS, //the vector layer crashes without this
     target: 'map',
-    layers: [watercolor,],
+    layers: [watercolor,farms],
     view: new ol.View2D({
-      center: ol.proj.transform([-80.5, 43.45], 'EPSG:4326', 'EPSG:3857'), //these coordinates are not what you'll find on Wikipedia or in the World Fact Book. The Wikipedia coordinates, 43,28,0 N by 80,30,0W are A) in Degrees-Minutes-Seconds B) in WGS84 (so even once converted to decimal degrees they're slightly off)
-      zoom: 7
+      center: ol.proj.transform([-80.56, 43.65], 'EPSG:4326', 'EPSG:3857'), //these coordinates are not what you'll find on Wikipedia or in the World Fact Book. The Wikipedia coordinates, 43,28,0 N by 80,30,0W are A) in Degrees-Minutes-Seconds B) in WGS84 (so even once converted to decimal degrees they're slightly off)
+      zoom: 12
     }) 
   });
 
