@@ -112,7 +112,9 @@ class Eutopia:
     ""
     "There is an API here for controlling and querying the model state"
 
-    def __init__(self):
+    def __init__(self, log = None):
+        self.log = log
+        
         try:
             shapefile = Shapefile(MAP_SHAPEFILE)
         except IOError:       #py2.7
@@ -146,15 +148,23 @@ class Eutopia:
         "meant to be used in a ModelExplorer endpoint"
         return self.map.dumps()
 
-    def step(self):
+    def __next__(self):
+        # apply interventions
         for intervention in self.interventions:
             if self.time >= intervention.time:
                 intervention.apply(self, self.time)
         
+        # run model
         for family in self.families:
             family.step()
         self.time += 1
-        # log data here
+        
+        # log metrics
+        if self.log is not None:
+            self.log.append((self.time, self.get_activity_count())) #XXX assumes a list (or a list-like object)
+    
+    next = __next__ #py2 :(
+    step = __next__ #backwards compat
     
     def intervene(self, intervention):
         self.interventions.append(intervention)
@@ -162,7 +172,7 @@ class Eutopia:
     def __iter__(self):
         "convenience method"
         while True:
-            self.step()
+            next(self)
             yield self.get_activity_count() #hardcode model output, for now
 
     def get_activity_count(self):
@@ -179,7 +189,8 @@ class Eutopia:
 
 if __name__=='__main__':
     
-    eutopia = Eutopia()
+    log = []
+    eutopia = Eutopia(log)
 
     eutopia.intervene(intervention.PriceIntervention(5, 'duramSeed', 10))
     eutopia.intervene(intervention.PriceIntervention(7, 'duramSeedOrganic', 0.001))
@@ -198,13 +209,12 @@ if __name__=='__main__':
             }
         }
     eutopia.intervene(intervention.NewActivityIntervention(7, 'magic', magic_activity))
-    #TODO: make 'interventions' an API of Eutopia
-    # and the bit below too:
     
-    activities = []
-    for i, state in izip(range(10), eutopia):
-        activities.append(state)
-
+    #run the model
+    for i in range(17):
+        next(eutopia)
+    
+    activities = [state for time, state in log]
     print activities
 
     # optional:
@@ -216,5 +226,5 @@ if __name__=='__main__':
     #import pylab
     #pylab.plot(range(len(activities)), [a.get('durumWheatConventional',0) for a in activities])
     #pylab.plot(range(len(activities)), [a.get('durumWheatGreen',0) for a in activities])
-    #pylab.plot(range(len(activities)), [a.get('magic',0) for a in activities])
+    #pylab.plot(range(len(activities)git ), [a.get('magic',0) for a in activities])
     #pylab.show()
