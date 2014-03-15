@@ -70,3 +70,4 @@ http://en.wikipedia.org/wiki/Ecosystem_services
 
 * The [uClassify Collaboratory](http://www.uclassify.com/browse)
 * [InsightMaker Collaboratory](http://insightmaker.com/)
+* [NASA-funded HANDY model](http://www.theguardian.com/environment/earth-insight/2014/mar/14/nasa-civilisation-irreversible-collapse-study-scientists)
