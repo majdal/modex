@@ -114,7 +114,7 @@ class Eutopia:
 
     def __init__(self, log = None):
         self.log = log
-        
+
         try:
             shapefile = Shapefile(MAP_SHAPEFILE)
         except IOError:       #py2.7
@@ -153,19 +153,19 @@ class Eutopia:
         for intervention in self.interventions:
             if self.time >= intervention.time:
                 intervention.apply(self, self.time)
-        
+
         # run model
         for family in self.families:
             family.step()
         self.time += 1
-        
+
         # log metrics
         if self.log is not None:
             self.log.append((self.time, self.get_activity_count())) #XXX assumes a list (or a list-like object)
-    
+
     next = __next__ #py2 :(
     step = __next__ #backwards compat
-    
+
     def intervene(self, intervention):
         self.interventions.append(intervention)
 
@@ -190,7 +190,7 @@ class Eutopia:
 if __name__=='__main__':
     n = 10 #number of steps to run
            #TODO: make this a command line param
-    
+
     log = []
     eutopia = Eutopia(log)
 
@@ -206,16 +206,16 @@ if __name__=='__main__':
             'soil': -5,
             'labour': -2000,
             'certification': 0,
-            'duram': 1000000,
+            'duram': 42,
             'dolphin': -87,
             }
         }
     eutopia.intervene(intervention.NewActivityIntervention(7, 'magic', magic_activity))
-    
+
     #run the model
     for i in range(n):
         next(eutopia)
-    
+
     activities = [state for time, state in log]
     print activities
 
