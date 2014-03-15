@@ -94,7 +94,7 @@ if __name__ == '__main__':
    
    model = Eutopia([]) #the [] becomes model.log
    poke_model = task.LoopingCall(lambda: next(model))
-   poke_model.start(4) //4 second intervals
+   poke_model.start(4) #4 second intervals
    
    data_endpoint = WebSocketServerFactory("ws://localhost:8080",
                                     debug = debug,
