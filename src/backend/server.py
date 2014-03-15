@@ -59,11 +59,8 @@ class CtlProtocol(WebSocketServerProtocol):
 
 
 class ModelDataServer(WebSocketServerProtocol):
-   def onConnect(self, request):
-      print("Client connecting: {}".format(request.peer))
-
    def onOpen(self):
-      print("WebSocket connection open.")
+      #print("WebSocket connection open.")
       
       #I want to speak dynamically: so, as data comes in, push it to the client
       # but I don't see how to do this?? what thread am I running on???
@@ -99,19 +96,7 @@ class ModelDataServer(WebSocketServerProtocol):
           reactor.callLater(.3, loop)
         except StopIteration:
           pass
-      loop()  #kick it off
-
-   def onMessage(self, payload, isBinary):
-      if isBinary:
-         print("Binary message received: {} bytes".format(len(payload)))
-      else:
-         print("Text message received: |{}|".format(payload.decode('utf8')))
-
-      #self.sendMessage(json.dumps(data), isBinary)
-
-   def onClose(self, wasClean, code, reason):
-      print("WebSocket connection closed: {}".format(reason))
-      
+      loop()  #kick it off      
 
 if __name__ == '__main__':
 
