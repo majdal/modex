@@ -96,23 +96,32 @@ def read_interventions(interventions): #XXX <-- custom to Eutopia.py
             simulation.scenarios[scenario_id.message] = [intervention_obj]
     
     return simulation
-        
+ 
+from intervention import PriceIntervention, NewActivityIntervention
+from eutopia import *
+
+num_steps = 20 # same as in eutopia.py
+eutopia = Eutopia([]) 
+
+###
+# README: 
+# This section is when running a wrapped eutopia.py standalone. It uses
+# the read_interventions function to initialize it with some default scenarios.
+# THIS IS NOT THE ONE THE SERVER IS USING. 
+# The one the server is using is a "blank" sim with Eutopia([])
+###
+
 if __name__ == "__main__":
-    from intervention import PriceIntervention, NewActivityIntervention
-    from eutopia import *
-
-
     with open("test_eutopia_interventions.json", "r") as input_json:
         interventions_json = json.load(input_json)
     
     sim = read_interventions(interventions_json)
-    num_steps = 20 # same as in eutopia.py
     
-    eutopia = Eutopia([]) 
+
     sim.simpack = eutopia
     sim.set_scenario(1) # indexed by scenario 1
     sim.create_stepper(num_steps+1) # creates a generator from simulation start and end dates.
-    
+
     for i in xrange(num_steps):
         print sim.step()
         # this data will be sent whenever the web socket sends data.
@@ -121,6 +130,12 @@ if __name__ == "__main__":
     #activities = [state for time, state in sim.simpack.log]
     #print activities
     
+else:
+    sim = Simulation()
+    sim.simpack = eutopia
+    sim.create_stepper(num_steps+1) # this is xrange so need to add one
+    
+
         
         
     
