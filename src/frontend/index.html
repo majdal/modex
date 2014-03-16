@@ -72,19 +72,20 @@
         <option value="subsidy">Subsidy</option>
       </select>
       <span id="action">on</span>
-      <select id="product">
+      <select id="activity">
         <option value="" disabled="disabled" selected="selected">Select a product</option>
-        <option value="tax">Wheat</option>
-        <option value="subsidy">Barley</option>
+        <option value="wheat">Wheat</option>
+        <option value="barley">Barley</option>
       </select>
       <div id="tax_slider"></div>
       <span>Value of </span>
       <span id="intervention_value">0</span>
       <span id="intervention_unit">%</span>
-
-      <div id="year_slider"></div>
-      <span id="year_unit"> Applied at year</span>
-      <span id="year_value">0</span>
+      <!-- 
+        <div id="year_slider"></div>
+        <span id="year_unit"> Applied at year</span>
+        <span id="year_value">0</span>
+      -->
 
   </div>
   <script type="text/javascript">
@@ -96,6 +97,13 @@
   <script type="text/javascript">
   $(document).ready(function(){
     less.watch();
+
+    // useful for debugging
+    console.oldLog = console.log;
+    console.log = function(value) {
+      console.oldLog(value);
+      window.$log = value;
+    };
   });
   </script>
 </body>

@@ -25,6 +25,10 @@ Crafty.c('AddScenario', {
     //         width in pixels / total number of years
     return Math.floor(xCoord/year);
   }, 
+
+  serialize: function() {
+    return $.map(this.scenarios, function(element){return element.serialize()} );
+  }
 });
 
 
@@ -38,7 +42,7 @@ Crafty.c('Timeline', {
 
     this.bind('Click', function(e) {
       var taxYear = plusButton.yearInPixels(e.x);
-      var intervention = new Crafty.e('Tax').tax(e.x, this.positionY, taxYear); 
+      var intervention = new Crafty.e('Tax').tax(taxYear, e.x, this.positionY); 
       this.interventions.push(intervention);
     });
   },
@@ -48,15 +52,13 @@ Crafty.c('Timeline', {
     this.interventions = [];
     var positionY = Crafty.viewport.height - this.scenarioCount*10 - this.scenarioCount*25;
     //              viewport height        - padding               - timeline height
-    this.positionY = positionY;
-    this.attr({x: 150, y: positionY, w: 700, h: 25});
+    this.positionY = positionY-20; // align the bottom timeline with the plus button. 
+    this.attr({x: 150, y: this.positionY, w: 700, h: 25});
+    return this; 
   }, 
 
   serialize: function() {
-    var interventions = [];
-    $(this.interventions).each(function(index, element){
-      interventions.push(element.serialize());
-    });
+    var interventions = $.map(this.interventions, function(element){return element.serialize()} )
     //this.interventions
     return {'scenarioCount': this.scenarioCount,
             'scenarioName': this.scenarioName,
@@ -77,16 +79,18 @@ Crafty.c('Tax', {
         });
   }, 
 
-  tax: function(xCoord, yCoord, year) {
+  tax: function(year, xCoord, yCoord) {
     this.year = year;
     this.attr({x: xCoord-2, y: yCoord, w: 4, h: 25}) // put a little red tick mark on the timeline wherever the click is. 
         .color('red');
     Crafty.e('InterventionDialogue').interventionDialogue(this);
+    return this;
   },
 
   serialize: function() {
     return {'year': this.year,
-            'tax_value': this.tax_value
+            'tax_value': this.tax_value, 
+            'activity': this.activity,
         }
   }
 });
@@ -102,12 +106,14 @@ Crafty.c('InterventionDialogue', {
         .css({'background-color': 'red',
               'color': 'black'
         });
-    this.createDialogue(intervention);
+    this.createDialogue(intervention, this);
+    return this;
   },
 
-  createDialogue: function(intervention) {
+  createDialogue: function(intervention, self) {
     $("#dialogue").dialog({
       width: 420,
+      modal: true,
       buttons: [        
         {
           text: "Delete",
@@ -120,12 +126,13 @@ Crafty.c('InterventionDialogue', {
         {
           text: "Save",
           click: function() {
-            if (!$('#product').val()) { // if the product is not selected
-              alert('Please select product first!');
+            if (!$('#activity').val()) { // if the activity is not selected
+              alert('Please select an activity first!');
             } else {
-              intervention.tax_value = $('#tax_slider').val();
-              intervention.year = $('#year_slider').val();
-              $(this).dialog("destroy");
+              intervention.tax_value = $('#tax_slider').slider('value');
+              intervention.activity = $('#activity').val();
+              //intervention.year = $('#year_slider').val();
+              self.destroyDialogue();
               // TODO send code to backend to create an intervention
             }
           }
@@ -141,13 +148,13 @@ Crafty.c('InterventionDialogue', {
         $('#intervention_unit').text('%');
       }
     });
-    $("#tax_slider").slider({
+    $('#tax_slider').slider({
       slide: function(event, ui) {
         $('#intervention_value').text(ui.value);
         // ui.value is a value between 0 and 100% - representing the possible tax value
       }
     });
-
+/*
     $("#year_slider").slider({
       min: 0,
       max: plusButton.length,
@@ -157,10 +164,12 @@ Crafty.c('InterventionDialogue', {
         // ui.value is a value between 0 and 100% - representing the possible tax value
       }
     });
+*/
   },
 
   destroyDialogue: function () {
-    $("#dialogue").dialog("destroy");
-    $("#tax_slider").slider("destory");
+    $('#activity').val('')
+    $('#dialogue').dialog('destroy');
+    $('#tax_slider').slider('destroy');
   }
 });

@@ -16,6 +16,8 @@ Crafty.scene('game', function() {
          })
        });
 
+/*
+// commenting this out until we get the 404 error fixed. 
 var farms = new ol.layer.Vector({
   source: new ol.source.TopoJSON({ url: '/assets/maps/elora.topo.json'  } ), 
     styleFunction: function(feature, resolution) {
@@ -36,12 +38,12 @@ var farms = new ol.layer.Vector({
   } //styleFunction
  
 });
-
+*/
   // draw the map
   var map = new ol.Map({
     renderer: ol.RendererHint.CANVAS, //the vector layer crashes without this
     target: 'map',
-    layers: [watercolor,farms],
+    layers: [watercolor, /*farms*/],
     view: new ol.View2D({
       center: ol.proj.transform([-80.56, 43.65], 'EPSG:4326', 'EPSG:3857'), //these coordinates are not what you'll find on Wikipedia or in the World Fact Book. The Wikipedia coordinates, 43,28,0 N by 80,30,0W are A) in Degrees-Minutes-Seconds B) in WGS84 (so even once converted to decimal degrees they're slightly off)
       zoom: 12
@@ -51,17 +53,13 @@ var farms = new ol.layer.Vector({
   plusButton = Crafty.e('AddScenario');
 
   playButton = Crafty.e('PlayPause');
-
+/*
   redSquare = Crafty.e('2D, Canvas, Color, Mouse')
-                     .attr({x: 100, y: 100, w: 100, h: 100})
+                     .attr({x: 100, y: 600, w: 100, h: 100})
                      .color('red')
                      .bind('Click', function() {
-                       // ctl.send('ctrl!!!!!');
-                            var pan = ol.animation.pan({
-                              duration: 2000,
-                              source: /** @type {ol.Coordinate} */ (view.getCenter())
-                            });
-                            map.beforeRender(pan);
-                            view.setCenter(london);
-                          }, false);
+                       var data = plusButton.serialize();
+                       ctl.send()
+                     });
+*/
 });
