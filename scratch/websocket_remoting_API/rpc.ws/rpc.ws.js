@@ -212,26 +212,34 @@ root.putChild("tank1", endpoint)
 and similarly for the frontend, we need a bit of magic to get things rolling
 (sadly, js has no __getattr__ magic, so we'll need to explicitly define the methods)
 
+// protocol 2 (aka your mother's simplest protocol):
+// calls: [arg1, arg2, ...] in json
+// responses: {'error': 'error message'} || {'payload': return_value} in json
+
 function RPC(ws, methods) {
-    queue = []
-	methods.each(
+    queue = []; //queue of calls in progress
+	methods.forEach(function(m) {
 	 this[m]._ws = new WebSocket(ws+"/"+m); //XXX should be URLjoin
+	 
+	 //actually, we don't need to enforce one-call-at-a-time
+	 //we can instead just immediately send data and put the promise on the queue
+	 // and so long as we can assume that send() is atomic, this should be fine
 	 this[m]._ws.onmessage = function(evt) {
 	    if(queue.length <= 0) {
 	    	throw new Error("Received RPC message but no call is in the queue waiting for it");
 	    }
 	 	response = serializer.parse(evt.data);
-	 	if('error' in response) {
-	 		console.error("RPC call to", ws, "failed:", response.error);
-	 	} else if('payload' in response) {
-	 		queue[0].resolve(response.payload);
-	 	}
-	 	queue.shift(); //this message is resolved.
+	 	promise = queue.shift();
 	 	
-	 	//we still want a queue here....
-	 	# resolve the promise at the top of the queue
-	 	# if we get a message it's an error (but we have nowhere to put the error, so i guess silently ignore it)
-	 	// TODO: experiment with setTimeout(function() { }, 10) //
+	 	
+	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
+	 	if('error' in response) {
+	 	    promise.error(response.error); //err how do i distnguish promises and promiss?
+	 	} else if('payload' in response) {
+	 		promise.resolve(response.payload);
+	 	} else {
+	 		console.log("Got malformed RPC message:", evt.data)
+	 	}
 	 	
 	 }
 	  this[m] = function() {
