@@ -1,11 +1,15 @@
 #!/usr/bin/env python2
 # this program requires python2 because GDAL requires python2
 
+# system libs
 import os
 from itertools import izip
 
+# local libs
 from pygdal import *
+from util import *
 
+# eutopia files
 import activity
 import intervention
 
@@ -57,16 +61,15 @@ class Farm(Feature):
     def id(self): return self.fields.GetFID()
 
     @property
+    @memoize
     def lat(self):
-        if self._lat is None:
-            self._lat = self.geometry.Centroid().GetY() 
-        return self._lat
+        return self.geometry.Centroid().GetY() 
 
     @property
-    def long(self): 
-        if self._long is None:
-            self._long = self.geometry.Centroid().GetX() 
-        return self._long
+    @memoize #fun fact: memoizing this function saves 700 times the calls
+             #          --nearly 3 orders of magnitude-- as of this commit.
+    def long(self):
+        return self.geometry.Centroid().GetX()
 
     @property
     def area(self): return self.geometry.Area()
