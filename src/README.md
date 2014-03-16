@@ -4,6 +4,34 @@ Welcome to Modex! Please excuse the construction dust.
 
 If your copy of modex isn't working, make sure your [dependencies](#dependencies) are up to date. 
 
+## Team Guidelines
+
+We currently are coordinating through an [Asana](http://asana.com) group. Our issue tracker is over there, not here.
+
+Our heterogeneity makes coordination difficult. This makes it extra important to document where we're at.
+Guides, tricks, gotchas, and references need to be saved and made available to the team.
+Putting discoveries in this "wiki" (which is really just a series of .md files in the source repo) makes them easily linkable,
+fixable, and public to the world.
+
+### Keeping Copyrighted Data Out
+
+While it is joyous that the Open Data movement is getting underway, not everything is freely available yet.
+Several of our datasets are not. It would be disastrous (not the end of the world, but pretty close) if we
+accidentally uploaded a copyrighted dataset to github--forcing us to [delete the repositories to wipe any
+trace of the bad commit](https://help.github.com/articles/remove-sensitive-data) and recreate them from an older check in.
+
+The convention for dealing with this problem in this project **is as follows**
+
+1. Given a dataset `x.ext` that you want to use
+2. Rename it: `mv x.ext x.ext.real`
+3. Create a symlink in its place: `ln -s x.ext.real x.ext`
+4. Hide `x.ext.real` from git, so it doesn't accidentally get committed: `echo x.ext.real >> .gitignore`
+   * **if x.ext.real gets expanded to any child files, add those to .gitignore as well**
+5. Distribute `x.ext.real` in some private way to those authorized (thumbdrive, Google Drive, carrier pigeon...)
+This way, it should be very difficult to accidentally upload copyrighted data.
+
+
+
 ## Folder Layout
 
 Each folder should have a README that describes its content in more detail, but as an overview:
@@ -83,12 +111,16 @@ Arranging your install this way is more immediately tedious, but it saves you fr
 The choice of which method: virtual or system, is up to you. You will probably have an easier time going with virtualenvs on Windows on OS X, and an easier time with your system package manager on Linux/BSD.
 
 
-You will probably also want **_these tools_** to make dealing with data easier:
-* A spreadsheet. Excel, [LibreOffice Calc](http://www.libreoffice.org/download). You need to be able to work with and debug tabular data. You should be able to do reliable preprocessing of it (sums, averages, subsets) and plotting. (if you are comfortable doing this in matlab, R, or scipy, then by all means stick with what you know).
-* A GIS. You can get [ArcGIS](http://esri.com) [from the school](https://uwaterloo.ca/information-systems-technology/services/software-students/microsoft-office-students) at a discount, or you can install [QGIS](http://qgis.org/) which is frankly perhaps better
-* [topojson](https://github.com/mbostock/topojson/wiki/Installation) comes in handy (make sure to remember `-g` when installing!)
+You will probably also want **_these tools_** to make dealing with code easier:
+
 * Some web developer tools (see [frontend/README.md](frontend/) for suggestions)
 * [IPython](http://ipython.org), which gives a python command shell _with tab-completion_, and Mathematica-style [notebooks](http://nbviewer.ipython.org).
+* [nodejs](http://nodejs.org) - several of our deps have their unit tests written against Node, because it's easier than trying to script a browser. -_tab completion for javascript_
+* [topojson](https://github.com/mbostock/topojson/wiki/Installation) comes in handy (make sure to remember `-g` when installing!)
+
+
+* A spreadsheet. Excel, [LibreOffice Calc](http://www.libreoffice.org/download). You need to be able to work with and debug tabular data. You should be able to do reliable preprocessing of it (sums, averages, subsets) and plotting. (if you are comfortable doing this in matlab, R, or scipy, then by all means stick with what you know).
+* A GIS. You can get [ArcGIS](http://esri.com) [from the school](https://uwaterloo.ca/information-systems-technology/services/software-students/microsoft-office-students) at a discount, or you can install [QGIS](http://qgis.org/) which is frankly perhaps better
 
 
 For a brain dump of everything you might need to know about getting set up on OS X, see [here](../wiki/TechGuides/Step-by-step-installation-instructions-for-Mac-users.md). Similarly, see [here](../wiki/TechGuides/Step-by-step-installation-instructions-for-Windows-users.md) for Windows.
@@ -122,17 +154,3 @@ You can use qgis to fiddle with geodata: subset it, reorder it, remove or add co
 but it's tricky. Some gotchas with qgis:
 * SQL joins are hidden under 'properties' of a layer
 * to edit a layer it MUST be in ESRI Shapefile format and you need to find the "Toggle Editing" button (which shows up in the rightclick menu on the layer, once its in that format)
-
-## Keeping Copyrighted Data Out
-
-While the Open Data movement is getting underway, not everything is freely available yet. Several of our datasets are not. It would be disastrous (not the end of the world, but pretty close) if we accidentally uploaded a copyrighted dataset to github--forcing us to [delete the repositories to wipe any trace of the bad commit](https://help.github.com/articles/remove-sensitive-data) and recreate them from an older check in.
-
-The convention for dealing with this problem in this project **is as follows**
-
-1. Given a dataset `x.ext` that you want to use
-2. Rename it: `mv x.ext x.ext.real`
-3. Create a symlink in its place: `ln -s x.ext.real x.ext`
-4. Hide `x.ext.real` from git, so it doesn't accidentally get committed: `echo x.ext.real >> .gitignore`
-   * **if x.ext.real gets expanded to any child files, add those to .gitignore as well**
-5. Distribute `x.ext.real` in some private way to those authorized (thumbdrive, Google Drive, carrier pigeon...)
-This way, 
