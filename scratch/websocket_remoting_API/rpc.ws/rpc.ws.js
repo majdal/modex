@@ -165,43 +165,85 @@ function RPC_OOP(ws, prototype) {
   and it eschews sending metadata over the wire, because the socket you're connecting to 
  I don't like the proliferation of objects internally which do basically nothing but placemarkers for that metadata
   
-class RPCEndpoint(WebSocketServerProtocol):
+  the really nice thing about this is that you can
+  
+class RPCProtocol(WebSocketServerProtocol):
+    "wrap a callable into a websocket: messages are parameters to function calls; return values"
+    "handles serialization automatically"
+    "and nothing else"
     def __init__(self, target): #target is a callable, not a class
         self._target = target
     
     def onMessage(self, payload, isBinary):
+        # XXX maybe _target() should be called on a Deferred? we have no idea
+        # how long _target() will take to execute, and hanging the whollle server
+        # ..but maybe that's part of the game; hanging the server early
+        # in test is better than load problems sneaking up later because
+        # the app writer didn't thoroughly make sure they had caching in at the right layers
         
+        # note: protocol assumes only one message at a time
+        #  if we didn't, messages would need to come with an id code (like Autobahn does)
+        # ...actually that's not true, these four lines enforce one-message-at-a-time:
+        # there's no way to hear the next message until _target() returns
+        #  (wtf does Autobahn do, then? Does it use Deferreds? It allows parallel calls, that's for sure)
+        payload = serializer.loads(payload)
+        result = self._target(*payload)
+        result = serializer.dumps(result)
+        self.send(result)
 
-def RPCObjectEndpoint(o): #doesn't actually provide, but instead wraps each public method of o in a RPCEndpoint 
-    
 
-RPCEndpoint(tank.hp)
+def RPCEndpoint(method, debug = False):
+    "why the debug param? because "
+    f = WebSocketServerFactory(" why do i have to tell you the URL, Autobake? ", debug = debug, debugCodePaths = debug )
+    f.protocol = RPCProtocol(method)
+    return f
 
+class RPCObjectEndpoint(twisted.web.resource.Resource):
+   "convenience class to make putting" #this class is feature-parable with RPCEndpoint in API #1
+   "doesn't actually provide a websocket, but instead wraps each public method of o in a RPCEndpoint"
+    def __init__(self, o):
+      for method in (m for m in dir(o) if callable(getattr(o, m))): #find all the names (strings) of all methods
+          self.addChild(method, RPCEndpoint(getattr(o, method))
+
+
+endpoint = RPCObjectEndpoint(tank)
+root.putChild("tank1", endpoint)
 
 and similarly for the frontend, we need a bit of magic to get things rolling
 (sadly, js has no __getattr__ magic, so we'll need to explicitly define the methods)
 
-tank = RPC("ws://example.com/tank2", ["hp", "turn", "shoot"]) //you really shouldn't be holding any local state in tank yourself; if you insist, you can attach it after; but better to wrap, like function Tank() {... this._remote_tank = RPC(...) }
 function RPC(ws, methods) {
-    
+    queue = []
 	methods.each(
-	 this[m]._ws = new WebSocket(ws+"/"+m) //XXX should be URLjoin
+	 this[m]._ws = new WebSocket(ws+"/"+m); //XXX should be URLjoin
 	 this[m]._ws.onmessage = function(evt) {
+	    if(queue.length <= 0) {
+	    	throw new Error("Received RPC message but no call is in the queue waiting for it");
+	    }
+	 	response = serializer.parse(evt.data);
+	 	if('error' in response) {
+	 		console.error("RPC call to", ws, "failed:", response.error);
+	 	} else if('payload' in response) {
+	 		queue[0].resolve(response.payload);
+	 	}
+	 	queue.shift(); //this message is resolved.
 	 	
 	 	//we still want a queue here....
+	 	# resolve the promise at the top of the queue
+	 	# if we get a message it's an error (but we have nowhere to put the error, so i guess silently ignore it)
+	 	// TODO: experiment with setTimeout(function() { }, 10) //
+	 	
 	 }
 	  this[m] = function() {
 	    arguments = Array.prototype.slice(arguments);
-	  	this[m].sendJSON.stringify(arguments);
+	  	this[m].send(JSON.stringify(arguments));
 	  	return new Promise()
 	  }
 	}
 }
-tank.hp().then(function(...))
 
-tank.hp = function() {
-	# serialize arguments
-	
-	
-}
+// usage:
+tank = RPC("ws://example.com/tank2", ["hp", "turn", "shoot"]) //you really shouldn't be holding any local state in tank yourself; if you insist, you can attach it after; but better to wrap, like function Tank() {... this._remote_tank = RPC(...) }
+tank.hp().then(function(...) {...})
+
  */
