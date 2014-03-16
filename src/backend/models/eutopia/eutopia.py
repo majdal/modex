@@ -280,4 +280,4 @@ if __name__=='__main__':
         pylab.legend(loc='best')
         pylab.show()
     except ImportError:
-        print "Could not import matplotlib to generate graph"
+        print "It appears you do not have scipy's matplotlib installed. Though the simulation has run I cannot show you the plots."
