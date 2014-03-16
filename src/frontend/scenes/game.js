@@ -26,9 +26,20 @@ Crafty.scene('game', function() {
     }) 
   });
 
-
   plusButton = Crafty.e('AddScenario');
 
-  pauseButton = Crafty.e('PlayPause');
+  playButton = Crafty.e('PlayPause');
 
+  redSquare = Crafty.e('2D, Canvas, Color, Mouse')
+                     .attr({x: 100, y: 100, w: 100, h: 100})
+                     .color('red')
+                     .bind('Click', function() {
+                       // ctl.send('ctrl!!!!!');
+                            var pan = ol.animation.pan({
+                              duration: 2000,
+                              source: /** @type {ol.Coordinate} */ (view.getCenter())
+                            });
+                            map.beforeRender(pan);
+                            view.setCenter(london);
+                          }, false);
 });
