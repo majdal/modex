@@ -5,9 +5,15 @@
    <!-- libraries -->
      <!-- TODO: investigate using require.js or some other js dependency manager -->
      <!-- jquery -->
-     <script type="text/javascript" src="/assets/libs/jquery.js"></script>
+     <script type="text/javascript" src="/assets/libs/jquery.js"></script>        
+     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+    <!-- there are  abunch of dependencies for jqueryUI (images and stuff) that also need to be imported, but i don't have time for that at the moment, so keeping the cdn version for Monday's demo -->
+    <!--
      <script src="/assets/libs/jquery-ui.js"></script>
      <link rel="stylesheet" href="/assets/libs/jquery-ui-smoothness.css">
+     -->
   
      <!-- json -->
      <script type="text/javascript" src="/assets/libs/json2.js"></script>
@@ -61,13 +67,25 @@
   <div id="map"></div>
   <div id="dialogue" title="Create an intervention">
       <select id="intervention_type">
-        <option value="" disabled="disabled" selected="selected">Select an intervention type</option>
-        <option value="tax">Tax</option>
+        <option value="" disabled="disabled">Select an intervention type</option>
+        <option value="tax" selected="selected">Tax</option>
         <option value="subsidy">Subsidy</option>
       </select>
+      <span id="action">on</span>
+      <select id="activity">
+        <option value="" disabled="disabled" selected="selected">Select a product</option>
+        <option value="wheat">Wheat</option>
+        <option value="barley">Barley</option>
+      </select>
       <div id="tax_slider"></div>
-      <span id="intervention_value">_</span>
+      <span>Value of </span>
+      <span id="intervention_value">0</span>
       <span id="intervention_unit">%</span>
+      <!-- 
+        <div id="year_slider"></div>
+        <span id="year_unit"> Applied at year</span>
+        <span id="year_value">0</span>
+      -->
 
   </div>
   <script type="text/javascript">
@@ -79,6 +97,13 @@
   <script type="text/javascript">
   $(document).ready(function(){
     less.watch();
+
+    // useful for debugging
+    console.oldLog = console.log;
+    console.log = function(value) {
+      console.oldLog(value);
+      window.$log = value;
+    };
   });
   </script>
 </body>
