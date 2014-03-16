@@ -66,7 +66,7 @@ PROJECT_ROOT = dirname(abspath(__file__)) #run.py should always sit in the proje
 
 def browse():
   time.sleep(2) #give time for the server to spin up
-  webbrowser.open('http://127.0.0.1:8080')  #the URL here is hardcoded and needs to match what server.py spins up on
+  #webbrowser.open('http://127.0.0.1:8080')  #the URL here is hardcoded and needs to match what server.py spins up on
 
 if __name__ == '__main__':
 
