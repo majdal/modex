@@ -78,7 +78,7 @@ class ModelDataServer(WebSocketServerProtocol):
               self.time+=1
       
       self.push = task.LoopingCall(push)
-      self.push.start(0.00006)
+      self.push.start(0.06)
 
 
 #######################
@@ -96,7 +96,7 @@ if __name__ == '__main__':
    
    model = Eutopia([]) #the [] becomes model.log
    poke_model = task.LoopingCall(lambda: next(model))
-   poke_model.start(.0004) #4 second intervals
+   poke_model.start(4) #4 second intervals
    
    data_endpoint = WebSocketServerFactory(debug=True, debugCodePaths=True)
    data_endpoint.protocol = ModelDataServer
