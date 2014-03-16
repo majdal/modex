@@ -13,19 +13,21 @@ class Simulation:
         self.stepper = None
         self.years = 0
             
-    def internal_step(self):
-        """
-        This iterates through all the interventions
-        in the current scenario and runs the simpack
-        specific stepping.
-        """
-        
-        global time #time has to be global for Terry's simpack to work.
-        for intervention in self.current_interventions:
-            if time >= intervention.time:
-                intervention.apply(self.simpack, time)
-        time += 1
-        self.simpack.step()
+    #def internal_step(self):
+        #"""
+        #This iterates through all the interventions
+        #in the current scenario and runs the simpack
+        #specific stepping.
+        #"""
+        ## THIS IS NOT NEEDED ANY MORE.
+        ###global time #time has to be global for Terry's simpack to work.
+        ##for intervention in self.current_interventions:
+            ##if time >= intervention.time:
+                ##intervention.apply(self.simpack, time)
+        ###time += 1
+        ##old stepping version: self.simpack.step()
+        ##new stepping version:
+        #next(self.simpack)
         
     def set_scenario(self, scenario_id):
         self.current_interventions = self.scenarios[scenario_id]
@@ -38,7 +40,7 @@ class Simulation:
         """     
         def internal_stepper():
             for year in xrange(1, end):
-                self.internal_step()
+                next(self.simpack)
                 current_activity = self.simpack.get_activity_count()
                 yield current_activity
         
@@ -104,15 +106,20 @@ if __name__ == "__main__":
         interventions_json = json.load(input_json)
     
     sim = read_interventions(interventions_json)
-    eutopia = Eutopia()
+    num_steps = 20 # same as in eutopia.py
+    
+    eutopia = Eutopia([]) 
     sim.simpack = eutopia
     sim.set_scenario(1) # indexed by scenario 1
-    sim.create_stepper(100) # creates a generator from simulation start and end dates.
+    sim.create_stepper(num_steps+1) # creates a generator from simulation start and end dates.
     
-    for i in xrange(1, 100):
+    for i in xrange(num_steps):
         print sim.step()
         # this data will be sent whenever the web socket sends data.
         
+    # Uncomment this and it prints the exact same thing as eutopia.py
+    #activities = [state for time, state in sim.simpack.log]
+    #print activities
     
         
         

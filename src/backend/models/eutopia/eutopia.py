@@ -273,8 +273,11 @@ if __name__=='__main__':
     #    mapjson.write(eutopia.dumpMap())
 
     # optional: display summary of model outputs
-    import pylab
-    for act in ['durumWheatConventional', 'durumWheatGreen', 'magic']:
-        pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
-    pylab.legend(loc='best')
-    pylab.show()
+    try:
+        import pylab
+        for act in ['durumWheatConventional', 'durumWheatGreen', 'magic']:
+            pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
+        pylab.legend(loc='best')
+        pylab.show()
+    except ImportError:
+        print "It appears you do not have scipy's matplotlib installed. Though the simulation has run I cannot show you the plots."

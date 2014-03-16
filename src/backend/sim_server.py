@@ -67,8 +67,6 @@ class ModelDataServer(WebSocketServerProtocol):
       self.time = self.factory.model.time #stash the time we started watching the model at
       model = self.factory.model
       def push():
-          "this function essentially polls for new data"
-          "using select() or events would be better"  
           if self.time < len(model.log):
               #TODO: if we are much behind where model is, do we want to batch all the updates at once?
               #  - i like it the way it is now for debugging as we get settled into the new stream, since the model and the data are running at different rates and will therefore get out of sync
@@ -78,19 +76,14 @@ class ModelDataServer(WebSocketServerProtocol):
               self.time+=1
       
       self.push = task.LoopingCall(push)
-      self.push.start(0.00006)
+      self.push.start(0.6)
 
 
 #######################
 ## Main
 
-def workaround_autobahn(websocketfactory):
-    """
-    Autobahn has made an unnecessary decision: WebSocketServerFactorys demand 
-    """
-
 if __name__ == '__main__':
-   #TODO: reindent
+
    debug = (len(sys.argv) > 1 and sys.argv[1] == 'debug')
    
    if debug:
@@ -101,13 +94,17 @@ if __name__ == '__main__':
    
    model = Eutopia([]) #the [] becomes model.log
    poke_model = task.LoopingCall(lambda: next(model))
-   poke_model.start(.0004) #4 second intervals
+   poke_model.start(4) #4 second intervals
    
-   data_endpoint = WebSocketServerFactory(debug=True, debugCodePaths=True)
+   data_endpoint = WebSocketServerFactory("ws://localhost:8080",
+                                    debug = debug,
+                                    debugCodePaths = True)
    data_endpoint.protocol = ModelDataServer
    data_endpoint.model = model
    
-   ctl_endpoint = WebSocketServerFactory(debug=debug, debugCodePaths=True)
+   ctl_endpoint = WebSocketServerFactory("ws://localhost:8080",
+                                    debug = debug,
+                                    debugCodePaths = True)
    ctl_endpoint.protocol = CtlProtocol
       
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
@@ -138,8 +135,6 @@ if __name__ == '__main__':
    
    ## both under one Twisted Web Site
    site = Site(root)
-   data_endpoint.setSessionParameters(externalPort=8080) # hopefully unecessary soon; see https://github.com/tavendo/AutobahnPython/pull/196
-   ctl_endpoint.setSessionParameters(externalPort=8080) # hopefully unecessary soon; see https://github.com/tavendo/AutobahnPython/pull/196
    reactor.listenTCP(8080, site)
 
    print "Now open http://127.0.0.1:8080 in your browser"
