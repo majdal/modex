@@ -8,10 +8,43 @@
  *  tank_turn(47.9).error(function(e) { console.log("Error while turning tank:", e); })
  *  tank_HP = RPC("ws://example.com/games/0xG56/sprites/tank65/hp")
  *  tank_HP().then(function(h) { console.log("I have", h.current, "hit points of", h.total) }).error(....)
- 
- this API ONLY supports positional arguments; AutobahnWamp tries to support keyword arguments, but depending on your perspective
+
+// protocol 1:
+// first, connect to the websocket supporting this protocol 
+// calls: {'method': methodname, 'arguments': [arg1, arg2, ...]} in json
+// responses: {'error': 'error message'} || {'payload': return_value}
+
+// protocol 2 (aka your mother's simplest protocol):
+// 
+// calls: [arg1, arg2, ...] in json
+// responses: {'error': 'error message'} || {'payload': return_value} in json
+// protocol 2a (to support object mapping)
+//  -> no change to the basic protocol
+//  -> objects get unique URLs ("//example.com/data/maps/vector/buildings/northyork") which simply give a "This is a WebSocket Object Endpoint" page when accessed over HTTP
+//  -> their methods are under them in the hierarchy (say, internally, northyork has northyork.m1(), northyork.m2(), then )
+// "ws://example.com/data/maps/vector/buildings/northyork/m1" and "ws://example.com/data/maps/vector/buildings/northyork/m2" are URLs supporting protocol 2
+
+Either API ONLY
+ a) supports positional arguments
+  AutobahnWamp tries to support keyword arguments, but depending on your perspective
   either js already has keyword args (just pass an object (aka a dict)) or it has no keyword args
   so we'll just ride on that..
+ b) handles calls strictly in order (so a slow call will hold up a fast one if it happened to be invoked first); if you need non-strict RPC ordering, design your system with two RPC websockets: a fast and a slow one);
+ AutobahnWamp supports non-strict ordering, and it does this by generating (in-browser) a (hopefully, but you know how that goes) crypto-strong message ID hash, and sending it with each message, which forces each message to be a meta-structure (ie. {'method': method, 'id': id, parameters: [real arguments go here]}) 
+
+
+  I like API 1 because it makes the number of necessary websockets less (but we were already planning on using a Multiplexer)
+   and it seems like it should make the internal implementation shorter: there's only one (WebSocketResource, WebSocketServerFactory, WebSocketServerProtocol) instead of one of those triplets for EACH method
+   and it makes more sense, then, to pass in the data from the WebSocketServerProtocol (like .peer, .connected, .time, .http_headers)
+   --and it allows you to call methods not specified -- but maybe that's a bug, not a feature, in the context of RPC
+  
+  I like API 2 because it exposes each method as a distinct URL which feels more RESTish to me;
+   it will certainly be easier to debug and log, long term, because we can eg. use Wireshark filtering on HTTP URLs instead of having to filter
+  and it eschews sending metadata over the wire, because the socket you're connecting to IS the metadata
+    I don't like the proliferation of objects internally which do basically nothing but placemarkers for that metadata -- but that probably doesn't actually hurt the performance
+   I also very much like that API doesn't -force- you to be OOP: in API2 the default case is an exposed function call, and it's only by extension (Protocol 2a) that you get the case of an exposed object. In API1, exposing only a single function would mean writing a whole class (java-style) just containing one method. This seems like it should be much much easier to compose with other objects; e.g. into an AuthorizedRPCObject()
+    
+ 
  */
 
 /* TODO:
@@ -112,7 +145,9 @@ RPC.prototype.call = function(method, handler) {
   
   /* and the backend looks like
   
-  class Tank: #class we want to wrap out to the frontned
+  #class we want to wrap out to the frontned
+  
+  class Tank: 
     [...]
     def turn(self, degrees):
         # we also have self.peer and all the other metadata that's in WebSocketServerProtocol so we can do Auth&Auth
@@ -122,10 +157,12 @@ RPC.prototype.call = function(method, handler) {
         self.heading+=degrees
     def HP(self):
         return {'current': self.hp, 'total': self.total_hp}
-  tank = Tank("Big Cannon", 50hp, x, y, z)
+  
+  tank = Tank("Big Cannon", x, y, z, hp=50)
+  */
   
   
-  /* API #1:
+  /* Backend under API #1:
   
   class RPCEndpoint(WebSocketServerProtocol):
       "wraps an object and serves its public (ie non-_) methods up over a websocket"
@@ -146,26 +183,11 @@ RPC.prototype.call = function(method, handler) {
   endpoint = RPCEndpoint(tank)
   attach_node_to_twisted_hiearchy(endpoint)
   */
-  
-
-// a way to wrap objects to make sub-ws sockets available?
-function RPC2(ws)
 
 
-function RPC_OOP(ws, prototype) {
-	/* ws is a 'root' websocket
-	 *
-	 * prototype is 
-	 */
-	
-}
 
 /* backend (API #2):
- I like API 2 because it exposes each method as a distinct URL which feels more RESTish to me
-  and it eschews sending metadata over the wire, because the socket you're connecting to 
- I don't like the proliferation of objects internally which do basically nothing but placemarkers for that metadata
   
-  the really nice thing about this is that you can
   
 class RPCProtocol(WebSocketServerProtocol):
     "wrap a callable into a websocket: messages are parameters to function calls; return values"
@@ -212,14 +234,26 @@ root.putChild("tank1", endpoint)
 and similarly for the frontend, we need a bit of magic to get things rolling
 (sadly, js has no __getattr__ magic, so we'll need to explicitly define the methods)
 
-// protocol 2 (aka your mother's simplest protocol):
-// calls: [arg1, arg2, ...] in json
-// responses: {'error': 'error message'} || {'payload': return_value} in json
+function RPC(ws) {
+	if(ws instanceof String) {
+		ws = new WebSocket(ws);
+	}
+	//TODO: support relative URLs and //semirelative.com/urls
+	
+	function call() {
+	    arguments = Array.prototype.slice(arguments);
+	  	this[m].send(JSON.stringify(arguments));
+	  	return new Promise()
+	}
+	
+	return call;
+}
 
-function RPC(ws, methods) {
+function ObjectRPC(ws, methods) {
+    // here, ws a URL but is not actually expected to be a websocket; it  
     queue = []; //queue of calls in progress
 	methods.forEach(function(m) {
-	 this[m]._ws = new WebSocket(ws+"/"+m); //XXX should be URLjoin
+	 this[m] = RPC(ws+"/"+m); //XXX should be URLjoin
 	 
 	 //actually, we don't need to enforce one-call-at-a-time
 	 //we can instead just immediately send data and put the promise on the queue
@@ -242,11 +276,7 @@ function RPC(ws, methods) {
 	 	}
 	 	
 	 }
-	  this[m] = function() {
-	    arguments = Array.prototype.slice(arguments);
-	  	this[m].send(JSON.stringify(arguments));
-	  	return new Promise()
-	  }
+	  this[m] = 
 	}
 }
 
