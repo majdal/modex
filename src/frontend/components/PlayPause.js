@@ -11,7 +11,7 @@ Crafty.c('PlayPause', {
                 this.addComponent("pauseButton").removeComponent("playButton");
                 this.isPaused = false;
                 var game = plusButton.serialize();
-                game = JSON.stringify(game);
+                game = JSON.stringify({'message': 'play', 'content': game});
                 ctl.send(game);
             }
             else {

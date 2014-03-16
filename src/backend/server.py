@@ -48,11 +48,26 @@ class CtlProtocol(WebSocketServerProtocol):
       
    def onMessage(self, payload, isBinary):
       if isBinary:
-         print("Binary message received: {} bytes".format(len(payload)))
+        print("This is probably bad. Binary message received: {} bytes.".format(len(payload)))
       else:
-         print("Text message received: |{}|".format(payload.decode('utf8')))
+        print("Text message received: |{}|".format(payload.decode('utf8')))
+        try:
+          payload = json.loads(payload)
+        except ValueError, e:
+          payload = {}
+ 
+        message = payload.get('message', 'no message :(')
 
-      #self.sendMessage(json.dumps(data), isBinary)
+        if message == 'play':
+          import sys
+          sys.path.append('/Users/majdal-shihabi/Documents/School/4B/SYDE462_design_workshop/modex/src/backend/models')
+          from eutopia.eutopia import make_magic_happen
+          self.sendMessage(json.dumps(make_magic_happen()))
+        elif message == 'pause':
+          pass
+        elif message == 'addIntervention':
+          pass
+
 
    def onClose(self, wasClean, code, reason):
       print("WebSocket connection closed: {}".format(reason))

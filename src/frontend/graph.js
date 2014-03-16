@@ -69,8 +69,8 @@ $(function() {
       
       //loop through and format data into line graph data for nv
       for(key in series) {
-        console.log("adding", time, [series[key]])
-	addData(key, time, [series[key]]);
+        //console.log("adding", time, [series[key]])
+	      addData(key, time, [series[key]]);
       }      
       
       svg // update the chart with the data
