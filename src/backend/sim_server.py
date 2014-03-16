@@ -26,9 +26,7 @@ PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the proj
 # though our single model is run via python import
 # in the Real System(TM) models will be dynamically
 # loaded somehow, so pretend you don't see this.
-from models.eutopia.eutopia import Eutopia
-from models.eutopia.simulation import sim
-
+from models.eutopia.simulation import sim as model #this is an empty sim using Eutopia, no interventions
 
 
 # NB:
@@ -52,7 +50,11 @@ class CtlProtocol(WebSocketServerProtocol):
       if isBinary:
          print("Binary message received: {} bytes".format(len(payload)))
       else:
-         print("Text message received: |{}|".format(payload.decode('utf8')))
+         message = payload.decode('utf8')
+         print("Text message received: |{}|".format(message))
+         print(model.update_interventions(message))
+         
+         #This part is for receiving interventions from the user as I understand.
 
       #self.sendMessage(json.dumps(data), isBinary)
 
@@ -94,10 +96,7 @@ if __name__ == '__main__':
    if debug:
      print "Starting server in", PROJECT_ROOT
    
-   model = sim #the [] becomes model.log
-   
-   
-   poke_model = task.LoopingCall(lambda: sim.step())
+   poke_model = task.LoopingCall(lambda: model.step())
    poke_model.start(4) #4 second intervals
    
    data_endpoint = WebSocketServerFactory("ws://localhost:8080",

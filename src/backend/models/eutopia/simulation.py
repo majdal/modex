@@ -1,4 +1,5 @@
 import json
+from StringIO import StringIO
 
 class Scenario:
     def __init__(self, interventions):
@@ -63,10 +64,30 @@ class Simulation:
             
         except StopIteration:
             print "Simulation range exceeded."
-        
-        
             
-
+    def update_interventions(self, client_json):
+            """
+            Like read_interventions, but it does not initialize a new Simulation object.
+            It reads interventions sent from the client one at a tme, and
+            appends those to the current model. 
+            """
+            
+            # unicode object does not have read method, this gives it one
+            io = StringIO(client_json) 
+            raw = json.load(io)
+            
+            try:
+                intervention = raw[0]
+                intervention_data = intervention["interventions"][0]
+    
+                print "Scenario count is: {}.".format(intervention["scenarioCount"])
+                print "Activity type is: {}.".format(intervention_data["activity"])
+                print "The associated value is: {}.".format(intervention_data["tax_value"])
+                return intervention
+            
+            except IndexError:
+                print "Error, no interventions specified!"
+                return client_json
 
 def read_interventions(interventions): #XXX <-- custom to Eutopia.py
     """
@@ -96,6 +117,7 @@ def read_interventions(interventions): #XXX <-- custom to Eutopia.py
             simulation.scenarios[scenario_id.message] = [intervention_obj]
     
     return simulation
+    
  
 from intervention import PriceIntervention, NewActivityIntervention
 from eutopia import *
