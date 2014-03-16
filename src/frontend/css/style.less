@@ -2,90 +2,24 @@
 .hidden { display: none } /* use this CSS class to disable elements temporarily */
 
 body, html {
-  //background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
-  background-color: white;
+  background-color: white; // ideally, body will be completely covered by the crafty game, so this won't be even necessrary. Leave it here just in case. 
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
   padding: 0px;
   margin: 0px;
 }
 
-h1, h2, h3, h4, h5, h6 { color: steelblue }
-
-/* layout */
-
 #cr-stage { 
   z-index: 11;
-  position: fixed;
 }
-
-#layout { /* outline div, giving the overall space available */
-  height: 100%;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  
-  //position: fixed; /* interweave with crafty */
-  //z-index: 3;
-  //opacity: .6;
-}
-
-/* wrapper div so that inner divs will bunch up against each other proper-like */
-/* this is sometimes called "shrinkwrapping" */
-#view { height: 80%; }
-#view > * { display: inline-block; height: 100% } 
-
-#controls { 
-   height: 20%;
-   background: grey;
-   padding: .3em 1em;
-}
-// ugh
-// to center a bunch of elements at once you
-// a) need to shrink wrap them into a div (so the div must be inline-block??)
-// b) wrap that in another div so that margin works right
-.shrinkwrap { 
-
-}
-#controls > div {
-   margin-left: auto;
-   margin-right: auto;
-display: inline-block 
-}
-
-#controls {
-  text-align: center; /* this is unsatisfying; I really want to center an entire div; but CSS makes that devilish -kousu*/
-}
-
-#controls a { 
-  opacity: .2; /*initially grey out since it's inactive*/
-  color: white;
-  margin: .1em;
-  padding-left: .1em;
-  padding-right: .1em;
-  border: black dotted 1px;
-}
-
-/* the ideal layout:
-   - automatically figures out if it has enough space to render the two elements side by side (to some minimum definition of "enough space", say 200px)
-   - if not, splits them onto multiple lines, and on those lines spreads them as wide as possible
-I know i've done this before, I just have to remember how -kousu
-*/
 
 #map {
-  //border-top-left-radius: 20px;
-  //overflow: hidden; /* make the radius affect the inner map rendering elements */
-
-  /*position: relative;
-  z-index: 900;*/
-
-  //width: 61%; /*golden ratio*/
   width: 100%; /* full screen */
   height: 100%;
   position: fixed;
   z-index: 0;
   
-  .ol-zoom, .ol-logo {
-    .hidden
+  .ol-zoom, .ol-logo { // hide the ol3 zoom buttons and the logo. We should add credit to OL3 for their work in our "credits" page for the game. 
+    .hidden 
   }
 }
 
@@ -142,12 +76,3 @@ I know i've done this before, I just have to remember how -kousu
   stroke: steelblue;
   stroke-width: 1.5px;
 }
-/*
-#graph {
-  position: fixed;
-  z-index: 1000;
-  background: white;
-  bottom: 0;
-  right: 0;
-  border-radius: 3px;
-}*/
