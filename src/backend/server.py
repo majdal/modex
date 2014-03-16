@@ -84,11 +84,6 @@ class ModelDataServer(WebSocketServerProtocol):
 #######################
 ## Main
 
-def workaround_autobahn(websocketfactory):
-    """
-    Autobahn has made an unnecessary decision: WebSocketServerFactorys demand 
-    """
-
 if __name__ == '__main__':
    #TODO: reindent
    debug = (len(sys.argv) > 1 and sys.argv[1] == 'debug')
