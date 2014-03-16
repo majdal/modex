@@ -69,18 +69,30 @@ class FarmFamily:
         self.farms = []
         self.bank_balance = 1000000.00
         self.equipment = []
-        self.preferences = {'money': 1.0}
+        self.preferences = {'money': 1.0, 'follow_society':0.2}
 
     def add_farm(self, farm):
         self.farms.append(farm)
         farm.family = self
 
     def make_planting_decision(self, activities, farm):
+        all_activities = dict(self.eutopia.latest_activity_count)
+        total_activities = float(sum(all_activities.values()))
+        if total_activities > 0:
+            for k,v in all_activities.items():
+                all_activities[k]/=total_activities
+
+        
+
+
         best = None
         for activity in activities:
             total = 0
             for pref, weight in self.preferences.items():
-                total += activity.get_product(pref, farm) * weight
+                if pref=='follow_society':
+                    total += all_activities.get(activity.name,0) * weight
+                else:
+                    total += activity.get_product(pref, farm) * weight
                 # TODO: improve choice algorithm
                 #    - maybe by allowing different sensitivities to risk
                 #      on different income dimensions
@@ -154,6 +166,7 @@ class Eutopia:
                 intervention.apply(self, self.time)
 
         # run model
+        self.latest_activity_count = self.get_activity_count()
         for family in self.families:
             family.step()
         self.time += 1
@@ -226,8 +239,8 @@ if __name__=='__main__':
     #    mapjson.write(eutopia.dumpMap())
 
     # optional: display summary of model outputs
-    #import pylab
-    #for act in ['durumWheatConventional', 'durumWheatGreen', 'magic']:
-    #    pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
-    #pylab.legend(loc='best')
-    #pylab.show()
+    import pylab
+    for act in ['durumWheatConventional', 'durumWheatGreen', 'magic']:
+        pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
+    pylab.legend(loc='best')
+    pylab.show()
