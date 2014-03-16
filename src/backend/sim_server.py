@@ -27,6 +27,8 @@ PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the proj
 # in the Real System(TM) models will be dynamically
 # loaded somehow, so pretend you don't see this.
 from models.eutopia.eutopia import Eutopia
+from models.eutopia.simulation import sim
+
 
 
 # NB:
@@ -92,8 +94,10 @@ if __name__ == '__main__':
    if debug:
      print "Starting server in", PROJECT_ROOT
    
-   model = Eutopia([]) #the [] becomes model.log
-   poke_model = task.LoopingCall(lambda: next(model))
+   model = sim #the [] becomes model.log
+   
+   
+   poke_model = task.LoopingCall(lambda: sim.step())
    poke_model.start(4) #4 second intervals
    
    data_endpoint = WebSocketServerFactory("ws://localhost:8080",
