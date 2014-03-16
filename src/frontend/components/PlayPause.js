@@ -17,6 +17,10 @@ Crafty.c('PlayPause', {
             else {
                 this.addComponent("playButton").removeComponent("pauseButton");
                 this.isPaused = true;
+
+                var game = plusButton.serialize();
+                game = JSON.stringify({'message': 'pause', 'content': game});
+                ctl.send(game);
             }
         })
     },

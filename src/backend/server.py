@@ -59,12 +59,11 @@ class CtlProtocol(WebSocketServerProtocol):
         message = payload.get('message', 'no message :(')
 
         if message == 'play':
-          import sys
-          sys.path.append('/Users/majdal-shihabi/Documents/School/4B/SYDE462_design_workshop/modex/src/backend/models')
-          from eutopia.eutopia import make_magic_happen
-          self.sendMessage(json.dumps(make_magic_happen()))
+          print "play"
+          poke_model.start(1)
         elif message == 'pause':
-          pass
+          print "pause"
+          poke_model.stop()
         elif message == 'addIntervention':
           pass
 
@@ -111,7 +110,7 @@ if __name__ == '__main__':
    
    model = Eutopia([]) #the [] becomes model.log
    poke_model = task.LoopingCall(lambda: next(model))
-   poke_model.start(4) #4 second intervals
+   #poke_model.start(4) #4 second intervals
    
    data_endpoint = WebSocketServerFactory(debug=True, debugCodePaths=True)
    data_endpoint.protocol = ModelDataServer
