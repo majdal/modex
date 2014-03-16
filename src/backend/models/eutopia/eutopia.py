@@ -49,16 +49,24 @@ class Farm(Feature):
         self.county = "BestCountyInTheWorldIsMyCountyAndNotYours"
 
         self.last_activity = None
+        self._lat = None
+        self._long = None
 
     #backwards compat
     @property
     def id(self): return self.fields.GetFID()
 
     @property
-    def lat(self): return self.geometry.Centroid().GetY()
+    def lat(self):
+        if self._lat is None:
+            self._lat = self.geometry.Centroid().GetY() 
+        return self._lat
 
     @property
-    def long(self): return self.geometry.Centroid().GetX()
+    def long(self): 
+        if self._long is None:
+            self._long = self.geometry.Centroid().GetX() 
+        return self._long
 
     @property
     def area(self): return self.geometry.Area()
@@ -69,7 +77,10 @@ class FarmFamily:
         self.farms = []
         self.bank_balance = 1000000.00
         self.equipment = []
-        self.preferences = {'money': 1.0, 'follow_society':0.2}
+        self.preferences = {'money': 1.0, 
+                            'follow_society':0.1,  # how important is following what everyone else is doing
+                            'follow_local':0.2,    # how important is doing what my neighbours are doing
+                            }
 
     def add_farm(self, farm):
         self.farms.append(farm)
@@ -82,6 +93,14 @@ class FarmFamily:
             for k,v in all_activities.items():
                 all_activities[k]/=total_activities
 
+        if self.preferences.get('follow_local', 0) != 0:
+            local_activities = self.eutopia.get_activity_count(farm.neighbours)
+            total_activities = float(sum(local_activities.values()))
+            if total_activities > 0:
+                for k,v in local_activities.items():
+                    local_activities[k]/=total_activities
+
+
         
 
 
@@ -91,6 +110,9 @@ class FarmFamily:
             for pref, weight in self.preferences.items():
                 if pref=='follow_society':
                     total += all_activities.get(activity.name,0) * weight
+                elif pref=='follow_local':
+                    if weight != 0:
+                        total += local_activities.get(activity.name,0) * weight
                 else:
                     total += activity.get_product(pref, farm) * weight
                 # TODO: improve choice algorithm
@@ -154,6 +176,9 @@ class Eutopia:
             family.add_farm(farm)
             self.families.append(family)
 
+        for farm in self.farms:
+            farm.neighbours = self.get_local_farms(farm.lat, farm.long, count=10)
+
     def dumpMap(self):
         "convert the map data to GeoJSON"
         "meant to be used in a ModelExplorer endpoint"
@@ -187,9 +212,10 @@ class Eutopia:
             next(self)
             yield self.get_activity_count() #hardcode model output, for now
 
-    def get_activity_count(self):
+    def get_activity_count(self, farms = None):
+        if farms is None: farms = self.farms
         activities = {}
-        for farm in self.farms:
+        for farm in farms:
             if farm.last_activity is not None:
                 name = farm.last_activity.name
                 if name not in activities:
@@ -198,9 +224,17 @@ class Eutopia:
                     activities[name] += 1
         return activities
 
+    def get_local_farms(self, lat, long, count):
+        dist = [((lat-f.lat)**2 + (long-f.long)**2, f) for f in self.farms]
+        dist.sort()
+        return [d[1] for d in dist]
+
+    def get_local_activity_count(self, farm, count):
+        return self.get_activity_count(self.get_local_farms(farm.lat, farm.long, count))
+
 
 if __name__=='__main__':
-    n = 10 #number of steps to run
+    n = 20 #number of steps to run
            #TODO: make this a command line param
 
     log = []
