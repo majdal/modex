@@ -1,6 +1,8 @@
 state.ws
 ========
 
+state.ws implements data binding.
+
 state.ws comes in two components: state.ws.js and statews.py
 
 It lets you do this:
@@ -10,7 +12,7 @@ s = state(WebSocket("ws://example.com/spreadsheets/debts"))
 setInterval(function() { console.log(s.data) }, 31415)
 ```
 
-When the object at ws://example.com/spreadsheets/debts is updated, state.ws computes a delta 
+When the object at ws://example.com/spreadsheets/debts is updated, state.ws computes a delta, sends it, and the other side applies the delta and optionally fires event handlers.
 
 Updates can happen server side (e.g. by the database getting updated, by another user editing the object, etc) or by you editing s.data.
 
