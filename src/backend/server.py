@@ -48,23 +48,11 @@ class CtlProtocol(WebSocketServerProtocol):
       
    def onMessage(self, payload, isBinary):
       if isBinary:
-         print("This is probably bad. Binary message received: {} bytes.".format(len(payload)))
+         print("Binary message received: {} bytes".format(len(payload)))
       else:
-        try:
-          payload = json.loads(payload)
-        except ValueError, e:
-          payload = {}
+         print("Text message received: |{}|".format(payload.decode('utf8')))
 
-        message = payload.get('message', 'no message :(')
-
-        print message
-
-        if message == 'play':
-          pass
-        elif message == 'pause':
-          pass
-        elif message == 'addIntervention':
-          pass
+      #self.sendMessage(json.dumps(data), isBinary)
 
    def onClose(self, wasClean, code, reason):
       print("WebSocket connection closed: {}".format(reason))
@@ -89,22 +77,6 @@ class ModelDataServer(WebSocketServerProtocol):
       
       self.push = task.LoopingCall(push)
       self.push.start(0.6)
-      # this could probably be cleaner
-      def feed():  #a coroutine, meant to be pumped by the twisted event loop
-        for row in dat:
-          J = dict(zip(header, row))
-          # print "pushing", J, "to the client"
-          self.speak(J)
-          yield
-      g = feed()
-      
-      def loop():  #wrap the coroutine in a callback that causes a loop setTimeout()-style playing nice with Twisted's loop (there's probably a cleaner way to do this, but shh)
-        try:
-          next(g)
-          reactor.callLater(.3, loop)
-        except StopIteration:
-          pass
-      loop()  #kick it off
 
 
 #######################

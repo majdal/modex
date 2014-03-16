@@ -1,19 +1,14 @@
-$(function() {
-/*
- *   TODO
- *  
- * [x] make the d3 plot update
- *  [x] subproblem: less doesn't work because it's nonlocal
- *  [x] subproblem: jquery reruns .ready() handlers if one of them crashes??
- *  [ ] use enter() and exit() instead of redrawing everything on every update
- *  [ ] don't jump the axes all the time
- *  [ ] construct a legend instead of labelling lines
- *  [ ] make the lines *independent*: we should be able to throw arbitary coordinate pairs into each list and have them arrange themselves properly; it shouldn't be forced
- *   
+/* graph.js
+ *   draws a multi-timeseries linegraph from data passed over a websocket
  */
+
+
+$(function() {
 
    scope = {} //hacks
    scope.data = [] //makes a data array that is safely accessible from anywhere in this file; sidesteps any weird js scoping rules that might kick in if we tried to make data a (pseudo)global
+   
+   var parseDate = d3.time.format("%Y%m%d").parse;
     
     var margin = {top: 20, right: 80, bottom: 30, left: 50},
     
@@ -21,130 +16,102 @@ $(function() {
     //height = 500 - margin.top - margin.bottom;
     width = $("#graph").width() - margin.left - margin.right
     height = $("#graph").height() - margin.top - margin.bottom;
-
-    var parseDate = d3.time.format("%Y%m%d").parse;
-
-    var x = d3.time.scale()
-        .range([0, width]);
-
-    var y = d3.scale.linear()
-        .range([height, 0]);
-
-    var color = d3.scale.category10();
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
-
-    var line = d3.svg.line()
-        .interpolate("basis")
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.temperature); });
-
-    
-    
-    
-    data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
-    data_socket.onopen = function() { 
-       this.send(""); //poke the server to get data out
-    }
-    data_socket.onmessage = function(d) {
-      d = JSON.parse(d.data);
-      //console.log("received data from (plain) websocket:")
-      d.date = parseDate(d.date)
-      //console.log(d);
-      scope.data.push(d)
-      draw()
-    }
-    
-    /*
-    d3.tsv("assets/data/static_lightbulbs.tsv", function(error, data) {
-    
-      data.forEach(function(d) {
-        d.date = parseDate(d.date);
-      });
-      
-      scope.data = data;
-      
-      draw()
-      })
-      */
-      
-   // the trickiest part of this problem is that it is several line graphs, not just ones
-   
-   function draw() {
-    data = scope.data; //hacks
-      
-    //console.log("plotting this data array:", data)
-      
-    //console.log("creating svg")
-    $("svg").detach() //kill old svg, if there is one
-    var svg = d3.select("#graph").append("svg")
+        
+	var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")"
         );
+	var chart;
+	
+	nv.addGraph(function() {
+		chart = nv.models.lineChart()
+		.options({
+                        width: width,    //it is super awkward that we have to define these; isn't d3 supposed to just figure this out?
+                        height: height,  //it might even be doing that, but it seems (try clicking the nvd3 legends on and off and watch
+                                         //the inspector---it resets the <rect> width exactly when you click) nvd3 has other plans in mind
+                        margin: {top: 10, right: 10, bottom: 15, left: 10}, //all these pixel measurements are hurtful
+                        
+			showXAxis: true,
+			showYAxis: true,
+			showLegend: true,
+		})
+		;
+		
+		chart.xAxis
+			.axisLabel("Time")
+			.tickFormat(function(d) { return d3.time.format('%b %d, %Y')(new Date(d)) })
+			;
+		chart.yAxis
+			.axisLabel("Quantity")
+			.tickFormat(d3.format(',.1f'))
+			;
+			
+		chart.x(function(d,i) { return d.x}); 	// use the .x value for x-axis 
+                                           		//  location (rather than i)
+                     
+        
+        nv.utils.windowResize(chart.update); //what does this do? do we need this?
+
+  		return chart;
+	})
+    
+    
+    
+    data_socket = new WebSocket("ws://" + location.host + "/ws") //our websocket sits at /ws (TODO(kousu): reorg this)
+    data_socket.onmessage = function(d) {
+      //console.log("received data from (plain) websocket:", d)
+      d = JSON.parse(d.data);
+      var time = d[0]
+      var series = d[1]
+      //d.date = parseDate(d.date);
       
-      color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
-
-      var cities = color.domain().map(function(name) {
-        return {
-          name: name,
-          values: data.map(function(d) {
-            return {date: d.date, temperature: +d[name]};
-          })
-        };
-      });
-
-      x.domain(d3.extent(data, function(d) { return d.date; }));
-
-      y.domain([ //compute the outermost values we need on the axes to show all the data
-        d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
-        d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
-      ]);
-
-      svg.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
-
-      svg.append("g")
-          .attr("class", "y axis")
-          .call(yAxis)
-        .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", ".71em")
-          .style("text-anchor", "end")
-          .text("Temperature (ºF)"); //tempurature?
-
-      //'city' is named because this code was stolen from a demo showing
-      // off using d3 to plot multiple city temperature lines
-      // 'city' is a <g> tag containing a <path>: the line, and
-      //   a <text>: the label at the end of the line
-      var city = svg.selectAll(".city")
-          .data(cities)
-        .enter().append("g")
-          .attr("class", "city");
-
-     // this is <path> tag
-     // 
-      city.append("path")
-          .attr("class", "line")
-          .attr("d", function(d) { return line(d.values); /*this call returns the actual line in the format desired by svg <path> elements */ })
-          .style("stroke", function(d) { return color(d.name); });
-
-      // this is the <text> tag which labels the end of the line
-      city.append("text")
-          .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-          .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
-          .attr("x", 3)
-          .attr("dy", ".35em")
-          .text(function(d) { return d.name; });
-   }
-});
+      //loop through and format data into line graph data for nv
+      for(key in series) {
+        console.log("adding", time, [series[key]])
+	addData(key, time, [series[key]]);
+      }      
+      
+      svg // update the chart with the data
+        .datum(scope.data)
+        .call(chart);
+      //console.log(d);
+      //scope.data.push(d)
+      //draw()
+    }
+    
+    //add Data to pre-existing line
+    function addData(keyval,xval,yval){
+    	var notthere = true
+    	//if there is already a line for the data add it to that line
+    	for(var i = 0; i < scope.data.length; i++){
+    		if(scope.data[i].key == keyval){
+    			notthere = false;
+    			scope.data[i].values.push({x:xval, y:yval});
+    		}
+    	}
+    	
+    	//otherwise add a new line
+    	if(notthere){
+    		var new_line = {
+    		values: [{x:xval, y:yval}],
+    		key: keyval,
+    		color: getRandomColor()
+    		}
+    		scope.data.push(new_line);
+    	}
+    		
+    }
+    
+    // Just to be pretty
+	function getRandomColor() {
+		var letters = '0123456789ABCDEF'.split('');
+		var color = '#';
+		for (var i = 0; i < 6; i++ ) {
+			color += letters[Math.round(Math.random() * 15)];
+		}
+		return color;
+	}
+   
+  })

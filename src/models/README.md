@@ -84,6 +84,14 @@ Features:
 **Dumb non-linear model generators**
 **Dumb multivariate random number generators with tunable cross-correlation**
 
+**Food Stamps**:
+  * families
+    * income
+    * children
+  * food banks
+  * food stamps
+  * government subsidies / etc
+
 **[SLUCE](http://sluce.wici.ca)**
 **[FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel)**
 

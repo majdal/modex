@@ -23,6 +23,8 @@ GDAL has Feature.ExportToJSON but not:
  * Layer.ExportToGeoJSON()
  * Shapefile.ExportToGeoJSON()
 
+ogr has a .UseExceptions() method, but it's inconsistent; it doesn't, for example, cover opening a nonexistant file; and unlike gdal, ogr provides not GetLastError*() methods)
+
 We can do better.
 
 ## Competition
@@ -31,6 +33,8 @@ We can do better.
   * pygdal                    - "Virtualenv and setuptools friendly version of standard GDAL python bindings"
 * geometryIO                - GDAL wrapper for reading and writing geospatial data to a variety of vector formats (unfinished)
 * Python_GDAL               - _dead_
+
+* QGIS                      - _very much alive_ and with lots of bits written in python; they almost certainly have a python UI that's easier than GDAL
 
 not full GDAL interfaces:
 
