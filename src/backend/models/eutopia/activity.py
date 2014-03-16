@@ -21,7 +21,7 @@ activities = {
             'nitrogen': 0,
             'carbon': 5,
             'soil': -2,
-            'labour': -2000,
+            'labour': -2500,
             'certification': -500,
             'duramOrganic': 40,
             'dolphin': -17,
@@ -44,7 +44,7 @@ class Normal:
 aggregate_measures = {
     'money': {
         'duramSeed': Normal(50,10),
-        'duramSeedOrganic': Normal(55,10),
+        'duramSeedOrganic': Normal(100,10),
         'labour': Normal(5,1),
         'certification': Normal(1,0),
         'duram': Normal(300,10),

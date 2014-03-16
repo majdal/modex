@@ -69,7 +69,7 @@ class FarmFamily:
         self.farms = []
         self.bank_balance = 1000000.00
         self.equipment = []
-        self.preferences = {'money': True}
+        self.preferences = {'money': 1.0}
 
     def add_farm(self, farm):
         self.farms.append(farm)
@@ -85,6 +85,7 @@ class FarmFamily:
                 #    - maybe by allowing different sensitivities to risk
                 #      on different income dimensions
 
+            
             if best is None or total > best_total:
                 best = activity
                 best_total = total
@@ -195,6 +196,7 @@ if __name__=='__main__':
     eutopia.intervene(intervention.PriceIntervention(5, 'duramSeed', 10))
     eutopia.intervene(intervention.PriceIntervention(7, 'duramSeedOrganic', 0.001))
 
+    """
     magic_activity = {
         'equipment': ['tractor', 'wheelbarrow'],
         'products': {
@@ -209,6 +211,7 @@ if __name__=='__main__':
             }
         }
     eutopia.intervene(intervention.NewActivityIntervention(7, 'magic', magic_activity))
+    """
 
     #run the model
     for i in range(n):
@@ -224,7 +227,7 @@ if __name__=='__main__':
 
     # optional: display summary of model outputs
     #import pylab
-    #pylab.plot(range(len(activities)), [a.get('durumWheatConventional',0) for a in activities])
-    #pylab.plot(range(len(activities)), [a.get('durumWheatGreen',0) for a in activities])
-    #pylab.plot(range(len(activities)), [a.get('magic',0) for a in activities])
+    #for act in ['durumWheatConventional', 'durumWheatGreen', 'magic']:
+    #    pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
+    #pylab.legend(loc='best')
     #pylab.show()
