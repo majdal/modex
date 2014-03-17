@@ -2,10 +2,7 @@
 
 RPC = require("./rpc.ws.js")
 
-ObjectRPC = RPC.ObjectRPC
-RPC = RPC.RPC
-
-var tank = new ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"])
+var tank = new RPC.RemoteObject("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"])
 
 tank.ready(function() {
   console.log("tank sockets opened; calling");

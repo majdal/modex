@@ -205,7 +205,7 @@ function ObjectRPC(ws, methods) {
 	return this;
 }
 
-module.exports = {'ObjectRPC': ObjectRPC, 'RPC': RPC}
+module.exports = {'RemoteObject': ObjectRPC, 'Call': RPC}
   
   /* and the backend looks like
   
