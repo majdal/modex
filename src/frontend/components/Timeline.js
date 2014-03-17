@@ -2,9 +2,9 @@ Crafty.c('AddScenario', {
   scenarioCount: 1, // the total number of scenarios
   length: 10, // how many years is the scenario for?
   scenarios: [],
+  selectedScenario: null,
 
   init: function() {
-    var self = this;
     // make sure that we have all the entities required
     this.requires('2D, Canvas, Mouse, plusButton');
 
@@ -14,10 +14,15 @@ Crafty.c('AddScenario', {
     this.attr({x: 20, y: positionY, w: 100, h: 100})
         // to create a new scenario/timeline, press this button
         .bind('Click', function(e){
-          var scenario = new Crafty.e('Timeline').timeline(self.scenarioCount);
-          self.scenarioCount = self.scenarioCount+1;
-          self.scenarios.push(scenario);
+          this.addScenario();
         });
+  },
+
+  addScenario: function() {
+    var scenario = new Crafty.e('Timeline').timeline(this.scenarioCount);
+    scenario.select();
+    this.scenarioCount = this.scenarioCount+1;
+    this.scenarios.push(scenario);
   },
 
   yearInPixels: function(xCoord) {
@@ -28,7 +33,8 @@ Crafty.c('AddScenario', {
 
   serialize: function() {
     return $.map(this.scenarios, function(element){return element.serialize()} );
-  }
+  }, 
+
 });
 
 
@@ -36,14 +42,19 @@ Crafty.c('Timeline', {
   scenarioCount: 1, // the ordinal number of the scenario
   scenarioName: '',
   positionY: 0, // keeping track  of the y position of the timeline, for reference 
+  isSelected: false,
 
   init: function() {
-    this.requires('2D, Canvas, Color, Mouse, timelineBackground');
+    this.requires('2D, Canvas, Mouse, timelineBackground');
 
     this.bind('Click', function(e) {
-      var taxYear = plusButton.yearInPixels(e.x);
-      var intervention = new Crafty.e('Tax').tax(taxYear, e.x, this.positionY); 
-      this.interventions.push(intervention);
+      if (e.x < 170) { // if the user slected this scenario (clicked on the selection handle)  
+        if (!this.isSelected) this.select(); // if this scenario is not selected, mark it as the selected one, and deselect the currently previously scenario.
+      } else {        
+        var taxYear = plusButton.yearInPixels(e.x);
+        var intervention = new Crafty.e('Tax').tax(taxYear, e.x, this.positionY); 
+        this.interventions.push(intervention);
+      }
     });
   },
 
@@ -58,12 +69,25 @@ Crafty.c('Timeline', {
   }, 
 
   serialize: function() {
-    var interventions = $.map(this.interventions, function(element){return element.serialize()} )
-    //this.interventions
+    var interventions = $.map(this.interventions, function(element) { return element.serialize() } );
     return {'scenarioCount': this.scenarioCount,
             'scenarioName': this.scenarioName,
             'interventions': interventions,
         }
+  }, 
+
+  select: function() {
+    this.isSelected = true;
+    this.removeComponent('timelineBackground').addComponent('timelineSelected');
+    try { // when adding the first scenario, there is no scenario to deselect. DUCK TYPING FTW!!! 
+      plusButton.selectedScenario.deselect(); 
+    } catch (e) { /* do nothing */ }
+    plusButton.selectedScenario = this;
+  },
+
+  deselect: function() {
+    this.isSelected = false;
+    this.removeComponent('timelineSelected').addComponent('timelineBackground');
   }
 });
 
@@ -112,7 +136,7 @@ Crafty.c('InterventionDialogue', {
 
   createDialogue: function(intervention, self) {
     $("#dialogue").dialog({
-      width: 420,
+      width: 490,
       modal: true,
       buttons: [        
         {
@@ -129,7 +153,11 @@ Crafty.c('InterventionDialogue', {
             if (!$('#activity').val()) { // if the activity is not selected
               alert('Please select an activity first!');
             } else {
-              intervention.tax_value = $('#tax_slider').slider('value');
+              var interventionType = $(this).val();
+              var tax_value = $('#tax_slider').slider('value');
+              if (interventionType == 'subsidy') {
+                tax_value = tax_value * -1; // a subsidy is a negative tax
+              } 
               intervention.activity = $('#activity').val();
               //intervention.year = $('#year_slider').val();
               self.destroyDialogue();
@@ -154,22 +182,12 @@ Crafty.c('InterventionDialogue', {
         // ui.value is a value between 0 and 100% - representing the possible tax value
       }
     });
-/*
-    $("#year_slider").slider({
-      min: 0,
-      max: plusButton.length,
-      step: 1,
-      slide: function(event, ui) {
-        $('#year_value').text(ui.value);
-        // ui.value is a value between 0 and 100% - representing the possible tax value
-      }
-    });
-*/
   },
 
   destroyDialogue: function () {
     $('#activity').val('')
     $('#dialogue').dialog('destroy');
     $('#tax_slider').slider('destroy');
+    $('#intervention_value').text('0');
   }
 });

@@ -16,26 +16,16 @@ Crafty.scene('game', function() {
          })
        });
 
-var farms = new ol.layer.Vector({
-  source: new ol.source.TopoJSON({ url: '/assets/maps/elora.topo.json'  } ), 
+  var farms = new ol.layer.Vector({
+    source: new ol.source.TopoJSON({ url: '/assets/maps/elora.topo.json'  } ), 
     styleFunction: function(feature, resolution) {
-    return [new ol.style.Style({
-  //image: new ol.style.Circle({
-  fill: new ol.style.Fill({
-    //TODO: look at feature and colour accordingly; for example: change hue by wealth and alpha by activity or something
-    color: 'hsla(100, 50%,30%, .5)'
-  }),
-  stroke: new ol.style.Stroke({
-    color: 'hsla(290, 50%, 50%, .3)',
-    width: 2
-  })
-  //})
+      return [new ol.style.Style({ fill: new ol.style.Fill({ color: 'hsla(100, 50%,30%, .5)'}),  //TODO: look at feature and colour accordingly; for example: change hue by wealth and alpha by activity or something
+                                   stroke: new ol.style.Stroke({ color: 'hsla(290, 50%, 50%, .3)', width: 2 })  
+                          })
+      ];
+    } //styleFunction
+  });
 
-    })
-    ];
-  } //styleFunction
- 
-});
   // draw the map
   var map = new ol.Map({
     renderer: ol.RendererHint.CANVAS, //the vector layer crashes without this
@@ -48,8 +38,19 @@ var farms = new ol.layer.Vector({
   });
 
   plusButton = Crafty.e('AddScenario');
+  // add an initial scenario and select it
+  plusButton.addScenario();
 
   playButton = Crafty.e('PlayPause');
+
+  //back button to Menu screen
+
+  Crafty.e("2D, DOM, backButton, Mouse").attr({
+      x: 0,
+      y: 0
+   }).bind('Click', function() {
+      Crafty.scene("menu");
+    });
 /*
   redSquare = Crafty.e('2D, Canvas, Color, Mouse')
                      .attr({x: 100, y: 600, w: 100, h: 100})

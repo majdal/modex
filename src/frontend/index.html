@@ -25,7 +25,7 @@
      <script type="text/javascript" src="/assets/libs/ol.js"></script>
      <link rel="stylesheet" href="/assets/libs/ol.css" type="text/css">
      
-     <!-- d3 -- >
+     <!-- d3 -->
      <script type="text/javascript" src="/assets/libs/d3.v3.js" charset="utf-8"></script>
      <script type="text/javascript" src="/assets/libs/nv.d3.js"></script>
      <link href="/assets/libs/nv.d3.css" rel="stylesheet" type="text/css">
@@ -41,9 +41,6 @@
    
      <!-- ol3 --> 
      <!-- <script type="text/javascript" src="map.js"></script>-->
-  
-     <!-- d3 -->
-     <!-- <script type="text/javascript" src="graph.js"></script>   -->
 
      <!-- crafty -->
      <!-- warning: crafty sets overflow: hidden unilaterally on the body element,
@@ -58,13 +55,18 @@
      <script type="text/javascript" src="scenes/goals.js"></script>
      <script type="text/javascript" src="scenes/intro.js"></script>
      <script type="text/javascript" src="scenes/game.js"></script>
+
+     <!-- nvd3 -->
+     <script type="text/javascript" src="graph.js"></script>
   
   <!-- start page content -->
    
   <title>Model Explorer -- Agriculture Simulation</title>
 
 </head>
-  <div id="map"></div>
+  <div id="view">
+    <div id="map"></div><div id="graph"></div>
+  </div>
   <div id="dialogue" title="Create an intervention">
       <select id="intervention_type">
         <option value="" disabled="disabled">Select an intervention type</option>
@@ -73,9 +75,9 @@
       </select>
       <span id="action">on</span>
       <select id="activity">
-        <option value="" disabled="disabled" selected="selected">Select a product</option>
-        <option value="wheat">Wheat</option>
-        <option value="barley">Barley</option>
+        <option value="" disabled="disabled" selected="selected">Select an activity</option>
+        <option value="duramSeed">Conventional durum wheat</option>
+        <option value="duramSeedOrganic">Organic durum wheat </option>
       </select>
       <div id="tax_slider"></div>
       <span>Value of </span>

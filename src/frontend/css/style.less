@@ -2,26 +2,65 @@
 .hidden { display: none } /* use this CSS class to disable elements temporarily */
 
 body, html {
-  background-color: white; // ideally, body will be completely covered by the crafty game, so this won't be even necessrary. Leave it here just in case. 
+  //background-color: #C8C8C8; /* a nice steelblue (but not the same as what Gecko thinks steelblue is */
+  background-color: white;
   height: 100%;  /* ensure that subelements are able to compute using relative units; why, CSS, why? */
   padding: 0px;
   margin: 0px;
 }
 
 #cr-stage { 
-  z-index: 11;
+  z-index: 100;
+  position: fixed;
 }
 
 #map {
+  position: absolute;
+  z-index: 0;
   width: 100%; /* full screen */
   height: 100%;
-  position: fixed;
-  z-index: 0;
   
-  .ol-zoom, .ol-logo { // hide the ol3 zoom buttons and the logo. We should add credit to OL3 for their work in our "credits" page for the game. 
-    .hidden 
+  .ol-zoom, .ol-logo {
+    .hidden
   }
 }
+
+#graph {
+  background-color: white;
+
+  position: absolute; //need this or else z-index does nothing
+  z-index: 1000;  //put overtop of the map (I dislike this immensely; HTML is NOT meant to be used like this)
+  
+  /* height: 50px; */
+  //width: 300px; /* it would be nice if this could be autocalculated from the available space*/
+
+  width: 500px;
+  height: 400px;
+
+  top: 5px;
+  right: 5px;
+
+  border-radius: 3px;
+  overflow: hidden; /* make the radius affect the inner map rendering elements */
+}
+
+/* d3 properties */
+/*
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}*/
 
 #dialogue {
   display: none;
@@ -40,39 +79,4 @@ body, html {
     width: 200px;
     display: inline-block;
   }
-}
-
-#graph {
-  background-color: white;
-  border-left: black solid 2px ;
-
-  position: relative; //need this or else z-index does nothing
-  z-index: 2;  //put overtop of the map (I dislike this immensely; HTML is NOT meant to be used like this)
-  
-  /* height: 50px; */
-  width: 38%; /* it would be nice if this could be autocalculated from the available space*/
-
-  bottom: 5px;
-  right: 5px;
-
-  border-top-right-radius: 20px;
-  /*border-bottom-right-radius: 20px;*/
-  overflow: hidden; /* make the radius affect the inner map rendering elements */
-}
-
-/* d3 properties */
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.x.axis path {
-  display: none;
-}
-
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
 }

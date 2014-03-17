@@ -143,11 +143,11 @@ class FarmFamily:
 
 
 class Eutopia:
-    "The Eutopic World"
-    "The main simulation class"
-    ""
-    "There is an API here for controlling and querying the model state"
-
+    """
+    The Eutopic World
+    The main simulation class
+    There is an API here for controlling and querying the model state
+    """
     def __init__(self, log = None):
         self.log = log
 
@@ -236,7 +236,8 @@ class Eutopia:
         return self.get_activity_count(self.get_local_farms(farm.lat, farm.long, count))
 
 
-if __name__=='__main__':
+#if __name__=='__main__':
+def make_magic_happen():
     n = 20 #number of steps to run
            #TODO: make this a command line param
 
@@ -268,7 +269,6 @@ if __name__=='__main__':
         next(eutopia)
 
     activities = [state for time, state in log]
-    print activities
 
     # optional:
     #write a geojson file containing the loaded map dataset
@@ -284,3 +284,5 @@ if __name__=='__main__':
         pylab.show()
     except ImportError:
         print "It appears you do not have scipy's matplotlib installed. Though the simulation has run I cannot show you the plots."
+    
+    return activities
