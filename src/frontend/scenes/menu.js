@@ -1,6 +1,7 @@
 
 "use strict";
 Crafty.scene("menu", function() {
+    Crafty.background("url('images/background.png')");
     
    
     //four buttons in menu sceen
