@@ -205,27 +205,7 @@ function ObjectRPC(ws, methods) {
 	return this;
 }
 
-
-var tank = new ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"]) 
-
-/* q: a) why is it setting the ready handlers twice -> because i was setting the same handlers on all objects because 'this' was wrong
-   b) why, once set, are they not firign?
-*/
-
-tank.ready(function() {
-  console.log("tank sockets opened; calling");
-  tank.HP().then(function(h) {
-     console.log("Tank2's hp:", h.current, "/", h.total)
-  });  tank.HP().then(function(h) {
-     console.log("Tank2's hp:", h.current, "/", h.total)
-  });  tank.HP().then(function(h) {
-     console.log("Tank2's hp:", h.current, "/", h.total)
-  })
-});
-
-tank.error(function(e){
-  console.log(e.target.url, "failed because", e.message);
-})
+module.exports = {'ObjectRPC': ObjectRPC, 'RPC': RPC}
   
   /* and the backend looks like
   
