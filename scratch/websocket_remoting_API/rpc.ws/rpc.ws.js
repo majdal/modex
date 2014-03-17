@@ -142,7 +142,6 @@ function RPC(ws) {
 	 
      ws.onopen = function(evt) {
          ready_handler();
-         console.log(ws.url,"Calling",ready_handler.toString())
          open = true;
      };
      ws.onclose = function(evt) {
@@ -177,10 +176,9 @@ function RPC(ws) {
      }
      
 	function call() {
-	    //if(!open) {
-	    //  throw new Error("WebSocket not open")
-	    //}
-            console.log("calling", ws.url, arguments);
+	    if(!open) {
+	      throw new Error("WebSocket not open")
+	    }
 	    arguments = Array.prototype.slice(arguments);
 	  	ws.send(JSON.stringify(arguments));
 	  	var p = new Promise();
@@ -190,13 +188,10 @@ function RPC(ws) {
 	
     var ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	call.ready = function(f) {
-            if(!f) throw new Error("why is ready() handler null?")
-            //console.log(ws.url, "setting ready handler to", f.toString())
 	    ready_handler = f;
 	}
 	call._ws = ws; //expose the websocket just cuz
 	call.error = function(f) {
-            if(!f) throw new Error("why is error() handler null?")
 	    error_handler = f;
 	}
 	
@@ -219,12 +214,9 @@ function ObjectRPC(ws, methods) {
     
     var self = this; //avoid scoping trouble; 'methods.forEach' runs its function with this = methods
     methods.forEach(function(m) {
-           console.log("binding", m)
 	   self[m] = RPC(ws+"/"+m); //XXX should be URLjoin
 	   self[m].ready(function(){
-             //this isn't happening....huh
 	     readyCount += 1;
-             console.log(m,"is ready", ". there are", readyCount, "ready")
 	     if(readyCount >= methods.length) { ready_handler(); }
 	   })
 	   self[m].error(function(e) {
@@ -236,12 +228,10 @@ function ObjectRPC(ws, methods) {
 	this.error = function(f) {
 	    error_handler = f;
 	}
-	var ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
         
+	var ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	this.ready = function(f) {
-            console.log('setting meta ready handler')
 	    ready_handler = f; //what. this triggers it again??
-            console.log("it's set!")
 	}
 	return this;
 }
@@ -254,16 +244,15 @@ var tank = new ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "sh
 */
 
 tank.ready(function() {
-  console.log("tank sockets opened");
+  console.log("tank sockets opened; calling");
   tank.HP().then(function(h) {
+     console.log("Tank2's hp:", h.current, "/", h.total)
+  });  tank.HP().then(function(h) {
+     console.log("Tank2's hp:", h.current, "/", h.total)
+  });  tank.HP().then(function(h) {
      console.log("Tank2's hp:", h.current, "/", h.total)
   })
 });
-
-console.log(tank['HP'].ready.toString())
-console.log(tank.ready.toString())
-
-console.log("next level shit???")
 
 tank.error(function(e){
   console.log(e.target.url, "failed because", e.message);
