@@ -134,10 +134,10 @@ function Call(ws) {
 	 	//console.log(response) //debug
 	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
 	 	if('error' in response) {
-                    console.log("Received error from", ws.url, ":", response.error)
-	 	    promise.error(response.error); //err how do i distnguish promises and promiss?
+                    //console.log("Received error from", ws.url, ":", response.error)
+	 	    promise.error_out(response.error); //err how do i distnguish promises and promiss?
 	 	} else if('result' in response) {
-                    console.log("Received result from", ws.url, ":", response.result)
+                    //console.log("Received result from", ws.url, ":", response.result)
                     promise.resolve(response.result);
 	 	} else {
 	 	    console.log("Got malformed RPC message:", evt.data)
