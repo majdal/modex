@@ -104,9 +104,7 @@ if __name__ == '__main__':
    
    if debug:
       log.startLogging(sys.stdout)
-   
-   if debug:
-     print "Starting server in", PROJECT_ROOT
+      print "Starting server in", PROJECT_ROOT
    
    model = Eutopia([]) #the [] becomes model.log
    poke_model = task.LoopingCall(lambda: next(model))
