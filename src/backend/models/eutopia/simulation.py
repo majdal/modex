@@ -117,13 +117,6 @@ def read_interventions(interventions): #XXX <-- custom to Eutopia.py
             simulation.scenarios[scenario_id.message] = [intervention_obj]
     
     return simulation
-    
- 
-from intervention import PriceIntervention, NewActivityIntervention
-from eutopia import *
-
-num_steps = 20 # same as in eutopia.py
-eutopia = Eutopia([]) 
 
 ###
 # README: 
@@ -134,6 +127,11 @@ eutopia = Eutopia([])
 ###
 
 if __name__ == "__main__":
+    from intervention import PriceIntervention, NewActivityIntervention
+    from eutopia import *
+
+    num_steps = 20 # same as in eutopia.py
+    eutopia = Eutopia([]) 
     with open("test_eutopia_interventions.json", "r") as input_json:
         interventions_json = json.load(input_json)
     

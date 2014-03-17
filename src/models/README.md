@@ -39,6 +39,7 @@ Features:
  * A case for supporting 3d models (e.g. chemical structure, things that Modelica can do, laser-measured archeaology data)?
  * Should be relatively simple to write as a raytracer
  
+## Other models 
 
 model: SimIntrovert
  Agents
@@ -92,8 +93,10 @@ Features:
   * food stamps
   * government subsidies / etc
 
-**[SLUCE](http://sluce.wici.ca)**
-**[FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel)**
+
+* [SLUCE](http://sluce.wici.ca)
+* [FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel)
+* [NASA-funded HANDY model](http://www.theguardian.com/environment/earth-insight/2014/mar/14/nasa-civilisation-irreversible-collapse-study-scientists)
 
 **Conversion Events**: religious, tech, or other subculture
   * See the Lofland/Stark model, which is the dominant theory in Cult & New Religious Movement research
