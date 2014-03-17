@@ -23,6 +23,11 @@ We have been calling these "salience plots" but you can't google that. There is 
 Here's an example of a timeseries plot with uncertainty listed as a heatmap ![Salience Plot](salience.png)
 And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression](smooth_overlaid.jpg)
 
+## High dimension tabular
+
+* Radar charts (like in DDR)
+* Parallel coordinate plots
+
 ## Cartographic
 
  ---we need to handle zooming smoothly, going from different types, and as we do this we need maintain context for the user. googlemaps does this by fading out layers as more detailed tiles are loaded-in
