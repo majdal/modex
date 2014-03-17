@@ -53,13 +53,19 @@ Either API ONLY
 /* TODO:
  
  * [x] use Promises instead of uglily passing a handler
- *  * [ ] use a standard Promises library instead of this hack thing
+    * [ ] use a standard Promises library instead of this hack thing
  * [ ] use __getAttr__ to autobind -- impossible??
  * [x] autowrap a websocket if a string is passed
  * [ ] reindent to 4 spaces
  * [ ] typecheck ws URLs
  * [ ] enforce that RPC and ObjectRPC are created via `new`
  * [ ] figure out if I can make (via .prototype) a specialized WebSocket class -- RPCWebSocket -- that has onmessage filled in by prototype instead of by constantly recreating it
+
+ * [ ] support composable WebSocket-like instances; as a consequence, then:
+   * [ ] support relative URLs
+     * [ ] and clean up how ObjectRPC does it
+   * [ ] //semirelative.com/urls
+   * [ ] support multiplexing
  */
 
 /*
@@ -131,7 +137,7 @@ function RPC(ws) {
 	if(ws instanceof String || typeof(ws)=='string' || ws.substr) { // TODO: figure out the proper way to do polymorphism/ducktyping in js; I know you can check for the existence of properties, but is that the Right Way? 
 		ws = new WebSocket(ws);
 	}
-	//TODO: support relative URLs and //semirelative.com/urls
+
 	
 	 
      ws.onopen = function(evt) {
