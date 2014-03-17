@@ -66,8 +66,8 @@ var farm = function($) {
                 //Setup Screen Stuff
                 govtIcon : [60, 136, 20, 20],
                 condIcon : [40, 136, 20, 20],
-                natIcon : [20, 136, 20, 20],
-                timeIcon : [0, 136, 20, 20],
+                timeIcon : [20, 136, 20, 20],
+                natIcon : [0, 136, 20, 20],
                 loadscText : [206, 46, 50, 20],
                 saveText : [106, 46, 50, 20],
                 govtText : [106, 68, 50, 6],
@@ -97,7 +97,8 @@ var farm = function($) {
             // load game scene sprite
             Crafty.sprite(5, "images/game_components.png", {
                 plusButton : [0, 0, 20, 20],
-                timelineBackground : [20, 12, 140, 8],
+                timelineBackground : [20, 12, 144, 8],
+                timelineSelected : [20, 4, 144, 8],
                 taxMark : [4, 4, 100, 5],
                 subsidyMark : [35, 4, 100, 5],
                 playButton: [20, 20, 20, 20],
