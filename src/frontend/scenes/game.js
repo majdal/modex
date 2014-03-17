@@ -2,6 +2,8 @@ Crafty.scene('game', function() {
   // clear the background so we can see the map
   Crafty.background('url(assets/images/FFFFFF-0.png)');
 
+  $('#graph').show();
+
   // The layers
   var watercolor = new ol.layer.Tile({
          source: new ol.source.Stamen({
@@ -45,12 +47,11 @@ Crafty.scene('game', function() {
 
   //back button to Menu screen
 
-  Crafty.e("2D, DOM, backButton, Mouse").attr({
-      x: 0,
-      y: 0
-   }).bind('Click', function() {
-      Crafty.scene("menu");
-    });
+  Crafty.e("2D, DOM, backButton, Mouse").attr({ x: 5, y: 5 })
+                                        .bind('Click', function() {
+                                          Crafty.scene("menu");
+                                          $('#graph').hide();
+                                        });
 /*
   redSquare = Crafty.e('2D, Canvas, Color, Mouse')
                      .attr({x: 100, y: 600, w: 100, h: 100})

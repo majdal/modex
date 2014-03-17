@@ -12,10 +12,8 @@ var farm = function($) {
        
         },
 
-        Questions : null,
-
         /**
-         * Initializes Quiz application
+         * Initializes game
          */
         initialize : function() {
             
@@ -105,7 +103,7 @@ var farm = function($) {
                 taxMark : [4, 4, 100, 5],
                 subsidyMark : [35, 4, 100, 5],
                 playButton: [20, 20, 20, 20],
-                pauseButton : [0, 20, 20, 20],
+                pauseButton : [0, 20, 20, 14],
                 backButton : [0, 34, 6, 6],
 
             });
