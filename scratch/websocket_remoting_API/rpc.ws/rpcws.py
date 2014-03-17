@@ -16,41 +16,8 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
 from autobahn.twisted.resource import WebSocketResource
 
-
 serializer = json;
 
-#TODO(kousu): move this out to scratch/ for reference on how to host a web socket server using AutobahnPython
-class CtlProtocol(WebSocketServerProtocol):
-   def onConnect(self, request):
-      print("Client connecting: {}".format(request.peer))
-
-   def onOpen(self):
-      print("WebSocket connection open.")
-      
-   def onMessage(self, payload, isBinary):
-      if isBinary:
-        print("This is probably bad. Binary message received: {} bytes.".format(len(payload)))
-      else:
-        print("Text message received: |{}|".format(payload.decode('utf8')))
-        try:
-          payload = json.loads(payload)
-        except ValueError, e:
-          payload = {}
- 
-        message = payload.get('message', 'no message :(')
-
-        if message == 'play':
-          print "play"
-          poke_model.start(1)
-        elif message == 'pause':
-          print "pause"
-          poke_model.stop()
-        elif message == 'addIntervention':
-          pass
-
-
-   def onClose(self, wasClean, code, reason):
-      print("WebSocket connection closed: {}".format(reason))
 
 class RPCProtocol(WebSocketServerProtocol):
     "wrap a callable into a websocket: messages are parameters to function calls; return values"
@@ -97,47 +64,3 @@ class RPCObjectEndpoint(Resource):
       Resource.__init__(self)
       for method in (m for m in dir(o) if callable(getattr(o, m))): #find all the names (strings) of all methods
           self.putChild(method, RPCEndpoint(getattr(o, method)))
-
-
-  
-class Tank:
-    "a class that gets its public methods exposed on a WebSocket"
-    def __init__(self, weapon, (x, y, z), hp=50):
-        self.weapon = weapon
-        self.x = x
-        self.y = y
-        self.z = z
-        self.hp = 50
-        self.total_hp = 50
-        self.heading = 33.4;
-    def shoot(self):
-        return "Shooting harder!"
-    
-    def turn(self, degrees):
-        # we also have self.peer and all the other metadata that's in WebSocketServerProtocol so we can do Auth&Auth
-        #, which RPCEndpoint attaches to us
-        # or maybe peer comes in as a kwarg?
-        # 
-        self.heading+=degrees
-     
-    def HP(self):
-        return {'current': self.hp, 'total': self.total_hp}
-
-
-if __name__ == '__main__':
-    log.startLogging(sys.stdout)
-    
-    tank = Tank("Big Cannon", (55,81.1,32), 50) # somewhere in the Arctic
-    
-    root = File(".");
-    sprites = Resource(); root.putChild("sprites", sprites)
-    tank_endpoint = RPCObjectEndpoint(tank);
-    sprites.putChild("tank2", tank_endpoint)
-    #tank_hp_endpoint = RPCEndpoint(tank.hp);
-    #tank_endpoint.put
-    
-    site = Site(root);
-    
-    reactor.listenTCP(8080, site)
-   
-    reactor.run()
