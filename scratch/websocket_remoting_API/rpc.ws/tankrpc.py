@@ -29,9 +29,11 @@ class Tank:
         self.total_hp = 50
         self.heading = 33.4;
     def shoot(self):
+        print("shoot()")
         return "Shooting harder!"
     
     def turn(self, degrees):
+        print("turn(%f)" % degrees)
         # we also have self.peer and all the other metadata that's in WebSocketServerProtocol so we can do Auth&Auth
         #, which RPCEndpoint attaches to us
         # or maybe peer comes in as a kwarg?
@@ -39,6 +41,7 @@ class Tank:
         self.heading+=degrees
      
     def HP(self):
+        print("hp()")
         return {'current': self.hp, 'total': self.total_hp}
 
 

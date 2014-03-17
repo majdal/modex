@@ -10,19 +10,25 @@ tank.ready(function() {
      console.log("1st call: Tank2's hp:", h.current, "/", h.total)
   });
 
+  tank.turn(67);
+  
+  setTimeout(function() {
+  tank.turn().error(function(e) {
+    console.log("tank.turn() failed:", e)
+  })}, 1000)
+  
+  setTimeout(function() {
   tank.HP().then(function(h) {
      console.log("2nd: Tank2's hp:", h.current, "/", h.total)
      console.log("Shutting down Tank connections");
      tank.close();
-  });
+  })}, 2000)
   
-  tank.turn().error(function(e) {
-    console.log("tank.turn() failed:", e)
-  })
-
+  setTimeout(function() {
   tank.HP().then(function(h) {   
-     console.log("3rd: Tank2's hp:", h.current, "/", h.total)
-  })
+     console.log("3rd: Tank2's hp:", h.current, "/", h.total) //are these sharing promises???
+  })}, 3000)
+  
 });
 
 tank.error(function(e){
