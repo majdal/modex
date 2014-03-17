@@ -213,30 +213,30 @@ function ObjectRPC(ws, methods) {
      */
      //
     // here, ws a URL but is not actually expected to be a websocket; it 
+    if(this == global) throw new Error("you dun wrong; use `new`")
+    var readyCount = 0; //sketchy! the idea is to fire ObjectRPC._readyHandler() when all sub sockets are ready
     
-    var readyCount = 0; //sketchy
-    
+    self = this; //avoid scoping trouble; 'methods.forEach' runs its function with this = methods
     methods.forEach(function(m) {
            console.log("binding", m)
-	   this[m] = RPC(ws+"/"+m); //XXX should be URLjoin
-	   this[m].ready(function(){
-
+	   self[m] = RPC(ws+"/"+m); //XXX should be URLjoin
+	   self[m].ready(function(){
+             //this isn't happening....huh
 	     readyCount += 1;
              console.log(m,"is ready", ". there are", readyCount, "ready")
-	     if(readyCount >= methods.length) ready_handler();
+	     if(readyCount >= methods.length) { ready_handler(); }
 	   })
-	   this[m].error(function(e) {
+	   self[m].error(function(e) {
 	     error_handler(e);
 	   })
 	   })
-	
-	
-	
+		
 	error_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	this.error = function(f) {
 	    error_handler = f;
 	}
 	ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+        
 	this.ready = function(f) {
             console.log('setting meta ready handler')
 	    ready_handler = f; //what. this triggers it again??
@@ -246,7 +246,7 @@ function ObjectRPC(ws, methods) {
 }
 
 
-var tank = ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"]) 
+var tank = new ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"]) 
 
 /* q: a) why is it setting the ready handlers twice
    b) why, once set, are they not firign?
