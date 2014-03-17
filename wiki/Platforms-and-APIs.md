@@ -145,12 +145,22 @@ A data bind and a data flow are related problems, and several of these libraries
 * [ABCE](https://github.com/DavoudTaghawiNejad/abce) _Agent Based Complete Economy_ (python); [paper](http://jasss.soc.surrey.ac.uk/16/3/1.html)
 * http://insightmaker.com/
 
+## Packaging
+
+* [py2exe](http://www.py2exe.org/) - _specialized for Windows, runs as a distutils extension_
+* [freeze.py](https://wiki.python.org/moin/Freeze) - _specialized for Unix; not used that much anymore, since most Unices have good package managers these days_
+* [PyInstaller](http://pyinstaller.org/)  - _cross-platform python packaging_
+
+(nick thinks we should rely on system-specific packaging conventions as much as possible, e.g. try to get our work into brew, pacman, aptitude and the Windows 8 and OS X App Stores)
+
 ## Tools
 
 * [GeoHack](https://tools.wmflabs.org/geohack/) (all lat/lon coordinates on Wikipedia link to GeoHack)
 * [MapBox Collaboratory](https://www.mapbox.com/)
 
-## Collaboratories
+## Collaboratories 
+
+Collaboraties (laboratories for collaboration) are our key to reproducible science.
 
 * [StackExchange](http://stackoverflow.com/) - _they've thought long and hard -- and have measured -- about the right way to do comment systems; the link escapes me right now, though -kousu_
 
