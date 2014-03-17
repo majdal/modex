@@ -153,7 +153,7 @@ function Call(ws) {
 	    if(!open) {
 	      throw new Error("WebSocket not open")
 	    }
-	    arguments = Array.prototype.slice(arguments);
+	    arguments = Array.prototype.slice.call(arguments);
 	  	ws.send(JSON.stringify(arguments));
 	  	var p = new Promise();
 	  	queue.push(p);

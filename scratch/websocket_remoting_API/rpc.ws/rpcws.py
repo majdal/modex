@@ -48,8 +48,8 @@ class RPCProtocol(WebSocketServerProtocol):
         # ...actually that's not true, these four lines enforce one-message-at-a-time:
         # there's no way to hear the next message until _target() returns
         #  (wtf does Autobahn do, then? Does it use Deferreds? It allows parallel calls, that's for sure)
-        print("MESSAGE")
         payload = serializer.loads(payload)
+        #print getattr(self._target, "__name__","anonymous method"), "received", payload #DEBUG
         try:
           result = self._target(*payload)
           result = serializer.dumps({'result': result})
