@@ -7,9 +7,9 @@ function Promise() {
     */
     /* todo: scrap this and use A+, when my net comes back
      */
-	
-    handlers = []
-    error_handlers = []
+    
+    var handlers = []
+    var error_handlers = []
     
     return {
         resolve: function(result) {
