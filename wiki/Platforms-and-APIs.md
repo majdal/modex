@@ -24,6 +24,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
   * 
 * [dimplejs](http://dimplejs.org/) - _this looks pretty underpowered_
 * [Vega](https://github.com/trifacta/vega)
+  * [Vincent](https://github.com/wrobstory/vincent) - _A Python to Vega translator_
 * [NVD3](http://nvd3.org/)
 * [Miso](http://misoproject.com/)   - _this one looks super promising_
 * [DexCharts](https://github.com/PatMartin/DexCharts)
