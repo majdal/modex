@@ -231,7 +231,7 @@ function ObjectRPC(ws, methods) {
 }
 
 
-var tank = ObjectRPC("ws://localhost:8080/sprites/tank2", ["hp", "turn", "shoot"]) 
+var tank = ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"]) 
 
 tank.ready(function() {
   tank.hp().then(function(h) {
@@ -240,25 +240,12 @@ tank.ready(function() {
 });
 
 tank.error(function(e){
-  console.log(e.target.url, "failed because", e.code);
+  console.log(e.target.url, "failed because", e.message);
 })
   
   /* and the backend looks like
   
   #class we want to wrap out to the frontned
-  
-  class Tank: 
-    [...]
-    def turn(self, degrees):
-        # we also have self.peer and all the other metadata that's in WebSocketServerProtocol so we can do Auth&Auth
-        #, which RPCEndpoint attaches to us
-        # or maybe peer comes in as a kwarg?
-        # 
-        self.heading+=degrees
-    def HP(self):
-        return {'current': self.hp, 'total': self.total_hp}
-  
-  tank = Tank("Big Cannon", x, y, z, hp=50)
   */
   
   
@@ -288,48 +275,6 @@ tank.error(function(e){
 
 /* backend (API #2):
   
-  
-class RPCProtocol(WebSocketServerProtocol):
-    "wrap a callable into a websocket: messages are parameters to function calls; return values"
-    "handles serialization automatically"
-    "and nothing else"
-    def __init__(self, target): #target is a callable, not a class
-        self._target = target
-    
-    def onMessage(self, payload, isBinary):
-        # XXX maybe _target() should be called on a Deferred? we have no idea
-        # how long _target() will take to execute, and hanging the whollle server
-        # ..but maybe that's part of the game; hanging the server early
-        # in test is better than load problems sneaking up later because
-        # the app writer didn't thoroughly make sure they had caching in at the right layers
-        
-        # note: protocol assumes only one message at a time
-        #  if we didn't, messages would need to come with an id code (like Autobahn does)
-        # ...actually that's not true, these four lines enforce one-message-at-a-time:
-        # there's no way to hear the next message until _target() returns
-        #  (wtf does Autobahn do, then? Does it use Deferreds? It allows parallel calls, that's for sure)
-        payload = serializer.loads(payload)
-        result = self._target(*payload)
-        result = serializer.dumps(result)
-        self.send(result)
-
-
-def RPCEndpoint(method, debug = False):
-    "why the debug param? because "
-    f = WebSocketServerFactory(" why do i have to tell you the URL, Autobake? ", debug = debug, debugCodePaths = debug )
-    f.protocol = RPCProtocol(method)
-    return f
-
-class RPCObjectEndpoint(twisted.web.resource.Resource):
-   "convenience class to make putting" #this class is feature-parable with RPCEndpoint in API #1
-   "doesn't actually provide a websocket, but instead wraps each public method of o in a RPCEndpoint"
-    def __init__(self, o):
-      for method in (m for m in dir(o) if callable(getattr(o, m))): #find all the names (strings) of all methods
-          self.addChild(method, RPCEndpoint(getattr(o, method))
-
-
-endpoint = RPCObjectEndpoint(tank)
-root.putChild("tank1", endpoint)
 
 and similarly for the frontend, we need a bit of magic to get things rolling
 (sadly, js has no __getattr__ magic, so we'll need to explicitly define the methods)
