@@ -13,6 +13,11 @@ And two convenience functions, which make Twisted Resource objects:
 TODO:
  * [ ] figure out a sane way for users to change the serializer
  * [ ]
+ * [ ] An DetailedRPCProtocol (and associated DetailsRPC(Object)?Endpoint calls) which is meant to cooperate with target by passing itself in so that target can do something;
+     ---> or
+   * [ ] or maybe a better idea is to attach the RPCProtocol object to _target, and if _target happens to be a callable class (but this
+ * [ ] To simplify a common case, an AuthRPCProtocol which takes two args: an auth_manager and a target, and behaves the same as RPCProtocol except that before calling target() it checks with auth_mananger first
+   ^ anyway, the problem of the leaky abstraction is going to require some cleverness to solve elegantly, but I'm sure we can get there when we need it.
 """
 
 import json
