@@ -105,6 +105,7 @@ var farm = function($) {
                 subsidyMark : [35, 4, 100, 5],
                 playButton: [20, 20, 20, 20],
                 pauseButton : [0, 20, 20, 20],
+                backButton : [0, 34, 6, 6],
 
             });
 
