@@ -42,6 +42,15 @@ Crafty.scene('game', function() {
   plusButton.addScenario();
 
   playButton = Crafty.e('PlayPause');
+
+  //back button to Menu screen
+
+  Crafty.e("2D, DOM, backButton, Mouse").attr({
+      x: 0,
+      y: 0
+   }).bind('Click', function() {
+      Crafty.scene("menu");
+    });
 /*
   redSquare = Crafty.e('2D, Canvas, Color, Mouse')
                      .attr({x: 100, y: 600, w: 100, h: 100})
