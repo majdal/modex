@@ -75,6 +75,8 @@ var farm = function($) {
                 natText : [206, 24, 50, 6],
                 timeText : [206, 68, 50, 6],
                 breakLine : [90, 44, 88, 1],
+                text1 : [156, 32, 88, 12],
+                text2 : [156, 20, 88, 12],
 
 
                 //Set End Goals Screen
@@ -97,8 +99,8 @@ var farm = function($) {
             // load game scene sprite
             Crafty.sprite(5, "images/game_components.png", {
                 plusButton : [0, 0, 20, 20],
-                timelineBackground : [20, 12, 144, 8],
-                timelineSelected : [20, 4, 144, 8],
+                timelineBackground : [20, 12, 144, 5],
+                timelineSelected : [20, 4, 144, 5],
                 taxMark : [4, 4, 100, 5],
                 subsidyMark : [35, 4, 100, 5],
                 playButton: [20, 20, 20, 20],
