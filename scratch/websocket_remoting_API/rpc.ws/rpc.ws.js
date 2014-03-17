@@ -135,7 +135,7 @@ function RPC(ws) {
 	
 	 
      ws.onopen = function(evt) {
-         call.ready();
+         ready_handler();
          open = true;
      };
      ws.onclose = function(evt) {
@@ -183,11 +183,13 @@ function RPC(ws) {
 	
     ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	call.ready = function(f) {
-            console.log(ws.url, "setting ready handler")
+            if(!f) throw new Error("why is ready() handler null?")
+            //console.log(ws.url, "setting ready handler to", f.toString())
 	    ready_handler = f;
 	}
 	call._ws = ws; //expose the websocket just cuz
 	call.error = function(f) {
+            if(!f) throw new Error("why is error() handler null?")
 	    error_handler = f;
 	}
 	
@@ -212,8 +214,9 @@ function ObjectRPC(ws, methods) {
            console.log("binding", m)
 	   this[m] = RPC(ws+"/"+m); //XXX should be URLjoin
 	   this[m].ready(function(){
+
 	     readyCount += 1;
-             console.log(m,"Ready")
+             console.log(m,"is ready", ". there are", readyCount, "ready")
 	     if(readyCount >= methods.length) ready_handler();
 	   })
 	   this[m].error(function(e) {
@@ -231,6 +234,7 @@ function ObjectRPC(ws, methods) {
 	this.ready = function(f) {
             console.log('setting meta ready handler')
 	    ready_handler = f; //what. this triggers it again??
+            console.log("it's set!")
 	}
 	return this;
 }
@@ -238,14 +242,17 @@ function ObjectRPC(ws, methods) {
 
 var tank = ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"]) 
 
-tank.HP._ws.onopen = function(evt) {
-console.log("HP socket opened");
-//tank.ready(function() {
+/* q: a) why is it setting the ready handlers twice
+   b) why, once set, are they not firign?
+*/
+
+tank.ready(function() {
+  console.log("tank sockets opened");
   tank.HP().then(function(h) {
      console.log("Tank2's hp:", h.current, "/", h.total)
   })
-}
-//);
+});
+console.log("next level shit???")
 
 tank.error(function(e){
   console.log(e.target.url, "failed because", e.message);
@@ -278,19 +285,3 @@ tank.error(function(e){
   endpoint = RPCEndpoint(tank)
   attach_node_to_twisted_hiearchy(endpoint)
   */
-
-
-
-/* backend (API #2):
-  
-
-and similarly for the frontend, we need a bit of magic to get things rolling
-(sadly, js has no __getattr__ magic, so we'll need to explicitly define the methods)
-
-
-
-// usage:
-tank = RPC("ws://example.com/tank2", ["hp", "turn", "shoot"]) //you really shouldn't be holding any local state in tank yourself; if you insist, you can attach it after; but better to wrap, like function Tank() {... this._remote_tank = RPC(...) }
-tank.hp().then(function(...) {...})
-
- */
