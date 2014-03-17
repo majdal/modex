@@ -17,7 +17,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [graphite](http://graphite.wikidot.com/)
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
 
-### Reusable d3 visualizations
+### Encapsulated Visualization Libraries
 
 * [Mike Bostock's Reusable d3 chart spec](http://bost.ocks.org/mike/chart/)
   * and the [official results](https://github.com/d3/d3-plugins), so far 
@@ -27,7 +27,9 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [NVD3](http://nvd3.org/)
 * [Miso](http://misoproject.com/)   - _this one looks super promising_
 * [DexCharts](https://github.com/PatMartin/DexCharts)
-* Scrap examples:
+* [Flot](http://www.flotcharts.org/)
+* [Chart.JS](http://www.chartjs.org/)
+* Scrap reusable d3 examples:
   * http://jsfiddle.net/johnwun/8hSGP/
   * [textrotate()](http://bl.ocks.org/ezyang/4236639)
   * [pie-chart](https://github.com/gajus/pie-chart)
