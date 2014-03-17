@@ -4,6 +4,7 @@
 
 
 $(function() {
+  // TODO move scope to the window.Game namespace 
   scope = {} //hacks
   scope.data = [] //makes a data array that is safely accessible from anywhere in this file; sidesteps any weird js scoping rules that might kick in if we tried to make data a (pseudo)global
   
@@ -73,7 +74,7 @@ $(function() {
   function addData(keyval,xval,yval) {
     var notthere = true
     //if there is already a line for the data add it to that line
-    for(var i = 0; i < scope.data.length; i++) { // FIXME: switch to $.each(). Looping over an array this way has caused me headaches in the past. 
+    for(var i = 0; i < scope.data.length; i++) { // FIXME: switch to $.each() or $.map(). Looping over an array this way has caused me headaches in the past. 
       if(scope.data[i].key == keyval) {
         notthere = false;
         scope.data[i].values.push({x:xval, y:yval});

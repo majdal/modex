@@ -27,6 +27,8 @@ PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the proj
 # in the Real System(TM) models will be dynamically
 # loaded somehow, so pretend you don't see this.
 from models.eutopia.eutopia import Eutopia
+from models.eutopia.intervention import PriceIntervention, NewActivityIntervention
+#from models.eutopia.simulation import read_interventions
 
 
 # NB:
@@ -60,12 +62,30 @@ class CtlProtocol(WebSocketServerProtocol):
 
         if message == 'play':
           print "play"
-          poke_model.start(1)
+          try:
+            poke_model.start(0.5)
+          except AssertionError: # Happens if we tried to start an already started LoopingCall
+            pass  
+
         elif message == 'pause':
           print "pause"
           poke_model.stop()
-        elif message == 'addIntervention':
-          pass
+
+        elif message == 'setInterventions':
+          # delete all interventions in the intervention list
+          del model.interventions[:]
+          # clean up the log 
+          del model.log[:]
+          # add all the new interventions
+          for intervention in payload['content']['interventions']:
+            # FIXME change the names of the arguments to PriceIntervention to match those of the frontend, or vice versa. 
+            print intervention
+            print 'setted the interventions!'
+            product = intervention['activity']
+            time = intervention['year']
+            scale = intervention['tax_value']
+            model.intervene(PriceIntervention(time, product, scale))
+
 
 
    def onClose(self, wasClean, code, reason):

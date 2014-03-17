@@ -143,11 +143,11 @@ class FarmFamily:
 
 
 class Eutopia:
-    "The Eutopic World"
-    "The main simulation class"
-    ""
-    "There is an API here for controlling and querying the model state"
-
+    """
+    The Eutopic World
+    The main simulation class
+    There is an API here for controlling and querying the model state
+    """
     def __init__(self, log = None):
         self.log = log
 
