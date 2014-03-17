@@ -39,7 +39,7 @@ $(function() {
     
     chart.xAxis
       .axisLabel("Time")
-      .tickFormat(function(d) { return d3.time.format('%b %d, %Y')(new Date(d)) });
+      .tickFormat(d3.format(",1f"));
 
     chart.yAxis
       .axisLabel("Quantity")

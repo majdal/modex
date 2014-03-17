@@ -21,12 +21,13 @@ Crafty.c('PlayPause', {
         this.removeComponent('playButton').addComponent('pauseButton');
         // change the state of the button entity
         this.isPaused = false;
-
+/*
         if (!(this.playingScenario === plusButton.selectedScenario)) {
             // If the selected scenario has changed, send over the new scenario's interventions
             this.setInterventions();
             this.playingScenario = plusButton.selectedScenario;
         }
+        */
         // send the play command
         var data = JSON.stringify({'message': 'play', 'content': ''});
         Game.ctlSocket.send(data);
