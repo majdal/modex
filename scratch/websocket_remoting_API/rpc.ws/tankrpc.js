@@ -1,6 +1,6 @@
 
 
-RPC = require("./rpc.ws.js")
+RPC = require("./rpcws.js")
 
 var tank = new RPC.RemoteObject("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"])
 
