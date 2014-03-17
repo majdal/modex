@@ -1,23 +1,28 @@
+"""
+RPC.ws: python server code
 
+This on AutobahnPython on Twisted.
 
-import sys
-from os.path import dirname, abspath, join as pathjoin
+Provides one class:
+ - RPCProtocol, which wraps a callable into something that speaks websockets+json
+
+And two convenience functions, which make Twisted Resource objects:
+ - RPCEndpoint - which turns an RPCProtocol into something usable
+ - RPCObjectEndpoint - which wraps all public methods on an object into RPCEndpoints
+
+TODO:
+ * [ ] figure out a sane way for users to change the serializer
+ * [ ]
+"""
 
 import json
 
 from twisted.web.resource import *;
-from twisted.internet import reactor
-from twisted.internet import task
-from twisted.python import log
-from twisted.web.server import Site
-from twisted.web.static import File
-from twisted.internet.defer import inlineCallbacks
 
 from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
 from autobahn.twisted.resource import WebSocketResource
 
 serializer = json;
-
 
 class RPCProtocol(WebSocketServerProtocol):
     "wrap a callable into a websocket: messages are parameters to function calls; return values"
