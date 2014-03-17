@@ -58,33 +58,36 @@ Either API ONLY
  * [x] autowrap a websocket if a string is passed
  * [ ] reindent to 4 spaces
  * [ ] typecheck ws URLs
- * [ ] enforce that RPC and ObjectRPC are created via `new`
+ * [ ] make Call able to be created via `new`, for consistency
+ * [ ] enforce that Call and RemoteObject are created via `new`
  * [ ] figure out if I can make (via .prototype) a specialized WebSocket class -- RPCWebSocket -- that has onmessage filled in by prototype instead of by constantly recreating it
 
  * [ ] support composable WebSocket-like instances; as a consequence, then:
    * [ ] support relative URLs
      * [ ] and clean up how ObjectRPC does it
    * [ ] //semirelative.com/urls
-   * [ ] support multiplexing
+   * [ ] support multiplexing, but optionally because the server might not be setup to do it for us
+ * [ ] handle (and while you're doing it, write tests for) all the corner cases like
+     * one of the RemoteObject's sub-websockets closing while the others are still up,
+     * make sure to call error() if (e.g. test case: Call() the same method three times in row, but in the second handler .close() the RemoteObject: instead of shutting down nodejs will hang, waiting for a handler that will never come)
+       
  */
 
-/*
- * do we assume functional? ie same args => redundant call?
- */
 
 /* js OOP ref: http://www.documentroot.net/en/misc/js-tutorial-classes-prototypes-oop
  */
 
 WebSocket = require("ws");
+Promise = require("./promise.js")
+
 var serializer = JSON //serialize should be an object with "parse" and "stringify" methods
 
-Promise = require("./promise.js")
   
-function RPC(ws) {
+function Call(ws) {
     /*
      *
      * usage:
-     *   talk = RPC("ws://example.com:5755/path/to/endpoint");
+     *   talk = Call("ws://example.com:5755/path/to/endpoint");
      *   talk("hey").then(function(r) { handle return value r })
      *
      * you can debug you connection with:
@@ -92,8 +95,8 @@ function RPC(ws) {
      *
      * you can also pass a premade WebSocket in:
      *   var h = new WebSocket("wss://shortcut.net/socklet")
-     *   h.onerror
-     *   shout = RPC()
+     *   h.onerror = ....
+     *   shout = Call(h)
      * (but it won't do much good.....)
      * ...hmmm maybe this is a bad idea
      * hmmm but if you can't do that, how do we MULTIPLEX
@@ -131,8 +134,10 @@ function RPC(ws) {
 	 	//console.log(response) //debug
 	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
 	 	if('error' in response) {
+                    console.log("Received error from", ws.url, ":", response.error)
 	 	    promise.error(response.error); //err how do i distnguish promises and promiss?
 	 	} else if('result' in response) {
+                    console.log("Received result from", ws.url, ":", response.result)
                     promise.resolve(response.result);
 	 	} else {
 	 	    console.log("Got malformed RPC message:", evt.data)
@@ -166,11 +171,15 @@ function RPC(ws) {
 	
 	// test if we're open, just in case the socket was open BEFORE it was given to us
     open = (ws.readyState == ws.OPEN); // XXX there's (possibly, depending on the particular js interpreter's threading model) a small window between which this is checked and onopen is set
+     
+     call.close = function() {
+        ws.close();
+     }
     
 	return call;
 }
 
-function ObjectRPC(ws, methods) {
+function RemoteObject(ws, methods) {
     /*
      * takes: a websocket URL 
      * you really shouldn't be holding any local state in tank yourself; if you insist, you can attach it after; but better to wrap, like function Tank() {... this._remote_tank = RPC(...) }
@@ -183,7 +192,7 @@ function ObjectRPC(ws, methods) {
     
     var self = this; //avoid scoping trouble; 'methods.forEach' runs its function with this = methods
     methods.forEach(function(m) {
-	   self[m] = RPC(ws+"/"+m); //XXX should be URLjoin
+	   self[m] = Call(ws+"/"+m); //XXX should be URLjoin
 	   self[m].ready(function(){
 	     readyCount += 1;
 	     if(readyCount >= methods.length) { ready_handler(); }
@@ -202,16 +211,17 @@ function ObjectRPC(ws, methods) {
 	this.ready = function(f) {
 	    ready_handler = f; //what. this triggers it again??
 	}
+        
+        this.close = function() {
+           methods.forEach(function(m) {
+              self[m].close();
+           })
+        }
 	return this;
 }
 
-module.exports = {'RemoteObject': ObjectRPC, 'Call': RPC}
-  
-  /* and the backend looks like
-  
-  #class we want to wrap out to the frontned
-  */
-  
+module.exports.RemoteObject = RemoteObject
+module.exports.Call = Call
   
   /* Backend under API #1:
   
