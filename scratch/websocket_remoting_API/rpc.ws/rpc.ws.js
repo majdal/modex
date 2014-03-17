@@ -57,6 +57,8 @@ Either API ONLY
  * [ ] use __getAttr__ to autobind -- impossible??
  * [x] autowrap a websocket if a string is passed
  * [ ] reindent to 4 spaces
+ * [ ] typecheck ws URLs
+ * [ ] enforce that RPC and ObjectRPC are created via `new`
  * [ ] figure out if I can make (via .prototype) a specialized WebSocket class -- RPCWebSocket -- that has onmessage filled in by prototype instead of by constantly recreating it
  */
 
@@ -67,6 +69,7 @@ Either API ONLY
 /* js OOP ref: http://www.documentroot.net/en/misc/js-tutorial-classes-prototypes-oop
  */
 
+WebSocket = require("ws");
 var serializer = JSON //serialize should be an object with "parse" and "stringify" methods
 
 function Promise() {
@@ -108,18 +111,43 @@ function RPC(ws) {
      * usage:
      *   talk = RPC("ws://example.com:5755/path/to/endpoint");
      *   talk("hey").then(function(r) { handle return value r })
+     *
+     * you can debug you connection with:
+     *   talk.error(function(evt) { ... }) which binds your given function to the WebSocket onerror handler
+     *
+     * you can also pass a premade WebSocket in:
+     *   var h = new WebSocket("wss://shortcut.net/socklet")
+     *   h.onerror
+     *   shout = RPC()
+     * (but it won't do much good.....)
+     * ...hmmm maybe this is a bad idea
+     * hmmm but if you can't do that, how do we MULTIPLEX
      */
-	if(ws instanceof String) {
+     
+     
+	var queue = []; //queue of calls in progress; actually a queue of promises, since we .send() immediately (assuming js is single threaded but eventLooped)
+	var open = false;
+     
+	if(ws instanceof String || typeof(ws)=='string' || ws.substr) { // TODO: figure out the proper way to do polymorphism/ducktyping in js; I know you can check for the existence of properties, but is that the Right Way? 
 		ws = new WebSocket(ws);
 	}
 	//TODO: support relative URLs and //semirelative.com/urls
 	
-	queue = []; //queue of calls in progress; actually a queue of promises, since we .send() immediately (assuming js is single threaded but eventLooped)
+	 
+     ws.onopen = function(evt) {
+         call.ready();
+         open = true;
+     };
+     ws.onclose = function(evt) {
+         open = false;
+         ws = null;
+     };
+     
 	 
 	 //actually, we don't need to enforce one-call-at-a-time
 	 //we can instead just immediately send data and put the promise on the queue
 	 // and so long as we can assume that send() is atomic, this should be fine
-	 ws.onmessage = function(evt) { 
+	 ws.onmessage = function(evt) {
 	    if(queue.length <= 0) {
 	    	throw new Error("Received RPC message but no call is in the queue waiting for it");
 	    }
@@ -135,8 +163,16 @@ function RPC(ws) {
 	 		console.log("Got malformed RPC message:", evt.data)
      	}
      }
-	 
+     
+     error_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+     ws.onerror = function(evt) {
+       error_handler(evt);
+     }
+     
 	function call() {
+	    if(!open) {
+	      throw new Error("WebSocket not open")
+	    }
 	    arguments = Array.prototype.slice(arguments);
 	  	ws.send(JSON.stringify(arguments));
 	  	var p = new Promise();
@@ -144,17 +180,68 @@ function RPC(ws) {
 	  	return p;
 	}
 	
+    ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+	call.ready = function(f) {
+	    ready_handler = f;
+	}
+	call._ws = ws; //expose the websocket just cuz
+	call.error = function(f) {
+	    error_handler = f;
+	}
+	
+	// test if we're open, just in case the socket was open BEFORE it was given to us
+    open = (ws.readyState == ws.OPEN); // XXX there's (possibly, depending on the particular js interpreter's threading model) a small window between which this is checked and onopen is set
+    
 	return call;
 }
 
 function ObjectRPC(ws, methods) {
-    // here, ws a URL but is not actually expected to be a websocket; it  
+    /*
+     * takes: a websocket URL 
+     * you really shouldn't be holding any local state in tank yourself; if you insist, you can attach it after; but better to wrap, like function Tank() {... this._remote_tank = RPC(...) }
+     *
+     */
+     //
+    // here, ws a URL but is not actually expected to be a websocket; it 
+    
+    var readyCount = 0; //sketchy
+    
     methods.forEach(function(m) {
 	   this[m] = RPC(ws+"/"+m); //XXX should be URLjoin
-	   }) 
+	   this[m].ready(function(){
+	     readyCount += 1;
+	     if(readyCount >= methods.length) ready_handler();
+	   })
+	   this[m].error(function(e) {
+	     error_handler(e);
+	   })
+	   })
+	
+	
+	
+	error_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+	this.error = function(f) {
+	    error_handler = f;
 	}
+	ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+	this.ready = function(f) {
+	    ready_handler = f;
+	}
+	return this;
 }
 
+
+var tank = ObjectRPC("ws://localhost:8080/sprites/tank2", ["hp", "turn", "shoot"]) 
+
+tank.ready(function() {
+  tank.hp().then(function(h) {
+     console.log("Tank2's hp:'", h)
+  })
+});
+
+tank.error(function(e){
+  console.log(e.target.url, "failed because", e.code);
+})
   
   /* and the backend looks like
   
