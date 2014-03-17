@@ -51,7 +51,7 @@ Either API ONLY
  */
 
 /* TODO:
- 
+ * [ ] loadtest this jerk : how many simultaneous servers and clients calling how many simulatanous methods can we handle?
  * [x] use Promises instead of uglily passing a handler
     * [ ] use a standard Promises library instead of this hack thing
  * [ ] use __getAttr__ to autobind -- impossible??
