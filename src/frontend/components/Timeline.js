@@ -38,7 +38,7 @@ Crafty.c('Timeline', {
   positionY: 0, // keeping track  of the y position of the timeline, for reference 
 
   init: function() {
-    this.requires('2D, Canvas, Color, Mouse, timelineBackground');
+    this.requires('2D, Canvas, Mouse, timelineBackground');
 
     this.bind('Click', function(e) {
       var taxYear = plusButton.yearInPixels(e.x);
