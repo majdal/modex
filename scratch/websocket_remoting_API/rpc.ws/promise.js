@@ -33,10 +33,8 @@ function Promise() {
 
 
 var q = new Promise().then(function(alphabet) { console.log("alpohaahahaha", alphabet) })
-
-
 q.error(function(e) { console.error("ERRORR"); })
-
 q.error_out(5);
-
 q.resolve("zurp");
+
+module.exports = Promise

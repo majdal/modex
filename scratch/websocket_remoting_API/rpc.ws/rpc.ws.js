@@ -78,38 +78,7 @@ Either API ONLY
 WebSocket = require("ws");
 var serializer = JSON //serialize should be an object with "parse" and "stringify" methods
 
-function Promise() {
-    /* todo: scrap this and use A+, when my net comes back
-     */
-	
-    handlers = []
-    error_handlers = []
-    
-    return {
-        resolve: function(result) {
-            handlers.forEach(function(h) {
-                h(result);
-            })
-           },
-
-        error_out: function(result) {
-            error_handlers.forEach(function(h) {
-                h(result);
-            })
-          },
-        
-        then: function(f) {
-            handlers.push(f);
-            return this;
-        }    ,
-        error: function(f) {
-            error_handlers.push(f);
-            return this;
-        }    ,
-    }
-	
-}
-
+Promise = require("./promise.js")
   
 function RPC(ws) {
     /*
