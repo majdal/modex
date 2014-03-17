@@ -37,6 +37,9 @@ Either API ONLY
    and it seems like it should make the internal implementation shorter: there's only one (WebSocketResource, WebSocketServerFactory, WebSocketServerProtocol) instead of one of those triplets for EACH method
    and it makes more sense, then, to pass in the data from the WebSocketServerProtocol (like .peer, .connected, .time, .http_headers)
    --and it allows you to call methods not specified -- but maybe that's a bug, not a feature, in the context of RPC
+    I would like API 1 more if js supported autopassing not-found attrs to something like __getattr__ in python/ruby;
+      -> because you can't do this, AutobahnWamp insists you do session.call("methodname", args)
+
   
   I like API 2 because it exposes each method as a distinct URL which feels more RESTish to me;
    it will certainly be easier to debug and log, long term, because we can eg. use Wireshark filtering on HTTP URLs instead of having to filter
@@ -49,9 +52,12 @@ Either API ONLY
 
 /* TODO:
  
- * [ ] use Promises instead of uglily passing a handler
+ * [x] use Promises instead of uglily passing a handler
+ *  * [ ] use a standard Promises library instead of this hack thing
  * [ ] use __getAttr__ to autobind -- impossible??
  * [x] autowrap a websocket if a string is passed
+ * [ ] reindent to 4 spaces
+ * [ ] figure out if I can make (via .prototype) a specialized WebSocket class -- RPCWebSocket -- that has onmessage filled in by prototype instead of by constantly recreating it
  */
 
 /*
@@ -63,85 +69,92 @@ Either API ONLY
 
 var serializer = JSON //serialize should be an object with "parse" and "stringify" methods
 
-function RPC(ws) { //la la la
-  if(ws instanceof String) {
-    ws = new WebSocket(ws);
-  }
-  
-  /*
-  ws.onopen = 
-  ws.onclose = 
-  ws.onerror = 
-  */
-  
-  //this looks a bit funny (ie its not just a simple loop) because we're stream-orienting a message-oriented protocol
-  
-  /*
-  how i'd write this in a magic language with built in concurrency magic
-  (python's generators are pretty close to this)
-  _queue = []
-  def queue():
-     while _queue:
-       yield queue[0]
-       queue.pop(0)
-       
-  def rpc():
-     for request in queue():
-       ws.send(serialize(request))
-       result = yield
-       handler(result)
-       yield
-       
-  def wrap():
-    onMessage(m):
-      r.send(m) #we guarantee that there's only one active message from us at a time
-  */
-  
-  ws.onmessage = function(evt) {
+function Promise() {
+    /* todo: scrap this and use A+, when my net comes back
+     */
+	
+    handlers = []
+    error_handlers = []
     
-    response = serializer.parse(evt.data)
-    
-    //call handler
-    if('error' in response) {
-    	error(response.error);
+    return {
+        resolve: function(result) {
+            handlers.forEach(function(h) {
+                h(result);
+            })
+           },
+
+        error_out: function(result) {
+            error_handlers.forEach(function(h) {
+                h(result);
+            })
+          },
+        
+        then: function(f) {
+            handlers.push(f);
+            return this;
+        }    ,
+        error: function(f) {
+            error_handlers.push(f);
+            return this;
+        }    ,
     }
-    else if('result' in response) {
-        handler(response.result);
-    }
-    
-    queue.shift()
-    
-    //now push the next things on the queue
-    pump()
-    
-    
-  }
-  
-  this.queue = []
-  
-  function pump() { //pump the queue: send the next request
-  	if(queue.length > 0) {
-  		this.queue.
-  		serialize.stringify(this.queue[0])
-  	}
-  	
-  	//serialize
-  }  
+	
 }
 
-// js doe	sn't support autopassing not-found to something like __getattr__
-RPC.prototype.call = function(method, handler) {
-  if(!(ws instanceof String)) {
-    throw Error("remote method names must be strings");
-  }
   
-  arguments = Array.prototype.slice.call(arguments, 2); //coerce args to a real array, eating the args that aren't part of it
-  arguments.shift(); //eat 'method' and 'handler' pass the remainder through RPC
-  
-  queue.push({method: method, args: arguments, handler: handler})
-    
-    //return a promise  	
-  }
+function RPC(ws) {
+    /*
+     *
+     * usage:
+     *   talk = RPC("ws://example.com:5755/path/to/endpoint");
+     *   talk("hey").then(function(r) { handle return value r })
+     */
+	if(ws instanceof String) {
+		ws = new WebSocket(ws);
+	}
+	//TODO: support relative URLs and //semirelative.com/urls
+	
+	queue = []; //queue of calls in progress; actually a queue of promises, since we .send() immediately (assuming js is single threaded but eventLooped)
+	 
+	 //actually, we don't need to enforce one-call-at-a-time
+	 //we can instead just immediately send data and put the promise on the queue
+	 // and so long as we can assume that send() is atomic, this should be fine
+	 ws.onmessage = function(evt) { 
+	    if(queue.length <= 0) {
+	    	throw new Error("Received RPC message but no call is in the queue waiting for it");
+	    }
+	 	response = serializer.parse(evt.data);
+	 	promise = queue.shift();
+	 	
+	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
+	 	if('error' in response) {
+	 	    promise.error(response.error); //err how do i distnguish promises and promiss?
+	 	} else if('payload' in response) {
+	 		promise.resolve(response.payload);
+	 	} else {
+	 		console.log("Got malformed RPC message:", evt.data)
+     	}
+     }
+	 
+	function call() {
+	    arguments = Array.prototype.slice(arguments);
+	  	ws.send(JSON.stringify(arguments));
+	  	var p = new Promise();
+	  	queue.push(p);
+	  	return p;
+	}
+	
+	return call;
+}
+
+function ObjectRPC(ws, methods) {
+    // here, ws a URL but is not actually expected to be a websocket; it  
+    methods.forEach(function(m) {
+	   this[m] = RPC(ws+"/"+m); //XXX should be URLjoin
+	   }) 
+	}
+}
+
   
   /* and the backend looks like
   
@@ -234,51 +247,7 @@ root.putChild("tank1", endpoint)
 and similarly for the frontend, we need a bit of magic to get things rolling
 (sadly, js has no __getattr__ magic, so we'll need to explicitly define the methods)
 
-function RPC(ws) {
-	if(ws instanceof String) {
-		ws = new WebSocket(ws);
-	}
-	//TODO: support relative URLs and //semirelative.com/urls
-	
-	function call() {
-	    arguments = Array.prototype.slice(arguments);
-	  	this[m].send(JSON.stringify(arguments));
-	  	return new Promise()
-	}
-	
-	return call;
-}
 
-function ObjectRPC(ws, methods) {
-    // here, ws a URL but is not actually expected to be a websocket; it  
-    queue = []; //queue of calls in progress
-	methods.forEach(function(m) {
-	 this[m] = RPC(ws+"/"+m); //XXX should be URLjoin
-	 
-	 //actually, we don't need to enforce one-call-at-a-time
-	 //we can instead just immediately send data and put the promise on the queue
-	 // and so long as we can assume that send() is atomic, this should be fine
-	 this[m]._ws.onmessage = function(evt) {
-	    if(queue.length <= 0) {
-	    	throw new Error("Received RPC message but no call is in the queue waiting for it");
-	    }
-	 	response = serializer.parse(evt.data);
-	 	promise = queue.shift();
-	 	
-	 	
-	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
-	 	if('error' in response) {
-	 	    promise.error(response.error); //err how do i distnguish promises and promiss?
-	 	} else if('payload' in response) {
-	 		promise.resolve(response.payload);
-	 	} else {
-	 		console.log("Got malformed RPC message:", evt.data)
-	 	}
-	 	
-	 }
-	  this[m] = 
-	}
-}
 
 // usage:
 tank = RPC("ws://example.com/tank2", ["hp", "turn", "shoot"]) //you really shouldn't be holding any local state in tank yourself; if you insist, you can attach it after; but better to wrap, like function Tank() {... this._remote_tank = RPC(...) }
