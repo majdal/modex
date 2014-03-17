@@ -1,10 +1,16 @@
 
 $(document).ready(function() {
-    Game = {}; // global variable to hold all game components. Currently mostly used for easy serialization 
-    ctl = new WebSocket("ws://localhost:8080/ctl");
+    window.Game = {}; // global variable to hold all game components. Currently mostly used for easy serialization 
 
-    ctl.onmessage = function(e) {
+    // the control websocket 
+    Game.ctlSocket = new WebSocket('ws://' + location.host + '/ctl');
+
+    Game.ctlSocket.onmessage = function(e) {
        data = JSON.parse(e.data);
        console.log(data);
     };
+
+    // the data websocket
+    Game.dataSocket = new WebSocket("ws://" + location.host + "/ws"); //our websocket sits at /ws (TODO(kousu): reorg this)
+
 });
