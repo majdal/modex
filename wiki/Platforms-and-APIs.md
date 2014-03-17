@@ -93,26 +93,42 @@ A data bind and a data flow are related problems, and several of these libraries
 
 # Backend
 
+
+### Servers
+
+
 * Twisted
 * Django?
-* [RPy](http://rpy.sourceforge.net/rpy2.html) and its child [rmagic](http://ipython.org/ipython-doc/dev/config/extensions/rmagic.html) to hook out
-* Jython to wrap java code??
-* [PIL](http://pillow.readthedocs.org/) for generating and working with rasters
+* flask
+  * klein
 
-Webby stuff:
+### Webby stuff:
 
 * Jinja2==2.7.1
 * MarkupSafe==0.18
 * Werkzeug==0.9.4
 * klein==0.2.1
 
+### Utils
 
-
-* PostGIS
+* [PIL](http://pillow.readthedocs.org/) for generating and working with rasters
 
 ### Video??
 
 * ??? ?? ? ? ?
+
+### Databases
+
+* Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
+* postgres with the postgis extension
+
+### Interfaces
+
+* [RPy](http://rpy.sourceforge.net/rpy2.html) and its child [rmagic](http://ipython.org/ipython-doc/dev/config/extensions/rmagic.html) to hook out
+* Jython to wrap java code??
+
+
+
 
 ## Patterns
 * REST
