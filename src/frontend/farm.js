@@ -77,6 +77,7 @@ var farm = function($) {
                 breakLine : [90, 44, 88, 1],
                 text1 : [156, 32, 88, 12],
                 text2 : [156, 20, 88, 12],
+                text3 : [0, 116, 20, 12 ],
 
 
                 //Set End Goals Screen

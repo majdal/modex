@@ -85,6 +85,14 @@ Crafty.scene("setup", function() {
    		y: 135
    });
 
+    
+   //text
+   Crafty.e("2D, DOM, text1").attr({
+    x: 450,
+    y: 165
+   });
+
+
    Crafty.e("2D, DOM, breakLine").attr({
    		x: 450,
    		y: 225
@@ -100,14 +108,20 @@ Crafty.scene("setup", function() {
 
    Crafty.e("2D, DOM, condText").attr({
    		x: 450,
-   		y: 235
+   		y: 245
+   });
+
+   Crafty.e("2D, DOM, text2").attr({
+    x: 450,
+    y: 295
    });
 
    Crafty.e("2D, DOM, breakLine").attr({
    		x: 450,
-   		y: 335
+   		y: 355
    });
 
+   /*
    //Natural Disasters
 
    Crafty.e("2D, DOM, natIcon").attr({
@@ -123,18 +137,23 @@ Crafty.scene("setup", function() {
    Crafty.e("2D, DOM, breakLine").attr({
    		x: 450,
    		y: 445
-   });
+   }); */
 
    //Game Time
 
    Crafty.e("2D, DOM, timeIcon").attr({
    		x: 340,
-   		y: 455
+   		y: 365
    });
 
    Crafty.e("2D, DOM, timeText").attr({
    		x: 450,
-   		y: 455
+   		y: 375
+   });
+
+   Crafty.e("2D, DOM, text3").attr({
+    x: 450,
+    y: 395
    });
 });
 
