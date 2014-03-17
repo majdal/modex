@@ -54,8 +54,7 @@ class RPCProtocol(WebSocketServerProtocol):
           result = self._target(*payload)
           result = serializer.dumps({'result': result})
         except Exception, e:
-          result = serializer.dumps({'error': str(e)}) #Security Risk?
-        print("responding with", result)
+          result = serializer.dumps({'error': e}) #Security Risk?
         self.sendMessage(result)
 
 
