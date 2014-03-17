@@ -142,6 +142,7 @@ function RPC(ws) {
 	 
      ws.onopen = function(evt) {
          ready_handler();
+         console.log(ws.url,"Calling",ready_handler.toString())
          open = true;
      };
      ws.onclose = function(evt) {
@@ -170,7 +171,7 @@ function RPC(ws) {
      	}
      }
      
-     error_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+     var error_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
      ws.onerror = function(evt) {
        error_handler(evt);
      }
@@ -187,7 +188,7 @@ function RPC(ws) {
 	  	return p;
 	}
 	
-    ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+    var ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	call.ready = function(f) {
             if(!f) throw new Error("why is ready() handler null?")
             //console.log(ws.url, "setting ready handler to", f.toString())
@@ -216,7 +217,7 @@ function ObjectRPC(ws, methods) {
     if(this == global) throw new Error("you dun wrong; use `new`")
     var readyCount = 0; //sketchy! the idea is to fire ObjectRPC._readyHandler() when all sub sockets are ready
     
-    self = this; //avoid scoping trouble; 'methods.forEach' runs its function with this = methods
+    var self = this; //avoid scoping trouble; 'methods.forEach' runs its function with this = methods
     methods.forEach(function(m) {
            console.log("binding", m)
 	   self[m] = RPC(ws+"/"+m); //XXX should be URLjoin
@@ -231,11 +232,11 @@ function ObjectRPC(ws, methods) {
 	   })
 	   })
 		
-	error_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+	var error_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	this.error = function(f) {
 	    error_handler = f;
 	}
-	ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
+	var ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
         
 	this.ready = function(f) {
             console.log('setting meta ready handler')
@@ -248,7 +249,7 @@ function ObjectRPC(ws, methods) {
 
 var tank = new ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"]) 
 
-/* q: a) why is it setting the ready handlers twice
+/* q: a) why is it setting the ready handlers twice -> because i was setting the same handlers on all objects because 'this' was wrong
    b) why, once set, are they not firign?
 */
 
@@ -258,6 +259,10 @@ tank.ready(function() {
      console.log("Tank2's hp:", h.current, "/", h.total)
   })
 });
+
+console.log(tank['HP'].ready.toString())
+console.log(tank.ready.toString())
+
 console.log("next level shit???")
 
 tank.error(function(e){
