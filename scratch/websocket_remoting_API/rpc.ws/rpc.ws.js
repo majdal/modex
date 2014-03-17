@@ -17,7 +17,7 @@
 // protocol 2 (aka your mother's simplest protocol):
 // 
 // calls: [arg1, arg2, ...] in json
-// responses: {'error': 'error message'} || {'payload': return_value} in json
+// responses: {'error': 'error message'} || {'result': return_value} in json
 // protocol 2a (to support object mapping)
 //  -> no change to the basic protocol
 //  -> objects get unique URLs ("//example.com/data/maps/vector/buildings/northyork") which simply give a "This is a WebSocket Object Endpoint" page when accessed over HTTP
@@ -124,7 +124,7 @@ function RPC(ws) {
      * hmmm but if you can't do that, how do we MULTIPLEX
      */
      
-     
+      
 	var queue = []; //queue of calls in progress; actually a queue of promises, since we .send() immediately (assuming js is single threaded but eventLooped)
 	var open = false;
      
@@ -153,14 +153,14 @@ function RPC(ws) {
 	    }
 	 	response = serializer.parse(evt.data);
 	 	promise = queue.shift();
-	 	
+	 	//console.log(response) //debug
 	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
 	 	if('error' in response) {
 	 	    promise.error(response.error); //err how do i distnguish promises and promiss?
-	 	} else if('payload' in response) {
-	 		promise.resolve(response.payload);
+	 	} else if('result' in response) {
+                    promise.resolve(response.result);
 	 	} else {
-	 		console.log("Got malformed RPC message:", evt.data)
+	 	    console.log("Got malformed RPC message:", evt.data)
      	}
      }
      
@@ -170,9 +170,10 @@ function RPC(ws) {
      }
      
 	function call() {
-	    if(!open) {
-	      throw new Error("WebSocket not open")
-	    }
+	    //if(!open) {
+	    //  throw new Error("WebSocket not open")
+	    //}
+            console.log("calling", ws.url, arguments);
 	    arguments = Array.prototype.slice(arguments);
 	  	ws.send(JSON.stringify(arguments));
 	  	var p = new Promise();
@@ -182,6 +183,7 @@ function RPC(ws) {
 	
     ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	call.ready = function(f) {
+            console.log(ws.url, "setting ready handler")
 	    ready_handler = f;
 	}
 	call._ws = ws; //expose the websocket just cuz
@@ -207,9 +209,11 @@ function ObjectRPC(ws, methods) {
     var readyCount = 0; //sketchy
     
     methods.forEach(function(m) {
+           console.log("binding", m)
 	   this[m] = RPC(ws+"/"+m); //XXX should be URLjoin
 	   this[m].ready(function(){
 	     readyCount += 1;
+             console.log(m,"Ready")
 	     if(readyCount >= methods.length) ready_handler();
 	   })
 	   this[m].error(function(e) {
@@ -225,7 +229,8 @@ function ObjectRPC(ws, methods) {
 	}
 	ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
 	this.ready = function(f) {
-	    ready_handler = f;
+            console.log('setting meta ready handler')
+	    ready_handler = f; //what. this triggers it again??
 	}
 	return this;
 }
@@ -233,11 +238,14 @@ function ObjectRPC(ws, methods) {
 
 var tank = ObjectRPC("ws://localhost:8080/sprites/tank2", ["HP", "turn", "shoot"]) 
 
-tank.ready(function() {
-  tank.hp().then(function(h) {
-     console.log("Tank2's hp:'", h)
+tank.HP._ws.onopen = function(evt) {
+console.log("HP socket opened");
+//tank.ready(function() {
+  tank.HP().then(function(h) {
+     console.log("Tank2's hp:", h.current, "/", h.total)
   })
-});
+}
+//);
 
 tank.error(function(e){
   console.log(e.target.url, "failed because", e.message);
