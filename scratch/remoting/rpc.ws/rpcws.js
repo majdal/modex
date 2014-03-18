@@ -78,7 +78,7 @@ Either API ONLY
  */
 
 WebSocket = require("ws");
-Promise = require("./promise.js")
+Promise = require("./ayepromise.js").defer
 
 var serializer = JSON //serialize should be an object with "parse" and "stringify" methods
 
@@ -135,7 +135,7 @@ function Call(ws) {
 	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
 	 	if('error' in response) {
                     //console.log("Received error from", ws.url, ":", response.error)
-	 	    promise.error_out(response.error); //err how do i distnguish promises and promiss?
+	 	    promise.reject(response.error); //err how do i distnguish promises and promiss?
 	 	} else if('result' in response) {
                     //console.log("Received result from", ws.url, ":", response.result)
                     promise.resolve(response.result);
@@ -155,9 +155,10 @@ function Call(ws) {
 	    }
 	    arguments = Array.prototype.slice.call(arguments);
 	  	ws.send(JSON.stringify(arguments));
-	  	var p = new Promise();
+	  	var p = Promise();
 	  	queue.push(p);
-	  	return p;
+                console.log("queued promise", p)
+	  	return p.promise;
 	}
 	
     var ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??

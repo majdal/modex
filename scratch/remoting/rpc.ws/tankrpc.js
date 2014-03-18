@@ -13,7 +13,7 @@ tank.ready(function() {
   tank.turn(67).then(function(result) { console.log("successfully rotated the tank; server returned:", result) }); //that's funny... this should have done.. something
   
   setTimeout(function() {
-  tank.turn().error(function(e) {
+  tank.turn().fail(function(e) {
     console.log("tank.turn() failed, as expected:", e)
   })}, 1000)
   
