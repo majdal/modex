@@ -78,7 +78,10 @@ Either API ONLY
  */
 
 WebSocket = require("ws");
-defer = require("./ayepromise.js").defer
+ayepromise = require("./ayepromise.js") //these will have to be removed or adapted when run in a browser...
+
+
+defer = ayepromise.defer
 
 var serializer = JSON //serialize should be an object with "parse" and "stringify" methods
 
