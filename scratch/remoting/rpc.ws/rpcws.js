@@ -78,11 +78,10 @@ Either API ONLY
  */
 
 WebSocket = require("ws");
-Promise = require("./ayepromise.js").defer
+defer = require("./ayepromise.js").defer
 
 var serializer = JSON //serialize should be an object with "parse" and "stringify" methods
 
-  
 function Call(ws) {
     /*
      *
@@ -130,15 +129,15 @@ function Call(ws) {
 	    	throw new Error("Received RPC message but no call is in the queue waiting for it");
 	    }
 	 	response = serializer.parse(evt.data);
-	 	promise = queue.shift();
+	 	deferred = queue.shift();
 	 	//console.log(response) //debug
 	 	// TODO: experiment with calling these on setTimeout(function() { }, 10) //
 	 	if('error' in response) {
                     //console.log("Received error from", ws.url, ":", response.error)
-	 	    promise.reject(response.error); //err how do i distnguish promises and promiss?
+	 	    deferred.reject(response.error); //err how do i distnguish promises and promiss?
 	 	} else if('result' in response) {
                     //console.log("Received result from", ws.url, ":", response.result)
-                    promise.resolve(response.result);
+                    deferred.resolve(response.result);
 	 	} else {
 	 	    console.log("Got malformed RPC message:", evt.data)
      	}
@@ -155,10 +154,9 @@ function Call(ws) {
 	    }
 	    arguments = Array.prototype.slice.call(arguments);
 	  	ws.send(JSON.stringify(arguments));
-	  	var p = Promise();
-	  	queue.push(p);
-                console.log("queued promise", p)
-	  	return p.promise;
+	  	var d = defer();
+	  	queue.push(d);
+	  	return d.promise;
 	}
 	
     var ready_handler = function(evt) { /*no-op*/ } //TODO: use promises here??
