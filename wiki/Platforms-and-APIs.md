@@ -9,6 +9,10 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
 * [Modernizr](http://modernizr.com/) to let us write one codebase against HTML5
 
+**Layout Templates**
+* [Boilerplate](http://html5boilerplate.com/)
+* [Bootstrap](http://getbootstrap.com/)
+
 ## Visualization
 
 * d3js
