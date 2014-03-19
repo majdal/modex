@@ -3,6 +3,7 @@ rpc.ws
 
 rpc.ws wraps WebSocket's message-based protocol into a call-response protocol plus automatic `json` serialization, with _promises_ for interacting with return values.
 
+Once you set up some CallEndpoints on the backend, interacting with them is short and sweet:
 ```
 // open communication sockets
 open_fridge = RPCws.Call("ws://example.com/open_fridge")
@@ -17,10 +18,17 @@ open_fridge(Kitchen.FAST).then(function(door) {
 }).fail(function(error) {
   console.error("Unable to get to the tasties:", error)
 })
+
+// Clean up and shut down connections
+// (this isn't really necessary; if you don't do this you'll see
+// server errors about dropped connections, but Calls() won't care
+open_fridge.close()
+close_fridge.close()
+get_temperature.close()
 ```
 
 
-It also supports (but wrapping several `RPCws.Call` objects together), exposing the methods on an entire object. In a large system with lots of architecture, you're probably going to favour exposing whole objects at once:
+It also supports (by wrapping several `RPCws.Call` objects together), exposing the methods on an entire object. In a large system with lots of architecture, you're probably going to favour this:
 ```
 cookie = RPCws.RemoteObject("ws://example.com/cookiejar/cookie1", ["chips", "size"])
 cookie.chips("vanilla").then(function(vanilla_chips) {
@@ -43,13 +51,13 @@ cookie.chips("vanilla", Math.PI).then(function(vanilla_chips) {
 })
 ```
 
-By itself, an rpc session only talks to one method and one method only. This means that URLs are methods and methods are URLs, REST-style, but without all the overhead of sending HTTP headers every message. However, if you have a lot of active objects and methods you _will_ use a lot of active sockets. But if you use `multiplex.ws` (**NOT WRITTEN YET**), which provides something like HTTP-keepalive but for WebSockets, you can avoid that (_TODO: write `multiplex.ws` and make a convenience flag on RPCws.RemoteObject which internally assumes the RemoteObject URL is a multiplex.ws endpoint and that the methods on the object are to be multiplexed across_); if you open one socket per object, you can use your packet insepctors to track when objects are being talked to.
-
+By itself, an rpc session only talks to one method and one method only. This means that URLs are methods and methods are URLs, REST-style, but without all the overhead of sending HTTP headers every message. However, if you have a lot of active objects and methods you _will_ use a lot of active sockets. But if you use `multiplex.ws` (**NOT WRITTEN YET**).
 
 The protocol is currently only implemented in javascript (frontend) and Python-Twisted-AutobahnPython (backend) right now but there's no reason (with enough tests as a safety net) it couldn't be on Python-`asyncio`-AutobahnPython or in nodejs or in something else as well.
 
 
 For a related pattern, see `pubsub.ws`.
+
 
 Demo
 ====
@@ -65,3 +73,15 @@ $ node tankrpc.js
 ```
 
 You should see.
+
+
+TODO
+=====
+
+* Configurable server-side redirection of clients to different CallEndpoints depending on their identity (ip address/cookies/http login/etc). This could be done: 
+  * openly, with a `HTTP 302`, or internally by setting up a proxy object) 
+* Make it easier to fake _realms_: make convenience methods to set up identical CallEndpoint trees under subpaths, e.g. so that `ws://example.com/games/session04g78a4B/` and `ws://example.com/games/session99g77a23/` both contain `players/`, `pieces/`, `board` etc, and make a `RelativeWebSocket` js class which papers over the detail of which session you're talking to.
+* `multiplex.ws` which provides something like HTTP-keepalive but for WebSockets. you can avoid that
+  * make a flag on RPCws.RemoteObject that makes it assumes the RemoteObject URL is a multiplex.ws endpoint instead of opening direct WebSocket connections everywhere
+  *  (in fact, right now, RPCObjectEndpoint is just a `Resource`; we could trivially make it a `MultiplexingWebsocketResource` and make this the default?)
+  * This way--if you open one socket per object--you can balance the benefits of multiplexing use your packet insepctors to track when objects are being talked to.
