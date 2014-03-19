@@ -9,7 +9,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
 * [Modernizr](http://modernizr.com/) to let us write one codebase against HTML5
 
-* Promises: [overview of some of the better implementations](http://www.promisejs.org/implementations/)
+* Promises: [overview of some of the better implementations](http://www.promisejs.org/implementations/) / [a different site??](http://promisesaplus.com/implementations)
   * ayepromise (**<-- current**)
   * when.js
   * promise.js
