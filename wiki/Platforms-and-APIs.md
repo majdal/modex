@@ -55,6 +55,12 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [ModestMaps](http://modestmaps.com/examples/)
 (_these all seem like they overlap a bit; what's the deal?_)
 
+**Map Data** _is complicated_
+* TopoJSON
+* GeoJSON
+* [MapFish](http://trac.mapfish.org/trac/mapfish/wiki/MapFishProtocol), for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
+* [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
+
 
 ## Networking
 
