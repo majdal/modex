@@ -18,8 +18,13 @@ To that end, we need easy to read guides that get the interested lay public (whi
     * vector: polygon, point, line
     * DEM
     * 
- 
-**TODO**: link Majd's NFB-experienced friend here
+
+## Avenues
+
+* [/r/DataIsBeautiful](https://reddit.com/r/dataisbeautiful) - _a high-traffic channel for aesthetically pleasing charts and graphs_
+* [/r/redactedcharts](https://reddit.com/r/redactedcharts) - _a subreddit which makes a sort of game out of dataviz_
+* the SuperCanada National Film Board project
+  * Majd's NFB-experienced filmmaker friend who wants to help us
 
 # Reproducible Science
 
