@@ -92,13 +92,14 @@ Error: WebSocket not open
     at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
 
 ```
+The error is expected, and demonstrates that we know better than to try to send data to a closed socket.
 
 
 TODO
 =====
 
-
-* Make it easier to fake _realms_: make convenience methods to set up identical CallEndpoint trees under subpaths, e.g. so that `ws://example.com/games/session04g78a4B/` and `ws://example.com/games/session99g77a23/` both contain `players/`, `pieces/`, `board` etc, and make a `RelativeWebSocket` js class which papers over the detail of which session you're talking to.
+* Scrap the error checking in rpcws.js? There's something to be said for thinner wrapping; relying on the built in errors will make people understand that they are actually using WebSockets.
+* Make it easier to fake _realms_: make convenience methods to set up identical CallEndpoint trees under subpaths, e.g. so that `ws://example.com/games/session04g78a4B/` and `ws://example.com/games/session99g77a23/` both contain *disinct* objects/methods `players/`, `pieces/`, `board/` etc, and make a `RelativeWebSocket` js class which papers over the detail of which session you're talking to.
 * Some way of changing decisions based on client ("`.peer`", in Autobahn terminology) identity (ip address/cookies/http login/etc).
   * One idea: configurable server-side redirection of clients to different CallEndpoints. This could be done: 
     * _openly_, with a `HTTP 302` (or another 3xx code), or
