@@ -48,6 +48,7 @@ cookie.ready(function() {
       vanilla_chips.forEach(function(chip) {
         console.log("Nom nom", chip);
       })
+      console.log("Mmm, those were some tasty cookie guts")
     })
   }, 9750)
 })
