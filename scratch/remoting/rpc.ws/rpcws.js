@@ -106,7 +106,8 @@ function Call(ws) {
      
       
 	var queue = []; //queue of calls in progress; actually a queue of promises, since we .send() immediately (assuming js is single threaded but eventLooped)
-	var open = false;
+	call.open = false;  //weird. js does all its parsing and defining *before* running any code. this sketches me out; i think this line should be *after* the def'n of call()
+
      
 	if(ws instanceof String || typeof(ws)=='string' || ws.substr) { // TODO: figure out the proper way to do polymorphism/ducktyping in js; I know you can check for the existence of properties, but is that the Right Way? 
 		ws = new WebSocket(ws);
@@ -116,10 +117,10 @@ function Call(ws) {
 	 
      ws.onopen = function(evt) {
          ready_handler();
-         open = true;
+         call.open = true;
      };
      ws.onclose = function(evt) {
-         open = false;
+         call.open = false;
          ws = null;
      };
      
@@ -152,7 +153,7 @@ function Call(ws) {
      }
      
 	function call() {
-	    if(!open) {
+	    if(!call.open) { //can I reassign this = call? that would be clearer..
 	      throw new Error("WebSocket not open")
 	    }
 	    arguments = Array.prototype.slice.call(arguments);
@@ -172,7 +173,7 @@ function Call(ws) {
 	}
 	
 	// test if we're open, just in case the socket was open BEFORE it was given to us
-    open = (ws.readyState == ws.OPEN); // XXX there's (possibly, depending on the particular js interpreter's threading model) a small window between which this is checked and onopen is set
+     call.open = (ws.readyState == ws.OPEN); // XXX there's (possibly, depending on the particular js interpreter's threading model) a small window between which this is checked and onopen is set
      
      call.close = function() {
         ws.close();
