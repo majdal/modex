@@ -35,7 +35,7 @@ class Tank:
     def turn(self, degrees):
         print str(self)+".turn(%f)" % degrees
         # we also have self.peer and all the other metadata that's in WebSocketServerProtocol so we can do Auth&Auth
-        #, which RPCEndpoint attaches to us
+        #, which CallEndpoint attaches to us
         # or maybe peer comes in as a kwarg?
         # 
         self.heading+=degrees
@@ -52,9 +52,9 @@ if __name__ == '__main__':
     
     root = File(".");
     sprites = Resource(); root.putChild("sprites", sprites)
-    tank_endpoint = RPCObjectEndpoint(tank);
+    tank_endpoint = RemoteObjectEndpoint(tank);
     sprites.putChild("tank2", tank_endpoint)
-    #tank_hp_endpoint = RPCEndpoint(tank.hp);
+    #tank_hp_endpoint = CallEndpoint(tank.hp);
     #tank_endpoint.put
     
     site = Site(root);

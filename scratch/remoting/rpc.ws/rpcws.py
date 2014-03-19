@@ -58,7 +58,7 @@ class RPCProtocol(WebSocketServerProtocol):
         self.sendMessage(result)
 
 
-def RPCEndpoint(method, debug = False):
+def CallEndpoint(method, debug = False):
     "why the debug param? because "
     f = WebSocketServerFactory(debug = debug, debugCodePaths = debug )
     f.setSessionParameters(externalPort = 8080) #bug in autobahn
@@ -66,10 +66,11 @@ def RPCEndpoint(method, debug = False):
     
     return WebSocketResource(f)
 
-class RPCObjectEndpoint(Resource):
+
+class RemoteObjectEndpoint(Resource):
    "convenience class to make putting" #this class is feature-parable with RPCEndpoint in API #1
    "doesn't actually provide a websocket, but instead wraps each public method of o in a RPCEndpoint"
    def __init__(self, o):
       Resource.__init__(self)
       for method in (m for m in dir(o) if callable(getattr(o, m))): #find all the names (strings) of all methods
-          self.putChild(method, RPCEndpoint(getattr(o, method)))
+          self.putChild(method, CallEndpoint(getattr(o, method)))
