@@ -27,7 +27,16 @@ close_fridge.close()
 get_temperature.close()
 ```
 
-It also supports (by wrapping several `RPCws.Call` objects together), exposing the methods on an entire object. In a large system with lots of architecture, you're probably going to favour using `rpc.ws` like this:
+You can send any number of calls simultaneously. 
+They will be serialized to the underlying WebSocket
+stream in the order they were called and they will resolve in that order (_FIFO queue_).
+```
+TODO: example of this.
+ (for now, see tankrpc.js)
+```
+
+It also supports (by wrapping several `RPCws.Call` objects together), exposing the public methods of an entire object.
+In a large system with lots of architecture, you're probably going to favour using `rpc.ws` like this:
 ```
 cookie = RPCws.RemoteObject("ws://example.com/cookiejar/cookie1", ["chips", "size"])
 
