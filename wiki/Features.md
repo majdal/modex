@@ -122,6 +122,7 @@ What would it take for us to feel that modex was "feature complete"?
 1. A small but effective suite of **forkable** example visualizations
 1. Dataset metadata: explanations of what each column is, change tracking (GIS is big on that)
 1. A useful set of unit tests
+2. <10ms response time (cite: [....])
 
 ## V1.5
 1. Solid Suite of unit tests

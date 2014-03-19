@@ -12,6 +12,11 @@ We currently are coordinating through an [Asana](http://asana.com) group. Our is
 
 ### Git and Branching
 
+We want to follow the gitflow patter, described [here](http://nvie.com/posts/a-successful-git-branching-model/). So, please install the gitflow plugin from [here](https://github.com/nvie/gitflow), or use [SourceTree](http://www.sourcetreeapp.com/), which has gitflow beautifully integrated. 
+
+![Gitflow](http://nvie.com/img/2009/12/Screen-shot-2009-12-24-at-11.32.03.png )
+
+
 Now that we have a sizable amount of code, we are switching to a branching approach with two major prongs: `master` and `develop`.
 `master` must always be kept working and clean: a newbie or interested international researcher needs to be able to `git clone`
 the repo and have something worth looking at. Development should happen on `develop`, so keep your default; ideally, `develop` should always be kept working too
