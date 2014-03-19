@@ -80,6 +80,11 @@ Features:
 **SIR**
 
 
+**ParkingGarage**
+  * effect of (`price`, `distance`, and `time of day`) on the distribution of cars
+  * adding/removing factors would be nice too
+
+
 **Dumb random number generators**
 **Dumb linear-model generators**
 **Dumb non-linear model generators**

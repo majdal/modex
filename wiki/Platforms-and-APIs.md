@@ -9,6 +9,16 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
 * [Modernizr](http://modernizr.com/) to let us write one codebase against HTML5
 
+* Promises: [overview of some of the better implementations](http://www.promisejs.org/implementations/) / [a different site??](http://promisesaplus.com/implementations)
+  * ayepromise (**<-- current**)
+  * when.js
+  * promise.js
+  * ....
+
+**Layout Templates**
+* [Boilerplate](http://html5boilerplate.com/)
+* [Bootstrap](http://getbootstrap.com/)
+
 ## Visualization
 
 * d3js
@@ -50,6 +60,12 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * http://polymaps.org/
 * [ModestMaps](http://modestmaps.com/examples/)
 (_these all seem like they overlap a bit; what's the deal?_)
+
+**Map Data** _is complicated_
+* TopoJSON
+* GeoJSON
+* [MapFish](http://trac.mapfish.org/trac/mapfish/wiki/MapFishProtocol), for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
+* [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
 
 
 ## Networking
@@ -145,12 +161,22 @@ A data bind and a data flow are related problems, and several of these libraries
 * [ABCE](https://github.com/DavoudTaghawiNejad/abce) _Agent Based Complete Economy_ (python); [paper](http://jasss.soc.surrey.ac.uk/16/3/1.html)
 * http://insightmaker.com/
 
+## Packaging
+
+* [py2exe](http://www.py2exe.org/) - _specialized for Windows, runs as a distutils extension_
+* [freeze.py](https://wiki.python.org/moin/Freeze) - _specialized for Unix; not used that much anymore, since most Unices have good package managers these days_
+* [PyInstaller](http://pyinstaller.org/)  - _cross-platform python packaging_
+
+(nick thinks we should rely on system-specific packaging conventions as much as possible, e.g. try to get our work into brew, pacman, aptitude and the Windows 8 and OS X App Stores)
+
 ## Tools
 
 * [GeoHack](https://tools.wmflabs.org/geohack/) (all lat/lon coordinates on Wikipedia link to GeoHack)
 * [MapBox Collaboratory](https://www.mapbox.com/)
 
-## Collaboratories
+## Collaboratories 
+
+Collaboraties (laboratories for collaboration) are our key to reproducible science.
 
 * [StackExchange](http://stackoverflow.com/) - _they've thought long and hard -- and have measured -- about the right way to do comment systems; the link escapes me right now, though -kousu_
 
