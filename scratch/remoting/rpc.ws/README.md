@@ -27,14 +27,20 @@ close_fridge.close()
 get_temperature.close()
 ```
 
-
-It also supports (by wrapping several `RPCws.Call` objects together), exposing the methods on an entire object. In a large system with lots of architecture, you're probably going to favour this:
+It also supports (by wrapping several `RPCws.Call` objects together), exposing the methods on an entire object. In a large system with lots of architecture, you're probably going to favour using `rpc.ws` like this:
 ```
 cookie = RPCws.RemoteObject("ws://example.com/cookiejar/cookie1", ["chips", "size"])
-cookie.chips("vanilla").then(function(vanilla_chips) {
-  vanilla_chips.forEach(function(chip) {
-    console.log("Nom nom", chip);
+
+cookie.ready(function() {
+  // once the connection comes up
+  // eat some chocolate chips every 9.75 seconds
+  setInterval(function() {
+    cookie.chips("vanilla").then(function(vanilla_chips) {
+      vanilla_chips.forEach(function(chip) {
+        console.log("Nom nom", chip);
+      })
     })
+  }, 9750)
 })
 ```
 
@@ -56,8 +62,8 @@ By itself, an rpc session only talks to one method and one method only. This mea
 The protocol is currently only implemented in javascript (frontend) and Python-Twisted-AutobahnPython (backend) right now but there's no reason (with enough tests as a safety net) it couldn't be on Python-`asyncio`-AutobahnPython or in nodejs or in something else as well.
 
 
-For a related pattern, see `pubsub.ws`.
-
+For a different sort of communication pattern, not based on calls and responses, see `pubsub.ws`.
+For a different sort of data sync pattern, which hides the irrelevant messaging parts, see `state.ws`.
 
 Demo
 ====
@@ -98,6 +104,8 @@ The error is expected, and demonstrates that we know better than to try to send 
 TODO
 =====
 
+* Make Calls and RemoteObjects `then()able`? Instead of `.ready()` we could use `.then()`, and if the connection fails (`ws.onerror`) we can pass that out too.
+  * Do WebSockets conform to the _promises_ spec? Like, do they _guarantee_ to only .onerror() and .onopen() and .onclose() at most ONCE each?
 * Scrap the error checking in rpcws.js? There's something to be said for thinner wrapping; relying on the built in errors will make people understand that they are actually using WebSockets.
 * Make it easier to fake _realms_: make convenience methods to set up identical CallEndpoint trees under subpaths, e.g. so that `ws://example.com/games/session04g78a4B/` and `ws://example.com/games/session99g77a23/` both contain *disinct* objects/methods `players/`, `pieces/`, `board/` etc, and make a `RelativeWebSocket` js class which papers over the detail of which session you're talking to.
 * Some way of changing decisions based on client ("`.peer`", in Autobahn terminology) identity (ip address/cookies/http login/etc).
