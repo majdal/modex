@@ -40,14 +40,14 @@ cookie.chips("vanilla").then(function(vanilla_chips) {
 
 `ayepromise` provides our [promises](http://promisesaplus.com/implementations) which then provide the `.then()` and `.fail()` methods. This requires a change in thinking about how to program: RPC is fundamentally a long-running network phenomenom, and need to design your application asynchronously. If you're used to javascript, you're probably already used to this. If you're not, read the promises documentation and learn the full power of it.
 
-Since serialization is `json`-based you are restricted to sending only relatively simple datastructures. Sineand the front and backend are dynamic languages, these calls are fairly weakly typed. You should know what your frontend and backend are sending. You will get an error at runtime if you call them wrong:
+Since serialization is `json`-based you are restricted to sending only relatively simple datastructures. Since front and backend are in dynamic languages and this is a very thin wrapper on top of those, these calls are weakly typed and you will. You should know what your frontend and backend are sending. You will get an error at runtime if you call them wrong:
 ```
 cookie.chips("vanilla", Math.PI).then(function(vanilla_chips) {
   vanilla_chips.forEach(function(chip) {
     console.log("Nom nom", chip.radius); //error: chip.radius is undefined
     })
-}).fail(function(error) {
-  console.error(error); // --> 'type error somethingsomethingsomething XXX FIXME'
+}).fail(function(error) { // --> will give a stringified Python exception to your javascript code:
+  console.error(error);   // error: 'chips() takes exactly 2 arguments (3 given)' 
 })
 ```
 
@@ -72,7 +72,26 @@ and then in another run
 $ node tankrpc.js
 ```
 
-You should see.
+You should see (maybe reordered a bit for random network delays):
+```
+$ node tankrpc.js
+done Tank demo initialization;
+tank sockets opened; calling
+1st call: Tank2's hp: 50 / 50
+successfully rotated the tank; server returned: null
+tank.turn() failed, as expected: turn() takes exactly 2 arguments (1 given)
+2nd: Tank2's hp: 50 / 50
+Shutting down Tank connections
+
+/home/kousu/School/WICI/sig/repos/modex/scratch/remoting/rpc.ws/rpcws.js:157
+	      throw new Error("WebSocket not open")
+	            ^
+Error: WebSocket not open
+    at RemoteObject.call [as HP] (/home/kousu/School/WICI/sig/repos/modex/scratch/remoting/rpc.ws/rpcws.js:157:14)
+    at null._onTimeout (/home/kousu/School/WICI/sig/repos/modex/scratch/remoting/rpc.ws/tankrpc.js:28:8)
+    at Timer.listOnTimeout [as ontimeout] (timers.js:110:15)
+
+```
 
 
 TODO
@@ -88,7 +107,6 @@ TODO
     * Complicated use case (which fits the _internally_ method): users only have access to a particular subportion of a spreadsheet, according to what the team has shared with them. So the `spreadsheet.rows` call that the `CallEndpoint` wraps needs to behave differently depending on the user.
       * We could figure out some way to pass `.rows` the `.peer` information (kwargs? some sort of global?), or
       * Create (with the Factory pattern) a new `spreadsheet` object for each user that takes `.peer` in its constructor.
-* S
 * `multiplex.ws` which provides something like HTTP-keepalive but for WebSockets. you can avoid that
   * make a flag on RPCws.RemoteObject that makes it assumes the RemoteObject URL is a multiplex.ws endpoint instead of opening direct WebSocket connections everywhere
   *  (in fact, right now, RPCObjectEndpoint is just a `Resource`; we could trivially make it a `MultiplexingWebsocketResource` and make this the default?)
