@@ -6,12 +6,35 @@ If your copy of modex isn't working, make sure your [dependencies](#dependencies
 
 ## Team Guidelines
 
+### Issue Tracker
+
 We currently are coordinating through an [Asana](http://asana.com) group. Our issue tracker is over there, not here.
+
+### Git and Branching
+
+Now that we have a sizable amount of code, we are switching to a branching approach with two major prongs: `master` and `develop`.
+`master` must always be kept working and clean: a newbie or interested international researcher needs to be able to `git clone`
+the repo and have something worth looking at. Development should happen on `develop`, so keep your default; ideally, `develop` should always be kept working too
+but if it breaks it won't be the end of
+Edits to files in `wiki/`, however, can (and, probably should) happen on `master`.
+(commands relevant to this (XXX SORTME)
+```
+git branch develop
+git branch --set-upstream-to=origin/develop develop
+git checkout develop
+git branch #see what branches you have copies of
+git branch -a #see the remote branches too
+(#how do we see what our upstream branches are? how do we make sure when we 'pull' it's pulling the right thing?
+```
+
+
+### Documentation
 
 Our heterogeneity makes coordination difficult. This makes it extra important to document where we're at.
 Guides, tricks, gotchas, and references need to be saved and made available to the team.
 Putting discoveries in this "wiki" (which is really just a series of .md files in the source repo) makes them easily linkable,
 fixable, and public to the world.
+
 
 ### Keeping Copyrighted Data Out
 
