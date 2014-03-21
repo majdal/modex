@@ -1,35 +1,51 @@
 
-global = this;
-
-WebSocketRealm = function(realm) {
+WebSocketRealm = function(realm, _WebSocket) {
   /* *class factory* which creates WebSocket-compatible classes that know about relative URLs.
-   *
+   * realm is the base URL to build WebSockets onto
+   * and _WebSocket is an optional parameter which gives a WebSocket-compatible class (which could be, e.g., another WebSocketRealm) to construct WebSockets out of
    * Usage:
    *   RelativeWebSocket
+   * 
+   * TODO:
+   *  [ ] Figure out how instanceof sees results from this class, and if so what to do about that. Is anyone going to be depending on us?
    */
 
   if(!(realm instanceof URL)) {
     realm = new URL(realm);
   }
   
-  realm = realm.toWebSocket();
-
-  return {
-     // something someting
-     function constructor(href) { //this isn't quite right; it won't get along with 'new' and 'this'
-       return new WebSocketRealm._WebSocket(realm.join(href));
+  if(realm.toWebSocket) {
+    realm = realm.toWebSocket();
+  } else {
+    console.warn("URL.prototype.toWebSocket is not installed. Make sure '"+realm.href+"' uses the correct websocket scheme.")
+  }
+  
+  if(_WebSocket == null) {
+    _WebSocket = WebSocket; //stash original WebSocket class in our closure (if we don't do this, and someone uses WebSocketRealm to overwrite the default WebSocket, infinite loops will happen)
+  }
+  
+  function WebSocketClass(href) { 
+     var o = new _WebSocket(realm.join(href)); //since
+     if(typeof(o) != "object") { // <- this check ensures that this function behaves itself, despite not being a 'proper' constructor.
+                                 // see http://stackoverflow.com/questions/1978049/what-values-can-a-constructor-return-to-avoid-returning-this / http://bclary.com/2004/11/07/#a-13.2.2
+       throw new Error("The WebSocket implementation that WebSocketRealm("+realm.href+") is wrapping did not construct an object.")
      }
-      
+     return o;
   }
 
+  return WebSocketClass
 }
-WebSocketRealm._WebSocket = WebSocket; // stash original WebSocket implementation:
-                                       // we always use this version, no matter what overwrites later may be done
-                                       // because there's no way to be general about that without getting terrible dependency loops.
 
 
+// usage:
 
+WebSocket = new WebSocketRealm(window.location);
 
+//if we DIDN'T stash the original WebSocket, the above would cause an infinite loop
+// you can even chain
+ControlsWebSocket = new WebSocketRealm("ctls/");
+DataWebSocket = new WebSocketRealm("feeds/");
+d = new DataWebSocket("tempsensor1");
 
 
 // Here's the API I want:
@@ -46,6 +62,3 @@ pretty = new RedditSocket("/r/IAmA");
 pretty.onopen = function() { pretty.send("You won't guess who I met today..") }
 ping = new RedditSocket("new_users") //-> 'wss://reddit.com/feeds/new_users'
 
-
-// to accomplish these features, overwrite built in WebSocket like so:
-WebSocket = new WebSocketRealm(window.location);
