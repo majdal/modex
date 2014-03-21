@@ -1,6 +1,25 @@
-//the only change needed 
-
-// this
+/* urljoin.js
+ *  Extend the URL prototype with a "join" method that
+    behaves the same as html links: http://www.ietf.org/rfc/rfc1808.txt
+   
+    In particular, this understands
+      * absolute URLs ("://")
+      * net path URLs ("//")
+      * absolute path URLs ("/")
+      * relative path URLs ("")
+    XXX are these def'ns clear enough?
+ 
+ 
+ * There might be some edge cases not handled. Please report bugs you find with a short test case attached. For one thing,
+ * Doesn't handle ".." which is really just convention but was written into the spec; the browser can deal with that.
+ 
+ TODO:
+* [ ] check if rfc1808 has been overridden at all
+* [x-ish] write tests
+* [ ] For spec compliance (but not for functionality):
+      parse relative hrefs and do the spec'd pruning of '..' and '.' components.
+      
+*/
 
 // this only runs on browsers -- node's url.Url is different
 // nodejs's url includes a "resolve" function
@@ -17,20 +36,37 @@
  */
 
 URL.prototype.join = function(href) {
-    // implement http://www.ietf.org/rfc/rfc1808.txt
-    // which says, in BNF, that:
-    // an absolute URL is just something prefixed by "scheme:" where 'scheme' is actually http or https or ftp or ws or data or whatever; in particular, an absolute URL can be scheme:relativeURL
+    /* Returns a new URL object representing
+     *
+     */
     
-    // so relative URLs are king
-    // an a relative URL is either an absolute path (which is identified simply by the fact that it starts with a /) a net_path URL (those funny //google.com/site URLs) which is identified by it starting with two slashes, and everything else is relative
-    // a URL can come in absolute and relative flavoures
+    if(href instanceof URL) href = href.href; // cast URL objects into absolute-URL strings
+                    // this could be shortcircuited by performing the absolute-URL case here
+                    // but I'm scared of missing a corner case that way. 
     
+    /*
+    RFC1808 says, in BNF, that:
+      an absolute URL is just /something/ prefixed by "scheme:",
+      with the something usually being a relative URL. 
+     So relative URLs are king, and they are defined as any of:
+        - a net_path (those funny //google.com/site URLs) which is identified by it starting with //)
+        - an abs_path (which is identified simply by the fact that it starts with a /)
+        - a rel_path (ie. everything else so long as it is made of unreserved characters)
+    
+     We offload all the validity checking whether a path as the right characters
+        or not or whatever to the browser's internal parser by
+        calling 'new URL()' once we have done our tweaks.
+      */
     
     //experimentally, site == this.origin EXCEPT if this.protocol is unknown to the browser.
     // and "file:" counts as unknown for some reason.
     // so instead, a workaround:
     site = this.protocol + "//" + this.hostname;
     
+    
+    if(href=="") { // section 5.2: "An empty reference resolves to the complete base URL:"
+        return new URL(this.href);
+    }
     if (href.startsWith("//")) { //net_path, section 2.4.3
        return new URL(this.protocol + href); //notice how the spec writers cleverly made href already contain the two needed slashes here
     } 
@@ -49,18 +85,11 @@ URL.prototype.join = function(href) {
         
         var path = this.pathname.split("/");
         // sanity check (comment out at discretion)
-        if(path[0] != "") throw new Error("API inconsistency: URL.pathname should be absolute, so first component of path should be empty, but instead it is `" + this.pathname.toString() + "`")
+        if(path[0] != "") throw new Error("API inconsistency: URL.pathname should be absolute, so first component of path should be empty, but instead it is `" + this.pathname.toString() + "`");
         
-        
-        path.pop() //remove final component (possibly empty, if this URL represents a folder path)
-        // XXX corner-case: http://site.com/folder vs http://site.com/folder/ do relative hrefs from  know that folder is a folder? testing this will require writing a server that fakes URL
-        // aha, thank you IIS and your durpiness:
-        // this site provides a test platform:
-        // http://weblogs.asp.net/durp.jpg/
-        //try running location.assign("hello/") a few times, then
-        //            location.assign("hello2") and location.assign("hello3"); observe that hello/ keeps ~appending~, but hello3 replaces hello2 because hello2 didn't end with a /
-        //so indeed, RELATIVE URLS MAY DIFFER. SO http://site.com/topiclist is a DIFFERENT page than http://site.com/topiclist/
-        path.push(href)
+        // replace final component with the relative component. 
+        path.pop();
+        path.push(href);
         
         return new URL(site + path.join("/"));
       }
@@ -70,12 +99,32 @@ URL.prototype.join = function(href) {
 
 // tests:
 function test() {
-var Ru = new URL(window.location.href)
-console.log(Ru.href)
-console.log(Ru.join("tackthison_relatively/p?zlease").href)
-console.log(Ru.join("/absolute_path").href)
-console.log(Ru.join("//newsite.com/otherpath").href) //a quirk: if you run this code locally (under a file:// URL) then this line misbehaves: the browser intentionally drops the hostname part
+var Ru = new URL("https://myawesomesite.net/zing/zang/zong.pdf")
+console.log("Relative Path: ", Ru.join("tackthison_relatively/p?zlease").href, "Expected:", "https://myawesomesite.net/zing/zang/tackthison_relatively/p?zlease")
+console.log("Absolute Path:", Ru.join("/absolute_path").href, "Expected:", "https://myawesomesite.com/absolute_path")
+console.log("Net Path", Ru.join("//newsite.com/otherpath").href, "Expected:", "https://newsite.com/otherpath") 
+console.log(Ru.join("ws://zanga.internet/woahnelly").href, "Expected:", "ws://zanga.internet/woahnelly") 
+console.log(Ru.join("").href, "Expected:", "https://myawesomesite.net/zing/zang/zong.pdf") 
+  //a quirk: if you run this code locally (under a file:// URL) then this line misbehaves: the browser intentionally drops the hostname part
+
+
+// ensure corner case works:
+// IIS's durpiness provides a test platform:
+//    http://weblogs.asp.net/durp.jpg/
+//try going there and running location.assign("hello/") a few times, then
+//            location.assign("hello2") and location.assign("hello3"); observe that hello/ keeps ~appending~, but hello3 replaces hello2 because hello2 didn't end with a /
+        //so indeed, RELATIVE URLS MAY DIFFER. SO http://site.com/topiclist is a DIFFERENT page than http://site.com/topiclist/
+var folder = new URL("http://site.com/one/two/")
+var file = new URL("http://site.com/one/two")
+
+console.log(folder.join("addendum").href, "Expected:", "http://site.com/one/two/addendum")
+console.log(file.join("addendum").href, "Expected", "http://site.com/one/addendum")
+
+
+
 }
+
+test()
 
 function websockethref(href) {
     /* using the above, get a websocket URL
