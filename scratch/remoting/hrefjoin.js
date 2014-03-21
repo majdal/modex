@@ -97,8 +97,62 @@ URL.prototype.join = function(href) {
     
 }
 
+
+
+
+URL.prototype.toWebSocket = function() {
+    /* Coerce a URL to the corresponding WebSocket URL.
+     *  That is:
+     *    - map http: -> ws:  and  https: -> wss:
+     *    - leave things unchanged if it's already ws: or wss:
+     *    - give an error otherwise, because WebSockets do not make sense off "the web"
+     *         (if you really need non-http-related WebSocket URLs, think carefully about
+     *         what you're doing, then explicity change your URL's protocol).
+     *  The goal is to make it easy to keep all endpoints--HTTP, WebSocket, and otherwise
+     *         --consistent in their use/not use of TLS.
+     *
+     *
+     * Returns: a new URL object -- (not a string!)
+     *   does NOT create a WebSocket -- you have to do that yourselv
+     *
+     *
+     * Usage (assuming you have URLAbleWebSocket installed):
+     *
+     *  var control = new WebSocket(new URL(window.location).join("/ctl").toWebSocket())
+     *  control.onopen = function(evt) { console.log("Successfully connected to", control.url); }
+     *
+     * TODO:
+     *  [ ] Do we really need to be strict about URLs? What if you really do want to make a WebSocket connection to an ftp site?
+     */
+
+    // make a copy of ourselves
+    var U = new URL(this.href)
+    
+    // now, map it to a websocket url
+    if(U.protocol == "https:" || U.protocol == "wss:") { U.protocol = "wss:" }
+    else if(U.protocol == "http:" || U.protocol == "ws:" ) { U.protocol = "ws:"}
+    else { throw new URIError(U.href + " is not an HTTP URL") }
+    
+    return U;
+}
+
+
+URLAbleWebSocket = function(U) {
+  /* A simple drop-in wrapper to make WebSocket understand URL objects.
+   * 
+   * 
+   */
+  if(U.href) U = U.href;
+  return new URLAbleWebSocket.WebSocket(U);
+}
+URLAbleWebSocket.WebSocket = WebSocket; //store the original websocket
+WebSocket = URLAbleWebSocket
+
+
+///////////////////////////////////////////////
 // tests:
-function test() {
+
+function test_hrefjoin() {
 var Ru = new URL("https://myawesomesite.net/zing/zang/zong.pdf")
 console.log("Relative Path: ", Ru.join("tackthison_relatively/p?zlease").href, "Expected:", "https://myawesomesite.net/zing/zang/tackthison_relatively/p?zlease")
 console.log("Absolute Path:", Ru.join("/absolute_path").href, "Expected:", "https://myawesomesite.com/absolute_path")
@@ -124,16 +178,18 @@ console.log(file.join("addendum").href, "Expected", "http://site.com/one/addendu
 
 }
 
-test()
+function test_towebsocket() {
+  // TODO
+  Ru = new URL("http://sallysureisgreat.com/updates")
+  console.log("toWebSocket() result", Ru.toWebSocket().href, "Expected:", "ws://sallysureisgreat.com/updates")
 
-function websockethref(href) {
-    /* using the above, get a websocket URL
-     */
-	U = new URL(window.location.href).join(href)	
-    // now, map it to a websocket
-    if(U.protocol == "https:") { U.protocol = "wss" }
-    else if(U.protocol == "http:") { U.protocol = "ws"}
-    else { throw new URIError(U.href + " is not an HTTP URL") }
-    //case III should be impossible because if window.location exists we're running in a browser, and if we're running in a browser we're over HTTP
-    //but better safe-than-sorry
+  Ru = new URL("https://fsdfds")
+  console.log("secure sockets edition", Ru.toWebSocket().href, "Expected:", "wss://fsdfds")
+
+  Ru = new URL("https://thiswillbreak/because/it/is/too/bad")
+  Ru = Ru.toWebSocket()
+  console.log("secure sockets edition", Ru.toWebSocket().href, "Expected:", "wss://fsdfds")
 }
+
+test_hrefjoin()
+test_towebsocket()
