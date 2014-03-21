@@ -1,5 +1,4 @@
 
-
 ## Potential Datasets
 
 ### Scrapbucket
@@ -10,6 +9,9 @@
 * datahub.io
 
 * http://geocommons.com/
+* 
+
+* a source for ideas and datasets (it doesn't hurt to ask): http://www.reddit.com/r/datasets
 
 we should just scrape http://www.agr.gc.ca/atlas/data_donnees/ (sketchy redhat server ftw)
 
