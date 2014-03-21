@@ -14,11 +14,11 @@
  * Doesn't handle ".." which is really just convention but was written into the spec; the browser can deal with that.
  
  TODO:
-* [ ] check if rfc1808 has been overridden at all
+* [ ] check if rfc1808 has been overridden since it was written.
 * [x-ish] write tests
 * [ ] For spec compliance (but not for functionality):
       parse relative hrefs and do the spec'd pruning of '..' and '.' components.
-      
+* [ ] Figure out a way to make this cross-platform to NodeJS too; this will make unit testing easier.
 */
 
 // this only runs on browsers -- node's url.Url is different

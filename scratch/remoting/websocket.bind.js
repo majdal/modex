@@ -1,13 +1,13 @@
 /*
 Problem:
-the raw WebSocket API has you
-also, it runs your handlers in the context of the websocket object (they change 'this'), which is confusing
+the raw WebSocket API has you assigning event handlers direct to functions.
+ Which then runs your handlers in the context of the websocket object (they change 'this'),
+ which is confusing when you're deep in application code.
 
-Solution:
+Solution: 
  follow jQuery's lead and allow appending chains of event handlers with .bind()
- [make sure 'this' behaves itself]
+ [TODO: make sure 'this' behaves itself]
   
-
 API goal:
 
  z = new WebSocket("wss://site.com/whateverdatastreem")
@@ -20,7 +20,7 @@ API goal:
 */
 
 WebSocket.prototype.bind = function(event, handler) {
-  
+  //TODO: ...
   return this; //to allow chaining
 }
 
