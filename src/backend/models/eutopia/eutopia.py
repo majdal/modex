@@ -182,10 +182,17 @@ class Eutopia:
         for farm in self.farms:
             farm.neighbours = self.get_local_farms(farm.lat, farm.long, count=10)
 
-    def dumpMap(self):
-        "convert the map data to GeoJSON"
+    def dumpsMap(self):
+        "convert the map data to a GeoJSON string"
         "meant to be used in a ModelExplorer endpoint"
         return self.map.dumps()
+    
+    def dumpMap(self, fname):
+        "write the loaded map data to a file"
+        "this function is cruft, but very useful cruft"
+        with open(fname,"w") as mapjson:
+            mapjson.write(self.dumpsMap())
+
 
     def __next__(self):
         # apply interventions
@@ -236,11 +243,12 @@ class Eutopia:
         return self.get_activity_count(self.get_local_farms(farm.lat, farm.long, count))
 
 
-
-def main():
-    n = 20 #number of steps to run
-           #TODO: make this a command line param
-
+def create_demo_model():
+    """
+    Construct Eutopia under a specific scenario.
+    
+    This subroutine is useful as a benchmark for using Eutopia under different hosts.
+    """
     log = []
     eutopia = Eutopia(log)
 
@@ -263,25 +271,47 @@ def main():
         }
     eutopia.intervene(intervention.NewActivityIntervention(7, 'magic', magic_activity))
     """
+    return eutopia
 
+
+def main(n=20, dumpMap=False):
+    """
+    Run Eutopia with some default interventions, and plot the results if matplotlib is installed.
+    
+    args:
+      n: number of timesteps to run
+      dumpMap: whether to export the map to a topojson file
+    
+    TODO:
+      [ ] make __main__ parse command line params and pass them as the args to main()
+        [ ] Then, document how to use --dumpMap to reconstruct /assets/maps/elora.topo.json from this Elora_esque.shp.zip.real
+    """
+    
+    eutopia = create_demo_model()
+
+    if dumpMap:
+        #write the map data from GDAL out to topojson
+        eutopia.dumpMap("elora.geo.json")
+        os.system("topojson elora.geo.json -o elora.topo.json")
+        print("Finished exporting map data to elora.topo.json")
+    
     #run the model
-    for i in range(n):
+    print("Simulating Eutopia:")
+    for t in range(n):
+        print ("Timestep %d" % (t,))
         next(eutopia)
-
-    activities = [state for time, state in log]
-
-    # optional:
-    #write a geojson file containing the loaded map dataset
-    #with open("elora.geo.json","w") as mapjson:
-    #    mapjson.write(eutopia.dumpMap())
+    
+    activities = [state for time, state in eutopia.log]
 
     # optional: display summary of model outputs
     try:
         import pylab
-        for act in ['durumWheatConventional', 'durumWheatGreen', 'magic']:
+        print("Plotting activities:")
+        for act in activities[0].keys(): #XXX will break if there are zero activitiesx
+            print(act)
             pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
         pylab.legend(loc='best')
-        pylab.show()
+        pylab.show()   #block here until the user closes the plot
     except ImportError:
         print "It appears you do not have scipy's matplotlib installed. Though the simulation has run I cannot show you the plots."
     

@@ -136,7 +136,7 @@ class Layer(object):
             yield self[i]
 
     def dumps(self):
-        "GDAL doesn't have a layer.ExportToJSON()"
+        "GDAL doesn't have a layer.ExportToJson()"
         "So we need to write it"
         "this line derived from the spec at http://geojson.org/geojson-spec.html#feature-collection-objects"
         return json.dumps({"type": "FeatureCollection", "features": [json.loads(f.ExportToJson()) for f in self]})
@@ -185,3 +185,6 @@ class Feature(object):
             return self._source.SetField(name, value) #this causes infinite regress because it calls self.fields which triggers getattr
         except RuntimeError: #ogr gives this for all errors when UseExceptions() is on
             return object.__setattr__(self, name, value)
+    
+    def ExportToJson(self):
+        return self._source.ExportToJson()
