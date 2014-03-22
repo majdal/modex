@@ -46,9 +46,7 @@ Make data and models accessible to people, especially policy makers, in their de
 
 "we want to encourage reproducible science"
 
-"we want people to start imagining alternate worlds to fight T.I.N.A. thinking"
-
-"we want 
+"we want people to imagine possible worlds and ot fight [T.I.N.A.](https://en.wikipedia.org/wiki/There_is_no_alternative) thinking"
 
 
 
