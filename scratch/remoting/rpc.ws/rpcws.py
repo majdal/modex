@@ -72,5 +72,8 @@ class RemoteObjectEndpoint(Resource):
    "doesn't actually provide a websocket, but instead wraps each public method of o in a RPCEndpoint"
    def __init__(self, o):
       Resource.__init__(self)
-      for method in (m for m in dir(o) if callable(getattr(o, m))): #find all the names (strings) of all methods
+      
+      # find the names of all *public* methods
+      # and bind them to rpc.ws CallEndpoints.
+      for method in (m for m in dir(o) if not m.startswith("_") and callable(getattr(o, m))):
           self.putChild(method, CallEndpoint(getattr(o, method)))
