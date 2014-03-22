@@ -23,10 +23,15 @@ PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the proj
 #########################
 ## Models
 
-# though our single model is run via python import
+# though our demo model (eutopia) is run via python import
 # in the Real System(TM) models will be dynamically
-# loaded somehow, so pretend you don't see this.
-import models.eutopia as eutopia
+# loaded somehow, so pretend you don't see this line:
+
+import eutopia   #this is actually sitting in ../models/, but is symlinked into ./
+                 #to avoid having to write sketchy __import__ calls. In the long run
+                 #simulation.py should be abstracting--somehow--over the models
+                 #(with magical __import__s or wrapping SQL or otherwise), so
+                 #this server won't be touching them directly at all.
 
 # NB:
 # we are trying to set up a producer-consumer system, and twisted has this built in:
