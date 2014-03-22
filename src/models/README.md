@@ -103,6 +103,10 @@ Features:
 * [FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel)
 * [NASA-funded HANDY model](http://www.theguardian.com/environment/earth-insight/2014/mar/14/nasa-civilisation-irreversible-collapse-study-scientists)
 
+* **neural network**
+
+* **simple bayesian simulator: ** output X ~ N(u, V) where u is random with u ~ N(l, S) where l and S are known (in our case, parameters) (and for now, V may as well be random)
+
 **Conversion Events**: religious, tech, or other subculture
   * See the Lofland/Stark model, which is the dominant theory in Cult & New Religious Movement research
   * Related cite: Lorne L. Dawson. Comprehending Cults: The Sociology of New Religious Movements. Toronto: Oxford University Press. 1998
