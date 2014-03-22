@@ -23,15 +23,15 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 __all__ = ['Farm', 'FarmFamily', 'Eutopia'] #XXX should we maybe only export "Eutopia" and just ask users to access Farms via Eutopia?
 __all__ += ['create_demo_model']            #for testing (only(?))
 
-# from activity.py
-__all__ += ['Activity'] 
-
 # from intervention.py
+from intervention import *    # put into local namespace for reexport
+                              # users of Eutopia need to be able to create Interventions that Eutopia understands,
+                              # so they need to have these symbols available.
 __all__ += ['PriceIntervention', 'NewActivityIntervention'] 
 
-
-from activity import Activity #put into local namespace for reexport
-from intervention import *    #ditto
+# from activity.py
+from activity import Activity  #ditto #XXX this is probably not super well designed.
+__all__ += ['Activity']
 
 
 #######################
