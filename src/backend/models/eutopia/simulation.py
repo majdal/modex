@@ -1,6 +1,8 @@
 import json
 from StringIO import StringIO
 
+__all__ = ['Scenario', 'Simulation', 'read_interventions']
+
 class Scenario:
     def __init__(self, interventions):
         self.interventions = interventions
@@ -151,6 +153,7 @@ if __name__ == "__main__":
     #print activities
     
 else:
+    import eutopia
     sim = Simulation()
     sim.simpack = eutopia
     sim.create_stepper(num_steps+1) # this is xrange so need to add one

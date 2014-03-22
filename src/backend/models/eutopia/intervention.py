@@ -1,5 +1,7 @@
 import activity
 
+__all__ = ['PriceIntervention', 'NewActivityIntervention']
+
 class PriceIntervention:
     def __init__(self, time, product, scale, phase_in_time=0):
         self.time = time

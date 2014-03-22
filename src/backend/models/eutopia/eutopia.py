@@ -13,8 +13,25 @@ from util import *
 import activity
 import intervention
 
-
 HERE = os.path.abspath(os.path.dirname(__file__))
+
+
+#######################
+## Exports
+
+# from ourselves
+__all__ = ['Farm', 'FarmFamily', 'Eutopia'] #XXX should we maybe only export "Eutopia" and just ask users to access Farms via Eutopia?
+__all__ += ['create_demo_model']            #for testing (only(?))
+
+# from activity.py
+__all__ += ['Activity'] 
+
+# from intervention.py
+__all__ += ['PriceIntervention', 'NewActivityIntervention'] 
+
+
+from activity import Activity #put into local namespace for reexport
+from intervention import *    #ditto
 
 
 #######################
