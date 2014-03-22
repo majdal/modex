@@ -26,10 +26,7 @@ PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the proj
 # though our single model is run via python import
 # in the Real System(TM) models will be dynamically
 # loaded somehow, so pretend you don't see this.
-from models.eutopia.eutopia import Eutopia
-from models.eutopia.intervention import PriceIntervention, NewActivityIntervention
-#from models.eutopia.simulation import read_interventions
-
+import models.eutopia as eutopia
 
 # NB:
 # we are trying to set up a producer-consumer system, and twisted has this built in:
@@ -129,7 +126,8 @@ if __name__ == '__main__':
       log.startLogging(sys.stdout)
       print "Starting server in", PROJECT_ROOT
    
-   model = Eutopia([]) #the [] becomes model.log
+   model = eutopia.Eutopia([]) #the [] becomes model.log
+   #model = eutopia.create_demo_model()
    poke_model = task.LoopingCall(lambda: next(model))
    #poke_model.start(4) #4 second intervals
    
