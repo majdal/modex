@@ -42,7 +42,7 @@ class Simulation:
         
         """     
         def internal_stepper():
-            for year in xrange(1, end):
+            for year in xrange(end):
                 next(self.simpack)
                 current_activity = self.simpack.get_activity_count()
                 yield current_activity
@@ -128,11 +128,12 @@ def read_interventions(interventions): #XXX <-- custom to Eutopia.py
 # The one the server is using is a "blank" sim with Eutopia([])
 ###
 
+
+num_steps = 20 # same as in eutopia.py
+
 if __name__ == "__main__":
-    from intervention import PriceIntervention, NewActivityIntervention
     from eutopia import *
 
-    num_steps = 20 # same as in eutopia.py
     eutopia = Eutopia([]) 
     with open("test_eutopia_interventions.json", "r") as input_json:
         interventions_json = json.load(input_json)
@@ -156,9 +157,8 @@ else:
     import eutopia
     sim = Simulation()
     sim.simpack = eutopia
-    sim.create_stepper(num_steps+1) # this is xrange so need to add one
-    
-
-        
-        
+    sim.create_stepper(num_steps) # this is xrange so need to add one
+                                    # psst: no you don't: python uses inclusive-exclusive
+                                    #     (ie "[a,b)") ranges which have the property that the length is b-a
+                                    # But you have to be comfortable working with 0-based indexing.     
     
