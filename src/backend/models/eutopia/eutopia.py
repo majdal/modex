@@ -236,8 +236,7 @@ class Eutopia:
         return self.get_activity_count(self.get_local_farms(farm.lat, farm.long, count))
 
 
-#if __name__=='__main__':
-def make_magic_happen():
+if __name__=='__main__':
     n = 20 #number of steps to run
            #TODO: make this a command line param
 
@@ -285,4 +284,3 @@ def make_magic_happen():
     except ImportError:
         print "It appears you do not have scipy's matplotlib installed. Though the simulation has run I cannot show you the plots."
     
-    return activities
