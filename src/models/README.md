@@ -75,9 +75,18 @@ Features:
 
 **Dating**: a social network with utility functions determining "attractiveness", and some simple dynamics on that
 
-**EvilBankerSim**
+**EvilBankerSim**: an agent based model in three dialects:
 
-**SIR**
+* AltruisticBanker 
+* ApatheticBanker
+* EvilBanker
+
+Details forthcoming;2B
+
+**SIR**: Succeptible-Infected-Recovered, a standard model (with DE and ABM versions) of disease spread
+
+**[TINA vs LOIS](http://www.treehugger.com/culture/cage-match-tina-vs-lois.html)**: local vs globalized economies
+
 
 
 **ParkingGarage**
