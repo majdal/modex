@@ -7,10 +7,17 @@ Simply equate "topics" with URLs; then "subscribing" is connecting and "publishi
 
 Since this uses nothing that WebSocket doesn't already do, the implementation can be handled entirely server side, making the client side code dead simple:
 
+There's a few different takes on what _publish-subscribe_ means.
+Some (Wikipedia, ??) say anyone can publisher or subscribe to anything.
+Others (dbus, zeromq, autobahn) say that pubsub is _one_ publisher per topic with _many_ subscribers (1:n).
+For this library, pubsub is many-to-many (n:m), because implementing this subsumes all other cases.
+
+However, if you want to enforce 1:n messaging, you can use `PubProtocol`.
+
 Examples
 ========
 
-A simple server feed:
+Using a simple server feed:
 ```
 temperature_subscription = WebSocket("ws://example.com/feeds/sensors/temperature")
 temperature_subscription.onmessage = function(evt) {

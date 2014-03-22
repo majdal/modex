@@ -27,6 +27,9 @@ In addition to not providing all the messaging patterns under-the-sun, Autobahn 
 
 Instead, this folder has several ideas, to be fleshed out over the coming months, that do away with the need for anything but plain WebSockets.
 
+**set also rabbitmq, zeromq (esp `man zmq_socket`), dbus, [Faye](http://faye.jcoglan.com/) for a slew of takes on what messaging can be**
+**do you suppose we can run the amqp protocol over websockets? **
+
 Multiplexing
 ============
 

@@ -58,8 +58,11 @@ class PubSubProtocol(WebSocketServerProtocol):
 
 class PubSubBroker(WebSocketServerFactory):
     """
-    a publish-subscribe message broker,
-    implemented as a Twisted factory for websockets
+    A publish-subscribe message broker.
+    Each PubSubBroker represents a channel that clients may choose to listen to and publish to
+     (maybe "endpoint" would be a better name..)
+    
+    This is implemented as a Twisted factory constructing WebSocketServerProtocols.
     """
     protocol = PubSubProtocol
     _brokers = {}         #for debugging: instead of trying to trace python object IDs, use a short, unique,
@@ -72,7 +75,7 @@ class PubSubBroker(WebSocketServerFactory):
         PubSubBroker._brokers[PubSubBroker._unused_broker_id] = self #debug only!
         PubSubBroker._unused_broker_id += 1
     
-    @staticmethod
+    @staticmethod  #DEBUG/LOADTEST HACK
     def id(broker):
         "find broker in the list, or None if unknown"
         for k, brk in PubSubBroker._brokers.iteritems():
@@ -91,8 +94,12 @@ class PubSubResource(WebSocketResource):
     convenience class so you can say
       site.putChild("path", PubSubResource())
     """
-    def __init__(self, url):
+    def __init__(self, url): #TODO: Autobahn 0.8.6 fixes the oversight that forced url to be included like this.
         WebSocketResource.__init__(self, PubSubBroker(url, debug = False, debugCodePaths = False))
+    
+    def publish(self, data):
+        self.factory.publish(data)
+
 
 if __name__ == "__main__":
     # usage: pubsub.py 8080 /path/to/bind/to [/path2/to/bind/to /and/path3 /and/of/course/path4]
