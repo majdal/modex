@@ -113,6 +113,9 @@ class ModelDataServer(WebSocketServerProtocol):
       
       self.push = task.LoopingCall(push)
       self.push.start(0.06)
+   
+   def onClose(self, *args):
+      self.push.stop()
 
 
 #######################
