@@ -32,6 +32,7 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 * Line graphs
 * Stacked Line graphs
 * [Bullet Charts](http://bl.ocks.org/mbostock/4061961)
+* [Correlation Explorer](https://github.com/CompassInc/correlation-explorer) (the name is poorly chosen; it's basically a visualization of a spreadsheet. compare: imshow() in matlab)
 
 ## Timeseries
 
