@@ -11,10 +11,6 @@ Case: sensitivity analysis (ie looking at the derivatives, which, in high-dimens
 
 Case: parameter sweeps
 
-Case: researchers in the world at large, collaborating, github-like.
-
-Case: a running model-explorer instance that can be linked from a news article and invite the general public to come see for themselves
-
 Case: propaganda? (is that evil?)
 
 
@@ -32,6 +28,16 @@ Case: looking for chaotic regions of statespace
 
 Case: looking for path-dependency in complex systems
 
+# Audiences
+
+We have three layers we are targetting:
+
+1. Academic researchers.
+2. Policy makers.
+3. General public and the media.
+
+We aim to allow researchers and government to collaborate digitally over models, and to share particular, active, instances of those models in news articles.
+
 # Lofty Goals
 
 Make data and models accessible to people, especially policy makers, in their decisions.
@@ -40,9 +46,7 @@ Make data and models accessible to people, especially policy makers, in their de
 
 "we want to encourage reproducible science"
 
-"we want people to start imagining alternate worlds to fight T.I.N.A. thinking"
-
-"we want 
+"we want people to imagine possible worlds and ot fight [T.I.N.A.](https://en.wikipedia.org/wiki/There_is_no_alternative) thinking"
 
 
 
