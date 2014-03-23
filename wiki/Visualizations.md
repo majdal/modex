@@ -32,6 +32,13 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 
  ---we need to handle zooming smoothly, going from different types, and as we do this we need maintain context for the user. googlemaps does this by fading out layers as more detailed tiles are loaded-in
 
+## Algorithmic
+
+Plotting 
+There's no reason that plotting needs to plot _data_. It can also plot _algorithms_.
+
+* [Floyd's Algorithm in d3](http://www.jasondavies.com/duplicates/)
+
 ## Network
 
 

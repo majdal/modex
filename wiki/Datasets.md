@@ -11,6 +11,9 @@
 * http://geocommons.com/
 * 
 
+
+* [Natural Earth Data](http://www.naturalearthdata.com/downloads) - _Free vector and raster map data at 1:10m, 1:50m, and 1:110m scales_
+
 * a source for ideas and datasets (it doesn't hurt to ask): http://www.reddit.com/r/datasets
 
 we should just scrape http://www.agr.gc.ca/atlas/data_donnees/ (sketchy redhat server ftw)
