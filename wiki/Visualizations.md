@@ -38,6 +38,10 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 
 This is a special special case of the previous: special enough to warrant separate attention.
 
+## Categorical
+
+http://dimplejs.org/examples_viewer.html?id=bars_matrix
+
 ## High dimension tabular
 
 * Radar charts (like in DDR)
