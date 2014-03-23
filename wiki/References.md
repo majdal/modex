@@ -55,6 +55,9 @@ Alice Thudt, Dominikus Baur and Sheelagh Carpendale. [http://innovis.cpsc.ucalga
 # Software References
 Here's some software which has aspects of the data-modelling-visualization ideas we are looking at
 
+* http://map.geo.admin.ch/ ([source code](https://github.com/geoadmin/mf-geoadmin3))
+  * they also have some interesting [gamification of their own](https://github.com/geoadmin/mf-swissguesser) built on Ol3.
+
 * http://sunlightfoundation.com/tools/
 * http://data.influenceexplorer.com/
 * http://www.opensecrets.org/
