@@ -23,6 +23,20 @@ We have been calling these "salience plots" but you can't google that. There is 
 Here's an example of a timeseries plot with uncertainty listed as a heatmap ![Salience Plot](salience.png)
 And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression](smooth_overlaid.jpg)
 
+## Tabular
+
+
+
+* Bar Charts
+* Stacked bar charts
+* Line graphs
+* Stacked Line graphs
+* [Bullet Charts](http://bl.ocks.org/mbostock/4061961)
+
+## Timeseries
+
+This is a special special case of the previous: special enough to warrant separate attention.
+
 ## High dimension tabular
 
 * Radar charts (like in DDR)
