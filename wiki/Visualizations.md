@@ -33,6 +33,8 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 * Stacked Line graphs
 * [Bullet Charts](http://bl.ocks.org/mbostock/4061961)
 * [Correlation Explorer](https://github.com/CompassInc/correlation-explorer) (the name is poorly chosen; it's basically a visualization of a spreadsheet. compare: imshow() in matlab)
+* Marimekko/Cascade/Mosaic/[Eikosograms](https://www.youtube.com/watch?v=9ZuYfZukBcM)
+
 
 ## Timeseries
 
@@ -41,6 +43,9 @@ This is a special special case of the previous: special enough to warrant separa
 ## Categorical
 
 http://dimplejs.org/examples_viewer.html?id=bars_matrix
+
+* Venn Diagrams
+* Treemaps/Packed Circles (also a sort of network visualization)
 
 ## High dimension tabular
 
