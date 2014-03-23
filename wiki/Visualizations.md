@@ -23,6 +23,10 @@ We have been calling these "salience plots" but you can't google that. There is 
 Here's an example of a timeseries plot with uncertainty listed as a heatmap ![Salience Plot](salience.png)
 And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression](smooth_overlaid.jpg)
 
+## Model Structure
+
+* [PathVisio](https://github.com/wikipathways/pathvisiojs/) - _visualizes biological signalling pathways, which are very, very, very complicated and part of several complex systems_ (sorta sketchy tho; [more demos](http://wikipathways.org/index.php/Pathway:WP2516))
+
 ## Tabular
 
 
