@@ -41,6 +41,8 @@ This is a special special case of the previous: special enough to warrant separa
 
 * Radar charts (like in DDR)
 * Parallel coordinate plots
+* [NavGraph](http://navgraph.com/) (local!)
+* [Scagnostics](http://cran.r-project.org/web/packages/scagnostics/) - _more similar to model checking, but based on visualization ideas_
 
 ## Cartographic
 
