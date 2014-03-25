@@ -38,7 +38,7 @@ git branch -a #see active local AND remote branches
 and by looking in the hidden `.git/config` file.
 
 
-With every change you make, it's a good idea to test before writing your commit message, and as a rule you **must** test before pushing (but if you do break the build by accident we won't bite your head off: that's what doing our work on `develop` instead of `master` is for). Here's the schematic of the scheme, from the `gitflow` inventors:
+With every change you make, it's a good idea to test before writing your commit message, and as a rule you **must** test before pushing. Work this ritual into your head: "_change a line, check it works, change a linem, check it works, change a line, check it works, commit_". (but if you do break the build by accident we won't bite your head off: that's what doing our work on `develop` instead of `master` is for). Here's the schematic of the scheme, from the `gitflow` inventors:
 
 ![Gitflow](http://nvie.com/img/2009/12/Screen-shot-2009-12-24-at-11.32.03.png )
 
