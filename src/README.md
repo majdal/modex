@@ -24,7 +24,7 @@ git push
 ```
 and then looking at [the front page](https://github.com/majdal/modex/) to see if your commit took.
 
-The main thing to know about _gitflow_ is that **every commit to `master` is considered a release**. Our mainline, bleeding-edge, daily code happens in the `develop` branch. Once your account can push and pull (and you've `git rm`'d that testing file, switch to `develop`:
+The main thing to know about _gitflow_ is that **every commit to `master` is considered a release**. Our mainline, bleeding-edge, daily code happens in the `develop` branch. Once your account can push and pull (and you've `git rm`'d that testing file), switch to `develop`:
 ```
 git branch develop
 git branch --set-upstream-to=origin/develop develop
@@ -38,9 +38,11 @@ git branch -a #see active local AND remote branches
 and by looking in the hidden `.git/config` file.
 
 
-With every change you make, it's a good idea to test before writing your commit message, and as a rule you **must** test before pushing (but if you do break the build by accident we won't bite your head off: that's what doing our work on `develop` instead of `master` is for). The goal of this design is so that a newbie or interested, remote, researcher can `git clone` and end up with something useful.
+With every change you make, it's a good idea to test before writing your commit message, and as a rule you **must** test before pushing (but if you do break the build by accident we won't bite your head off: that's what doing our work on `develop` instead of `master` is for). Here's the schematic of the scheme, from the `gitflow` inventors:
 
 ![Gitflow](http://nvie.com/img/2009/12/Screen-shot-2009-12-24-at-11.32.03.png )
+
+This discipline is extra effort on top of learning git, python, and javascript, but it isn't mainly for us; it is so that a new team member or an interested but remote researcher can `git clone` and end up with something useful. There is nothing more frustrating than code that needs fixing before you can even see what it does.
 
 _Gitflow_ is made a magnitude smooher by installing the gitflow plugin from [here](https://github.com/nvie/gitflow) (Linux/OS X/other), or using [SourceTree](http://www.sourcetreeapp.com/) (Windows/OS X) which has gitflow beautifully integrated. 
 
