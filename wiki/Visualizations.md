@@ -23,6 +23,10 @@ We have been calling these "salience plots" but you can't google that. There is 
 Here's an example of a timeseries plot with uncertainty listed as a heatmap ![Salience Plot](salience.png)
 And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression](smooth_overlaid.jpg)
 
+## Model Structure
+
+* [PathVisio](https://github.com/wikipathways/pathvisiojs/) - _visualizes biological signalling pathways, which are very, very, very complicated and part of several complex systems_ (sorta sketchy tho; [more demos](http://wikipathways.org/index.php/Pathway:WP2516))
+
 ## Tabular
 
 
@@ -32,10 +36,20 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 * Line graphs
 * Stacked Line graphs
 * [Bullet Charts](http://bl.ocks.org/mbostock/4061961)
+* [Correlation Explorer](https://github.com/CompassInc/correlation-explorer) (the name is poorly chosen; it's basically a visualization of a spreadsheet. compare: imshow() in matlab)
+* Marimekko/Cascade/Mosaic/[Eikosograms](https://www.youtube.com/watch?v=9ZuYfZukBcM)
+
 
 ## Timeseries
 
 This is a special special case of the previous: special enough to warrant separate attention.
+
+## Categorical
+
+http://dimplejs.org/examples_viewer.html?id=bars_matrix
+
+* Venn Diagrams
+* Treemaps/Packed Circles (also a sort of network visualization)
 
 ## High dimension tabular
 
