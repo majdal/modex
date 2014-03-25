@@ -15,14 +15,14 @@ The biggest modifcation is that we're using git centrally because it's simpler f
 ```
 git clone git@github.com:majdal/modex
 ```
-or your git client's equivalent. This will connect to github and pull the `master` branch down, and additionally record that you are connecting over ssh--which is what will allow you to push back up. Talk to [majdal](https://github.com/majdal) at this point to be granted push access. You will be able to test this by
+or your git client's equivalent. This will connect to github and pull the `master` branch down, and additionally record that you are connecting over ssh--which is what will allow you to push back up. Talk to [@majdal](https://github.com/majdal) at this point to be granted push access. You will be able to test this by
 ```
 echo "Hello, GitHub!" > hello.txt
 git add hello.txt
 git commit
 git push
 ```
-and then looking at [the front page](https://github.com/majdal/modex/) to see if you commit took.
+and then looking at [the front page](https://github.com/majdal/modex/) to see if your commit took.
 
 The main thing to know about _gitflow_ is that **every commit to `master` is considered a release**. Our mainline, bleeding-edge, daily code happens in the `develop` branch. Once your account can push and pull (and you've `git rm`'d that testing file, switch to `develop`:
 ```
