@@ -73,3 +73,7 @@ Here's some software which has aspects of the data-modelling-visualization ideas
 # Essays
 http://www.wired.com/business/2014/01/quants-dont-know-everything/
  -- on the ignored self-referential effect of systemetization and "objective" measures on the systems they are measuring
+
+# The Competition
+
+* [Bombe](http://www.getbombe.com/)
