@@ -110,7 +110,14 @@ JSON
 ====
 
 Similarly, a drop-in WebSocket-compatible JSONWebSocket which autowraps and unwraps all messages to/from JSON would be useful, and probably not that long.
+((rpcws.js does this; perhaps todo: build this anyway, because it might be handy, and rewrite rpcws on it?))
 
+Connectivity
+============
+
+A proxy which handles dropped connections transparently
+(maybe with additional optional "ondrop" and "onreconnect" handlers)
+but has the same API as a WebSocket.
 
 Security
 ========
