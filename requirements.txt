@@ -1,5 +1,5 @@
 Twisted>=13.2.0
-autobahn>=0.8.1
+autobahn>=0.8.6
 autobahntestsuite>=0.5.6
 msgpack-python>=0.4.0
 GDAL>=1.10

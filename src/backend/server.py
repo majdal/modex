@@ -136,11 +136,11 @@ if __name__ == '__main__':
    poke_model = task.LoopingCall(lambda: next(model))
    #poke_model.start(4) #4 second intervals
    
-   data_endpoint = WebSocketServerFactory(debug=True, debugCodePaths=True)
+   data_endpoint = WebSocketServerFactory()
    data_endpoint.protocol = ModelDataServer
    data_endpoint.model = model
    
-   ctl_endpoint = WebSocketServerFactory(debug=debug, debugCodePaths=True)
+   ctl_endpoint = WebSocketServerFactory()
    ctl_endpoint.protocol = CtlProtocol
       
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
@@ -171,8 +171,6 @@ if __name__ == '__main__':
    
    ## both under one Twisted Web Site
    site = Site(root)
-   data_endpoint.setSessionParameters(externalPort=8080) # hopefully unecessary soon; see https://github.com/tavendo/AutobahnPython/pull/196
-   ctl_endpoint.setSessionParameters(externalPort=8080) # hopefully unecessary soon; see https://github.com/tavendo/AutobahnPython/pull/196
    reactor.listenTCP(8080, site)
 
    print "Now open http://127.0.0.1:8080 in your browser"
