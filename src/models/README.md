@@ -66,6 +66,8 @@ Features:
  * dynamic social network
  * simple
 
+**[Coastal Inundation Space Apps Challenge](https://2014.spaceappschallenge.org/challenge/coastal-inundation/)** - _which specificially asks for visualizations and simulations_
+
 **Drug markets**
 
   * [NARCsim](http://staffwww.dcs.shef.ac.uk/people/D.Romano/Romano_NARCSim_ICE-GIC09.pdf)
