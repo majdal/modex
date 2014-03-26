@@ -172,6 +172,7 @@ You will probably also want **_these tools_** to make dealing with code easier:
 * [IPython](http://ipython.org), which gives a python command shell _with tab-completion_, and Mathematica-style [notebooks](http://nbviewer.ipython.org).
 * [nodejs](http://nodejs.org) - several of our deps have their unit tests written against Node, because it's easier than trying to script a browser. -_tab completion for javascript_
 * [topojson](https://github.com/mbostock/topojson/wiki/Installation) comes in handy (make sure to remember `-g` when installing!)
+* [Lightpaper](http://clockworkengine.com/lightpaper-mac/)/[ReText](http://sourceforge.net/p/retext/) for editing Markdown (with livepreviews and [math support](http://sourceforge.net/p/retext/wiki/MathJax/)!)
 
 
 * A spreadsheet. Excel, [LibreOffice Calc](http://www.libreoffice.org/download). You need to be able to work with and debug tabular data. You should be able to do reliable preprocessing of it (sums, averages, subsets) and plotting. (if you are comfortable doing this in matlab, R, or scipy, then by all means stick with what you know).
