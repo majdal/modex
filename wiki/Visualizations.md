@@ -40,6 +40,9 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 * Marimekko/Cascade/Mosaic/[Eikosograms](https://www.youtube.com/watch?v=9ZuYfZukBcM)
 
 
+Can we do this? Histograms with 1-d scatter plots overlaid (forgive the ugly photoshop mockup):
+![Scatter-Histograms](scatter-hist.png)
+
 ## Timeseries
 
 This is a special special case of the previous: special enough to warrant separate attention.
