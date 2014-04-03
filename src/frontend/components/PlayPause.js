@@ -17,6 +17,7 @@ Crafty.c('PlayPause', {
     }, 
 
     play: function() {
+        console.log("play pressed");
         // change the look of the button
         this.removeComponent('playButton').addComponent('pauseButton');
         // change the state of the button entity
@@ -30,7 +31,8 @@ Crafty.c('PlayPause', {
         */
         // send the play command
         var data = JSON.stringify({'message': 'play', 'content': ''});
-        Game.ctlSocket.send(data);
+        socket.emit("game_state", "play");
+        
     },
 
     pause: function() {
@@ -40,13 +42,14 @@ Crafty.c('PlayPause', {
         this.isPaused = true;
         // send the pause command
         var data = JSON.stringify({'message': 'pause', 'content': ''}); 
-        Game.ctlSocket.send(data);
+        socket.emit("game_state", "paused");
     }, 
 
     setInterventions: function() {
         var scenario = plusButton.selectedScenario.serialize();
         var data = JSON.stringify({'message': 'setInterventions', 'content': scenario});
-        Game.ctlSocket.send(data);
+
+        
         $(scope.data).each(function(index, element) { element.values = []; });
     }
 });

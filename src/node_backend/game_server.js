@@ -58,14 +58,8 @@ io.sockets.on('connection', function (socket) {
         request.post(MODEL_SERVER, {form:{message_type:'game_state', game_state: state}});
     });
     socket.on('send_intervention', function(intervention) {
-       // this handles the interventions sent from the client.
-    
        request.post(MODEL_SERVER, {form:{message_type:'add_intervention', tax_value: intervention.tax_value, 
            activity: intervention.activity, year: intervention.year}});
-       //request.post(MODEL_SERVER).form({'tax_value': intervention.tax_value, 
-                                         //'activity':  intervention.activity,
-                                         //'year': intervention.year});
-        console.log("intervention sent to model server!");
     });
     socket.on('send_data', function (data) { 
         // this handles the data sent from the model.
@@ -73,3 +67,23 @@ io.sockets.on('connection', function (socket) {
     })
     socket.on('disconnect', function () { });
 });
+
+
+var model_listener = http.createServer(function (req, res) {
+    // This server listener listens to the data from the client.
+     // excuse the dirty hack, will fix later.
+    req.on('data', function(data) {
+        model_data = {}
+        data_items = data.toString().split("&"); // separates parameters
+        
+        for(var i=0; i<data_items.length; i++) {
+            split_items = data_items[i].split("=")
+            model_data[split_items[0]] = parseInt(split_items[1])
+        }
+        console.log(model_data);
+
+    });
+    res.writeHead(200);
+    res.end("finito");
+})
+model_listener.listen(9080);

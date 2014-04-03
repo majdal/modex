@@ -155,11 +155,16 @@ Crafty.c('InterventionDialogue', {
             } else {
               var interventionType = $(this).val();
               var tax_value = $('#tax_slider').slider('value');
+              console.log(interventionType);
               if (interventionType == 'subsidy') {
                 tax_value = tax_value * -1; // a subsidy is a negative tax
               } 
               intervention.activity = $('#activity').val();
-              //intervention.year = $('#year_slider').val();
+              
+              //change, sending intervention
+              // THERE IS AN ERROR HERE WHERE TAXES AND SUBSIDIES ARE THE SAME!
+              socket.emit("send_intervention", {activity: 'tax', tax_value: tax_value, year: intervention.year});
+              
               self.destroyDialogue();
               // TODO send code to backend to create an intervention
             }

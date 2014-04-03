@@ -95,6 +95,14 @@
       logLevel: 1,
     }
   </script>
+  <script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
   <script type="text/javascript" src="/assets/libs/less.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
