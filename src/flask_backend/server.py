@@ -2,7 +2,6 @@ import time
 from flask import Flask, request
 import requests
 
-# importing models
 from models.eutopia.eutopia import Eutopia
 from models.eutopia.intervention import PriceIntervention, NewActivityIntervention
 
@@ -10,7 +9,6 @@ app = Flask(__name__)
 
 @app.route("/", methods=['POST', 'GET'])
 def hello():
-
     if request.method == 'POST':
         print "POST request received!"
         print request.form.keys()
@@ -51,7 +49,6 @@ def time_runner(pause_length=1, iterations=20, year=0):
         print payload
         requests.post(model_listener, data = payload)
         year += 1
-    
     
     
 if __name__ == "__main__":
