@@ -1,5 +1,4 @@
 
-
 Architecture Overview and Goal
 ================================
 
@@ -199,7 +198,7 @@ farmmodel[7].products["wheat"]  #at time-step 7, what is the amount of productio
 
 
    current plan is to build an app in python using [Twisted](http://twistedmatrix.com/trac/) which hosts [GarlicSIM](GarlicSIM.md) models, and handles recording data
-
+Should we use [Tulip](https://www.youtube.com/watch?v=1coLC-MUCJc&feature=youtu.be) for asynchronous I/O?
  The backend is a Twisted server hosting some static content and a bunch of dynamic endpoints. ((should we go for a RESTful situation or try to use Autobahn?)). Layout is:
 
 * ```index.html```  -- the main action occurs on this stage
