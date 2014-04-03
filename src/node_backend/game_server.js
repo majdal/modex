@@ -1,8 +1,7 @@
 var http = require('http'),
     path = require('path'),
-    fs = require('fs'),
-    util = require('util');
-    
+    fs = require('fs')
+
 function get_root() {
     /*
      * Returns the root directory for modex.
@@ -17,7 +16,9 @@ var PROJECT_ROOT = get_root();
 var server = http.createServer(function (req, res) {
     var SERVEDIR = path.join(PROJECT_ROOT, 'src', 'frontend');
     var SERVEURL = SERVEDIR;
-    var TOPDIR = req.url.split('/')[1];
+    var SPLITURL = req.url.split('/')
+    var TOPDIR = SPLITURL[1];
+    var FILE = SPLITURL[SPLITURL.length - 1];
 
     if(TOPDIR == 'assets') {
         SERVEURL = PROJECT_ROOT  + req.url; // overrides and goes to /assets since that's req.url
@@ -42,5 +43,23 @@ var server = http.createServer(function (req, res) {
   });
 })
 
+// has to be defined in this order otherwise it screws things up
+var io = require('socket.io').listen(server);
 server.listen(8080);
 
+io.sockets.on('connection', function (socket) {
+    console.log("New socket connection from client!");
+    socket.on('game_state', function(state) {
+        //determines if game is running or not.
+        console.log(state);
+    });
+    socket.on('send_intervention', function(intervention) {
+       // this handles the interventions sent from the client.
+       console.log(intervention);
+    });
+    socket.on('send_data', function (data) { 
+        // this handles the data sent from the model.
+        console.log(data);
+    })
+    socket.on('disconnect', function () { });
+});
