@@ -1,6 +1,9 @@
 var http = require('http'),
     path = require('path'),
-    fs = require('fs')
+    fs = require('fs'),
+    request = require('request')
+    
+var MODEL_SERVER = 'http://localhost:5000';
 
 function get_root() {
     /*
@@ -52,10 +55,17 @@ io.sockets.on('connection', function (socket) {
     socket.on('game_state', function(state) {
         //determines if game is running or not.
         console.log(state);
+        request.post(MODEL_SERVER, {form:{message_type:'game_state', game_state: state}});
     });
     socket.on('send_intervention', function(intervention) {
        // this handles the interventions sent from the client.
-       console.log(intervention);
+    
+       request.post(MODEL_SERVER, {form:{message_type:'add_intervention', tax_value: intervention.tax_value, 
+           activity: intervention.activity, year: intervention.year}});
+       //request.post(MODEL_SERVER).form({'tax_value': intervention.tax_value, 
+                                         //'activity':  intervention.activity,
+                                         //'year': intervention.year});
+        console.log("intervention sent to model server!");
     });
     socket.on('send_data', function (data) { 
         // this handles the data sent from the model.
