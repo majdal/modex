@@ -136,6 +136,7 @@ What would it take for us to feel that modex was "feature complete"?
     * on visualizations
     * on models
   2. Forking of explorations (an "exploration" is the set of html5 code that makes the pretty visualizations and chooses what charts to plot)
+    * think "git" (see also dat-data.com) 
 
 ## V2.5
 1. More unit tests
@@ -143,7 +144,7 @@ What would it take for us to feel that modex was "feature complete"?
 
 ## V3
 
-1. Forking of models
+1. Forking of _models_
   * if we are supporting _any_ model in _any_ language, then in general this is impossible: to fork a model you must fork that codebase. But we can ease the pain if we make setting up the server on your own machine easier and help model writers make their models easier to fork (by reducing or including dependencies)
 1. Examples of models to fork, and how to integrate them with Modex
  * agent models (maybe steal a bunch of these from NetLogo)
