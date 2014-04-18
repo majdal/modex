@@ -48,10 +48,13 @@ var server = http.createServer(function (req, res) {
 
 // has to be defined in this order otherwise it screws things up
 var io = require('socket.io').listen(server);
+var subscribers = {};
 server.listen(8080);
 
 io.sockets.on('connection', function (socket) {
     console.log("New socket connection from client!");
+    // initialize new subscriber
+    subscribers["nodex"] = socket;
     socket.on('game_state', function(state) {
         //determines if game is running or not.
         console.log(state);
@@ -61,10 +64,7 @@ io.sockets.on('connection', function (socket) {
        request.post(MODEL_SERVER, {form:{message_type:'add_intervention', tax_value: intervention.tax_value, 
            activity: intervention.activity, year: intervention.year}});
     });
-    socket.on('send_data', function (data) { 
-        // this handles the data sent from the model.
-        console.log(data);
-    })
+
     socket.on('disconnect', function () { });
 });
 
@@ -75,12 +75,17 @@ var model_listener = http.createServer(function (req, res) {
     req.on('data', function(data) {
         model_data = {}
         data_items = data.toString().split("&"); // separates parameters
+        console.log(data_items);
         
         for(var i=0; i<data_items.length; i++) {
             split_items = data_items[i].split("=")
             model_data[split_items[0]] = parseInt(split_items[1])
         }
+        
         console.log(model_data);
+        var socket = subscribers["nodex"];
+        //socket.emit("send_data", "HELLO!");
+        socket.emit("send_data", model_data);
 
     });
     res.writeHead(200);

@@ -51,24 +51,46 @@ $(function() {
     return chart;
   });
 
-  Game.dataSocket.onmessage = function(d) {
-    //console.log("received data from (plain) websocket:", d)
-    d = JSON.parse(d.data);
+  // old websockets
+  //Game.dataSocket.onmessage = function(d) {
+    ////console.log("received data from (plain) websocket:", d)
+    //d = JSON.parse(d.data);
+    //var time = d[0]
+    //var series = d[1]
+    ////d.date = parseDate(d.date);
+    
+    ////loop through and format data into line graph data for nv
+    //for(key in series) {
+      //addData(key, time, [series[key]]);
+    //}      
+
+    //// update the chart with the data
+    //svg.datum(scope.data)
+       //.call(chart);
+    ////scope.data.push(d)
+    ////draw()
+  //};
+  socket.on("send_data", function(d) {
+    console.log("received data from (plain) websocket:")
+    //d = JSON.parse(d.data);
+    console.log(d);
     var time = d[0]
     var series = d[1]
-    //d.date = parseDate(d.date);
+    d.date = parseDate(d.date);
     
-    //loop through and format data into line graph data for nv
+
     for(key in series) {
       addData(key, time, [series[key]]);
     }      
 
-    // update the chart with the data
     svg.datum(scope.data)
        .call(chart);
-    //scope.data.push(d)
-    //draw()
-  };
+    scope.data.push(d)
+    draw()
+      
+      
+      
+  });
     
   //add Data to pre-existing line
   function addData(keyval,xval,yval) {
