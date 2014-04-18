@@ -27,4 +27,7 @@ See our [blog](http://socialinnovationsimulation.com/), our [people](FIXME), and
 ## Getting Started ##
 1. Clone this repository: `git clone https://github.com/majdal/modex.git`.
 2. To install dependencies, see [the developer's guide](src/README.md).
-3. To run the application, run `python run.py` in a terminal. A new browser window should open automatically, pointing to `http://127.0.0.1:8080`.
+3. NEW: Go to the src folder. Inside both flask_backend and node_backend, run both "python server.py" and "node game_server.js" respectively.
+
+Notes:
+When running the Python server, ensure you are running this on Python 2.7.
