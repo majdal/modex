@@ -1,3 +1,17 @@
+# Nodex Version
+
+This is modex using Flask+NodeJS which replaces the earlier Twisted/Autobahn/WAMP setup.
+This works by running two simultaneous servers, Flask and Node. Flask replaces the earlier server.py, and Flask
+runs the model simulation. What NodeJS does, is runs the client side model visualizer, and it allows us to abstract
+the WebSocket implementation. 
+
+So, NodeJS listens on two ports, 8080 and 9080. Going to localhost:8080/ runs the client side farm simulation. 
+When the client adds interventions (currently a Eutopia concept), they are sent over WebSockets to NodeJS, which then
+sends them as POST requests to port 5000, which is the Flask server. The Flask server updates the interventions as needed.
+
+When the model is running, data is pushed by being sent as a POST request to localhost:9080//, which then sends them as WebSocket
+data to the client's running game.
+
 # Model Explorer
 
 We are an interdisciplinary project of the [Social Innovation Group](http://sig.uwaterloo.ca) at the University of Waterloo. We are building a simulation of the southern Ontario farm system in its social, economic, and ecological aspects, and simultaneously building out tools to explore large-scale semi-chaotic simulations.
