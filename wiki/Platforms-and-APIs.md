@@ -5,6 +5,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 HTML5 is extremely powerful. It has a lot of new widgets (under form elements: sliders, numbers, dates, file uploaders, also <progress> and <meter> which lists). We can probably build most of our widgets direct in HTML.
 
+* LessCSS
 * craftyjs?
 * [TogetherJS](https://togetherjs.com/) by Mozilla for adding commenting throughout a site
 * [Modernizr](http://modernizr.com/) to let us write one codebase against HTML5
@@ -138,6 +139,8 @@ A data bind and a data flow are related problems, and several of these libraries
 * Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
 * [Dee](http://www.quicksort.co.uk/DeeDoc.html) which overloads python operators to create a superset of SQL directly in Python
 * postgres with the postgis extension
+* [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is.
+* [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
 
 ### Interfaces
 
@@ -156,10 +159,12 @@ A data bind and a data flow are related problems, and several of these libraries
 ## Modelling
 * Repast
 * GarlicSIM
+* [SimPy](http://simpy.readthedocs.org/)
 * [PyABM](http://www-rohan.sdsu.edu/~zvoleff/research/pyabm/) (canonical usage example [here](https://github.com/azvoleff/chitwanabm/blob/master/chitwanabm/agents.py))
   * check out [what wikipedia thinks](http://en.wikipedia.org/wiki/Comparison_of_agent-based_modeling_software) to be bored to tears
 * [ABCE](https://github.com/DavoudTaghawiNejad/abce) _Agent Based Complete Economy_ (python); [paper](http://jasss.soc.surrey.ac.uk/16/3/1.html)
 * http://insightmaker.com/
+* [Liam2](http://liam2.plan.be/pages/about.html)
 
 ## Packaging
 

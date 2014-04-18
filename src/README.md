@@ -6,40 +6,67 @@ If your copy of modex isn't working, make sure your [dependencies](#dependencies
 
 ## Team Guidelines
 
-### Issue Tracker
-
-We currently are coordinating through an [Asana](http://asana.com) group. Our issue tracker is over there, not here.
 
 ### Git and Branching
 
-We want to follow the gitflow patter, described [here](http://nvie.com/posts/a-successful-git-branching-model/). So, please install the gitflow plugin from [here](https://github.com/nvie/gitflow), or use [SourceTree](http://www.sourcetreeapp.com/), which has gitflow beautifully integrated. 
+We are using [git](http://www.git-scm.com/book) for version control, under a modified [_gitflow_](http://nvie.com/posts/a-successful-git-branching-model/) pattern.
 
-![Gitflow](http://nvie.com/img/2009/12/Screen-shot-2009-12-24-at-11.32.03.png )
+The biggest modifcation is that we're using git centrally because it's simpler for git newbies--which is most of us--to work with. Thus, the canonical copy of the codebase--which everyone on the team has push access to--is "https://github.com/majdal/modex/". Follow [github's instruction's](FIXME) on setting up your machine to be able to talk to your github account via `ssh` and then, to get a fresh copy of the code, do 
+```
+git clone git@github.com:majdal/modex
+```
+or your git client's equivalent. This will connect to github and pull the `master` branch down, and additionally record that you are connecting over ssh--which is what will allow you to push back up. Talk to [@majdal](https://github.com/majdal) at this point to be granted push access. You will be able to test this by
+```
+echo "Hello, GitHub!" > hello.txt
+git add hello.txt
+git commit
+git push
+```
+and then looking at [the front page](https://github.com/majdal/modex/) to see if your commit took.
 
-
-Now that we have a sizable amount of code, we are switching to a branching approach with two major prongs: `master` and `develop`.
-`master` must always be kept working and clean: a newbie or interested international researcher needs to be able to `git clone`
-the repo and have something worth looking at. Development should happen on `develop`, so keep your default; ideally, `develop` should always be kept working too
-but if it breaks it won't be the end of
-Edits to files in `wiki/`, however, can (and, probably should) happen on `master`.
-(commands relevant to this (XXX SORTME)
+The main thing to know about _gitflow_ is that **every commit to `master` is considered a release**. Our mainline, bleeding-edge, daily code happens in the `develop` branch. Once your account can push and pull (and you've `git rm`'d that testing file), switch to `develop`:
 ```
 git branch develop
 git branch --set-upstream-to=origin/develop develop
 git checkout develop
-git branch #see what branches you have copies of
-git branch -a #see the remote branches too
-(#how do we see what our upstream branches are? how do we make sure when we 'pull' it's pulling the right thing?
 ```
+
+You can double check what is going on with
+```
+git branch -a #see active local AND remote branches
+```
+and by looking in the hidden `.git/config` file.
+
+
+With every change you make, it's a good idea to test before writing your commit message, and as a rule you **must** test before pushing. Work this ritual into your head: "_change a line, check it works, change a linem, check it works, change a line, check it works, commit_". (but if you do break the build by accident we won't bite your head off: that's what doing our work on `develop` instead of `master` is for). Here's the schematic of the scheme, from the `gitflow` inventors:
+
+![Gitflow](http://nvie.com/img/2009/12/Screen-shot-2009-12-24-at-11.32.03.png )
+
+This discipline is extra effort on top of learning git, python, and javascript, but it isn't mainly for us; it is so that a new team member or an interested but remote researcher can `git clone` and end up with something useful. There is nothing more frustrating than code that needs fixing before you can even see what it does.
+
+_Gitflow_ is made a magnitude smooher by installing the gitflow plugin from [here](https://github.com/nvie/gitflow) (Linux/OS X/other), or using [SourceTree](http://www.sourcetreeapp.com/) (Windows/OS X) which has gitflow beautifully integrated. 
+
+As usual with version control systems, large and/or notable changes are built in on-the-side "feature" branches. To make a new branch that won't hurt anything else by accident, do
+```
+git checkout -b feature1
+```
+where "feature1" is the name for branch: something short and descriptive of what you're doing in it. Branches show up on the [branches tab](https://github.com/majdal/modex/branches)
+
+The other modification we have to `gitflow` is that, because the public face of our codebase right now is https://github.com/majdal/modex/tree/**master**/wiki, edits to files in `wiki/` happen on `master` unless there's a good reason for them to be done in a branch first. _This is kludgy and subject to change as we get more experience_.
 
 
 ### Documentation
 
 Our heterogeneity makes coordination difficult. This makes it extra important to document where we're at.
-Guides, tricks, gotchas, and references need to be saved and made available to the team.
-Putting discoveries in this "wiki" (which is really just a series of .md files in the source repo) makes them easily linkable,
-fixable, and public to the world.
+Whenever you discover a tricks, gotcha, or reference, record it and make it available to the team.
+Putting discoveries into this `wiki/` (which is really just a series of .md files in the source repo) makes them easily linkable, fixable, and public to the world.
 
+Again, for this one case, make sure to make these changes _on `master`_, not `develop`. They are still linkable if you commit on the wrong branch, but they are not findable by the average passer-by. The easiest way at this point to ensure documentation is public is to make your doc edits with GitHub's web-based Edit button. If you have a large amount of changes to make, just like working out of the cloud, (or are reorganizing things/adding pictures/generally doing someting complicated), just be mindful of what branch you're on when you run `git commit`.
+
+
+### Issue Tracker
+
+We currently are coordinating through an [Asana](http://asana.com) group. Our issue tracker is over there, not here.
 
 ### Keeping Copyrighted Data Out
 
@@ -145,6 +172,7 @@ You will probably also want **_these tools_** to make dealing with code easier:
 * [IPython](http://ipython.org), which gives a python command shell _with tab-completion_, and Mathematica-style [notebooks](http://nbviewer.ipython.org).
 * [nodejs](http://nodejs.org) - several of our deps have their unit tests written against Node, because it's easier than trying to script a browser. -_tab completion for javascript_
 * [topojson](https://github.com/mbostock/topojson/wiki/Installation) comes in handy (make sure to remember `-g` when installing!)
+* [Lightpaper](http://clockworkengine.com/lightpaper-mac/)/[ReText](http://sourceforge.net/p/retext/) for editing Markdown (with livepreviews and [math support](http://sourceforge.net/p/retext/wiki/MathJax/)!)
 
 
 * A spreadsheet. Excel, [LibreOffice Calc](http://www.libreoffice.org/download). You need to be able to work with and debug tabular data. You should be able to do reliable preprocessing of it (sums, averages, subsets) and plotting. (if you are comfortable doing this in matlab, R, or scipy, then by all means stick with what you know).
