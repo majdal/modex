@@ -81,6 +81,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
   * [txWS](https://github.com/MostAwesomeDude/txWS)
   * [socket.io](http://socket.io/)
       * [python API](http://gevent-socketio.readthedocs.org/)
+      * [other python API](https://github.com/MrJoes/tornadio2)
   * [JSON-RPC](https://en.wikipedia.org/wiki/JSON-RPC) is dead simple and worth investigatign
 
 * [EventSource](http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket)
@@ -106,8 +107,10 @@ A data bind and a data flow are related problems, and several of these libraries
 * Square's [Crossfilter](http://square.github.io/crossfilter/)
 * Miso's [Dataset](http://misoproject.com/dataset/)
 * Vega's [Triflow](https://github.com/trifacta/triflow/tree/master/test) - _not actually sure if this is a dataflow library; it seems to too tiny to do anything; maybe it's just clever - nick_
-
-
+* [AngularJS](https://docs.angularjs.org/guide/databinding) includes databinding as a feature
+* [BackboneJS](http://backbonejs.org/)
+* [Model.JS](https://github.com/curran/model) (new, but written by someone with extensive d3 experience; he even wrote [an intro to AngularJS](http://curran.github.io/screencasts/introToAngular/exampleViewer/#/)
+* [BaconJS](http://baconforme.com/) (clear tutorial [here](http://blog.flowdock.com/2013/01/22/functional-reactive-programming-with-bacon-js/))
 
 
 
