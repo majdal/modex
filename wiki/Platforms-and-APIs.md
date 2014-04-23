@@ -79,6 +79,9 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
   * [ws4py](https://github.com/Lawouach/WebSocket-for-Python)
   * [cherrypy](http://www.cherrypy.org/)
   * [txWS](https://github.com/MostAwesomeDude/txWS)
+  * [socket.io](http://socket.io/)
+      * [python API](http://gevent-socketio.readthedocs.org/)
+  * [JSON-RPC](https://en.wikipedia.org/wiki/JSON-RPC) is dead simple and worth investigatign
 
 * [EventSource](http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket)
 * jsonp
