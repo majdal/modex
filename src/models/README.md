@@ -101,6 +101,9 @@ Features:
   * government subsidies / etc
 
 
+Zero-tolerance school policy (TODO: cite the texas and National American Association of Secondary Schools)
+
+
 * [SLUCE](http://sluce.wici.ca)
 * [FarmSimulationModel](https://github.com/n7wilson/FoodSimulationModel)
 * [NASA-funded HANDY model](http://www.theguardian.com/environment/earth-insight/2014/mar/14/nasa-civilisation-irreversible-collapse-study-scientists)
