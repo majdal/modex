@@ -27,6 +27,8 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * Square's [cube](http://square.github.io/cube/)
 * [graphite](http://graphite.wikidot.com/)
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
+* Spreadsheet widgets (more [@](http://plugins.jquery.com/tag/spreadsheet/))
+    * [Handsontable](http://handsontable.com/)
 
 ### Encapsulated Visualization Libraries
 
