@@ -35,7 +35,7 @@
     <!--<h2>Model Explorer -- Agriculture Simulation</h2>-->
     <div id="view">
       <div id="map"></div><!-- hide whitespace from parser
-      --><div id="graph"><h2>GRAPH</h2></div>
+      --><div id="graph"><h2>&lt;GRAPH&gt;</h2></div>
     </div>
     <div id="controls">
      <div class="shrinkwrap">
@@ -44,7 +44,7 @@
       <button id="run">Play</button> <!-- this is wired up via jQuery to start and stop the simulation -->
       <div id="time">
         <!-- TODO: make this range slider have finer resolution (but make sure the <output> is legible over accurate) -->
-        <input id="time_slider" type="range" min="1990" max="2013" value="2005" step="1"  width="100%"></input>
+        <input id="time_slider" type="range" min="1990" max="2013" value="2005" step="0.01"  width="100%" />
         <output id="time_output"></output>
         <script>
         //$.on("loaded", function() { alert("no") } )
@@ -55,7 +55,7 @@
           console.log(time_output)
           // Keep the 
           // TODO: pull this out of the HTML
-          function _synctime() { time_output.value = time_slider.value; }
+          function _synctime() { time_output.value = Math.trunc(time_slider.value); }
           _synctime();
           controls_form.on("input",_synctime); //'oninput' doesn't have a jQuery shorthand yet
         })
@@ -68,6 +68,5 @@
      </div>
     </div>  
   </div>
-  </script>
 </body>
 </html>
