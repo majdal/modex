@@ -40,7 +40,16 @@
     <div id="controls">
      <div class="shrinkwrap">
      
-      <button id="run">Play</button> <!-- this is wired up via jQuery to start and stop the simulation -->
+      <!-- this is wired up via jQuery to start and stop the simulation -->
+      <!-- TODO: DataBind this button to the model's connection status:
+         - grey when "disconnected", otherwise
+         - "Play" when the view is paused
+         - "Pause" when the view is playing; also, in this state:
+              the backend model runner *should* be pumping out new data
+                (but we mustn't count on that)    
+      -->
+      <button id="run">Play</button> 
+      
       <div id="time">
         <!-- TODO: make this range slider have finer resolution (but make sure the <output> is legible over accurate) -->
         <input id="time_slider" type="range" min="1990" max="2013" value="2005" step="0.00001"  width="100%" />
