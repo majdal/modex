@@ -3,6 +3,6 @@ lightbulb
 .DS_Store
 *.pyc
 .idea
-TODO.*
+TODO.*.private
 .swp
 mapcache
