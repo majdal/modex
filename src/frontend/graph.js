@@ -51,7 +51,8 @@ $(function() {
     return chart;
   });
 
-  Game.dataSocket.onmessage = function(d) {
+//Game.dataSocket.onmessage
+  var notused = function(d) {
     //console.log("received data from (plain) websocket:", d)
     d = JSON.parse(d.data);
     var time = d[0]
