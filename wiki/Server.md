@@ -9,6 +9,7 @@ We own a server at digitalocean. The username is __________ and you can get the 
 * irc or jabber chat server (with a web interface! very important!)
 * Host our canonical demo simulation
 * mailing list with archives
+* [JitMeet](https://github.com/jitsi/jitsi-meet/blob/master/INSTALL.md)
 
 ## Issues
 
