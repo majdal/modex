@@ -40,6 +40,9 @@ And here's the "Watercolor Regression" demo from Solomon ![Watercolor Regression
 * Marimekko/Cascade/Mosaic/[Eikosograms](https://www.youtube.com/watch?v=9ZuYfZukBcM)
 
 
+Can we do this? Histograms with 1-d scatter plots overlaid (forgive the ugly photoshop mockup):
+![Scatter-Histograms](scatter-hist.png)
+
 ## Timeseries
 
 This is a special special case of the previous: special enough to warrant separate attention.
@@ -98,3 +101,4 @@ Root-centric visualizations
 * anything on [/r/dataisbeautiful](http://www.reddit.com/r/dataisbeautiful/)
 * http://graphicdesign.stackexchange.com/questions/15788/examples-of-well-designed-software-architecture-diagrams
 * The use of d3 + javascript + and html5 slider widget on [this page](http://scott.fortmann-roe.com/docs/BiasVariance.html) is glorious
+* [xkcd clock-world](http://xkcd.com/now)

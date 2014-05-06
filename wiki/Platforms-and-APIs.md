@@ -27,6 +27,8 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * Square's [cube](http://square.github.io/cube/)
 * [graphite](http://graphite.wikidot.com/)
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
+* Spreadsheet widgets (more [@](http://plugins.jquery.com/tag/spreadsheet/))
+    * [Handsontable](http://handsontable.com/)
 
 ### Encapsulated Visualization Libraries
 
@@ -79,6 +81,10 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
   * [ws4py](https://github.com/Lawouach/WebSocket-for-Python)
   * [cherrypy](http://www.cherrypy.org/)
   * [txWS](https://github.com/MostAwesomeDude/txWS)
+  * [socket.io](http://socket.io/)
+      * [python API](http://gevent-socketio.readthedocs.org/)
+      * [other python API](https://github.com/MrJoes/tornadio2)
+  * [JSON-RPC](https://en.wikipedia.org/wiki/JSON-RPC) is dead simple and worth investigatign
 
 * [EventSource](http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket)
 * jsonp
@@ -103,8 +109,10 @@ A data bind and a data flow are related problems, and several of these libraries
 * Square's [Crossfilter](http://square.github.io/crossfilter/)
 * Miso's [Dataset](http://misoproject.com/dataset/)
 * Vega's [Triflow](https://github.com/trifacta/triflow/tree/master/test) - _not actually sure if this is a dataflow library; it seems to too tiny to do anything; maybe it's just clever - nick_
-
-
+* [AngularJS](https://docs.angularjs.org/guide/databinding) includes databinding as a feature
+* [BackboneJS](http://backbonejs.org/)
+* [Model.JS](https://github.com/curran/model) (new, but written by someone with extensive d3 experience; he even wrote [an intro to AngularJS](http://curran.github.io/screencasts/introToAngular/exampleViewer/#/)
+* [BaconJS](http://baconforme.com/) (clear tutorial [here](http://blog.flowdock.com/2013/01/22/functional-reactive-programming-with-bacon-js/))
 
 
 
@@ -140,6 +148,7 @@ A data bind and a data flow are related problems, and several of these libraries
 * [Dee](http://www.quicksort.co.uk/DeeDoc.html) which overloads python operators to create a superset of SQL directly in Python
 * postgres with the postgis extension
 * [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is.
+* [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
 
 ### Interfaces
 
@@ -158,10 +167,12 @@ A data bind and a data flow are related problems, and several of these libraries
 ## Modelling
 * Repast
 * GarlicSIM
+* [SimPy](http://simpy.readthedocs.org/)
 * [PyABM](http://www-rohan.sdsu.edu/~zvoleff/research/pyabm/) (canonical usage example [here](https://github.com/azvoleff/chitwanabm/blob/master/chitwanabm/agents.py))
   * check out [what wikipedia thinks](http://en.wikipedia.org/wiki/Comparison_of_agent-based_modeling_software) to be bored to tears
 * [ABCE](https://github.com/DavoudTaghawiNejad/abce) _Agent Based Complete Economy_ (python); [paper](http://jasss.soc.surrey.ac.uk/16/3/1.html)
 * http://insightmaker.com/
+* [Liam2](http://liam2.plan.be/pages/about.html)
 
 ## Packaging
 
