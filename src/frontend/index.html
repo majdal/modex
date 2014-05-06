@@ -7,10 +7,8 @@
    <!-- TODO: investigate using require.js or some other js dependency manager -->
    <script type="text/javascript" src="/assets/libs/jquery.js"></script>
    <script type="text/javascript" src="/assets/libs/json2.js"></script>
-
-   <script type="text/javascript" src="/assets/libs/autobahn.js"></script>
-
-   <script type="text/javascript" src="/assets/libs/ol.js"></script>
+   
+   <script type="text/javascript" src="/assets/libs/ol.js"></script> <!-- curious: ol3 generates a mysterious iframe with an empty document inside -->
    <link rel="stylesheet" href="/assets/libs/ol.css" type="text/css">
    <script type="text/javascript" src="/assets/libs/d3.v3.js" charset="utf-8"></script>
    <script type="text/javascript" src="/assets/libs/nv.d3.js"></script>
@@ -39,10 +37,34 @@
       <div id="map"></div><!-- hide whitespace from parser
       --><div id="graph"><h2>GRAPH</h2></div>
     </div>
-    <div id="controls">      
+    <div id="controls">
      <div class="shrinkwrap">
-      Status: <span id="connected">Disconnected</span>
-      Model: <a id="start">Start</a><!--hidewhitespace--><a id="stop">Stop</a> <!-- these are buttons, wired up via jQuery, to start and stop the simulation -->
+     
+     <form>
+      <button id="run">Play</button> <!-- this is wired up via jQuery to start and stop the simulation -->
+      <div id="time">
+        <!-- TODO: make this range slider have finer resolution (but make sure the <output> is legible over accurate) -->
+        <input id="time_slider" type="range" min="1990" max="2013" value="2005" step="1"  width="100%"></input>
+        <output id="time_output"></output>
+        <script>
+        //$.on("loaded", function() { alert("no") } )
+        $(document).ready(function() {
+          var controls_form = $("#controls form");
+          var time_output = controls_form.find("#time_output")[0];
+          var time_slider = controls_form.find("#time_slider")[0];
+          console.log(time_output)
+          // Keep the 
+          // TODO: pull this out of the HTML
+          function _synctime() { time_output.value = time_slider.value; }
+          _synctime();
+          controls_form.on("input",_synctime); //'oninput' doesn't have a jQuery shorthand yet
+        })
+        </script>
+      </div>
+      
+      Status:
+      <meter id="connected" min="0" max="1" value="0">Disconnected</meter>
+      </form>
      </div>
     </div>  
   </div>

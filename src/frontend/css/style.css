@@ -30,6 +30,7 @@ html, body {
 
 #view > div {
   display: inline-block; /* causes the divs to bump up against each other instead of inserting newlines */
+  height: 100%;
 }
 
 #map {
@@ -56,4 +57,24 @@ html, body {
   vertical-align: center;
   margin-top: 50%; margin-bottom: 50%;
   /* display: none; */ /**Only for debugging; disable this when the graph is back*/
+}
+
+#controls  {
+  width: 100%;
+  padding-top: 1%;
+}
+
+#controls #time {
+  width: 80%;
+  display: inline-block;  
+}
+
+#controls #time #time_slider { 
+  width: 100%;
+}
+
+#controls #time > * {
+  /* center */
+  margin-left: auto;
+  margin-right: auto;
 }
