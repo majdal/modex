@@ -40,16 +40,15 @@
     <div id="controls">
      <div class="shrinkwrap">
      
-     <form>
       <button id="run">Play</button> <!-- this is wired up via jQuery to start and stop the simulation -->
       <div id="time">
         <!-- TODO: make this range slider have finer resolution (but make sure the <output> is legible over accurate) -->
-        <input id="time_slider" type="range" min="1990" max="2013" value="2005" step="0.01"  width="100%" />
+        <input id="time_slider" type="range" min="1990" max="2013" value="2005" step="0.00001"  width="100%" />
         <output id="time_output"></output>
         <script>
         //$.on("loaded", function() { alert("no") } )
         $(document).ready(function() {
-          var controls_form = $("#controls form");
+          var controls_form = $("#time");
           var time_output = controls_form.find("#time_output")[0];
           var time_slider = controls_form.find("#time_slider")[0];
           console.log(time_output)
@@ -62,9 +61,8 @@
         </script>
       </div>
       
-      Status:
-      <meter id="connected" min="0" max="1" value="0">Disconnected</meter>
-      </form>
+      <label for="connected">Status:</label>
+      <meter id="connected" min="0" max="1" value="0"></meter>
      </div>
     </div>  
   </div>
