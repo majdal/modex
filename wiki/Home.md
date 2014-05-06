@@ -24,6 +24,7 @@ Our **allies**,
 * [WICI](http://wici.ca)
 
 and some of our **inspiration**
+* The [Madingley Model](http://www.madingleymodel.org/about.html)
 * [School of Data](http://schoolofdata.org/)
 * The [Global Land Collaboratory](http://www.globallandproject.org/) 
 * [CorridorDesign](http://corridordesign.org/)
