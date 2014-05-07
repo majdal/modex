@@ -227,8 +227,8 @@ class Eutopia:
         if self.log is not None:
             self.log.append((self.time, self.get_activity_count())) #XXX assumes a list (or a list-like object)
 
-    next = __next__ #py2 :(
-    step = __next__ #backwards compat
+    next = __next__ #backwards compatibility with python2
+    step = __next__ #backwards compat with ourselves
 
     def intervene(self, intervention):
         self.interventions.append(intervention)
@@ -320,12 +320,19 @@ def main(n=20, dumpMap=False):
     
     activities = [state for time, state in eutopia.log]
 
+    # display results
+    print("Farm activities over time:")
+    for act in activities[0].keys(): #XXX will break if there are zero activities
+        print(act)
+        print([a.get(act,None) for a in activities])
+
     # optional: display summary of model outputs
+    # automatically kicks in if matplotlib is installed
     try:
         import pylab
         print("Plotting activities:")
         for act in activities[0].keys(): #XXX will break if there are zero activitiesx
-            print(act)
+            #print(act)
             pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
         pylab.legend(loc='best')
         pylab.show()   #block here until the user closes the plot
