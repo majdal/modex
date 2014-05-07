@@ -3,6 +3,7 @@
 # experimenting with MySQL
 # this only works with python2 because mysql-python won't build under 3
 # (but there are other DB drivers that will talk to MySQL which I haven't tried)
+# You need to start MySQL using the "db.sh" script in this directory.
 
 from sqlalchemy import *
 import IPython
@@ -29,14 +30,17 @@ def table2csv(conn, tbl, HEADER=True):
 		return buffer.getvalue()
 
 if __name__ == '__main__':
-	# There
+	# connect to the database
+	# dump "analysisresults" to a csv for a workout
+	# and drop to an IPython shell so you can explore the API.
+	
 	db = create_engine("mysql+mysqldb://root@127.0.0.1:3306/cmombour_sluceiidb") #mysqldb supports specifying a unix socket, but sqlalchemy doesn't seem to expose that. Maybe I just missed it.
 	schema = MetaData() #XXX is this a misnomer?
 	
-	print("These tables available:", schema.tables.keys())
-
 	conn = db.connect() #??? is this necessary? it seems to do things without it..
 	schema.reflect(conn) #??
+	
+	print("These tables available:", schema.tables.keys())
 	
 	analysisresults = schema.tables['analysisresults']
 	print("The interesting table has these columns:",analysisresults.columns.keys())
@@ -47,3 +51,7 @@ if __name__ == '__main__':
 	print(csv)
 	print("table2csv output a",type(csv))
 	IPython.embed()
+
+	# tidy up, for good show
+	conn.close()
+	db.dispose()

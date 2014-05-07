@@ -1,0 +1,9 @@
+#!/bin/sh
+
+pushd $(dirname $0) >/dev/null; HERE=`pwd`; popd >/dev/null
+
+#cat $HERE/mysqld.pid #DEBUG
+# For once, MySQL did something right: the officially correct shutdown procedure is
+# kill -TERM <http://lists.mysql.com/mysql/28801>
+# but they don't support ctrl-c, of all things
+kill `cat $HERE/mysqld.pid`
