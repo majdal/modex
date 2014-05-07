@@ -99,25 +99,37 @@ class SqlDumperResource(Resource): #XXX name
 #TODO: write another class (or maybe some special cases inside of the below)
 #      such that we can request a subset of columns like /tables/analysisresults/runID,minHappiness
 
-def rows2csv(queryset):
-    # dataset has csv dumping built in which is very convenient
+def dataset_freezes(result, **kw):
+    # serialize a dataset result set to a string.
+    # 
+    # dataset has serialization built in which is very convenient,
     # however, it insists on having a real filesystem file to dump to;
-    # We can deal with that using tmpfiles, but it's awkward *and* laggy.
-    # ---actually this dump is going to lag the WHOLE SERVER
-    # because, as written, the dump is done on the server thread
+    # We can deal with the file issue using tmpfiles, but it's redundant CPU cycles that could be better spent.
     # bug reported at https://github.com/pudo/dataset/issues/79
-    # ALSO, look into twisted.web.server.NOT_DONE_YET (eg http://ferretfarmer.net/2013/09/06/tutorial-real-time-chat-with-django-twisted-and-websockets-part-3/)
-    # which should be able to speed things up
+    #
+    # TODO: submit this as a patch to dataset
+    # actually dataset.freeze has other problems:
+    #   - it takes "indent" as a keyword arg, but that is only relevant to the json serializer
+    #   - Decimals are printed in full 16-decidigit glory, even when they don't need to be (e.g. "1.0000000000");
+    #     an artifact of the SQL db underneath, which it would be worthwhile to excise at the serializer.
+    
+    assert "filename" not in kw, "freezes() returns strings, not files"
+    assert "prefix" not in kw, "freezes() returns strings, not files"
+    
     with tempfile.NamedTemporaryFile() as dump:
-        dataset.freeze(queryset, filename=dump.name,
+        dataset.freeze(result, filename=dump.name,
                        prefix=dirname(dump.name)   #dataset.freeze demands we also tell it what folder we're exporting to
-                                                           #probably because of the templating shennanigans that freeze() supports;
-                                                           # awkward... perhaps we do not want to use freeze(), but rather its subroutines.
+                                                   #probably because of the templating shennanigans that freeze() supports;
+                                                   # awkward... perhaps we do not want to use freeze(), but rather its subroutines.
+                       , **kw
                        )
         
         # if we made it safely all the way here, output the dump
         dump.seek(0)
         return dump.read()
+# attach this where it belongs (I know, the Ruby people are laughing at this syntax gobble)
+dataset.freezes = dataset_freezes
+del dataset_freezes
 
 class SqlDumperTableResource(Resource): #XXX this name is the worst
     # TODO: explore exposing and enforcing the natural permissions that the database backend(s) already carries ta
@@ -130,11 +142,15 @@ class SqlDumperTableResource(Resource): #XXX this name is the worst
     def render_GET(self, request):
             request.setHeader("Content-Type", "text/csv")
             try:
-                return rows2csv(self.table.all())            
+                # ---actually this dump is going to lag the WHOLE SERVER
+                # because, as written, the dump is done on the server thread
+                # TODO: look into using Deferreds here
+                #       or twisted.web.server.NOT_DONE_YET (eg http://ferretfarmer.net/2013/09/06/tutorial-real-time-chat-with-django-twisted-and-websockets-part-3/) (which might be the same thing..)
+                
+                return dataset.freezes(self.table.all())
             except sqlalchemy.exc.OperationalError as e:
                 # XXX is including e.message here a security leak?
                 return ErrorPage(http.SERVICE_UNAVAILABLE, "Unable to connect to database.", e.message).render(request) 
-
 
 
 class CtlProtocol(WebSocketServerProtocol):
