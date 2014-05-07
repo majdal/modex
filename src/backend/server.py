@@ -3,6 +3,7 @@
 # make sure to read src/backend/README.md if this confuses you.
 
 import IPython #DEBUG
+import traceback #DEBUG
 
 import sys, warnings
 from os.path import dirname, abspath, join as pathjoin
@@ -14,6 +15,8 @@ from twisted.internet import reactor
 from twisted.internet import task
 from twisted.web import *
 from twisted.web.resource import *
+import twisted.web.http as http #TODO: fix the import namings
+
 from twisted.python import log
 from twisted.web.server import Site
 from twisted.web.static import File
@@ -23,6 +26,8 @@ from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerPr
 from autobahn.twisted.resource import WebSocketResource
 
 import dataset
+import sqlalchemy     # so that we can catch and wrap
+import sqlalchemy.exc # SQL errors into HTTP errors.
 
 #'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
 PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the project root is two levels up from the directory the server is
@@ -50,11 +55,19 @@ import eutopia   #this is actually sitting in ../models/, but is symlinked into 
 ## Twisted Components
 
 
+
 class SqlDumperResource(Resource): #XXX name
     # an HTTP resource which interprets requests given to it as requests
     # to dump entire database tables to csv
     # BE CAREFUL WITH THIS; it has a very good chance of exposing private data
     # This is just a kludge until our jsDataset is functional.
+    # TODO: move the connect() call inside of this class?
+    #       It is pretty standard in deployments (take any PHP site ever)
+    #       that you can just reaccess a resource to get the backend db connect to try again;
+    #       but we want the connection to pool, if possible..
+    #  SQLAlchemy pools by default < http://docs.sqlalchemy.org/en/latest/core/pooling.html >, but does dataset?
+    #    I want to precreate an engine but not precreate connections...
+    #   
     def __init__(self, db):
         # db should be a dataset.Database, e.g. as constructed by dataset.connect()
         self.db = db
@@ -65,11 +78,46 @@ class SqlDumperResource(Resource): #XXX name
         # is request.path == path??
         table = path
         
-        if unicode(table) in self.db.tables: #XXX the cast here is dodgy; does dataset ALWAYS name things in unicode? also, this line MUST change when we finally port to python3
-            return SqlDumperTableResource(self.db[table])
-        
+        try:
+            self.db.metadata.reflect(self.db.engine)  #kick dataset into updating its cached schema;
+                                                      #awkwardness reported as a bug at https://github.com/pudo/dataset/issues/88
+            
+            if unicode(table) in self.db.tables: #XXX the cast here is dodgy;
+                                                 #does dataset guarantee names in unicode?
+                                                 # This line needs to change when we port to python3.
+                return SqlDumperTableResource(self.db[table])
+        except sqlalchemy.exc.OperationalError as e:
+            # Why does twisted.web.error.Error exist if ErrorPage exists
+            #  and yet "raise twisted.web.error.Error()" doesn't render one? 
+            # XXX under the mysql driver, the interesting error message is e.orig.args[1]; but we cannot rely on that always being the case
+            # so we use e.message which includes the exception's class and whatever other args were passed to the exception
+            return ErrorPage(http.SERVICE_UNAVAILABLE, "Unable to connect to database.", e.message) # XXX is including e.message here a security leak?
+            
         #return Resource.getChild(self, path, request) #this causes a 404
         return NoResource("Database table '%s' not found." % (table,)) #or would we rather be explicit about giving the 404 ourselves?
+
+#TODO: write another class (or maybe some special cases inside of the below)
+#      such that we can request a subset of columns like /tables/analysisresults/runID,minHappiness
+
+def rows2csv(queryset):
+    # dataset has csv dumping built in which is very convenient
+    # however, it insists on having a real filesystem file to dump to;
+    # We can deal with that using tmpfiles, but it's awkward *and* laggy.
+    # ---actually this dump is going to lag the WHOLE SERVER
+    # because, as written, the dump is done on the server thread
+    # bug reported at https://github.com/pudo/dataset/issues/79
+    # ALSO, look into twisted.web.server.NOT_DONE_YET (eg http://ferretfarmer.net/2013/09/06/tutorial-real-time-chat-with-django-twisted-and-websockets-part-3/)
+    # which should be able to speed things up
+    with tempfile.NamedTemporaryFile() as dump:
+        dataset.freeze(queryset, filename=dump.name,
+                       prefix=dirname(dump.name)   #dataset.freeze demands we also tell it what folder we're exporting to
+                                                           #probably because of the templating shennanigans that freeze() supports;
+                                                           # awkward... perhaps we do not want to use freeze(), but rather its subroutines.
+                       )
+        
+        # if we made it safely all the way here, output the dump
+        dump.seek(0)
+        return dump.read()
 
 class SqlDumperTableResource(Resource): #XXX this name is the worst
     # TODO: explore exposing and enforcing the natural permissions that the database backend(s) already carries ta
@@ -80,25 +128,8 @@ class SqlDumperTableResource(Resource): #XXX this name is the worst
         Resource.__init__(self)
         
     def render_GET(self, request):
-        # dataset has csv dumping built in which is very convenient
-        # however, it insists on having a real filesystem file to dump to;
-        # We can deal with that using tmpfiles, but it's awkward *and* laggy.
-        # ---actually this dump is going to lag the WHOLE SERVER
-        # because, as written, the dump is done on the server thread
-        # bug reported at https://github.com/pudo/dataset/issues/79
-        # ALSO, look into twisted.web.server.NOT_DONE_YET (eg http://ferretfarmer.net/2013/09/06/tutorial-real-time-chat-with-django-twisted-and-websockets-part-3/)
-        # which should be able to speed things up
-        with tempfile.NamedTemporaryFile() as dump:
-            dataset.freeze(self.table.all(), filename=dump.name,
-                           prefix=dirname(dump.name)   #dataset.freeze demands we also tell it what folder we're exporting to
-                                                               #probably because of the templating shennanigans that freeze() supports;
-                                                               # awkward... perhaps we do not want to use freeze(), but rather its subroutines.
-                           )
-            
-            # if we made it safely all the way here, output the dump
             request.setHeader("Content-Type", "text/csv")
-            dump.seek(0)
-            return dump.read()
+            return rows2csv(self.table.all())
 
 
 class CtlProtocol(WebSocketServerProtocol):
@@ -215,11 +246,13 @@ if __name__ == '__main__':
    
    try:
       # PROTOTYPE; you must run `scratch/sql/db.sh` simultaneously to have this work
-      #   we could use "sqlite://" but that would just make an empty database
+      #   we could use "sqlite://" but that would just make a boring, empty database.
+      # Note that this brings tables up at /tables/tablename NOT /tables/tablename/
       DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
-      conn = dataset.connect(DATABASE_URL) 
+      conn = dataset.connect(DATABASE_URL, reflectMetadata=False) 
       print("Connected to %s." % DATABASE_URL)
    except:
+      #print traceback.format_exc() #DEBUG
       warnings.warn("Unable to connect to %s, /tables will not be available" % DATABASE_URL)
    else:
       table_data_resource = SqlDumperResource(conn) #kludge to get this running; this is parallel to data_resource and overwrites it
