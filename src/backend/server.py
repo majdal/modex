@@ -249,19 +249,13 @@ if __name__ == '__main__':
    root = File(webroot)
    assets = File(assets)
    
-   try:
-      # PROTOTYPE; you must run `scratch/sql/db.sh` simultaneously to have this work
-      #   we could use "sqlite://" but that would just make a boring, empty database.
-      # Note that this brings tables up at /tables/tablename NOT /tables/tablename/
-      DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
-      conn = dataset.connect(DATABASE_URL, reflectMetadata=False) 
-      print("Connected to %s." % DATABASE_URL)
-   except:
-      #print traceback.format_exc() #DEBUG
-      warnings.warn("Unable to connect to %s, /tables will not be available" % DATABASE_URL)
-   else:
-      table_data_resource = SqlDumperResource(conn) #kludge to get this running; this is parallel to data_resource and overwrites it
-      root.putChild("tables", table_data_resource)
+   # PROTOTYPE; you must run `scratch/sql/db.sh` simultaneously to have this work
+   #   we could use "sqlite://" but that would just make a boring, empty database.
+   # Note that this brings tables up at /tables/tablename NOT /tables/tablename/
+   DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
+   conn = dataset.connect(DATABASE_URL, reflectMetadata=False) 
+   table_data_resource = SqlDumperResource(conn) # a kludge just to get going; this Resource is parallel to data_resource and basically makes it pointless.
+   root.putChild("tables", table_data_resource)
       
    data_resource = WebSocketResource(data_endpoint)
    ctl_resource = WebSocketResource(ctl_endpoint)
