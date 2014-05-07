@@ -2,13 +2,18 @@
 # the main server code
 # make sure to read src/backend/README.md if this confuses you.
 
+import IPython #DEBUG
+
 import sys
 from os.path import dirname, abspath, join as pathjoin
 
 import json
+import tempfile
 
 from twisted.internet import reactor
 from twisted.internet import task
+from twisted.web import *
+from twisted.web.resource import Resource
 from twisted.python import log
 from twisted.web.server import Site
 from twisted.web.static import File
@@ -42,14 +47,40 @@ import eutopia   #this is actually sitting in ../models/, but is symlinked into 
 ######################
 ## Twisted Components
 
-#TODO(kousu): move this out to scratch/ for reference on how to host a web socket server using AutobahnPython
+
+
+class SqlDumperResource(Resource):
+    # an HTTP resource which uses the request given it to extract
+    # BE CAREFUL WITH THIS; it has a very good chance of exposing private data
+    # This is just a kludge until our jsDataset is functional
+    # TODO: explore exposing and enforcing the natural permissions that the database backend(s) already carries
+    # ..or maybe when you init this class you pass what database and table it dumps...?
+    def render_GET(self, request):
+        print("SqlDumper got a request; dropping to shell")
+        IPython.embed()
+        request.setHeader("Content-Type", "text/csv")
+        #database = 
+        table = "analysisresults"
+        # dataset has csv dumping built in which is very convenient
+        # however, it insists on having a real filesystem file to dump to;
+        # We can deal with that using tmpfiles, but it's awkward *and* laggy.
+        # ---actually this dump is going to lag the WHOLE SERVER
+        # because, as written, the dump is done on the server thread
+        # bug reported at https://github.com/pudo/dataset/issues/79
+        # ALSO, look into twisted.web.server.NOT_DONE_YET (eg http://ferretfarmer.net/2013/09/06/tutorial-real-time-chat-with-django-twisted-and-websockets-part-3/)
+        # which should be able to speed things up
+        with tempfile.NamedTemporaryFile() as dump:
+            dataset.freeze(table, filename=dump.name)
+            return open(dump.name,"rb").read()
+
+
 class CtlProtocol(WebSocketServerProtocol):
    def onConnect(self, request):
       print("Client connecting: {}".format(request.peer))
 
    def onOpen(self):
       print("WebSocket connection open.")
-      
+      ng
    def onMessage(self, payload, isBinary):
       if isBinary:
         print("This is probably bad. Binary message received: {} bytes.".format(len(payload)))
@@ -154,10 +185,12 @@ if __name__ == '__main__':
    ## and we have our WebSocket server under "/ws"
    root = File(webroot)
    assets = File(assets)
+   table_data_resource = SqlDumperResource() #kludge to get this running; this is parallel to data_resource and overwrites it
    data_resource = WebSocketResource(data_endpoint)
    ctl_resource = WebSocketResource(ctl_endpoint)
    
    root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
+   root.putChild("tables", table_data_resource)
    root.putChild("ws", data_resource)    #this puts the websocket at /ws. You cannot put both the site and the websocket at the same endpoint; whichever comes last wins, in Twisted
    if debug:
      root.putChild("scratch", File(pathjoin(PROJECT_ROOT,"scratch")))
