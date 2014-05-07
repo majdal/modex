@@ -13,7 +13,7 @@ import tempfile
 from twisted.internet import reactor
 from twisted.internet import task
 from twisted.web import *
-from twisted.web.resource import Resource
+from twisted.web.resource import *
 from twisted.python import log
 from twisted.web.server import Site
 from twisted.web.static import File
@@ -65,14 +65,11 @@ class SqlDumperResource(Resource): #XXX name
         # is request.path == path??
         table = path
         
-        # TODO: ensure 404s can still happen properlike
-        print(self.db.tables)
-        #IPython.embed()
         if unicode(table) in self.db.tables: #XXX the cast here is dodgy; does dataset ALWAYS name things in unicode? also, this line MUST change when we finally port to python3
             return SqlDumperTableResource(self.db[table])
         
-        return Resource.getChild(self, path, request) #this causes a 404
-        return NoResource("Database table not found") #or would we rather be explicit about giving the 404 ourselves?
+        #return Resource.getChild(self, path, request) #this causes a 404
+        return NoResource("Database table '%s' not found." % (table,)) #or would we rather be explicit about giving the 404 ourselves?
 
 class SqlDumperTableResource(Resource): #XXX this name is the worst
     # TODO: explore exposing and enforcing the natural permissions that the database backend(s) already carries ta
@@ -221,6 +218,7 @@ if __name__ == '__main__':
       #   we could use "sqlite://" but that would just make an empty database
       DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
       conn = dataset.connect(DATABASE_URL) 
+      print("Connected to %s." % DATABASE_URL)
    except:
       warnings.warn("Unable to connect to %s, /tables will not be available" % DATABASE_URL)
    else:
