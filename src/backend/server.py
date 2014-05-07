@@ -55,6 +55,14 @@ import eutopia   #this is actually sitting in ../models/, but is symlinked into 
 ## Twisted Components
 
 
+# Brute force SQL dumping
+# There's four classes that should be here:
+#  [1               /databases whose getChild() returns instances of
+#  [2 the class for /databases/db, whose getChild() returns an instance of the
+#  [3     class for /databases/db/table, whose render exports entire tables, and whose getChild() returns instances of the
+#  [4     class for /databases/db/table/col1,col2,col3?  whose render exports slices of tables
+# Right now SqlDumperResource == [2] and SqlDumperTableResource == [3]
+# Instead of [4], we could make [3] take optional HTTP query arguments.
 
 class SqlDumperResource(Resource): #XXX name
     # an HTTP resource which interprets requests given to it as requests
