@@ -19,6 +19,11 @@ and that can be worked on indepedently of the critical path.
     - Lit review:
         - [ ] [PySal](http://pysal.readthedocs.org) -- is this relevant should it be rolled in? supported somehow?
 - [ ] "jSQL": some sort of javascript frontend + server backend which allows efficient *and secure* querying (but not updating!) of databases.
+      The watchword here is "dynamic": whatever we settle on can't just download a dataset then operate on it, it needs to be able to get new data as new data comes in.
+      Ideally, we'd have a nice dataflow library handle this, so that you declare once
+       and only once what manipulations (eg transformations like log-log scales, aggregations like means, standard deviations, total morphs like kernel density estimates..) that you are interested in visualizing and on update everything is recomputed (efficiently, even, in the case of simple things like means). this is a pipe-dream at this point.
+      And even more ideally, the client-side transformations would become queries which
+          limit the results of or (partially?) be performed by the server.
     - [ ] Lit review: read up on how the pros deal with large datasets.
         - [ ] Miso's [Dataset](http://misoproject.com/dataset/) (tables; client side **only**, which is a weakness and a strength)
         - [ ] Square's [Cube](http://square.github.io/cube/) (events)
