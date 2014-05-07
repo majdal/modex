@@ -71,4 +71,12 @@ and that can be worked on indepedently of the critical path.
    - Lit review:
        - [ ] Microsoft's [SemanticZoom](http://msdn.microsoft.com/library/windows/apps/hh702601)
        - [ ] Audacity's [waveform display](https://svn.FIXME) switches rendering methods below a certain hardcoded threshold -- but this is strictly only appropriate for waveforms, like audio and maybe seasonal timeseries.
-   
+
+- Load Tests: we have a lot of uncertainty about what the right APIs to use.
+  To clear the air, we should task someone to focus on writing reproducible tests which systematically run over all the options.
+   In particular, our options are {IE, Firefox, Opera, Safari, iOS Browser, Android Browser, Chrome, *old* IE} cross {WebSockets, REST, SOAP, XMLRPC, json-rpc} cross
+    - WebSockets
+        - [ ] How many can be open at once?
+        - [ ] 
+    - 
+- Make the SQL extraction efficient; python's default is to print 16 bytes of ASCII for each Decimal, even if it is the value "1.0000000000". Also, look into binary serialization (msgpack, binary csv, etc); possibly an extension to jsSQL specifying sigdigs to keep (which, actually, would be easy to do with python's Decimals)
