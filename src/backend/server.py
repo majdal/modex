@@ -4,7 +4,7 @@
 
 import IPython #DEBUG
 
-import sys
+import sys, warnings
 from os.path import dirname, abspath, join as pathjoin
 
 import json
@@ -21,6 +21,8 @@ from twisted.internet.defer import inlineCallbacks
 
 from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
 from autobahn.twisted.resource import WebSocketResource
+
+import dataset
 
 #'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
 PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the project root is two levels up from the directory the server is
@@ -48,19 +50,39 @@ import eutopia   #this is actually sitting in ../models/, but is symlinked into 
 ## Twisted Components
 
 
-
-class SqlDumperResource(Resource):
-    # an HTTP resource which uses the request given it to extract
+class SqlDumperResource(Resource): #XXX name
+    # an HTTP resource which interprets requests given to it as requests
+    # to dump entire database tables to csv
     # BE CAREFUL WITH THIS; it has a very good chance of exposing private data
-    # This is just a kludge until our jsDataset is functional
-    # TODO: explore exposing and enforcing the natural permissions that the database backend(s) already carries
+    # This is just a kludge until our jsDataset is functional.
+    def __init__(self, db):
+        # db should be a dataset.Database, e.g. as constructed by dataset.connect()
+        self.db = db
+        Resource.__init__(self)
+    
+    def getChild(self, path, request):
+        # what is the 'path' we get??hi)
+        # is request.path == path??
+        table = path
+        
+        # TODO: ensure 404s can still happen properlike
+        print(self.db.tables)
+        #IPython.embed()
+        if unicode(table) in self.db.tables: #XXX the cast here is dodgy; does dataset ALWAYS name things in unicode? also, this line MUST change when we finally port to python3
+            return SqlDumperTableResource(self.db[table])
+        
+        return Resource.getChild(self, path, request) #this causes a 404
+        return NoResource("Database table not found") #or would we rather be explicit about giving the 404 ourselves?
+
+class SqlDumperTableResource(Resource): #XXX this name is the worst
+    # TODO: explore exposing and enforcing the natural permissions that the database backend(s) already carries ta
     # ..or maybe when you init this class you pass what database and table it dumps...?
+    def __init__(self, table):
+        # table should be a dataset.Table object
+        self.table = table
+        Resource.__init__(self)
+        
     def render_GET(self, request):
-        print("SqlDumper got a request; dropping to shell")
-        IPython.embed()
-        request.setHeader("Content-Type", "text/csv")
-        #database = 
-        table = "analysisresults"
         # dataset has csv dumping built in which is very convenient
         # however, it insists on having a real filesystem file to dump to;
         # We can deal with that using tmpfiles, but it's awkward *and* laggy.
@@ -70,8 +92,16 @@ class SqlDumperResource(Resource):
         # ALSO, look into twisted.web.server.NOT_DONE_YET (eg http://ferretfarmer.net/2013/09/06/tutorial-real-time-chat-with-django-twisted-and-websockets-part-3/)
         # which should be able to speed things up
         with tempfile.NamedTemporaryFile() as dump:
-            dataset.freeze(table, filename=dump.name)
-            return open(dump.name,"rb").read()
+            dataset.freeze(self.table.all(), filename=dump.name,
+                           prefix=dirname(dump.name)   #dataset.freeze demands we also tell it what folder we're exporting to
+                                                               #probably because of the templating shennanigans that freeze() supports;
+                                                               # awkward... perhaps we do not want to use freeze(), but rather its subroutines.
+                           )
+            
+            # if we made it safely all the way here, output the dump
+            request.setHeader("Content-Type", "text/csv")
+            dump.seek(0)
+            return dump.read()
 
 
 class CtlProtocol(WebSocketServerProtocol):
@@ -185,12 +215,22 @@ if __name__ == '__main__':
    ## and we have our WebSocket server under "/ws"
    root = File(webroot)
    assets = File(assets)
-   table_data_resource = SqlDumperResource() #kludge to get this running; this is parallel to data_resource and overwrites it
+   
+   try:
+      # PROTOTYPE; you must run `scratch/sql/db.sh` simultaneously to have this work
+      #   we could use "sqlite://" but that would just make an empty database
+      DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
+      conn = dataset.connect(DATABASE_URL) 
+   except:
+      warnings.warn("Unable to connect to %s, /tables will not be available" % DATABASE_URL)
+   else:
+      table_data_resource = SqlDumperResource(conn) #kludge to get this running; this is parallel to data_resource and overwrites it
+      root.putChild("tables", table_data_resource)
+      
    data_resource = WebSocketResource(data_endpoint)
    ctl_resource = WebSocketResource(ctl_endpoint)
    
    root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
-   root.putChild("tables", table_data_resource)
    root.putChild("ws", data_resource)    #this puts the websocket at /ws. You cannot put both the site and the websocket at the same endpoint; whichever comes last wins, in Twisted
    if debug:
      root.putChild("scratch", File(pathjoin(PROJECT_ROOT,"scratch")))
