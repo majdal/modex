@@ -129,7 +129,12 @@ class SqlDumperTableResource(Resource): #XXX this name is the worst
         
     def render_GET(self, request):
             request.setHeader("Content-Type", "text/csv")
-            return rows2csv(self.table.all())
+            try:
+                return rows2csv(self.table.all())            
+            except sqlalchemy.exc.OperationalError as e:
+                # XXX is including e.message here a security leak?
+                return ErrorPage(http.SERVICE_UNAVAILABLE, "Unable to connect to database.", e.message).render(request) 
+
 
 
 class CtlProtocol(WebSocketServerProtocol):
