@@ -76,7 +76,7 @@ class Activity:
                     total += weight*self.products[item]*farm.area
             return total
     
-        raise Exception('Could not find product "%s"'%key)
+        raise KeyError('Could not find product "%s"'%key)
 
 class Activities:
     def __init__(self):
