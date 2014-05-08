@@ -78,10 +78,18 @@ and that can be worked on indepedently of the critical path.
        - [ ] Audacity's [waveform display](https://svn.FIXME) switches rendering methods below a certain hardcoded threshold -- but this is strictly only appropriate for waveforms, like audio and maybe seasonal timeseries.
 
 - Load Tests: we have a lot of uncertainty about what the right APIs to use.
-  To clear the air, we should task someone to focus on writing reproducible tests which systematically run over all the options.
-   In particular, our options are {IE, Firefox, Opera, Safari, iOS Browser, Android Browser, Chrome, *old* IE} cross {WebSockets, REST, SOAP, XMLRPC, json-rpc} cross
-    - WebSockets
+  To clear the air, we should task someone to focus on writing reproducible tests which
+   systematically determine performance (e.g. runtime, number of items renderable, number of connections available, etc)
+   on each of our platforms:
+       {IE, Firefox, Opera, Safari, iOS Browser, Android Browser, Chrome, *old* IE} cross 
+       {WindowsXP, Windows7, Windows8, Linux, Ubuntu, OS X} 
+      Use tools like [Selenium](http://docs.seleniumhq.org/) and [Wati{N,r}](http://watin.org/).
+    - Data streams:
+       {WebSockets, REST, SOAP, XMLRPC, json-rpc, ...}
         - [ ] How many can be open at once?
         - [ ] 
+    - SVG (see http://trac.osgeo.org/openlayers/wiki/Future/OpenLayersWithCanvas for the sort of report we're looking for)
+        - [ ] How many {points, lines, paths} before the browser crashes?
+        - [ ] How does scrolling the image lag?
     - 
 - Make the SQL extraction efficient; python's default is to print 16 bytes of ASCII for each Decimal, even if it is the value "1.0000000000". Also, look into binary serialization (msgpack, binary csv, etc); possibly an extension to jsSQL specifying sigdigs to keep (which, actually, would be easy to do with python's Decimals)
