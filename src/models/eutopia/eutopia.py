@@ -4,6 +4,7 @@
 # system libs
 import os
 from itertools import izip
+import warnings
 
 # third party
 import dataset
@@ -171,8 +172,13 @@ class Eutopia:
     def __init__(self, log = None):
         self.log = log
         if self.log is None:
-            self.log = dataset.connect("sqlite://") #creates an in-memory database object
-
+            self.log = "sqlite://" #creates an in-memory database object
+        if isinstance(self.log, str):
+            self.log = dataset.connect(self.log)
+        else:
+            if not isinstance(self.log, dataset.Database):
+               warnings.warn("Eutopia log should be a dataset.Database object.") #only warn, don't crash, to allow for users doing funky mocking stuff that an explicit type check would miss; What I really want here is to assert on an Interface, like Java/C# or Twisted.
+        
         try:
             shapefile = pygdal.Shapefile(MAP_SHAPEFILE)
         except IOError:       #py2.7
@@ -236,7 +242,7 @@ class Eutopia:
         "if many is given, state should be empty"
         
         table = self.log[table]
-        # TODO: assert isinstance(self.log, sqlalchemy.engine.base.Engine | dataset.Database)
+                
         def labelit(d): #XXX bad name
             "label a row of state with the current run ID and the current time"
             d = d.copy() #XXX this copy is a safety measure, but it is wasteful for this particular use case
