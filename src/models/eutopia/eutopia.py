@@ -6,7 +6,7 @@ import os
 from itertools import izip
 
 # local libs
-from pygdal import *
+import pygdal
 from util import *
 
 # eutopia files
@@ -63,9 +63,9 @@ AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #'ZR': 'REFORESTATION'
 }
 
-class Farm(Feature):
+class Farm(pygdal.Feature):
     def __init__(self, feature):
-        Feature.__init__(self, feature)
+        pygdal.Feature.__init__(self, feature)
         #self.land_type = land_type #hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         self.county = "BestCountyInTheWorldIsMyCountyAndNotYours"
 
@@ -169,14 +169,14 @@ class Eutopia:
         self.log = log
 
         try:
-            shapefile = Shapefile(MAP_SHAPEFILE)
+            shapefile = pygdal.Shapefile(MAP_SHAPEFILE)
         except IOError:       #py2.7
             #except FileNotFoundError: #py3k
             raise RuntimeError("No shapefile `%s` found; you may need to download it from a team member (privately)" % MAP_SHAPEFILE)
 
         self.map = shapefile[0] #cheating: assume the only layer we care about is this one
-        assert self.map.GetGeomType() == wkbPolygon, "Farm boundaries layer is not a Polygon; it is a" + str.join(" or ", invertOGRConstants(self.map.GetGeomType()))
-        #assert isinstance(self.map, PolygonLayer), "Farm boundaries layer is not a Polygon; it is a " + str(type(self.map))
+        assert self.map.GetGeomType() == pygdal.wkbPolygon, "Farm boundaries layer is not a Polygon; it is a" + str.join(" or ", pygdal.invertOGRConstants(self.map.GetGeomType()))
+        #assert isinstance(self.map, pygdal.PolygonLayer), "Farm boundaries layer is not a Polygon; it is a " + str(type(self.map))
 
         #########################
         # modelling begins here
