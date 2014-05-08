@@ -5,6 +5,9 @@
 import os
 from itertools import izip
 
+# third party
+import dataset
+
 # local libs
 import pygdal
 from util import *
@@ -167,6 +170,8 @@ class Eutopia:
     """
     def __init__(self, log = None):
         self.log = log
+        if self.log is None:
+            self.log = dataset.connect("sqlite://") #creates an in-memory database object
 
         try:
             shapefile = pygdal.Shapefile(MAP_SHAPEFILE)
@@ -209,8 +214,7 @@ class Eutopia:
         "this function is cruft, but very useful cruft"
         with open(fname,"w") as mapjson:
             mapjson.write(self.dumpsMap())
-
-
+    
     def __next__(self):
         # apply interventions
         for intervention in self.interventions:
@@ -224,9 +228,29 @@ class Eutopia:
         self.time += 1
 
         # log metrics
-        if self.log is not None:
-            self.log.append((self.time, self.get_activity_count())) #XXX assumes a list (or a list-like object)
-
+        #self.record("activities", **self.get_activity_count()) #XXX this will flop across allllll the columns; is that what we want?
+        self.record("activities", [{"activity": a, "value": v} for a,v in self.get_activity_count().iteritems()]) #this rearranges the dictionary into two columns, which is more SQLish; dataset makes either one transparent to us, though
+        
+    def record(self, table, many=None, **state):
+        "log model 'state' into 'table' in database self.log"
+        "if many is given, state should be empty"
+        
+        table = self.log[table]
+        # TODO: assert isinstance(self.log, sqlalchemy.engine.base.Engine | dataset.Database)
+        def labelit(d): #XXX bad name
+            "label a row of state with the current run ID and the current time"
+            d = d.copy() #XXX this copy is a safety measure, but it is wasteful for this particular use case
+            d.update({"runId": -1}) #TODO: this should be outside of the model, like say in the Simulation class? hm. awkward!
+            d.update({"time": self.time}) #TODO: make some uber update method which logs every piece of "current" state and then incremements the timestep 
+            return d
+            
+        if many is None:
+            table.insert(labelit(columns))
+        else:
+            assert not state, "`many` and `**state` are mutually exclusive" #XXX sketchy
+            assert all(isinstance(e, dict) for e in many)
+            table.insert_many([labelit(e) for e in many])
+    
     next = __next__ #backwards compatibility with python2
     step = __next__ #backwards compat with ourselves
 
@@ -237,9 +261,10 @@ class Eutopia:
         "convenience method"
         while True:
             next(self)
-            yield self.get_activity_count() #hardcode model output, for now
+            yield self.get_activity_count() #hardcode model output, for now #XXX this is senseless now that we have a database in place
 
     def get_activity_count(self, farms = None):
+        "return a dictionary containing the current value of each economic activitiy"
         if farms is None: farms = self.farms
         activities = {}
         for farm in farms:
@@ -266,9 +291,8 @@ def create_demo_model():
     
     This subroutine is useful as a benchmark for using Eutopia under different hosts.
     """
-    log = []
-    eutopia = Eutopia(log)
-
+    eutopia = Eutopia()
+    
     eutopia.intervene(intervention.PriceIntervention(5, 'duramSeed', 10))
     eutopia.intervene(intervention.PriceIntervention(7, 'duramSeedOrganic', 0.001))
 
@@ -318,14 +342,19 @@ def main(n=20, dumpMap=False):
         print ("Timestep %d" % (t,))
         next(eutopia)
     
-    activities = [state for time, state in eutopia.log]
+    activities = list(e['activity'] for e in eutopia.log['activities'].distinct("activity"))
 
     # display results
     print("Farm activities over time:")
-    for act in activities[0].keys(): #XXX will break if there are zero activities
+    print(list(eutopia.log['activities'].all()))
+    print(eutopia.log['activities'].columns)
+    
+    for act in activities:
         print(act)
-        print([a.get(act,None) for a in activities])
-
+        
+        print([r["value"] for r in eutopia.log['activities'].find(activity=act, order_by="time")])
+    
+    import IPython; IPython.embed()
     # optional: display summary of model outputs
     # automatically kicks in if matplotlib is installed
     try:
@@ -338,6 +367,8 @@ def main(n=20, dumpMap=False):
         pylab.show()   #block here until the user closes the plot
     except ImportError:
         print "It appears you do not have scipy's matplotlib installed. Though the simulation has run I cannot show you the plots."
+    except RuntimeError, e: #this crashes on the off chance you're not running X; not a big deal, but notable, so a less-scary warning to the user
+        print e.message, "=> unable to show plots."
     
 
 if __name__=='__main__':

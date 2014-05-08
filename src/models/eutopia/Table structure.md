@@ -5,6 +5,8 @@ an ORM does not record time or runIDs (instead it just overwrites what was there
 This is rough work designing the table structure I would "naturally" expect, based on what is in the model,
 and that I will use manually, for a first draft,
 and that will guide attempts to get SQLAlchemy or Django to munge our objects into a DB more cleverly.
+Actually, SQLAlchemy seems like it is extraordinarily flexible, and the appropriate amount of metaclass magic will probably get us there.
+ .. PyABM must have facilities for this.
 
 **run**
 ```

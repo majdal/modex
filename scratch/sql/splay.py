@@ -4,6 +4,10 @@
 # this only works with python2 because mysql-python won't build under 3
 # (but there are other DB drivers that will talk to MySQL which I haven't tried)
 # You need to start MySQL using the "db.sh" script in this directory.
+#
+# You can also use db.sh to just play around with SQLAlchemy using a smallish database; use this conection string:
+#  mysql://root@127.0.0.1:3306/cmombour_sluceiidb
+# any other connection string will not work.
 
 from sqlalchemy import *
 import IPython
