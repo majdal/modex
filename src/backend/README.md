@@ -92,7 +92,8 @@ zip myshapefile.zip *
 ## Gotchas
 
 
-
+The symlink to `src/models/`  here is a workaround so that our (python) models are importable into our (python) server.
+Long term, we'll define some sort of model-running API and do model runs in subprocesses, which very well might be another language, such as Java (e.g. Repast or NetLogo).
 
 You must run the server under python2. Twisted is [the largest](https://wiki.python.org/moin/Python2orPython3) library yet to be ported to python3.
 
@@ -119,6 +120,7 @@ What if we moved models inside backend? This reduces a TON of issues. For instan
 fail to load for whatever reason when being called from outside the directory. I already altered map.py, yet this problem still persists.
 
 If we make models a subdirectory of backend, we wouldn't have this problem whatsoever. 
+
 
 
 ## Compatibility
