@@ -56,7 +56,7 @@ $(function() {
   // branch:databased TEMPORARY KLUDGE
   //  - redownload and redraw the whole dataset the whole time
   function redraw_graph() {
-    console.log("redraw_graph");
+    //console.log("redraw_graph");
     d3.csv("/tables/activities", function(tbl) {
       // nvd3 wants its data like [ { key: "seriesname", values: [{x: ..., y: ...}, ...], color: "#FF00FF" }, .... ]
       // d3.csv gives its data like [ {"columnanme": value, ... } ... ]
@@ -67,33 +67,48 @@ $(function() {
       // we need to map d3.csv -> nvd3 (..it is really annoying that nvd3 doesn't support csv out of the box)
 
       if(tbl.length > 0) {
+        var timemin = +Infinity
+        var timemax = -Infinity
         
         // option a: one pass with .push()es
         // option b: assume d3 gives consistent rows, and first extract the columnanmes from the 0th row, then do multiple passes with .map()
         serieses = Object.keys(tbl[0]).filter(function(e) { return !(e == "runID" || e == "time") })
         function series(name) { r= tbl.map(function(row) { 
-
- rr =  {x: +row.time, y: +row[name]};  //split out for debugging weirdness
-  //someting (nvd3??) is adding a 'series' value to rr. and somehow its managing t
-
- console.log(rr);
- return(rr);
-})
-
-console.log(name, r);
-return(r);
-
-   } /*NB: +value is javascript for 'cast to numeric'*/
+            if(+row.time < timemin) { timemin = +row.time }
+            if(+row.time > timemax) { timemax = +row.time }
+            
+            /*NB: +value is javascript for 'cast to numeric'*/
+            rr =  {x: +row.time, y: +row[name]};  //split out for debugging weirdness
+            //someting (nvd3??) is adding a 'series' value to rr. and somehow its managing to do it even though I'm recreating the dataset from scratch every time.
+         
+            // console.log(rr);
+            return(rr);
+            })
+        
+        //console.log(name, r);
+        return(r);
+        
+        } 
+        
         // overwrite the previous dataset
         scope.data = []
         serieses.forEach(function(s) {
           scope.data.push({key: s, values: series(s), color: getRandomColor()})
-        })
-
-        //redraw the graph
-        scope.dataclean = scope.data
+          })
+        // aahhh i screwed up the indentation
+        
+        //finally, redraw the graph
         svg.datum(scope.data).call(chart);
         scope.chart = chart;
+
+        //and update the time_slider
+        time_slider = $("#time_slider")[0]
+        time_slider.min = timemin
+        time_slider.max = timemax
+        time_slider.value = timemax
+        // XXX copied from index.html
+        var time_output = $("#time_output")[0];
+        time_output.value = Math.floor(time_slider.value);
         }
       setTimeout(redraw_graph, 2000); //only do the next redraw after the current redraw completes
       })
