@@ -234,24 +234,26 @@ class Eutopia:
         self.time += 1
 
         # log metrics
-        #self.record("activities", **self.get_activity_count()) #XXX this will flop across allllll the columns; is that what we want?
-        self.record("activities", [{"activity": a, "value": v} for a,v in self.get_activity_count().iteritems()]) #this rearranges the dictionary into two columns, which is more SQLish; dataset makes either one transparent to us, though
+        self.record("activities", **self.get_activity_count()) #XXX this will flop across allllll the columns; is that what we want?
+        #self.record("activities", [{"activity": a, "value": v} for a,v in self.get_activity_count().iteritems()]) #this rearranges the dictionary into two columns, which is more SQLish; dataset makes either one transparent to us, though
         
     def record(self, table, many=None, **state):
         "log model 'state' into 'table' in database self.log"
         "if many is given, state should be empty"
+        #XXX 'many' is sketchy! It only really exists because of table layout "version 2";
+        # I can't make up my mind to keep it or not.
         
         table = self.log[table]
                 
         def labelit(d): #XXX bad name
             "label a row of state with the current run ID and the current time"
             d = d.copy() #XXX this copy is a safety measure, but it is wasteful for this particular use case
-            d.update({"runId": -1}) #TODO: this should be outside of the model, like say in the Simulation class? hm. awkward!
+            d.update({"runID": -1}) #TODO: this should be outside of the model, like say in the Simulation class? hm. awkward!
             d.update({"time": self.time}) #TODO: make some uber update method which logs every piece of "current" state and then incremements the timestep 
             return d
             
         if many is None:
-            table.insert(labelit(columns))
+            table.insert(labelit(state))
         else:
             assert not state, "`many` and `**state` are mutually exclusive" #XXX sketchy
             assert all(isinstance(e, dict) for e in many)
@@ -347,35 +349,58 @@ def main(n=20, dumpMap=False):
     for t in range(n):
         print ("Timestep %d" % (t,))
         next(eutopia)
+
+    #version 1: flopping activities across columns; so the list of distinct activities is the list of columns minus the metadata columns
+    activities = [act for act in eutopia.log['activities'].columns if act not in ["id", "runID", "time"]]
+    #version 2: using one column "activity" to store the activities
+    #activities = list(e['activity'] for e in eutopia.log['activities'].distinct("activity"))
     
-    activities = list(e['activity'] for e in eutopia.log['activities'].distinct("activity"))
 
     # display results
     print("Farm activities over time:")
-    print(list(eutopia.log['activities'].all()))
-    print(eutopia.log['activities'].columns)
-    
+    #print(list(eutopia.log['activities'].all()))
+    #print(eutopia.log['activities'].columns)
+    #import IPython; IPython.embed()
+    # Now, reading the data is awkward because we use raw Python
+    # If we installed Pandas (which is not unreasonable, given that we care about stats and dataset manipulation)
+    # the cruft would get hidden (and probably run faster too, since Pandas has been tuned)
     for act in activities:
-        print(act)
+
+        # (version 1 is in some ways "ugly sql" but it makes very pretty tables and is actually easier to work with! )
+        # Version 1: flopping activities across columns
+        timeseries = [r[act] for r in eutopia.log['activities'].find(order_by="time")]
+        # Version 2: a more normalized sql form, where we essentially embed a dictionary into a table
+        #timeseries = [r["value"] for r in eutopia.log['activities'].find(activity=act, order_by="time")]
         
-        print([r["value"] for r in eutopia.log['activities'].find(activity=act, order_by="time")])
+        print(act, ":", timeseries)
+        
     
-    import IPython; IPython.embed()
+    
     # optional: display summary of model outputs
     # automatically kicks in if matplotlib is installed
     try:
         import pylab
-        print("Plotting activities:")
-        for act in activities[0].keys(): #XXX will break if there are zero activitiesx
-            #print(act)
-            pylab.plot(range(len(activities)), [a.get(act,0) for a in activities], label=act)
+        print("Plotting activities with matplotlib:")
+        for act in activities:
+            
+            # (version 1 is in some ways "ugly sql" but it makes very pretty tables and is actually easier to work with! )
+            # Version 1: flopping activities across columns
+            timeseries = [r[act] for r in eutopia.log['activities'].find(order_by="time")]
+            # Version 2: a more normalized sql form, where we essentially embed a dictionary into a table
+            #timeseries = [r["value"] for r in eutopia.log['activities'].find(activity=act, order_by="time")]
+            
+            pylab.plot(range(len(timeseries)), timeseries, label=act)
+            pylab.xlabel("time")
+            pylab.ylabel("activity")
+        
         pylab.legend(loc='best')
-        pylab.show()   #block here until the user closes the plot
+        pylab.show()   #block here until the user closes the plot    
     except ImportError:
         print "It appears you do not have scipy's matplotlib installed. Though the simulation has run I cannot show you the plots."
     except RuntimeError, e: #this crashes on the off chance you're not running X; not a big deal, but notable, so a less-scary warning to the user
         print e.message, "=> unable to show plots."
-    
+        
+    print("good bye!")
 
 if __name__=='__main__':
     main()
