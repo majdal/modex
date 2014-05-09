@@ -63,7 +63,7 @@
           console.log(time_output)
           // Keep the 
           // TODO: pull this out of the HTML
-          function _synctime() { time_output.value = Math.trunc(time_slider.value); }
+          function _synctime() { time_output.value = Math.floor(time_slider.value); }
           _synctime();
           controls_form.on("input",_synctime); //'oninput' doesn't have a jQuery shorthand yet
         })
