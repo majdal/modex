@@ -57,8 +57,17 @@ It is typical that a first pass model can be very detailed and very slow, and th
 A model is "simplifiable" if it can be replaced and still get "the same" outputs (what "the same" is is another huge topic). For example, a random-walk generating weather temperatures could be replaced by a sin function plus some gaussian noise. If the only output of an agent model is some lines ("count of sheep population", "count of wolf population") then it could perhaps be replaced by some ODEs solved numerically (or even symbolically!).
 
 (Modelica)[http://openmodelica.org] has some interesting ideas on plugging submodels together, which we can steal for great justice.
-
 Historically, coarse-graining has been the sugardaddy of western science. Science was all about discovering immutable, eternal laws, like "the earth orbits in an ellipse plus or minus some noise", though now there's more of a recognition that in many systems--especially complex ones--exceptions are the norm.
+
+# Parameter Sweeps
+
+Much of our use-case is to explore models which have large numbers of inputs and large number of outputs. The exploration is performed by something called a "parameter sweep", which samples some (but almost never all! definitely not all if any parameters are continuous) points from the input space and runs the models at those points.
+
+* [James Bergstra](http://www.eng.uwaterloo.ca/~jbergstr/publications.html) of the [CTN](http://compneuro.uwaterloo.ca/) has done much work on this.
+* In [NetLogo](http://ccl.northwestern.edu/netlogo/docs/behaviorspace.htm)
+* In [Repast](http://repast.sourceforge.net/docs/RepastParameterSweepsGettingStarted.pdf)
+
+We are also interested in interactively updating parameters. We do not know how to deal with this, yet, except that games deal with this all the time.
 
 ### References
 
