@@ -87,7 +87,7 @@ class SqlDumperResource(Resource): #XXX name
         table = path
         
         try:
-            self.db.metadata.reflect(self.db.engine)  #kick dataset into updating its cached schema;
+            self.db.metadata.reflect(self.db.engine)  #kick dataset into reconnecting and updating its cached schema;
                                                       #awkwardness reported as a bug at https://github.com/pudo/dataset/issues/88
             
             if unicode(table) in self.db.tables: #XXX the cast here is dodgy;
@@ -223,10 +223,19 @@ class ModelDataServer(WebSocketServerProtocol):
       def push():
           "this function essentially polls for new data"
           "using select() or events would be better"  
-          if self.time < len(model.log):
+          if self.time < len(list(model.log['activities'].distinct("time"))): #XXX this should extract the time range from model.log;
+              # but we happen to know that the model starts at 0 always and always increments and always *records* its increments
+              #  so this will work;
+              # ALSO we should NOT be using "len(list(", we should be asking SQL to do the count for us (.count())...
+              #  also, an issue: the db is not normalized, so the timesets might be inconsistent across the tables... 
+              # this is crying out for a thin wrapper which makes the database look like something indexable by time
               #TODO: if we are much behind where model is, do we want to batch all the updates at once?
               #  - i like it the way it is now for debugging as we get settled into the new stream, since the model and the data are running at different rates and will therefore get out of sync
-              J = model.log[self.time]
+              J = model.log['activities'].find_one(time=self.time)
+              # the format we were pushing special-cased time: (time, {activity: value, activity: value, ...})
+              # for now, backcompat it by selectively keeping columns..
+              activities = [act for act in model.log['activities'].columns if act not in ["runID", "time"]]
+              J = [J['time'], {k: J[k] for k in activities}]
               print "pushing", J, "to", self.peer #debug
               self.sendMessage(json.dumps(J))
               self.time+=1
@@ -249,10 +258,9 @@ if __name__ == '__main__':
       log.startLogging(sys.stdout)
       print "Starting server in", PROJECT_ROOT
    
-   model = eutopia.Eutopia([]) #the [] becomes model.log
-   #model = eutopia.create_demo_model()
+   model = eutopia.Eutopia()
    poke_model = task.LoopingCall(lambda: next(model))
-   #poke_model.start(4) #4 second intervals
+   poke_model.start(0.5) #4 second intervals (comment out to wait for the user to start the 'game' via the HTML5 UI via the WebSocket)
    
    data_endpoint = WebSocketServerFactory()
    data_endpoint.protocol = ModelDataServer
@@ -276,8 +284,9 @@ if __name__ == '__main__':
    # PROTOTYPE; you must run `scratch/sql/db.sh` simultaneously to have this work
    #   we could use "sqlite://" but that would just make a boring, empty database.
    # Note that this brings tables up at /tables/tablename NOT /tables/tablename/
-   DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
-   conn = dataset.connect(DATABASE_URL, reflectMetadata=False) 
+   #DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
+   #conn = dataset.connect(DATABASE_URL, reflectMetadata=False) 
+   conn = model.log
    table_data_resource = SqlDumperResource(conn) # a kludge just to get going; this Resource is parallel to data_resource and basically makes it pointless.
    root.putChild("tables", table_data_resource)
       
