@@ -2,11 +2,13 @@
  *   draws a multi-timeseries linegraph from data passed over a websocket
  */
 
+scope = {} //hacks
+scope.data = [] //makes a data array that is safely accessible from anywhere in this file; sidesteps any weird js scoping rules that might kick in if we tried to make data a (pseudo)global
 
+  
 $(function() {
   // TODO move scope to the window.Game namespace 
-  scope = {} //hacks
-  scope.data = [] //makes a data array that is safely accessible from anywhere in this file; sidesteps any weird js scoping rules that might kick in if we tried to make data a (pseudo)global
+  
   
   var parseDate = d3.time.format("%Y%m%d").parse;
     
@@ -51,6 +53,53 @@ $(function() {
     return chart;
   });
 
+  // branch:databased TEMPORARY KLUDGE
+  //  - redownload and redraw the whole dataset the whole time
+  function redraw_graph() {
+    console.log("redraw_graph");
+    d3.csv("/tables/activities", function(tbl) {
+      // nvd3 wants its data like [ { key: "seriesname", values: [{x: ..., y: ...}, ...], color: "#FF00FF" }, .... ]
+      // d3.csv gives its data like [ {"columnanme": value, ... } ... ]
+      //  and  because we're using "Version 1" table structure, the series names are embeded in some (but not all) of the row names
+      // so really we have
+      // [ { "runID": -1, "time": 0, "series1": value, "series2": value}, 
+      //   { "runID": -1, "time": 1, "series1": value, "series2": value}, .... ]
+      // we need to map d3.csv -> nvd3 (..it is really annoying that nvd3 doesn't support csv out of the box)
+
+      if(tbl.length > 0) {
+        
+        // option a: one pass with .push()es
+        // option b: assume d3 gives consistent rows, and first extract the columnanmes from the 0th row, then do multiple passes with .map()
+        serieses = Object.keys(tbl[0]).filter(function(e) { return !(e == "runID" || e == "time") })
+        function series(name) { r= tbl.map(function(row) { 
+
+ rr =  {x: +row.time, y: +row[name]};  //split out for debugging weirdness
+  //someting (nvd3??) is adding a 'series' value to rr. and somehow its managing t
+
+ console.log(rr);
+ return(rr);
+})
+
+console.log(name, r);
+return(r);
+
+   } /*NB: +value is javascript for 'cast to numeric'*/
+        // overwrite the previous dataset
+        scope.data = []
+        serieses.forEach(function(s) {
+          scope.data.push({key: s, values: series(s), color: getRandomColor()})
+        })
+
+        //redraw the graph
+        scope.dataclean = scope.data
+        svg.datum(scope.data).call(chart);
+        scope.chart = chart;
+        }
+      setTimeout(redraw_graph, 2000); //only do the next redraw after the current redraw completes
+      })
+  }
+  redraw_graph()
+  
 //Game.dataSocket.onmessage
   var notused = function(d) {
     //console.log("received data from (plain) websocket:", d)
