@@ -258,7 +258,7 @@ if __name__ == '__main__':
       log.startLogging(sys.stdout)
       print "Starting server in", PROJECT_ROOT
    
-   model = eutopia.Eutopia()
+   model = eutopia.Eutopia("sqlite:///eutopia.sqlite")
    poke_model = task.LoopingCall(lambda: next(model))
    poke_model.start(0.5) #4 second intervals (comment out to wait for the user to start the 'game' via the HTML5 UI via the WebSocket)
    
