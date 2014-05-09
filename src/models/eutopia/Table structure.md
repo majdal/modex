@@ -41,7 +41,9 @@ The farmers have "equipment" and "preferences" as well, but I'm not going to wri
 
 **activity** contains the log of how many farms
 TODO: this is *not* model state; it is already an aggregation of lower level data, with the aggregation being done.
+```
 runID | time | id
+```
 
 **activities** are the set of farming operations that a farmer can choose to engage in. Each has some inputs and utpouts ((see `activity.py` for more))
 id | name
@@ -50,11 +52,14 @@ id | name
 
 
 **equipment** contains the farm equipment available for use by the farmers 
+```
 id | name
 1  | tractor
 2  | plow
+```
 
 **products** contains the possible outputs of each 'activity'
+```
 id | name          | description
 1  | duramSeed     | duram wheat seed
 2  | nitrogen      | 
@@ -65,15 +70,18 @@ id | name          | description
 7  | duram         | duram wheat, grown conventionally
 8  | duramOrganic  | duram wheat, grown organically (and labelled as such)
 9  | dolphin       | dolphins in the ocean
+```
 
-**activities_equipment**
+**activities_equipment** lists what farm equipment each activity needs.
+```
 activity_id | equipment_id
 1  | 1
 2  | 1 
 2  | 2
-
+```
 
 **activities_products** contains the units of products made by doing one timestep of each activity. Negative values are _costs_.
+```
 activity_id | product_id | amount; primary key (activity_id, product_id)
 1           |     1      |  -5 
 1           |     2      |  -10
@@ -93,6 +101,7 @@ activity_id | product_id | amount; primary key (activity_id, product_id)
 2           |     7      |  0 
 2           |     8      |  40
 2           |     9      |  -17
+```
 (nb: the 0 valued rows should deleted in this table)
 
 
