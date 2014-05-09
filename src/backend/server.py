@@ -260,7 +260,7 @@ if __name__ == '__main__':
    
    model = eutopia.Eutopia("sqlite:///eutopia.sqlite")
    poke_model = task.LoopingCall(lambda: next(model))
-   poke_model.start(5) #4 second intervals (comment out to wait for the user to start the 'game' via the HTML5 UI via the WebSocket)
+   poke_model.start(.5) # intervals measured in seconds (comment out to wait for the user to start the 'game' via the HTML5 UI via the WebSocket)
    
    data_endpoint = WebSocketServerFactory()
    data_endpoint.protocol = ModelDataServer

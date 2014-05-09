@@ -104,13 +104,18 @@ $(function() {
         //and update the time_slider
         time_slider = $("#time_slider")[0]
         time_slider.min = timemin
-        time_slider.max = timemax
+        // only update the 'max' value when we get too close to it, so that the slider actually moves by itself
+        // note: timemax is also 'timecurrent'
+        // XXX initialization is a problem; workaround it with "Infinity"
+        if(time_slider.max == "Infinity" || +time_slider.max/2 < timemax) {
+          time_slider.max = 3*timemax
+        }
         time_slider.value = timemax
         // XXX copied from index.html
         var time_output = $("#time_output")[0];
         time_output.value = Math.floor(time_slider.value);
         }
-      setTimeout(redraw_graph, 2000); //only do the next redraw after the current redraw completes
+      setTimeout(redraw_graph, 200); //only do the next redraw after the current redraw completes
       })
   }
   redraw_graph()
