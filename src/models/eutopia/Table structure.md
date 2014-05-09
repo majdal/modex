@@ -39,16 +39,61 @@ runID | time | id | bankAccount |
 ```
 The farmers have "equipment" and "preferences" as well, but I'm not going to write those in just yet; I think they require yet more subsidiary tables which will just be a distraction at this point.
 
+**activity** contains the log of how many farms
+TODO: this is *not* model state; it is already an aggregation of lower level data, with the aggregation being done.
+runID | time | id
 
-**Activities**
-```
-runID | time | activity | value
-```
+**activities** are the set of farming operations that a farmer can choose to engage in. Each has some inputs and utpouts ((see `activity.py` for more))
+id | name
+1  | durumWheatConventional
+2  | durumWheatGreen
 
-**Products**: contains things like "duramSeed", "rogren", "labour", ... (see `activity.py` for more)
-```
-runID | time | product | value
-```
+
+**equipment** contains the farm equipment available for use by the farmers 
+id | name
+1  | tractor
+2  | plow
+
+**products** contains the possible outputs of each 'activity'
+id | name          | description
+1  | duramSeed     | duram wheat seed
+2  | nitrogen      | 
+3  | carbon        |
+4  | soil          |
+5  | labour        |
+6  | certification |
+7  | duram         | duram wheat, grown conventionally
+8  | duramOrganic  | duram wheat, grown organically (and labelled as such)
+9  | dolphin       | dolphins in the ocean
+
+**activities_equipment**
+activity_id | equipment_id
+1  | 1
+2  | 1 
+2  | 2
+
+
+**activities_products** contains the units of products made by doing one timestep of each activity. Negative values are _costs_.
+activity_id | product_id | amount; primary key (activity_id, product_id)
+1           |     1      |  -5 
+1           |     2      |  -10
+1           |     3      |  20
+1           |     4      |  -5 
+1           |     5      |  -2000 
+1           |     6      |  0
+1           |     7      |  40 
+1           |     8      |  0
+1           |     9      |  -87
+2           |     1      |  -4
+2           |     2      |  0
+2           |     3      |  5
+2           |     4      |  -2 
+2           |     5      |  -2500 
+2           |     6      |  -500
+2           |     7      |  0 
+2           |     8      |  40
+2           |     9      |  -17
+(nb: the 0 valued rows should deleted in this table)
 
 
 (missing data is a likely occurence here; these are only samples from a larger space that we will never see all of)
@@ -69,5 +114,15 @@ and then making the other tables start with 'logid' (instead of 'runid | time') 
 
 (runID, time) is always one of the primary keys!
 
+
+Implementation Plan
+--------------------
+
+first draft: just has the 'activities' table record the activities, same as the non-databased version
+
+
+Questions
 ---------------
-first draft: just record the activities, same as the non-databased version
+
+Something not directly related; some of my instincts tell me that scientific analysis prefers to work with totally denormalized data.
+I could write a REST API to automatically denormalize the entire database (perhaps, first query, then denormalize)... but the number of downsides to this is huge. We need to see more use cases to clear this up.
