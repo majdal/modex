@@ -144,22 +144,42 @@ A data bind and a data flow are related problems, and several of these libraries
 
 ### Databases
 
-* Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
-* [Dee](http://www.quicksort.co.uk/DeeDoc.html) which overloads python operators to create a superset of SQL directly in Python
-* postgres with the postgis extension
-* [Dataset](https://dataset.readthedocs.org/) which wraps SQLAlchemy into something ressembling plain dictionaries; somewhat unfinished; working with them would be profitable.
-* [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
-* [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is.
 
-### Interfaces
+[An Overview of Paradigms](http://www.slideshare.net/slidarko/an-overview-of-data-management-paradigms-relational-document-and-graph-3880059) by the author of Gremlin.
+
+* Tables: most of these are SQL, but some are not
+    * Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
+    * [Dee](http://www.quicksort.co.uk/DeeDoc.html) which overloads python operators to create a superset of SQL directly in Python
+    * [Dataset](https://dataset.readthedocs.org/) which wraps SQLAlchemy into something ressembling plain dictionaries; somewhat unfinished; working with them would be profitable.
+    * [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is (**where does this fit in??**)
+* Maps (_vector maps look a lot like tables, except with a special set of 'geometry' types; raster maps are a different beast_)
+    * [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver/)
+    * [PostGIS](http://postgis.net/) for postgres
+    * Related: [dat](https://github.com/maxogden/dat), a version control (but not query!) system for tabular/object data.
+* Graph / Network Databses
+    * [pggraph](http://pgfoundry.org/projects/pggraph) for postgres
+    * [Neo4j](https://en.wikipedia.org/wiki/Neo4j) ("the most popular graph database")
+    * [Gremlin](https://github.com/tinkerpop/gremlin/wiki); the [author](http://www.slideshare.net/slidarko/) has many talks online:
+        * A [Gremlin Overview](http://www.slideshare.net/slidarko/the-pathological-gremlin)
+        * [Memoirs of a GraphDB Addict](http://www.slideshare.net/slidarko/memoirs-of-a-graph-addict-despair-to-redemption#)
+        * Another [Gremlin Talk](http://www.slideshare.net/slidarko/gremlin-a-graphbased-programming-language-3876581)
+        * An [arxiv preprint](http://arxiv.org/abs/1004.1001)
+        * [Yet Another Gremlin talk](http://www.slideshare.net/slidarko/the-pathology-of-graph-databases)
+* OLAP
+    * [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
+* NoSQL
+    * [MongoDB](http://www.mongodb.org/)
+* Objects (most of these look like blazingly fast dictionaries, since all object oriented programming can be reduced to dictionaries of dictionaries)
+    * [Redis](http://redis.io/)
+
+
+### Language Bridges
 
 * [RPy](http://rpy.sourceforge.net/rpy2.html) and its child [rmagic](http://ipython.org/ipython-doc/dev/config/extensions/rmagic.html) to hook out
 * Jython to wrap java code??
 
-
-
-
 ## Patterns
+
 * REST
 * Pub/Sub
 * Events
@@ -174,6 +194,14 @@ A data bind and a data flow are related problems, and several of these libraries
 * [ABCE](https://github.com/DavoudTaghawiNejad/abce) _Agent Based Complete Economy_ (python); [paper](http://jasss.soc.surrey.ac.uk/16/3/1.html)
 * http://insightmaker.com/
 * [Liam2](http://liam2.plan.be/pages/about.html)
+
+
+## Statistics
+
+*   [Theano](http://deeplearning.net/software/theano/) (CPU and GPU compiler)
+*   [PyLearn2](http://deeplearning.net/software/pylearn2/) (Deep Learning research platform)
+*   [Hyperopt](http://hyperopt.github.io/hyperopt/) (Distributed Bayesian Optimization)
+
 
 ## Packaging
 
