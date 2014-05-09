@@ -64,6 +64,15 @@ Historically, coarse-graining has been the sugardaddy of western science. Scienc
 Much of our use-case is to explore models which have large numbers of inputs and large number of outputs. The exploration is performed by something called a "parameter sweep", which samples some (but almost never all! definitely not all if any parameters are continuous) points from the input space and runs the models at those points.
 
 * [James Bergstra](http://www.eng.uwaterloo.ca/~jbergstr/publications.html) of the [CTN](http://compneuro.uwaterloo.ca/) has done much work on this.
+    * DeepLearning.net<http://DeepLearning.net> Tutorial<http://deeplearning.net/tutorial/> (Yoshua Bengio)
+    * UFLDL<http://ufldl.stanford.edu/wiki/index.php/UFLDL_Tutorial> (Andrew Ng)
+    * Representative Papers:
+        *   J. Bergstra, D. Yamins and D. D. Cox (2013) "Making a Science of Model Search: Hyperparameter Optimization in Hundreds of Dimensions for Vision Architectures<http://jmlr.csail.mit.edu/proceedings/papers/v28/bergstra13.pdf>"
+        *   J. Bergstra and Y. Bengio (2012) "Random Search for Hyper-Parameter Optimization<http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf>"
+        *   J. Bergstra, N. Pinto and D. D. Cox (2012) "Machine Learning for Predictive Auto-Tuning with Boosted Regression Trees<http://www.eng.uwaterloo.ca/~jbergstr/files/pub/12_inpar.pdf>"
+        *   J. Bergstra, Y. Bengio and J. Louradour (2011) "Suitability of V1 Energy Models for Object Classification<http://www.mitpressjournals.org/doi/pdf/10.1162/NECO_a_00084>"
+        *   A. Courville, J. Bergstra and Y. Bengio (2011) "Unsupervised Models of Images by Spike and Slab RBMs<http://www.icml-2011.org/papers/591_icmlpaper.pdf>"
+        *   J. Bergstra, R. Bardenet, Y. Bengio and B. Kégl (2011) "Algorithms for Hyper-parameter Optimization<http://www.eng.uwaterloo.ca/~jbergstr/files/pub/11_nips_hyperopt.pdf>" 
 * In [NetLogo](http://ccl.northwestern.edu/netlogo/docs/behaviorspace.htm)
 * In [Repast](http://repast.sourceforge.net/docs/RepastParameterSweepsGettingStarted.pdf)
 
