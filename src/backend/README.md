@@ -92,8 +92,9 @@ zip myshapefile.zip *
 ## Gotchas
 
 
-The symlink to `src/models/`  here is a workaround so that our (python) models are importable into our (python) server.
-Long term, we'll define some sort of model-running API and do model runs in subprocesses, which very well might be another language, such as Java (e.g. Repast or NetLogo).
+The symlink to `eutopia`  here is a workaround so that our (python) model is importable into our (python) server.
+Long term, we'll define some sort of model-running API and define a model-running host program and 
+do model runs in subprocesses, which very well might be another language, such as Java (e.g. Repast or NetLogo).
 
 You must run the server under python2. Twisted is [the largest](https://wiki.python.org/moin/Python2orPython3) library yet to be ported to python3.
 
