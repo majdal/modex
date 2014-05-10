@@ -5,7 +5,7 @@
 import IPython #DEBUG
 import traceback #DEBUG
 
-import sys, warnings
+import sys, os, warnings
 from os.path import dirname, abspath, join as pathjoin
 
 import json
@@ -31,6 +31,8 @@ import sqlalchemy.exc # SQL errors into HTTP errors.
 
 #'working directory': not the system working directory, but the directory this program is in (so that we can be run from anywhere and find the correct assets/ folder et al.)
 PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__)))) #currently, the project root is two levels up from the directory the server is
+SQLITE_DB = os.path.join(PROJECT_ROOT, "eutopia.sqlite")
+
 
 #########################
 ## Models
@@ -252,13 +254,26 @@ class ModelDataServer(WebSocketServerProtocol):
 
 if __name__ == '__main__':
    #TODO: reindent
-   debug = (len(sys.argv) > 1 and sys.argv[1] == 'debug')
+   import argparse
+   argv = argparse.ArgumentParser(description="Model Explorer Backend Server")
+   argv.add_argument("--clean", help="Erase the model database before starting", action='store_true')
+   argv.add_argument("--debug", help="Turn on verbose output", action='store_true')
+   argv = argv.parse_args()   
    
-   if debug:
-      log.startLogging(sys.stdout)
-      print "Starting server in", PROJECT_ROOT
+   if argv.debug:
+       log.startLogging(sys.stdout)
+       print "Starting server in", PROJECT_ROOT
    
-   model = eutopia.Eutopia("sqlite:///eutopia.sqlite")
+   if argv.clean:
+       if os.path.exists(SQLITE_DB):
+           os.unlink(SQLITE_DB)
+       if argv.debug:
+           print("Removing old %s" % (SQLITE_DB,))
+
+   if argv.debug:
+       print("Saving eutopia database at %s" % (SQLITE_DB,))
+   model = eutopia.Eutopia("sqlite:///%s" % (SQLITE_DB,))
+   
    poke_model = task.LoopingCall(lambda: next(model))
    poke_model.start(.5) # intervals measured in seconds (comment out to wait for the user to start the 'game' via the HTML5 UI via the WebSocket)
    
@@ -271,7 +286,7 @@ if __name__ == '__main__':
       
    webroot = pathjoin(PROJECT_ROOT,"src","frontend")
    assets = pathjoin(PROJECT_ROOT,"assets")
-   if debug:
+   if argv.debug:
      print "putting", webroot,"at root"
      print "putting", assets,"at assets"
    
@@ -281,13 +296,7 @@ if __name__ == '__main__':
    root = File(webroot)
    assets = File(assets)
    
-   # PROTOTYPE; you must run `scratch/sql/db.sh` simultaneously to have this work
-   #   we could use "sqlite://" but that would just make a boring, empty database.
-   # Note that this brings tables up at /tables/tablename NOT /tables/tablename/
-   #DATABASE_URL = "mysql://root@127.0.0.1:3306/cmombour_sluceiidb"
-   #conn = dataset.connect(DATABASE_URL, reflectMetadata=False) 
-   conn = model.log
-   table_data_resource = SqlDumperResource(conn) # a kludge just to get going; this Resource is parallel to data_resource and basically makes it pointless.
+   table_data_resource = SqlDumperResource(model.log) # a kludge just to get going; this Resource is parallel to data_resource and basically makes it pointless.
    root.putChild("tables", table_data_resource)
       
    data_resource = WebSocketResource(data_endpoint)
@@ -295,7 +304,7 @@ if __name__ == '__main__':
    
    root.putChild("assets", assets)  #TODO: do we prefer to have each entry in assets/ sit at the root (ie http://simulation.tld/data/ instead of http://simulation.tld/assets/data/)   
    root.putChild("ws", data_resource)    #this puts the websocket at /ws. You cannot put both the site and the websocket at the same endpoint; whichever comes last wins, in Twisted
-   if debug:
+   if argv.debug:
      root.putChild("scratch", File(pathjoin(PROJECT_ROOT,"scratch")))
    root.putChild("ctl", ctl_resource) #this whole file is so not pythonic. Where's the D.R.Y. at, yo? --kousu
    
