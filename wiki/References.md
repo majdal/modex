@@ -77,3 +77,4 @@ http://www.wired.com/business/2014/01/quants-dont-know-everything/
 # The Competition
 
 * [Bombe](http://www.getbombe.com/)
+* [Aniconist](https://www.aniconist.com/wiki/index.php/AniconistWiki:About)
