@@ -29,6 +29,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
 * Spreadsheet widgets (more [@](http://plugins.jquery.com/tag/spreadsheet/))
     * [Handsontable](http://handsontable.com/)
+* [Vispy](http://vispy.org/) (_not a frontend possibility, but targetted at real-time big-data and interactivity, so good to keep in mind_)
 
 ### Encapsulated Visualization Libraries
 
