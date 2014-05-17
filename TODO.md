@@ -3,6 +3,26 @@ TODO
 
 We have a TODO list on a 'real' task tracker at Asana. These should be merged there eventually.
 
+Security
+---------
+
+Sandboxing
+
+
+* How not to do it: https://lwn.net/Articles/574215/
+* relevant debate: https://github.com/ctn-waterloo/nengo_gui/issues/25#issuecomment-43095242
+
+http://www.netlab.tkk.fi/opetus/s38153/k2003/Lectures/g41scanners_hackers.ppt
+
+Streaming
+---------
+
+see a proposal for how Nengo is doing it: https://github.com/ctn-waterloo/nengo_gui/pull/1/files#diff-5bc02cefb3ea9e27f1a6776eabd1935dR144
+
+CouchDB's [replication filtering](http://couchdb.readthedocs.org/en/latest/replication/protocol.html#filter-replication) ([example](http://guide.couchdb.org/draft/notifications.html#filters)) in `feed=continuous` mode)
+
+http://www.breezejs.com/ which is SQL-in-javascript plus support for databinds, which *might* be what we're looking for. Pro: comes with backends. Con: backends are all microsoftey, except for the MongoDB one.
+
 
 Orthogonal Tasks
 -----------------
