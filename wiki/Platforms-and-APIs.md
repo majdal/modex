@@ -65,12 +65,6 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [ModestMaps](http://modestmaps.com/examples/)
 (_these all seem like they overlap a bit; what's the deal?_)
 
-**Map Data** _is complicated_
-* TopoJSON
-* GeoJSON
-* [MapFish](http://trac.mapfish.org/trac/mapfish/wiki/MapFishProtocol), for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
-* [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
-
 
 ## Networking
 
@@ -142,8 +136,15 @@ It might turn out that there's no sensible way to write query+binding without wr
 
 (this exists in some form in:
 * CouchDB. It is called [replication filtering](http://couchdb.readthedocs.org/en/latest/replication/protocol.html#filter-replication) ([example](http://guide.couchdb.org/draft/notifications.html#filters)) in `feed=continuous` mode)
-* Breeze. It is called [projection queries](http://www.breezejs.com/documentation/projection-queries)
-(an [example](http://msdn.microsoft.com/en-us/magazine/jj133816.aspx) using MsSQL Server + WCF (C# backend) +{Data,Knockout}JS (HTML5 frontend); it even binds two ways)
+* Breeze. The components are [projection queries](http://www.breezejs.com/documentation/projection-queries) + [change tracking](http://www.breezejs.com/documentation/change-tracking)
+* Don't forget that SQL calls this a [View](https://en.wikipedia.org/wiki/View_%28database%29); there's no way to define a View dynamically, though.
+* A pre-Breeze [example](http://msdn.microsoft.com/en-us/magazine/jj133816.aspx) using MsSQL Server + WCF (C# backend) +{Data,Knockout}JS (HTML5 frontend); it even binds two ways)
+
+Related threads:
+* [dat#112](https://github.com/maxogden/dat/issues/112)
+* [nengo-gui#1](https://github.com/ctn-waterloo/nengo_gui/pull/1)
+
+
 # Backend
 
 
@@ -179,11 +180,19 @@ It might turn out that there's no sensible way to write query+binding without wr
     * Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
     * [Dee](http://www.quicksort.co.uk/DeeDoc.html) which overloads python operators to create a superset of SQL directly in Python
     * [Dataset](https://dataset.readthedocs.org/) which wraps SQLAlchemy into something ressembling plain dictionaries; somewhat unfinished; working with them would be profitable.
-    * [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is (**where does this fit in??**)
-* Maps (_vector maps look a lot like tables, except with a special set of 'geometry' types; raster maps are a different beast_)
+    * Related: [dat](https://github.com/maxogden/dat), a version control (but not query!) system for tabular/object data.
+    * [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is (**This isn't SQL.** where does this fit in??
+* Maps (_vector maps look a lot like tables, except with a special set of 'geometry' types; raster maps are a different beast_). generally 
+**Map Data** _is complicated_
     * [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver/)
     * [PostGIS](http://postgis.net/) for postgres
-    * Related: [dat](https://github.com/maxogden/dat), a version control (but not query!) system for tabular/object data.
+    * [GeoREST](https://code.google.com/p/georest/)
+    * [MapFish](http://trac.mapfish.org/trac/mapfish/wiki/MapFishProtocol), for
+    * Formats:
+        * TopoJSON
+        * GeoJSON
+        * (obligatory overengineered XML format: FIXME) [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
+    * [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
 * Graph / Network Databses
     * [pggraph](http://pgfoundry.org/projects/pggraph) for postgres
     * [Neo4j](https://en.wikipedia.org/wiki/Neo4j) ("the most popular graph database")
