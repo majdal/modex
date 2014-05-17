@@ -31,3 +31,10 @@ Network-specific
 
 Timeseries-specific
 * ?
+
+
+Reference
+-------------
+
+* [TETRAD](http://www.phil.cmu.edu/projects/tetrad/)
+* [CauseEffect](http://www.causality.inf.ethz.ch/cause-effect.php?page=help) of the Kaggle Contest of the [same name](http://www.kaggle.com/c/cause-effect-pairs)
