@@ -192,6 +192,7 @@ Related threads:
         * TopoJSON
         * GeoJSON
         * (obligatory overengineered XML format: FIXME) [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
+        * Formats [supported by OpenStreetMap](http://wiki.openstreetmap.org/wiki/OSM_file_formats) as available from [planet.osm.org](http://wiki.openstreetmap.org/wiki/Planet.osm#Downloading) -- notable that these formats are homegrown, because OSM started after proprietary geodata had a defacto standard (Arc's .shp) but before Open Geodata had one.
     * [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
 * Graph / Network Databses
     * [pggraph](http://pgfoundry.org/projects/pggraph) for postgres
