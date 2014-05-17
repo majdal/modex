@@ -31,3 +31,8 @@ and some of our **inspiration**
 * [CoMSES Collaboratory](http://www.openabm.org/) out of [Arizona State University](https://csdc.asu.edu/)
 * [The People who lobbied for data.gc.ca](http://datadotgc.ca/)
 * [CODE](https://canadianopendataexperience.com/)
+
+* [Sunlight Foundation](http://sunlightfoundation.com/)
+* [Grano](https://github.com/granoproject/grano/)
+* [Dexter](https://github.com/Code4SA/mma-dexter)
+* MIT Civic's [MediaCloud](http://www.mediacloud.org/dashboard/view/1?q1=94946)

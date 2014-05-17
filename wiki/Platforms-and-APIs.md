@@ -29,6 +29,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
 * Spreadsheet widgets (more [@](http://plugins.jquery.com/tag/spreadsheet/))
     * [Handsontable](http://handsontable.com/)
+* [Vispy](http://vispy.org/) (_not a frontend possibility, but targetted at real-time big-data and interactivity, so good to keep in mind_)
 
 ### Encapsulated Visualization Libraries
 
@@ -63,12 +64,6 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * http://polymaps.org/
 * [ModestMaps](http://modestmaps.com/examples/)
 (_these all seem like they overlap a bit; what's the deal?_)
-
-**Map Data** _is complicated_
-* TopoJSON
-* GeoJSON
-* [MapFish](http://trac.mapfish.org/trac/mapfish/wiki/MapFishProtocol), for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
-* [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
 
 
 ## Networking
@@ -113,7 +108,41 @@ A data bind and a data flow are related problems, and several of these libraries
 * [BackboneJS](http://backbonejs.org/)
 * [Model.JS](https://github.com/curran/model) (new, but written by someone with extensive d3 experience; he even wrote [an intro to AngularJS](http://curran.github.io/screencasts/introToAngular/exampleViewer/#/)
 * [BaconJS](http://baconforme.com/) (clear tutorial [here](http://blog.flowdock.com/2013/01/22/functional-reactive-programming-with-bacon-js/))
+* [BreezeJS](http://www.breezejs.com/home), a _LINQ-inspired javascript client_. Perhaps overengineered. Abilities depend on its backends (not unlike what Dataset is to SQLAlchemy is to {MySQL, Postgres, Sqlite, ...}) It is these things:
+    * an ORM to SQL
+        * recently, [an ORM to MongoDB](http://www.breezejs.com/documentation/mongodb)
+    * a query language
+    * an intelligent cache
+    * helper functions for supporting {Knockout, Angular, ...}'s databinding
 
+We have two related but distinct tasks: 1) query 2) binding. The ideal would be finding (or making) an API that can bind queries:
+
+```
+// dream query-binding example
+init() {
+
+speedsheetwidget = handsontable(...);
+barplot = nvd3.barplot(...);
+barplot.title("Farmer Income");
+
+feed = ServerDBProxy.tables.agents.where(time=t, agenttype="farmer").select(backaccount);
+bind(spreedsheetwidget, feed);
+bind(barplot, feed);
+}
+```
+with zero application-layer code handling the updates
+(this will definitely not work with what we have now, but it is inspired by SQLAlchemy and LINQ)
+It might turn out that there's no sensible way to write query+binding without writing querybinding. At least, not with the current state of javascript. Or something.
+
+(this exists in some form in:
+* CouchDB. It is called [replication filtering](http://couchdb.readthedocs.org/en/latest/replication/protocol.html#filter-replication) ([example](http://guide.couchdb.org/draft/notifications.html#filters)) in `feed=continuous` mode)
+* Breeze. The components are [projection queries](http://www.breezejs.com/documentation/projection-queries) + [change tracking](http://www.breezejs.com/documentation/change-tracking)
+* Don't forget that SQL calls this a [View](https://en.wikipedia.org/wiki/View_%28database%29); there's no way to define a View dynamically, though.
+* A pre-Breeze [example](http://msdn.microsoft.com/en-us/magazine/jj133816.aspx) using MsSQL Server + WCF (C# backend) +{Data,Knockout}JS (HTML5 frontend); it even binds two ways)
+
+Related threads:
+* [dat#112](https://github.com/maxogden/dat/issues/112)
+* [nengo-gui#1](https://github.com/ctn-waterloo/nengo_gui/pull/1)
 
 
 # Backend
@@ -144,21 +173,61 @@ A data bind and a data flow are related problems, and several of these libraries
 
 ### Databases
 
-* Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
-* [Dee](http://www.quicksort.co.uk/DeeDoc.html) which overloads python operators to create a superset of SQL directly in Python
-* postgres with the postgis extension
-* [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is.
-* [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
 
-### Interfaces
+[An Overview of Paradigms](http://www.slideshare.net/slidarko/an-overview-of-data-management-paradigms-relational-document-and-graph-3880059) by the author of Gremlin.
+
+* Tables: most of these are SQL, but some are not
+    * Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
+    * [Dee](http://www.quicksort.co.uk/DeeDoc.html) which overloads python operators to create a superset of SQL directly in Python
+    * [Dataset](https://dataset.readthedocs.org/) which wraps SQLAlchemy into something ressembling plain dictionaries; somewhat unfinished; working with them would be profitable.
+    * Related: [dat](https://github.com/maxogden/dat), a version control (but not query!) system for tabular/object data.
+    * [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is (**This isn't SQL.** where does this fit in??
+* Maps (_vector maps look a lot like tables, except with a special set of 'geometry' types; raster maps are a different beast_). generally 
+**Map Data** _is complicated_
+    * [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver/)
+    * [PostGIS](http://postgis.net/) for postgres
+    * [GeoREST](https://code.google.com/p/georest/)
+    * [MapFish](http://trac.mapfish.org/trac/mapfish/wiki/MapFishProtocol), for
+    * Formats:
+        * TopoJSON
+        * GeoJSON
+        * (obligatory overengineered XML format: FIXME) [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
+        * Formats [supported by OpenStreetMap](http://wiki.openstreetmap.org/wiki/OSM_file_formats) as available from [planet.osm.org](http://wiki.openstreetmap.org/wiki/Planet.osm#Downloading) -- notable that these formats are homegrown, because OSM started after proprietary geodata had a defacto standard (Arc's .shp) but before Open Geodata had one.
+            * There's even [a format for streaming deltas](http://wiki.openstreetmap.org/wiki/OsmChange) 
+    * [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
+* Graph / Network Databses
+    * [pggraph](http://pgfoundry.org/projects/pggraph) for postgres
+    * [Neo4j](https://en.wikipedia.org/wiki/Neo4j) ("the most popular graph database")
+    * [Gremlin](https://github.com/tinkerpop/gremlin/wiki); the [author](http://www.slideshare.net/slidarko/) has many talks online:
+        * A [Gremlin Overview](http://www.slideshare.net/slidarko/the-pathological-gremlin)
+        * [Memoirs of a GraphDB Addict](http://www.slideshare.net/slidarko/memoirs-of-a-graph-addict-despair-to-redemption#)
+        * Another [Gremlin Talk](http://www.slideshare.net/slidarko/gremlin-a-graphbased-programming-language-3876581)
+        * An [arxiv preprint](http://arxiv.org/abs/1004.1001)
+        * [Yet Another Gremlin talk](http://www.slideshare.net/slidarko/the-pathology-of-graph-databases)
+* OLAP
+    * [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
+* NoSQL (aka Document Databases)
+    * [MongoDB](http://www.mongodb.org/) - _**NB**: commercial use is a 5000$ license_
+    * [CouchDB](http://couchdb.readthedocs.org/)
+* Objects (most of these look like blazingly fast dictionaries, since all object oriented programming can be reduced to dictionaries of dictionaries) -- the Document Databases often end up looking identical to object databases
+    * [Redis](http://redis.io/)
+
+
+
+Query languages
+
+* [OData](http://www.odata.org/) - a protocol for exposing (SQL?) RESTfully; seems overengineered.
+    * [Query Langauge Spec](http://docs.oasis-open.org/odata/odata/v4.0/os/part2-url-conventions/odata-v4.0-os-part2-url-conventions.html#_Toc372793791) 
+* [SparQL](http://www.w3.org/TR/sparql11-query/) - for querying document databases
+    * [Example 2](http://www.ibm.com/developerworks/xml/library/j-sparql/) 
+
+### Language Bridges
 
 * [RPy](http://rpy.sourceforge.net/rpy2.html) and its child [rmagic](http://ipython.org/ipython-doc/dev/config/extensions/rmagic.html) to hook out
 * Jython to wrap java code??
 
-
-
-
 ## Patterns
+
 * REST
 * Pub/Sub
 * Events
@@ -173,6 +242,14 @@ A data bind and a data flow are related problems, and several of these libraries
 * [ABCE](https://github.com/DavoudTaghawiNejad/abce) _Agent Based Complete Economy_ (python); [paper](http://jasss.soc.surrey.ac.uk/16/3/1.html)
 * http://insightmaker.com/
 * [Liam2](http://liam2.plan.be/pages/about.html)
+
+
+## Statistics
+
+*   [Theano](http://deeplearning.net/software/theano/) (CPU and GPU compiler)
+*   [PyLearn2](http://deeplearning.net/software/pylearn2/) (Deep Learning research platform)
+*   [Hyperopt](http://hyperopt.github.io/hyperopt/) (Distributed Bayesian Optimization)
+
 
 ## Packaging
 

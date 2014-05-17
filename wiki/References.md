@@ -76,4 +76,11 @@ http://www.wired.com/business/2014/01/quants-dont-know-everything/
 
 # The Competition
 
+These are sites which combine at least some of data archiving, visualization, and/or analysis:
+
 * [Bombe](http://www.getbombe.com/)
+* [Aniconist](https://www.aniconist.com/wiki/index.php/AniconistWiki:About)
+* OCUL's [ODESI](http://odesi.ca/) (behind a paywall)
+* [Canadian Government Open Data](http://data.gc.ca/) (_collects data collections from many different government agencies which may or may not have already been open_)
+* [US Government Open Data](http://data.gov)
+* [Scholar's Geoportal](http://geo1.scholarsportal.info/) (behind a paywall)
