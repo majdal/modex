@@ -114,9 +114,36 @@ A data bind and a data flow are related problems, and several of these libraries
 * [BackboneJS](http://backbonejs.org/)
 * [Model.JS](https://github.com/curran/model) (new, but written by someone with extensive d3 experience; he even wrote [an intro to AngularJS](http://curran.github.io/screencasts/introToAngular/exampleViewer/#/)
 * [BaconJS](http://baconforme.com/) (clear tutorial [here](http://blog.flowdock.com/2013/01/22/functional-reactive-programming-with-bacon-js/))
+* [BreezeJS](http://www.breezejs.com/home), a _LINQ-inspired javascript client_. Perhaps overengineered. Abilities depend on its backends (not unlike what Dataset is to SQLAlchemy is to {MySQL, Postgres, Sqlite, ...}) It is these things:
+    * an ORM to SQL
+        * recently, [an ORM to MongoDB](http://www.breezejs.com/documentation/mongodb)
+    * a query language
+    * an intelligent cache
+    * helper functions for supporting {Knockout, Angular, ...}'s databinding
 
+We have two related but distinct tasks: 1) query 2) binding. The ideal would be finding (or making) an API that can bind queries:
 
+```
+// dream query-binding example
+init() {
 
+speedsheetwidget = handsontable(...);
+barplot = nvd3.barplot(...);
+barplot.title("Farmer Income");
+
+feed = ServerDBProxy.tables.agents.where(time=t, agenttype="farmer").select(backaccount);
+bind(spreedsheetwidget, feed);
+bind(barplot, feed);
+}
+```
+with zero application-layer code handling the updates
+(this will definitely not work with what we have now, but it is inspired by SQLAlchemy and LINQ)
+It might turn out that there's no sensible way to write query+binding without writing querybinding. At least, not with the current state of javascript. Or something.
+
+(this exists in some form in:
+* CouchDB. It is called [replication filtering](http://couchdb.readthedocs.org/en/latest/replication/protocol.html#filter-replication) ([example](http://guide.couchdb.org/draft/notifications.html#filters)) in `feed=continuous` mode)
+* Breeze. It is called [projection queries](http://www.breezejs.com/documentation/projection-queries)
+(an [example](http://msdn.microsoft.com/en-us/magazine/jj133816.aspx) using MsSQL Server + WCF (C# backend) +{Data,Knockout}JS (HTML5 frontend); it even binds two ways)
 # Backend
 
 
@@ -168,11 +195,20 @@ A data bind and a data flow are related problems, and several of these libraries
         * [Yet Another Gremlin talk](http://www.slideshare.net/slidarko/the-pathology-of-graph-databases)
 * OLAP
     * [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
-* NoSQL
-    * [MongoDB](http://www.mongodb.org/)
-* Objects (most of these look like blazingly fast dictionaries, since all object oriented programming can be reduced to dictionaries of dictionaries)
+* NoSQL (aka Document Databases)
+    * [MongoDB](http://www.mongodb.org/) - _**NB**: commercial use is a 5000$ license_
+    * [CouchDB](http://couchdb.readthedocs.org/)
+* Objects (most of these look like blazingly fast dictionaries, since all object oriented programming can be reduced to dictionaries of dictionaries) -- the Document Databases often end up looking identical to object databases
     * [Redis](http://redis.io/)
 
+
+
+Query languages
+
+* [OData](http://www.odata.org/) - a protocol for exposing (SQL?) RESTfully; seems overengineered.
+    * [Query Langauge Spec](http://docs.oasis-open.org/odata/odata/v4.0/os/part2-url-conventions/odata-v4.0-os-part2-url-conventions.html#_Toc372793791) 
+* [SparQL](http://www.w3.org/TR/sparql11-query/) - for querying document databases
+    * [Example 2](http://www.ibm.com/developerworks/xml/library/j-sparql/) 
 
 ### Language Bridges
 
