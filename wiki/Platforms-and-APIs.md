@@ -83,6 +83,11 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [EventSource](http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket)
 * jsonp
 
+## Serialization
+
+* json
+* msgpack (json in
+* http://nytimes.github.io/tamper/ - _achieves superior compression via categorical data_
 
 
 ## Javascript Data View/Flow/Binding Libraries  (an obscene number of them)
