@@ -88,7 +88,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * json
 * msgpack (json in
 * http://nytimes.github.io/tamper/ - _achieves superior compression via categorical data_
-
+* [protobufs](https://developers.google.com/protocol-buffers/)
 
 ## Javascript Data View/Flow/Binding Libraries  (an obscene number of them)
 
