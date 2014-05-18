@@ -24,7 +24,6 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 
 * d3js
 * Square's [cubism.js](http://square.github.io/cubism/) for visualizing live time series data
-* Square's [cube](http://square.github.io/cube/)
 * [graphite](http://graphite.wikidot.com/)
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
 * Spreadsheet widgets (more [@](http://plugins.jquery.com/tag/spreadsheet/))
@@ -207,6 +206,8 @@ Related threads:
         * [Yet Another Gremlin talk](http://www.slideshare.net/slidarko/the-pathology-of-graph-databases)
 * OLAP
     * [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
+* TimeSeries
+    * Square's [cube](http://square.github.io/cube/) 
 * NoSQL (aka Document Databases)
     * [MongoDB](http://www.mongodb.org/) - _**NB**: commercial use is a 5000$ license_
     * [CouchDB](http://couchdb.readthedocs.org/)
