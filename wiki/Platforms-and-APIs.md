@@ -101,7 +101,8 @@ A data bind and a data flow are related problems, and several of these libraries
   * supports functional definitions of quantities--quantities that get recomputed as the underlying data updates
 * [jsViews](https://github.com/BorisMoore/jsviews) seems to be jQuery's official plugin to do this 
 * [simpli5](https://github.com/jacwright/simpli5) is a bigger thing, but it [features data-binding](http://jacwright.com/438/javascript-data-binding/). It hasn't had an update in 4 years, though (perhaps jQuery superseded it?). Regardless, we can pick through it (and the others) for ideas.; [its magic](https://github.com/jacwright/simpli5/blob/master/src/binding.js) is mostly done with js's built in ```__lookupSetter__```
-* Square's [Crossfilter](http://square.github.io/crossfilter/)
+* Square's [Crossfilter](http://square.github.io/crossfilter/) - _built for big data_
+* NYT's [PourOver](http://nytimes.github.io/pourover/) - _built for big data; includes dataflow, and a dual functional and procedural interface; supports updates, but not databinds (but we could write a shim to do binding on top..)_
 * Miso's [Dataset](http://misoproject.com/dataset/)
 * Vega's [Triflow](https://github.com/trifacta/triflow/tree/master/test) - _not actually sure if this is a dataflow library; it seems to too tiny to do anything; maybe it's just clever - nick_
 * [AngularJS](https://docs.angularjs.org/guide/databinding) includes databinding as a feature
@@ -214,7 +215,7 @@ Related threads:
 
 
 
-Query languages
+Remote Query Protocols
 
 * [OData](http://www.odata.org/) - a protocol for exposing (SQL?) RESTfully; seems overengineered.
     * [Query Langauge Spec](http://docs.oasis-open.org/odata/odata/v4.0/os/part2-url-conventions/odata-v4.0-os-part2-url-conventions.html#_Toc372793791) 
