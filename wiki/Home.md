@@ -32,7 +32,10 @@ and some of our **inspiration**
 * [The People who lobbied for data.gc.ca](http://datadotgc.ca/)
 * [CODE](https://canadianopendataexperience.com/)
 
+Civic Programmers:
+
 * [Sunlight Foundation](http://sunlightfoundation.com/)
+* [OpenNews](http://opennews.org/code.html)
 * [Grano](https://github.com/granoproject/grano/)
 * [Dexter](https://github.com/Code4SA/mma-dexter)
 * MIT Civic's [MediaCloud](http://www.mediacloud.org/dashboard/view/1?q1=94946)
