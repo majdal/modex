@@ -101,7 +101,7 @@ A data bind and a data flow are related problems, and several of these libraries
 * [jsViews](https://github.com/BorisMoore/jsviews) seems to be jQuery's official plugin to do this 
 * [simpli5](https://github.com/jacwright/simpli5) is a bigger thing, but it [features data-binding](http://jacwright.com/438/javascript-data-binding/). It hasn't had an update in 4 years, though (perhaps jQuery superseded it?). Regardless, we can pick through it (and the others) for ideas.; [its magic](https://github.com/jacwright/simpli5/blob/master/src/binding.js) is mostly done with js's built in ```__lookupSetter__```
 * Square's [Crossfilter](http://square.github.io/crossfilter/) - _built for big data_
-* NYT's [PourOver](http://nytimes.github.io/pourover/) - _built for big data; includes dataflow, and a dual functional and procedural interface; supports updates, but not databinds (but we could write a shim to do binding on top..)_
+* NYT's [PourOver](http://nytimes.github.io/pourover/) - _built for big data; has updates+dataflow built in, and a dual functional and procedural interface; no databinds (but we could write a shim to do binding on top..) **the only datastructure involved is Collection (ie a set)** anything requiring a join still needs to be done on the server_
 * Miso's [Dataset](http://misoproject.com/dataset/)
 * Vega's [Triflow](https://github.com/trifacta/triflow/tree/master/test) - _not actually sure if this is a dataflow library; it seems to too tiny to do anything; maybe it's just clever - nick_
 * [AngularJS](https://docs.angularjs.org/guide/databinding) includes databinding as a feature
