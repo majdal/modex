@@ -111,6 +111,11 @@ and that can be worked on indepedently of the critical path.
    - Lit review:
        - [ ] Microsoft's [SemanticZoom](http://msdn.microsoft.com/library/windows/apps/hh702601)
        - [ ] Audacity's [waveform display](https://svn.FIXME) switches rendering methods below a certain hardcoded threshold -- but this is strictly only appropriate for waveforms, like audio and maybe seasonal timeseries.
+       - [ ] [imMens: Real-time Visual Querying of Big Data](http://vis.stanford.edu/files/2013-imMens-EuroVis.pdf). Section 3 summary:
+           - Filtering - only show data that fall within certain data ranges (e.g. filter by a limited time range)
+           - Sampling - only show a random subset of the data (e.g. include each data point with a 10% chance)
+           - Binned Aggregation - compute aggregated values (e.g. sum or average) over windows of the data space (e.g. count of events per day)
+
 
 - Load Tests: we have a lot of uncertainty about what the right APIs to use.
   To clear the air, we should task someone to focus on writing reproducible tests which
