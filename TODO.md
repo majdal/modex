@@ -78,7 +78,22 @@ and that can be worked on indepedently of the critical path.
 - [ ] widgets
     - [ ] build the <slider> tag into a whole HTML5-based date slider
     - [ ] add a <input type="month"> (not date or week, those are too fine; there's no "year" control tho) to give clickable control over time -- [this is only supported in WebKit so far, but by the time we're done the others will have caught up]
-- [ ] 
+    
+- [ ] Research and document all the various approaches to watching databases for updates.
+      We need this because with the amount of data we plan to handle, polling and computing diffs every cycle will get extremely, extremely expensive.
+      Note that, *ideally*, whatever we choose will be portable to Windows too.
+    - Unix:
+        - Linux's [inotify](http://linux.die.net/man/7/inotify)
+        - [FAM](http://oss.sgi.com/projects/fam/), which wraps the above depending on platform
+            - Gnome's clone of FAM, [GAMIN](https://people.gnome.org/~veillard/gamin/)
+        - OS X's [FSEvents](https://developer.apple.com/library/mac/documentation/Darwin/Conceptual/FSEvents_ProgGuide/Introduction/Introduction.html)
+        - *BSD's [kqueue](http://www.freebsd.org/cgi/man.cgi?query=kqueue&sektion=2)'s `EVFILT_VNODE` mode can be used to track changes to files; can it also track changes to folders?
+            - [stackoverflow on kqueue gotchas](http://stackoverflow.com/questions/15273061/kqueue-tracking-file-changes-chance-of-losing-events-while-processing-previous#15292041)
+    - [Postgres](http://www.postgresql.org/docs/current/static/triggers.html)
+    - [MySQL](https://dev.mysql.com/doc/refman/5.7/en/triggers.html)
+        - MySQL has replication built in. Maybe similar to CouchDB, we can create a fake MySQL server that listens to the replication stream and pushes it up to the web?
+    - Could [CouchDB's Replication Protocol](http://couchdb.readthedocs.org/en/latest/replication/protocol.html) in `feed=continous` be used
+    - ...?  
 - [ ] Sensible data subsampling [this task will be very, very, very involved]
     - It doesn't seem to be too difficult for javascript (at least on a modernish laptop or better) to store a large amount of data
       (in fact, [Crossfilter can handle 5mb of tables or more](http://square.github.io/crossfilter/)),
