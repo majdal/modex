@@ -152,8 +152,8 @@ class Feature(object):
         - id, the "feature ID" or FID from the original table
         - _source, the SWIG wrapper which this class then wraps;
                if this class is not enough you can probably hack out what you need from that (patches welcome)
-        - .{name} - syntactic sugar for [{name}]
         - [{name}] - access the property {name} from the original geodata table.
+        - .{name} - ditto
     """
     
     def __init__(self, ogr_feature):
@@ -198,9 +198,18 @@ class Feature(object):
 
     def __setattr__(self, name, value):
         # uh.. what's the rule here again?
+        # XXX this is buggy; setting properties does not get written back to the database
         try:
-            return self._source.SetField(name, value) #this causes infinite regress because it calls self.fields which triggers getattr
-        except RuntimeError: #ogr gives this for all errors when UseExceptions() is on
+            # TODO: this should create a new property when you say self.countyid = 434
+            # but it should *not* create a new property when you say self.id = 6 or self._source = mynewbackingstore
+            # but it doesn't, it just cra
+            # also we don't want to cause infinite regress
+            # also 
+            # TODO: this doesn't handle keeping the cached values in sync properly!
+            self._source.SetField(name, value) #this causes infinite regress because it calls self.fields which triggers getattr
+            self.__dict__[name] = value #XXX this is a quick patch! it solves my use case but is not a proper fix! 
+        except RuntimeError as e: #ogr gives this for all errors when UseExceptions() is on
+            #print(e) #DEBUG
             return object.__setattr__(self, name, value)
     
     def ExportToJson(self):
