@@ -2,6 +2,9 @@ import activity
 
 __all__ = ['PriceIntervention', 'NewActivityIntervention']
 
+# TODO: there should really be an abstract "Intervention" class with an "apply()" method
+#  but doing that right now is impossible because PriceIntervention is applies at its time and thereafter, while NewActivityIntervention applies once# we can unify them, but it will take a couple hours
+
 class PriceIntervention:
     def __init__(self, time, product, scale, phase_in_time=0):
         self.time = time
