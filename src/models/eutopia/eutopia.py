@@ -243,7 +243,7 @@ class Eutopia:
         #XXX 'many' is sketchy! It only really exists because of table layout "version 2";
         # I can't make up my mind to keep it or not.
         
-        table = self.log[table]
+        table = self.log[table] #dataset constructs a new table here for us if needed
                 
         def labelit(d): #XXX bad name
             "label a row of state with the current run ID and the current time"

@@ -26,7 +26,15 @@ class PriceIntervention:
         
         money[self.product] = self.original_value*scale
             
-            
+class Tax(PriceIntervention):
+    def __init__(self, time, product, rate):
+        PriceIntervention.__init__(self, time, product, rate)
+
+class Subsidy(PriceIntervention):
+    def __init__(self, time, product, rate):
+        PriceIntervention.__init__(self, time, product, -rate)
+
+
 class NewActivityIntervention:
     def __init__(self, time, name, activity):
         self.time = time
