@@ -44,8 +44,10 @@ There are at least two kinds of smoothing: distribution (1 dimensional) smoothin
 
 ## Causal Maps
 
+A causal map takes a large dataset, searches for effects between variables, and outputs a network where nodes are variables and the directed edges are the estimated strength of effect. This is a relatively novel approach **as at team do not understand this, and especially we do not understand the ways it can break, yet, so be careful**.
+
 * R's [dpa](http://cran.r-project.org/web/packages/dpa/) 
-* [TETRAD](http://www.phil.cmu.edu/projects/tetrad/)
+* [TETRAD](http://www.phil.cmu.edu/projects/tetrad/) (closed source, but they'll share if we ask nicely)
 * [CauseEffect](http://www.causality.inf.ethz.ch/cause-effect.php?page=help) of the Kaggle Contest of the [same name](http://www.kaggle.com/c/cause-effect-pairs)
 
 
