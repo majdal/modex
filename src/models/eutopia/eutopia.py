@@ -77,10 +77,6 @@ class Farm(pygdal.Feature):
         self._lat = None
         self._long = None
 
-    #backwards compat
-    @property
-    def id(self): return self.fields.GetFID()
-
     @property
     @memoize
     def lat(self):
@@ -285,9 +281,10 @@ class Eutopia:
         return activities
 
     def get_local_farms(self, lat, long, count):
+        "collect the 'count' closest farms to coordinates (lat, long)"
         dist = [((lat-f.lat)**2 + (long-f.long)**2, f) for f in self.farms]
         dist.sort()
-        return [d[1] for d in dist]
+        return [d[1] for d in dist][:count]
 
     def get_local_activity_count(self, farm, count):
         return self.get_activity_count(self.get_local_farms(farm.lat, farm.long, count))

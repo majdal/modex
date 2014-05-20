@@ -132,4 +132,6 @@ and that can be worked on indepedently of the critical path.
         - [ ] How many {points, lines, paths} before the browser crashes?
         - [ ] How does scrolling the image lag?
     - 
+    - [ ] d3 on svg vs d3 on canvas
+        - (while you're at it, find solid demos and link them under `scratch/` to show how to do this)
 - Make the SQL extraction efficient; python's default is to print 16 bytes of ASCII for each Decimal, even if it is the value "1.0000000000". Also, look into binary serialization (msgpack, binary csv, etc); possibly an extension to jsSQL specifying sigdigs to keep (which, actually, would be easy to do with python's Decimals)
