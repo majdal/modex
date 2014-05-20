@@ -3,6 +3,8 @@ farm_eutopia
 
 Possible worlds farm simulation.
 
+<u>Def'n</u>: _eutopia_: a possible perfect world. **Contrast**: _utopia_, an impossible perfect world.
+
 There are two ways to run the model. For a quick test, run
 ```
 $ python eutopia.py

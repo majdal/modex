@@ -24,7 +24,6 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 
 * d3js
 * Square's [cubism.js](http://square.github.io/cubism/) for visualizing live time series data
-* Square's [cube](http://square.github.io/cube/)
 * [graphite](http://graphite.wikidot.com/)
 * Native HTML5 (e.g. see [our html5 widget demo](../../scratch/html5/widgets))
 * Spreadsheet widgets (more [@](http://plugins.jquery.com/tag/spreadsheet/))
@@ -84,7 +83,12 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 * [EventSource](http://stackoverflow.com/questions/8499142/html5-server-side-event-eventsource-vs-wrapped-websocket)
 * jsonp
 
+## Serialization
 
+* json
+* msgpack (json in
+* http://nytimes.github.io/tamper/ - _achieves superior compression via categorical data_
+* [protobufs](https://developers.google.com/protocol-buffers/)
 
 ## Javascript Data View/Flow/Binding Libraries  (an obscene number of them)
 
@@ -101,7 +105,8 @@ A data bind and a data flow are related problems, and several of these libraries
   * supports functional definitions of quantities--quantities that get recomputed as the underlying data updates
 * [jsViews](https://github.com/BorisMoore/jsviews) seems to be jQuery's official plugin to do this 
 * [simpli5](https://github.com/jacwright/simpli5) is a bigger thing, but it [features data-binding](http://jacwright.com/438/javascript-data-binding/). It hasn't had an update in 4 years, though (perhaps jQuery superseded it?). Regardless, we can pick through it (and the others) for ideas.; [its magic](https://github.com/jacwright/simpli5/blob/master/src/binding.js) is mostly done with js's built in ```__lookupSetter__```
-* Square's [Crossfilter](http://square.github.io/crossfilter/)
+* Square's [Crossfilter](http://square.github.io/crossfilter/) - _built for big data_
+* NYT's [PourOver](http://nytimes.github.io/pourover/) - _built for big data; has updates+dataflow built in, and a dual functional and procedural interface; no databinds (but we could write a shim to do binding on top..) **the only datastructure involved is Collection (ie a set)** anything requiring a join still needs to be done on the server_
 * Miso's [Dataset](http://misoproject.com/dataset/)
 * Vega's [Triflow](https://github.com/trifacta/triflow/tree/master/test) - _not actually sure if this is a dataflow library; it seems to too tiny to do anything; maybe it's just clever - nick_
 * [AngularJS](https://docs.angularjs.org/guide/databinding) includes databinding as a feature
@@ -206,6 +211,8 @@ Related threads:
         * [Yet Another Gremlin talk](http://www.slideshare.net/slidarko/the-pathology-of-graph-databases)
 * OLAP
     * [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
+* TimeSeries
+    * Square's [cube](http://square.github.io/cube/) 
 * NoSQL (aka Document Databases)
     * [MongoDB](http://www.mongodb.org/) - _**NB**: commercial use is a 5000$ license_
     * [CouchDB](http://couchdb.readthedocs.org/)
@@ -214,7 +221,7 @@ Related threads:
 
 
 
-Query languages
+Remote Query Protocols
 
 * [OData](http://www.odata.org/) - a protocol for exposing (SQL?) RESTfully; seems overengineered.
     * [Query Langauge Spec](http://docs.oasis-open.org/odata/odata/v4.0/os/part2-url-conventions/odata-v4.0-os-part2-url-conventions.html#_Toc372793791) 
