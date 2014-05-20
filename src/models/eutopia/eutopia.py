@@ -21,6 +21,30 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 
 #######################
+## Model Overview
+#
+#
+# state:
+#  Farms - a set of georeferenced polygons containing (id, MAP_CODE, county, {some other stuff that we ignore})
+#        MAP_CODE is the type of farming done on that land (which might not strictly be farming. Activities like lying fallow or running a jungle gym are possible) 
+#  FarmFamily - an agent which has (bank_account, preferences)
+#  
+# interventions:
+# Upon the substrate of model state, Eutopia gives the user the power to
+# manipulate things like tax rates, new farming (or otherwise) activities, new equipment
+# We call these "interventions" and they operate by
+# (TODO: this part hasn't actually been properly spec'd yet; there are arguments to have)
+# 
+# future plans:
+# Farms will grow SOIL_TYPE
+# A Farmer class, which is born into a FarmFamily, moves, perhaps inherits farms from their parents, dies
+#
+#
+#
+#
+#######################
+
+#######################
 ## Exports
 
 # from ourselves
