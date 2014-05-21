@@ -13,23 +13,12 @@ log['
 """
 
 
+import functools
+
 import dataset
+import dataset.persistence.database
+
 import uuid #use uuids instead of autoincrementing ids; this requires more storage, but has the advantage that our runs are absolutely uniquely identifiable.
-
-
-#this code monkey-patches dataset 
-#it looks sort of funny because the targets of our monkey patches are considered global variables to dataset
-# though they are 
-# In any case, patching
-
-
-
-
-
-dataset.Table = lambda *args, **kwargs: print("hello!!")
-q = dataset.connect("sqlite://")
-#q['butts'].insert({1:2})
-print("is it? ", dataset.connect.__globals__['Table'] is dataset.Table)
 
 
     
@@ -41,6 +30,15 @@ class ModelTable(dataset.Table):
     #TODO: finish wrapping the row-related ops, update(), upsert() etc
     
 
+
+def funcdebug(f):
+    # decorator which traces function calls
+    def ff(*args, **kwargs):
+        print("DEBUG: %s(%s, %s)" % (f.__name__, args, kwargs))
+        return f(*args, **kwargs)
+    ff = functools.wraps(f)(ff)
+    return ff
+ 
 class ModelLog(dataset.Database):
     __table_class__ = ModelTable
     def __init__(self, *args, **kwargs):
@@ -52,17 +50,17 @@ class ModelLog(dataset.Database):
         #generate a new unique id, then clip it to 32bits because SQL can't handle bigints
         return uuid.uuid4().int & 0xFFFFFFFF 
 
-    def get_table(self, *args, **kwargs):
-        goop = super().get_table.__func__          #this is every bit as sketchy as it looks
-                                                   #we're monkeypatching dataset to behave differently
-        original = dict(goop.__globals__)
-        
-        goop.__globals__["Table"] = type(self).__table_class__
+    def get_table(self, *args, **kwargs):        
+        #this code monkey-patches dataset to use our table class instead
+        #(but it puts it back immediately!)
+        #TODO: is there a way to like, clone the whole loaded package and only tweak some bits?
 
+        original = dataset.persistence.database.Table
         try:
+            dataset.persistence.database.Table = type(self).__table_class__
             return super().get_table(*args, **kwargs)
         finally:
-            goop.__globals__.update(original)               #put it back
+            dataset.persistence.database.Table = original
 
 
 
@@ -86,12 +84,11 @@ class TimestepLog(ModelLog):
 
 def connector(db_class):
     def connect(*args, **kwargs):
-        original = dict(dataset.connect.__globals__)
-        dataset.connect.__globals__['Database'] = db_class
+        original,dataset.Database = dataset.Database, db_class
         try:
             return dataset.connect(*args, **kwargs)
         finally:
-            dataset.connect.__globals__.update(original)
+            dataset.Database = original
     return connect
 
 time_connect = connector(TimestepLog)
