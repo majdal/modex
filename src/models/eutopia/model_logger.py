@@ -96,7 +96,13 @@ model_connect = connector(ModelLog)
 
 if __name__ == '__main__':
     # tests!
+    import random
     q = time_connect("sqlite://")
-    q['myawesometable'].insert({"farmer": "frank", "riches": 10})
+    for t in range(20):
+        for farmer in ["frank", "alysha", "barack"]:
+            q['myawesometable'].insert({"farmer": farmer, "riches": random.randint(0, 222)})
+        q.step()
+        
     print(q.tables)
-    print(list(q['myawesometable'].all()))
+    for row in q['myawesometable'].all():
+        print(row)
