@@ -89,7 +89,7 @@ class SqlDumperResource(Resource): #XXX name
         table = path
         
         try:
-            self.db.metadata.reflect(self.db.engine)  #kick dataset into reconnecting and updating its cached schema;
+            self.db.metadata.reflect(self.db.engine, extend_existing=True)  #kick dataset into reconnecting and updating its cached schema;
                                                       #awkwardness reported as a bug at https://github.com/pudo/dataset/issues/88
             
             if unicode(table) in self.db.tables: #XXX the cast here is dodgy;
