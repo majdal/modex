@@ -4,6 +4,23 @@ Welcome to Modex! Please excuse the construction dust.
 
 If your copy of modex isn't working, make sure your [dependencies](#dependencies) are up to date. 
 
+
+## Folder Layout
+
+Each folder should have a README that describes its content in more detail, but as an overview:
+
+* ```assets/``` -- static content, like data
+  * ```assets/libs/``` -- external javascript libraries
+  * ```assets/images```-- sprites, textures, icons, etc
+* ```src/frontend```   -- internal html, javascript, and css 
+* ```src/backend```    -- model explorer and the twisted server that feeds it to the frontend
+* ```src/models```     -- (_tentative_) different model instances to be hosted by the model explorer
+* ```src/scripts```    -- batch scripts, like geoprocessing hacks, one-off webcrawlers, and database cleaners
+* ```tests/```         -- unit, integration, acceptance, etc tests
+* ```scratch/```       -- demo, testing, and API-learning code goes here. If a demo is at all complicated it should get its own subfolder and include all js libraries it needs locally. Once it cycles through a few iterations its lessons should be merged in ```src/```, but the demo should (within reason) stay put for future reference. 
+* ```mockups/```       -- drawings and vision documents
+
+
 ## Team Guidelines
 
 
@@ -85,22 +102,6 @@ The convention for dealing with this problem in this project **is as follows**
 5. Distribute `x.ext.real` in some private way to those authorized (thumbdrive, Google Drive, carrier pigeon...)
 This way, it should be very difficult to accidentally upload copyrighted data.
 
-
-
-## Folder Layout
-
-Each folder should have a README that describes its content in more detail, but as an overview:
-
-* ```assets/``` -- static content, like data
-  * ```assets/libs/``` -- external javascript libraries
-  * ```assets/images```-- sprites, textures, icons, etc
-* ```src/frontend```   -- internal html, javascript, and css 
-* ```src/backend```    -- model explorer and the twisted server that feeds it to the frontend
-* ```src/models```     -- (_tentative_) different model instances to be hosted by the model explorer
-* ```src/scripts```    -- batch scripts, like geoprocessing hacks, one-off webcrawlers, and database cleaners
-* ```tests/```         -- unit, integration, acceptance, etc tests
-* ```scratch/```       -- demo, testing, and API-learning code goes here. If a demo is at all complicated it should get its own subfolder and include all js libraries it needs locally. Once it cycles through a few iterations its lessons should be merged in ```src/```, but the demo should (within reason) stay put for future reference. 
-* ```mockups/```       -- drawings and vision documents
 
 ## Dependencies
 

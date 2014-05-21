@@ -253,10 +253,7 @@ Remote Query Protocols
 
 ## Statistics
 
-*   [Theano](http://deeplearning.net/software/theano/) (CPU and GPU compiler)
-*   [PyLearn2](http://deeplearning.net/software/pylearn2/) (Deep Learning research platform)
-*   [Hyperopt](http://hyperopt.github.io/hyperopt/) (Distributed Bayesian Optimization)
-
+This software list has been outsourced to [Statistics.md](Statistics.md).
 
 ## Packaging
 
