@@ -38,6 +38,12 @@ $ python server.py debug
 ????
 http://phantomjs.org/ might come in handy
 
+SQL GUIs:
+
+* sqliteman
+* sqlitebrowser
+* phpMyAdmin
+
 ## WebSocket Notes
 
 We're using [autobahn](https://github.com/tavendo/AutobahnPython) as our backend implementation of the websocket protocol (it's a protocol that rides on top of HTTP, just to make the web stack even deeper).

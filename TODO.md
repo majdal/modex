@@ -135,3 +135,7 @@ and that can be worked on indepedently of the critical path.
     - [ ] d3 on svg vs d3 on canvas
         - (while you're at it, find solid demos and link them under `scratch/` to show how to do this)
 - Make the SQL extraction efficient; python's default is to print 16 bytes of ASCII for each Decimal, even if it is the value "1.0000000000". Also, look into binary serialization (msgpack, binary csv, etc); possibly an extension to jsSQL specifying sigdigs to keep (which, actually, would be easy to do with python's Decimals)
+
+- [ ] Write a SQL hook that exports the database to the filesystem. It might even be possible to do this [via](http://apidoc.apsw.googlecode.com/hg/vtable.html) [python](http://multicorn.org/)
+- [ ] Write a NoSQL hook that exports the database to the filesystem.
+- [ ] Use inotify and/or FAM to watch the above for deltas and push the deltas up to the web.

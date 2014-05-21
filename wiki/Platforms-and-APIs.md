@@ -139,16 +139,6 @@ with zero application-layer code handling the updates
 (this will definitely not work with what we have now, but it is inspired by SQLAlchemy and LINQ)
 It might turn out that there's no sensible way to write query+binding without writing querybinding. At least, not with the current state of javascript. Or something.
 
-(this exists in some form in:
-* CouchDB. It is called [replication filtering](http://couchdb.readthedocs.org/en/latest/replication/protocol.html#filter-replication) ([example](http://guide.couchdb.org/draft/notifications.html#filters)) in `feed=continuous` mode)
-* Breeze. The components are [projection queries](http://www.breezejs.com/documentation/projection-queries) + [change tracking](http://www.breezejs.com/documentation/change-tracking)
-* Don't forget that SQL calls this a [View](https://en.wikipedia.org/wiki/View_%28database%29); there's no way to define a View dynamically, though.
-* A pre-Breeze [example](http://msdn.microsoft.com/en-us/magazine/jj133816.aspx) using MsSQL Server + WCF (C# backend) +{Data,Knockout}JS (HTML5 frontend); it even binds two ways)
-
-Related threads:
-* [dat#112](https://github.com/maxogden/dat/issues/112)
-* [nengo-gui#1](https://github.com/ctn-waterloo/nengo_gui/pull/1)
-
 
 # Backend
 
@@ -227,6 +217,31 @@ Remote Query Protocols
     * [Query Langauge Spec](http://docs.oasis-open.org/odata/odata/v4.0/os/part2-url-conventions/odata-v4.0-os-part2-url-conventions.html#_Toc372793791) 
 * [SparQL](http://www.w3.org/TR/sparql11-query/) - for querying document databases
     * [Example 2](http://www.ibm.com/developerworks/xml/library/j-sparql/) 
+
+Replication
+
+Ideally, we will have some way of watching the db for deltas, turning the deltas into json, and punting them over to the client.
+
+Even better, we would have some way of selecting a subset of data (what SQL and Couch call a [View](https://en.wikipedia.org/wiki/View_%28database%29) and only syncing that.
+However, this extra feature, supporting arbitrary queries from the front end, means finding or defining a whole query language
+that javascript can use, and that's a project unto itself.
+
+Possible approaches:
+
+* SQLite has hooks ([tips](http://sqlite.1065341.n5.nabble.com/Sqlite-replication-td43241.html)):
+    * [SQLite Update Hooks](http://www.sqlite.org/c3ref/update_hook.html)
+    * [SQLite Virtual Tables](https://www.sqlite.org/vtab.html) could allow us to 'export' SQL to the filesystem; then we could use git or rsync or csync to do replication
+        * [Python binding](http://apidoc.apsw.googlecode.com/hg/vtable.html)
+        * [Perl binding](http://search.cpan.org/~salva/SQLite-VirtualTable-0.06/lib/SQLite/VirtualTable.pm)
+* CouchDB. It is called [replication filtering](http://couchdb.readthedocs.org/en/latest/replication/protocol.html#filter-replication) ([example](http://guide.couchdb.org/draft/notifications.html#filters)) in `feed=continuous` mode)
+* Breeze. The components are [projection queries](http://www.breezejs.com/documentation/projection-queries) + [change tracking](http://www.breezejs.com/documentation/change-tracking)
+    * A pre-Breeze [example](http://msdn.microsoft.com/en-us/magazine/jj133816.aspx) using MsSQL Server + WCF (C# backend) +{Data,Knockout}JS (HTML5 frontend); it even binds two ways, which is beyond what we care for)
+
+Related threads:
+
+* [dat#112](https://github.com/maxogden/dat/issues/112)
+* [nengo-gui#1](https://github.com/ctn-waterloo/nengo_gui/pull/1)
+   
 
 ### Language Bridges
 
