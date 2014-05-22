@@ -75,12 +75,17 @@ class TimestepLog:
      and you must define at least one primary key or you will have trouble
       
      the idea is that you make new TimestepTables to log *new* data
+     so the use cases are optimized for that
+     
     like so: ...
     tables involved in your database need not necessarily be timestep tables: it is alright to do ._metadata.reflect()
     
     as a convenience, tables are attached as member variables under their name (so your tables need to be named according to python naming rules, which luckily largely overlap with sql naming rules)
     but the proper way to access them is log[name]
      
+     TODO: support minimal querying, for completeness
+     e.g. a .read() method which does a full select()
+     its awkward that the only way to get things out is to grab the internal member .database
     """
     def __init__(self, connection_string):
         self.database = sqlalchemy.create_engine(connection_string)
@@ -110,16 +115,17 @@ class TimestepLog:
 if __name__ == '__main__':
     # tests!
     import random
-    q = TimestepLog("sqlite://")
-    myawesometable = TimestepTable(q, "myawesometable", Column("farmer", sqlalchemy.String, primary_key=True), Column("riches", sqlalchemy.Integer))
+    log = TimestepLog("sqlite://")
+    TimestepTable(log, "myawesometable", Column("farmer", sqlalchemy.String, primary_key=True), Column("riches", sqlalchemy.Integer))
     for t in range(20):
         print("Timestep", t)
         for farmer in ["frank", "alysha", "barack"]:
-            q['myawesometable'](farmer=farmer, riches=random.randint(0, 222))
-        q.step()
+            log('myawesometable', farmer=farmer, riches=random.randint(0, 222))
+        #inform the logger that we are going to a new timestep
+        log.step()
         
-    print(myawesometable.columns.keys())
-    for row in q.database.execute(q['myawesometable'].select()):
+    print(log['myawesometable'].columns.keys())
+    for row in log.database.execute(log['myawesometable'].select()):
         print(row)
 
 """
