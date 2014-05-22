@@ -1,36 +1,14 @@
 """
-model_logger
+second draft of model logging, using composition instead of inheritence, and dropping the dependency on dataset
 
-depends on dataset and therefore SQLAlchemy
+the reason using dataset directly is awkward is because it is hard-coded to use its own Table.
 
-usage:
-
-log = ModelLog("sqlite://") # this can be any SQLAlchemy connection string.
-log['
-
-
+the reason this is complicated because we have several cooperating classes kicking around: the database and the tables in that database.
 
 """
 
 
 import functools
-
-import dataset
-import dataset.persistence.database
-
-import uuid #use uuids instead of autoincrementing ids; this requires more storage, but has the advantage that our runs are absolutely uniquely identifiable.
-
-
-    
-class ModelTable(dataset.Table):    
-    def insert(self, row, *args, **kwargs):
-        row = dict(row) #coerce
-        row['run_id'] = self.database.id
-        return super().insert(row, *args, **kwargs)
-    #TODO: finish wrapping the row-related ops, update(), upsert() etc
-    
-
-
 def funcdebug(f):
     # decorator which traces function calls
     def ff(*args, **kwargs):
@@ -38,71 +16,117 @@ def funcdebug(f):
         return f(*args, **kwargs)
     ff = functools.wraps(f)(ff)
     return ff
+
+
+#import dataset
+#import dataset.persistence.database
+
+import sqlalchemy
+from sqlalchemy import *
+
+import uuid #use uuids instead of autoincrementing ids; this requires more storage, but has the advantage that our runs are absolutely uniquely identifiable.
+
+
  
-class ModelLog(dataset.Database):
-    __table_class__ = ModelTable
-    def __init__(self, *args, **kwargs):
-        self.id = self.new_id()
-        super().__init__(*args, **kwargs)
-    
-    @staticmethod
-    def new_id():
-        #generate a new unique id, then clip it to 32bits because SQL can't handle bigints
-        return uuid.uuid4().int & 0xFFFFFFFF 
+#class ModelLog(dataset.Database):
+    # ??? how does this fit in    
 
-    def get_table(self, *args, **kwargs):        
-        #this code monkey-patches dataset to use our table class instead
-        #(but it puts it back immediately!)
-        #TODO: is there a way to like, clone the whole loaded package and only tweak some bits?
 
-        original = dataset.persistence.database.Table
+
+# TODO: somehow factor the run_id part of TimestepLog into its own classq
+
+# .,. this is a bit weird. There is 1:many sql tables to TimestepTables
+# but TimestepTable is setting a default
+# ,,this seems.. wrong
+
+# the
+
+class TimestepTable(sqlalchemy.Table):
+    def __new__(cls, parent_log, name, *args, **kwargs):
+        """
+        For some reason I haven't read enough of the code to grok yet,
+        the superclass is written in terms of __new__,  instead of __init__
+        and it does all sorts of shennigans in there that are hard to work around.
+        So, we just pretend that __new__ *is* __init__, as much as possible
+        """
+        args = ((Column("run_id", Integer, primary_key=True, default=parent_log.run_id), #the default here is a constant and *private*
+                Column("time", Integer, primary_key=True, default=lambda: parent_log.time),) +
+               args)
+        
+        self = sqlalchemy.Table.__new__(cls, name, parent_log._metadata, *args, **kwargs) #TODO: use super
+        self.parent = parent_log
+        
         try:
-            dataset.persistence.database.Table = type(self).__table_class__
-            return super().get_table(*args, **kwargs)
-        finally:
-            dataset.persistence.database.Table = original
-
-
-
-# can metaclass magic D.R.Y. this up?
-class TimestepTable(ModelTable):
-    def insert(self, row, *args, **kwargs):
-        row = dict(row) #coerce
-        row['time'] = self.database.time
-        return super().insert(row, *args, **kwargs)
-    #TODO: finish wrapping the row-related ops, update(), upsert() etc
+            self.create() #in contrast to other SQLAlchemy lines, .create() executes itself immediately
+        except sqlalchemy.OperationalError as e:
+            print("Unable to create table `%s`:" % (name,))
+            print(e)
+        return self
+    
+    def __call__(self, **row):
+        return self.parent.database.execute(self.insert(row))
             
-class TimestepLog(ModelLog):
-    __table_class__ = TimestepTable
-    def __init__(self, *args, **kwargs):
+        
+class TimestepLog:
+    """
+    ...
+    
+    usage: you need to construct the TimestepTables yourself, in cooperation with this class
+     and you must define at least one primary key or you will have trouble
+      
+     the idea is that you make new TimestepTables to log *new* data
+    like so: ...
+    tables involved in your database need not necessarily be timestep tables: it is alright to do ._metadata.reflect()
+    
+    as a convenience, tables are attached as member variables under their name (so your tables need to be named according to python naming rules, which luckily largely overlap with sql naming rules)
+    but the proper way to access them is log[name]
+     
+    """
+    def __init__(self, connection_string):
+        self.database = sqlalchemy.create_engine(connection_string)
         self.time = 0
-        super().__init__(*args, **kwargs)
+        self.run_id = uuid.uuid4().int & 0xFFFFFFFF #generate a new unique id, then clip it to 32bits because SQL can't handle bigints
+        self._metadata = sqlalchemy.MetaData() #create a new metadata for each , so that the column default trick is isolated per-
+        self._metadata.bind = self.database
+    
     def step(self):
         self.time += 1
-
+    
+    def keys(self):
+        return self._metadata.tables.keys()
+    
+    def __getitem__(self, name):
+        # rely on the fact that any table adds *itself* to the metadata object
+        return self._metadata.tables[name]
+    
+    def __call__(self, table, **row):
+        "syntactic sugar for logging into one of the tables" 
+        #TODO: support insert many: if row is a single 
+        self[table](**row)
     
 
-def connector(db_class):
-    def connect(*args, **kwargs):
-        original,dataset.Database = dataset.Database, db_class
-        try:
-            return dataset.connect(*args, **kwargs)
-        finally:
-            dataset.Database = original
-    return connect
 
-time_connect = connector(TimestepLog)
-model_connect = connector(ModelLog)
 
 if __name__ == '__main__':
     # tests!
     import random
-    q = time_connect("sqlite://")
+    q = TimestepLog("sqlite://")
+    myawesometable = TimestepTable(q, "myawesometable", Column("farmer", sqlalchemy.String, primary_key=True), Column("riches", sqlalchemy.Integer))
     for t in range(20):
+        print("Timestep", t)
         for farmer in ["frank", "alysha", "barack"]:
-            q['myawesometable'].insert({"farmer": farmer, "riches": random.randint(0, 222)})
+            q['myawesometable'](farmer=farmer, riches=random.randint(0, 222))
         q.step()
         
-    print(q.tables)
-    for row in q['myawesometable'].all():
+    print(myawesometable.columns.keys())
+    for row in q.database.execute(q['myawesometable'].select()):
         print(row)
+
+"""
+the sqlalchemy way (let's try to clone that as much as possible)
+would be
+schema = MetaData()
+farmers = Table("farmers", schema, Column("run_id",  primary_key=True), Column("time", primary_key=True), Column("id", INTEGER, primary_key=True), Column("Column("bankaccount", Integer)
+farmer_farms = Table("farmer_farms", schema, Column("run_id",  primary_key=True), Column("time", primary_key=True), Column("farm_id"), Column("farmer_id"))
+
+"""
