@@ -94,8 +94,11 @@ class TimestepLog:
         self._metadata = sqlalchemy.MetaData() #create a new metadata for each , so that the column default trick is isolated per-
         self._metadata.bind = self.database
     
-    def step(self):
-        self.time += 1
+    def step(self, value=None):
+        if value is not None:
+            self.time = value
+        else:
+            self.time += 1
     
     def keys(self):
         return self._metadata.tables.keys()
