@@ -40,9 +40,8 @@ class SimulationTable(sqlalchemy.Table):
         # works on sets and is ignorant of order, but sqlalchemy isn't, and csv isn't.
         assert isinstance(parent, SimulationLog), "SimulationTable only works with SimulationLogs."
         schema = (Column("run_id", Integer, primary_key=True, default=parent.run_id),) + schema #the default here is a constant and *private*
-               
-               #can I use super() here? 
-        self = sqlalchemy.Table.__new__(cls, name, parent._metadata, *schema, **kwargs) #TODO: use super
+        
+        self = sqlalchemy.Table.__new__(cls, name, parent._metadata, *schema, **kwargs) #NB: cannot use super() here because we're in __new__ which is ~~magic~~ 
         self.parent = parent
         
         setattr(self.parent, name, self) #for convenieince
