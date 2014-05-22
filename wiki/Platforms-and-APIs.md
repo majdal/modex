@@ -113,6 +113,9 @@ A data bind and a data flow are related problems, and several of these libraries
 * [AngularJS](https://docs.angularjs.org/guide/databinding) includes databinding as a feature
 * [BackboneJS](http://backbonejs.org/)
 * [Model.JS](https://github.com/curran/model) (new, but written by someone with extensive d3 experience; he even wrote [an intro to AngularJS](http://curran.github.io/screencasts/introToAngular/exampleViewer/#/)
+* It might be possible to get away with no learning databinding, but just being wise in application of [d3's native event API](http://bl.ocks.org/mbostock/5872848)
+    * [a writeup on this philosophy](http://ag.svbtle.com/on-d3-components)
+    * [one of the links from the above](http://swannodette.github.io/2013/07/31/extracting-processes/), in Clojure+JS, for another perspective
 * [BaconJS](http://baconforme.com/) (clear tutorial [here](http://blog.flowdock.com/2013/01/22/functional-reactive-programming-with-bacon-js/))
 * [BreezeJS](http://www.breezejs.com/home), a _LINQ-inspired javascript client_. Perhaps overengineered. Abilities depend on its backends (not unlike what Dataset is to SQLAlchemy is to {MySQL, Postgres, Sqlite, ...}) It is these things:
     * an ORM to SQL
