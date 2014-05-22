@@ -180,7 +180,7 @@ A computer system is the union of data and operations on that data. Many program
 2. faster reads ("queries" in DB parlance):
     1. slicing
     2. aggregation 
-3. consistency: _conflict detection and management_ ("transactions" and "rollbacks" in DB parlance)
+3. consistency: _conflict detection and management_ (the [ACID properties](https://en.wikipedia.org/wiki/ACID), "transactions" and "rollbacks" in DB parlance)
 4. replication: _duplicate your data to multiple places for i. reliability (backups!) ii. availability (every thousand clients can use a different server)_
 5. schemas: _reliably structuring your data_
    * it is hotly debated if this is a feature or a bug; in the case of map data, a standard system to read, write, and slice mixed tabular and geometric information is a big win
@@ -199,7 +199,6 @@ There are many [paradigms](http://www.slideshare.net/slidarko/an-overview-of-dat
     * Related: [dat](https://github.com/maxogden/dat), a version control (but not query!) system for tabular/object data.
     * [PyTables](http://www.pytables.org/moin) which eschews SQL in favour of hdf5's optimized idea of what a database is (**This isn't SQL.** where does this fit in??
 * Maps (_vector maps look a lot like tables, except with a special set of 'geometry' types; raster maps are a different beast_). generally 
-    * [Cassandra](https://cassandra.apache.org/) claims to be NoSQL, but it's a lot closer to SQL than everything else below.
 **Map Data** _is complicated_
     * [ArcGIS Server](http://www.esri.com/software/arcgis/arcgisserver/)
     * [PostGIS](http://postgis.net/) for postgres
@@ -233,18 +232,22 @@ There are many [paradigms](http://www.slideshare.net/slidarko/an-overview-of-dat
 * TimeSeries
     * Square's [cube](http://square.github.io/cube/) 
 * Document Databases aka Object Databases
-    * [MongoDB](http://www.mongodb.org/) - _**NB**: commercial use is a 5000$ license_
+    * [MongoDB](http://www.mongodb.org/) - _**NB**: commercial use is a 5000$ license_ **DOES NOT HAVE [ACID PROPERTIES](http://stackoverflow.com/questions/7149890/what-does-mongodb-not-being-acid-compliant-really-mean#7150406)**
     * [CouchDB](http://couchdb.readthedocs.org/) - **includes versioning**
 * Key Value Stores: blazingly fast dictionaries; a Document Database can end up looking pretty similar.
     * [Redis](http://redis.io/)
     * [memcached](http://www.memcached.org/); **does not** provide persistence
     * [couchbase](http://www.couchbase.com/); memcached **with** persistence; [not the same as CouchDB](http://www.couchbase.com/couchbase-vs-couchdb)
+    * [BigTable](https://en.wikipedia.org/wiki/BigTable) - somewhere between a table and (column, row, time)
     * [TokyoCabinet](https://launchpad.net/tokyocabinet)
     * [DBM](https://en.wikipedia.org/wiki/Trivial_Database); came out of Unix; comes in various flavours, most of which are [batteries-included in python](https://docs.python.org/3/library/dbm.html)
     * [Git is also key-value store](http://confreaks.com/videos/443-rubyconf2010-git-the-stupid-nosql-database) with **versioning**; but its scaling properties are targetted at hand-managed plain text files
-        * [that hasn't stopped](http://howtonode.org/volcano-wheat) people [being creative with it](https://github.com/gollum/gollum); 
+        * [that hasn't stopped](http://howtonode.org/volcano-wheat) people [being creative with it](https://github.com/gollum/gollum) or even [asinine](https://github.com/technoweenie/madrox)
     * The {Unix, Windows, Mac} File System is a hierarchical key-value store. This really puts it somewhere between a Key-Value Store and a Document Database. With the symlink feature that is standard on *nix (and suitable workarounds for the corner cases) it is also a very functional graph database.
         * [btrfs](https://btrfs.wiki.kernel.org/index.php/Main_Page) and [zfs](http://www.open-zfs.org/wiki/Main_Page) are filesystems which have revisions built in; they work very similarly to git, internally.
+* misc.
+    * [Cassandra](https://cassandra.apache.org/)
+    
 
 Remote Query Protocols
 
@@ -341,13 +344,17 @@ Collaboraties (laboratories for collaboration) are our key to reproducible scien
 
 ### Dataset Management
 
-* http://dat-data.com 
+* http://dat-data.com, an alpha-stage project to create a git for data 
 * http://datahub.io
 * (there's at least two other dataset-version-control/archival sites; what are they?)
 * https://exversion.com
 * [FigShare](http://figshare.com/)
+* [Dryad](http://datadryad.org/)
 
 ### Citation Management
+
+Some of the Dataset tools are also Citation tools; these are the remainder:
+
 * http://www.zotero.org/
 * http://www.mendeley.com/
 
