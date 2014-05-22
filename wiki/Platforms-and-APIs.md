@@ -3,7 +3,7 @@ Here we list all the APIs and platforms we have considered. It is a serious time
 
 # Frontend
 
-HTML5 is extremely powerful. It has a lot of new widgets (under form elements: sliders, numbers, dates, file uploaders, also <progress> and <meter> which lists). We can probably build most of our widgets direct in HTML.
+HTML5 is extremely powerful. It has a lot of new widgets (under form elements: sliders, numbers, dates, file uploaders, &lt;progress&gt; and &lt;meter&gt;). We can probably build most of our widgets directly in the DOM.
 
 * LessCSS
 * craftyjs?
@@ -86,7 +86,8 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 ## Serialization
 
 * json
-* msgpack (json in
+* msgpack - json in binary
+* [bson](http://bsonspec.org/) - a different json in binary; designed and used by MongoDB
 * http://nytimes.github.io/tamper/ - _achieves superior compression via categorical data_
 * [protobufs](https://developers.google.com/protocol-buffers/)
 
@@ -162,14 +163,30 @@ It might turn out that there's no sensible way to write query+binding without wr
 
 * [PIL](http://pillow.readthedocs.org/) for generating and working with rasters
 
-### Video??
+### Video
 
-* ??? ?? ? ? ?
+* [the empty void of uncertainty]
 
 ### Databases
 
+A computer system is the union of data and operations on that data. Many programs work fine only with their programming language's native datastructures. The reasons to use a database system--and so the features one usually has--are:
 
-[An Overview of Paradigms](http://www.slideshare.net/slidarko/an-overview-of-data-management-paradigms-relational-document-and-graph-3880059) by the author of Gremlin.
+1. persistence: _your data doesn't disappear if your program crashes_ 
+   (note that it is possible to do [serialization](#Serialization) without using database software, and for simple cases that may be all you need)
+2. faster reads ("queries" in DB parlance):
+    1. slicing
+    2. aggregation 
+3. consistency: _conflict detection and management_ ("transactions" and "rollbacks" in DB parlance)
+4. replication: _duplicate your data to multiple places for i. reliability (backups!) ii. availability (every thousand clients can use a different server)_
+5. schemas: _reliably structuring your data_
+   * it is hotly debated if this is a feature or a bug; in the case of map data, a standard system to read, write, and slice mixed tabular and geometric information is a big win
+   * in the case of large amounts of simple data (e.g. almost any social media site) it is unnecessarily restrictive (hence the move towards "NoSQL").
+5. revision tracking.
+
+Not every database has 
+A database also forces you to think about your datastructures ("schema" in DB parlance), and 
+
+There are many [paradigms](http://www.slideshare.net/slidarko/an-overview-of-data-management-paradigms-relational-document-and-graph-3880059). Every one of these can be mapped into the others; the question of which to use is a mixture of the tradeoffs between what has the most expressive API _for your use case_, what is the most efficient in space, and what is most efficient in time, and what is most efficient in administration.
 
 * Tables: most of these are SQL, but some are not
     * Python APIs: [Overview](https://wiki.python.org/moin/DatabaseInterfaces), [SQL](https://wiki.python.org/moin/DbApiModuleComparison) which conform to [PEP 249](http://legacy.python.org/dev/peps/pep-0249/), [ORMs &c](https://wiki.python.org/moin/HigherLevelDatabaseProgramming) of which [SQLAlchemy](http://www.sqlalchemy.org/) is head of the pack.
@@ -192,24 +209,37 @@ It might turn out that there's no sensible way to write query+binding without wr
     * [OpenLayers' Discussion on approaches to giving different results at different zoom levels](https://github.com/openlayers/ol3/pull/1812) (and [related PR](https://github.com/openlayers/ol3/pull/1744)
 * Graph / Network Databses
     * [pggraph](http://pgfoundry.org/projects/pggraph) for postgres
-    * [Neo4j](https://en.wikipedia.org/wiki/Neo4j) ("the most popular graph database")
+    * [Neo4j](http://www.neo4j.org/) ("the most popular graph database")
     * [Gremlin](https://github.com/tinkerpop/gremlin/wiki); the [author](http://www.slideshare.net/slidarko/) has many talks online:
         * A [Gremlin Overview](http://www.slideshare.net/slidarko/the-pathological-gremlin)
         * [Memoirs of a GraphDB Addict](http://www.slideshare.net/slidarko/memoirs-of-a-graph-addict-despair-to-redemption#)
         * Another [Gremlin Talk](http://www.slideshare.net/slidarko/gremlin-a-graphbased-programming-language-3876581)
         * An [arxiv preprint](http://arxiv.org/abs/1004.1001)
         * [Yet Another Gremlin talk](http://www.slideshare.net/slidarko/the-pathology-of-graph-databases)
+    * [Riak](http://basho.com/riak/)
+    * [VertexDB](http://www.dekorte.com/projects/opensource/vertexdb/)
+    * [Filament](http://sourceforge.net/projects/filament/)
+    * [Allegro](http://franz.com/agraph/allegrograph/)
+    * [InfoGrid](http://infogrid.org/trac/)
+    * [HyperGraphDB](http://www.kobrix.com/hgdb.jsp)
+    * [DEX](http://www.dama.upc.edu/technology-transfer/dex) **commercial**; [paper](http://www.dama.upc.edu/technology-transfer/files/p573-martinez.pdf): _Martínez-Bazan, N., Muntés-Mulero, V., Gómez-Villamor, S., Nin, J., Sánchez-Martínez, M., and Larriba-Pey, J.  2007. Dex: high-performance exploration on large graphs for information retrieval. In Proceedings of the Sixteenth ACM Conference on Conference on information and Knowledge Management (Lisbon, Portugal, November 06 - 10, 2007). CIKM '07. ACM, New York, NY, 573-582._
 * OLAP
     * [Cubes](http://cubes.databrewery.org/) which wraps SQL into OLAP _**pay attention** to this one_
 * TimeSeries
     * Square's [cube](http://square.github.io/cube/) 
-* NoSQL (aka Document Databases)
+* Document Databases aka Object Databases
     * [MongoDB](http://www.mongodb.org/) - _**NB**: commercial use is a 5000$ license_
     * [CouchDB](http://couchdb.readthedocs.org/)
-* Objects (most of these look like blazingly fast dictionaries, since all object oriented programming can be reduced to dictionaries of dictionaries) -- the Document Databases often end up looking identical to object databases
+* Key Value Stores: blazingly fast dictionaries; a Document Database can end up looking pretty similar.
     * [Redis](http://redis.io/)
-
-
+    * [memcached](http://www.memcached.org/); **does not** provide persistence
+    * [couchbase](http://www.couchbase.com/); memcached **with** persistence; [not the same as CouchDB](http://www.couchbase.com/couchbase-vs-couchdb)
+    * [TokyoCabinet](https://launchpad.net/tokyocabinet)
+    * [DBM](https://en.wikipedia.org/wiki/Trivial_Database); came out of Unix; comes in various flavours, most of which are [batteries-included in python](https://docs.python.org/3/library/dbm.html)
+    * [Git is also key-value store](http://confreaks.com/videos/443-rubyconf2010-git-the-stupid-nosql-database) with revision tracking; but its scaling properties are targetted at hand-managed plain text files
+        * [that hasn't stopped](http://howtonode.org/volcano-wheat) people [being creative with it](https://github.com/gollum/gollum); 
+    * The {Unix, Windows, Mac} File System is a hierarchical key-value store. This really puts it somewhere between a Key-Value Store and a Document Database. With the symlink feature that is standard on *nix (and suitable workarounds for the corner cases) it is also a very functional graph database.
+        * [btrfs](https://btrfs.wiki.kernel.org/index.php/Main_Page) and [zfs](http://www.open-zfs.org/wiki/Main_Page) are filesystems which have revisions built in; they work very similarly to git, internally.
 
 Remote Query Protocols
 
