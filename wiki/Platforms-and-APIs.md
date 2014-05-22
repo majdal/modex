@@ -232,6 +232,10 @@ Remote Query Protocols
 * [SparQL](http://www.w3.org/TR/sparql11-query/) - for querying document databases
     * [Example 2](http://www.ibm.com/developerworks/xml/library/j-sparql/) 
 
+## Data Types
+
+* [rfc3339: DateTimes](http://www.ietf.org/rfc/rfc3339.txt)
+
 ### Language Bridges
 
 * [RPy](http://rpy.sourceforge.net/rpy2.html) and its child [rmagic](http://ipython.org/ipython-doc/dev/config/extensions/rmagic.html) to hook out
