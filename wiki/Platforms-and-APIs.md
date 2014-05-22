@@ -86,6 +86,7 @@ HTML5 is extremely powerful. It has a lot of new widgets (under form elements: s
 ## Serialization
 
 * json
+* [https://github.com/edn-format/edn](edn)
 * msgpack (json in
 * http://nytimes.github.io/tamper/ - _achieves superior compression via categorical data_
 * [protobufs](https://developers.google.com/protocol-buffers/)
