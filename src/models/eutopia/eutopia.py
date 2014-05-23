@@ -240,10 +240,13 @@ class Eutopia:
            so that the schema can be declared at the class level
            but the actual log (and runID) only made at runtime
            the Tables by themselves shouldn't need to know
-           
          the trick would be maybe.. clone the Table objects and swap out
             the magic hidden columns with `default=` hooks.
             but let all SimulationTables share the other Columns
+        Besides cleanliness, my motivation for this would be speed:
+          actually creating the tables seems to be very very slow
+          so if we can do it in a way that runs can share objects,
+          that would be best
         """
         self.log = TimestepLog(log)
         
@@ -445,7 +448,7 @@ def create_demo_model(db=None):
     return eutopia
 
 
-def main(n=20, db=None):
+def main(n=50, db=None, plot=True):
     """
     Run Eutopia with some default interventions, and plot the results if matplotlib is installed.
     
@@ -494,7 +497,7 @@ def main(n=20, db=None):
                                          .execute().fetchall()]
         print(act, ":", timeseries[act])
         
-    
+    if not plot: return
     
     # optional: display summary of model outputs
     # automatically kicks in if matplotlib is installed
