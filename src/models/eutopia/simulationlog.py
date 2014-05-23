@@ -27,8 +27,21 @@ from sqlalchemy import *
 
 import uuid #use uuids instead of autoincrementing ids; this requires more storage, but has the advantage that our runs are absolutely uniquely identifiable.
 
+class Table(sqlalchemy.Table):
+    """
+    override the default sqlalchemy Table to change the constructor
+    to be consistent with the other Tables
+    """
+    def __new__(cls, parent, name, *schema, **kwargs):
+        
+        self =  sqlalchemy.Table.__new__(cls, name, parent._metadata, *schema, **kwargs) #NB: cannot use super() here because we're in __new__ which is ~~magic~~ 
+        self.parent = parent
+        
+        setattr(self.parent, name, self) #for convenience
+        
+        return self
 
-class SimulationTable(sqlalchemy.Table):
+class SimulationTable(Table):
     def __new__(cls, parent, name, *schema, **kwargs):
         """
         For some reason I haven't read enough of the code to grok yet,
@@ -41,29 +54,8 @@ class SimulationTable(sqlalchemy.Table):
         assert isinstance(parent, SimulationLog), "SimulationTable only works with SimulationLogs."
         schema = (Column("run_id", Integer, primary_key=True, default=parent.run_id),) + schema #the default here is a constant and *private*
         
-        self = sqlalchemy.Table.__new__(cls, name, parent._metadata, *schema, **kwargs) #NB: cannot use super() here because we're in __new__ which is ~~magic~~ 
-        self.parent = parent
+        return Table.__new__(cls, parent, name, *schema, **kwargs)
         
-        setattr(self.parent, name, self) #for convenieince
-        
-        try: #make the table before using it
-            self.create() #in contrast to other SQLAlchemy commands, .create() executes itself immediately; wrapping in .execute() is wrong
-            # TODO: first look at the db schema to find this table before creating it;
-            # also, if we do find it, checking for a mismatched schema and deal with the issue (either by giving a warning or sending ALTER TABLE commands)
-        except sqlalchemy.exc.OperationalError as e:
-            print("Unable to create table `%s`:" % (name,))
-            
-            # When do we do a table create? for comparison dataset does it *if it hasn't seen it before* 
-            # the only reason that method is usually alright is that by default it starts by loads tables from the db at
-            # and carefully updates the tables as columns are added or removed
-            # however it breaks if you db = connect(, reflectMetadata=False); db['table_that_already_exists'].insert()
-            #(it doesn't break at just getting the table, which )
-            #dataset's idea of "table exists" is "i have an item in my _tables dictionary with the same key"
-            
-            #TODO: improve this error case
-            # e.g. distinguish the "it already existed" from the "SQL broke" cases
-            print(e)
-        return self
 
 class TimestepTable(SimulationTable):
     def __new__(cls, parent, name, *schema, **kwargs):
