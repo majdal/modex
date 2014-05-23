@@ -107,6 +107,8 @@ class SimulationLog(object):
     
     def __getitem__(self, name):
         # rely on the fact that any table adds *itself* to the metadata object
+        if name not in self._metadata.tables:
+            raise KeyError("Unknown SimulationLog table '%s'" % (name,))
         return self._metadata.tables[name]
     
     def __call__(self, table, **row):
