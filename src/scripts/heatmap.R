@@ -50,7 +50,7 @@ z = heatmap.1d(act, xvar, yvar)
 #print(z)
 
 #TESTS:
-png(filename=paste("scatter _",basename(db),"_",xvar,"_",yvar,".png",sep=""))
+png(filename=paste("scatter_",basename(db),"_",xvar,"_",yvar,".png",sep=""))
 plot(act[,xvar], act[,yvar], 
         main="Before heatmapping",
         xlab=xvar, ylab=yvar)
