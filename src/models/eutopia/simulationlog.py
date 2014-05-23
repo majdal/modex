@@ -48,6 +48,8 @@ class SimulationTable(sqlalchemy.Table):
         
         try: #make the table before using it
             self.create() #in contrast to other SQLAlchemy commands, .create() executes itself immediately; wrapping in .execute() is wrong
+            # TODO: first look at the db schema to find this table before creating it;
+            # also, if we do find it, checking for a mismatched schema and deal with the issue (either by giving a warning or sending ALTER TABLE commands)
         except sqlalchemy.exc.OperationalError as e:
             print("Unable to create table `%s`:" % (name,))
             
@@ -73,12 +75,14 @@ class TimestepTable(SimulationTable):
 
 class SimulationLog:
     """
-    ...
+    A coordinator class for managing logs from simulations.
+    Each instance is for one simulation run, and handles constructing a random run ID.
     
     usage: construct this and then construct a series of ModelTables (or their subclasses!)
       in cooperation with this class      giving this as their first argument
-      This is just like making a regular set of sqlalchemy.Tables,
-      including that you must define at least one primary key or you will have trouble
+      This is just like making a regular set of sqlalchemy.Tables
+      with the caveat that, since ModelTable defines a primary key (at least one, more if you use the subclasses)
+      you must also define and use at least one primary key if you want to log more than one piece of data per run
       
       a SimulationLog may share tables with preexisting databases, other sqlalchemy.Engines,
       or even other SimulationLogs.

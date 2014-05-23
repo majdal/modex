@@ -2,14 +2,16 @@
 # this program requires python2 because GDAL requires python2
 
 # system libs
-import os
-from itertools import izip
-import warnings
+import os, warnings
+
+import random
+import json
 
 # third party
 import dataset
 
 # local libs
+from simulationlog import *
 import pygdal
 from util import *
 
@@ -25,9 +27,10 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 #
 #
 # state:
-#  Farms - a set of georeferenced polygons containing (id, MAP_CODE, county, {some other stuff that we ignore})
+#  Farms - a set of georeferenced polygons containing (id, soil_type, county, activity, {some other stuff that we ignore})
 #        MAP_CODE is the type of farming done on that land (which might not strictly be farming. Activities like lying fallow or running a jungle gym are possible) 
 #  FarmFamily - an agent which has (bank_account, preferences)
+#  
 #  
 # interventions:
 # Upon the substrate of model state, Eutopia gives the user the power to
@@ -35,6 +38,12 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 # We call these "interventions" and they operate by
 # (TODO: this part hasn't actually been properly spec'd yet; there are arguments to have)
 # 
+# logged state:
+#  - every Farm's (activity, soil status, ...?)
+#  - every FarmFamily (bank account, farms <-- requires a separate table...)
+#  - the current value of aggregate_measures (TODO: doing this cleanly requires cleaning up Activity first and dealing with the Normal()s in there which are in the wrong place)
+#  - activity counts
+#
 # future plans:
 # Farms will grow SOIL_TYPE
 # A Farmer class, which is born into a FarmFamily, moves, perhaps inherits farms from their parents, dies
@@ -91,16 +100,36 @@ AGRICULTURE_CODES = { #hardcoded out of the ARI dataset
    #'ZR': 'REFORESTATION'
 }
 
-class Farm(pygdal.Feature):
+SOIL_TYPES = [ #more than you ever wanted to know at http://sis.agr.gc.ca/cansis/taxa/cssc3/index.html
+    "CLAY",
+    "PEAT",
+    "LOAM",
+    "CHRERNOZEM", #aka "black earth" e.g. Holland Landing
+    "SAND"
+]
+
+class Farm: #(pygdal.Feature): #inheritence commented out until we determine if it's a good idea or not
+                               #the trouble comes down to that I want to have a copy constructor:
+                               # I want to say Farm(map.getsomefeature())
+                               # but a native ogr.Feature needs to be ogr.Feature(ogr.FeatureDefn(...)) which is all sorts of pain
+                               # For now, we clone only the given feature's geometry, which is all we are using at the moment
     def __init__(self, feature):
-        pygdal.Feature.__init__(self, feature)
-        #self.land_type = land_type #hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+        #pygdal.Feature.__init__(self, feature)
+        self.geometry = feature.GetGeometryRef() #instead of trying to muck with inheritence, just use get a pointer to the geometry and ignore the columns
+        
+        self.soil_type = random.choice(SOIL_TYPES) #TODO: pull from a real dataset
         self.county = "BestCountyInTheWorldIsMyCountyAndNotYours"
-
-        self.last_activity = None
-        self._lat = None
-        self._long = None
-
+        self._activity = self.last_activity = None
+        import IPython; IPython.embed()
+    
+    def get_activity(self):
+        return self._activity;
+    
+    def set_activity(self, value):
+        self.last_activity, self._activity = self._activity, value;
+    
+    activity = property(get_activity, set_activity)
+    
     @property
     @memoize
     def lat(self):
@@ -114,6 +143,19 @@ class Farm(pygdal.Feature):
 
     @property
     def area(self): return self.geometry.Area()
+    
+    def ExportToJSON(self):
+        # hand-rolled export function
+        # Until we figure out a consistent and efficient way to handle time-varying shapefiles,
+        # this will do to only export the properties which are actual geofeature properties (as distinct from the helpers that make the model easier to write)
+        
+        return json.dumps(
+        {"type": "Feature",
+         "geometry": json.loads(self.geometry.ExportToJSON()), #XXX ridiculously inefficient
+         "properties":
+            {"activity": self.activity,
+             "soil_type": self.soil_type,
+             "county": self.county}})
 
 class FarmFamily:
     def __init__(self, eutopia):
