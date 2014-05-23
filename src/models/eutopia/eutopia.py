@@ -237,13 +237,17 @@ class Eutopia:
         """
         helper to contan the verbose declarative schema statements
         TODO: hack it with metaclasses and some schema-walking magic
-           so that the tables can be declared at the class level
+           so that the schema can be declared at the class level
            but the actual log (and runID) only made at runtime
            the Tables by themselves shouldn't need to know
-            the trick would be to swap out the tables' .parent at the right times
+           
+         the trick would be maybe.. clone the Table objects and swap out
+            the magic hidden columns with `default=` hooks.
+            but let all SimulationTables share the other Columns
         """
         self.log = TimestepLog(log)
         
+        # define the logging SQL schema 
         equipment = Table(self.log, "equipment", Column("id", Integer, primary_key=True), Column("name", String))
         TimestepTable(self.log, "farms",
                                 Column("id", Integer, primary_key=True),
@@ -290,10 +294,12 @@ class Eutopia:
             pass
         
     
-    def __init__(self, log = "sqlite://"):
+    def __init__(self, log = None):
         """
-        log: the SQLAlchemy connection string to log into; default is to log into a temporary memory database.
+        log: the SQLAlchemy connection string to log into;
+        default is to log into a temporary memory database.
         """
+        if not log: log = "sqlite://"
         self._init_log(log)
                                                 
         #TODO: for categorical data, like 'county' and 'soil_type', switch to using an integer id to save space
@@ -314,7 +320,7 @@ class Eutopia:
 
         #########################
         # modelling begins here
-        # self.time is now == self.log.time
+        self.time = 0
         self.activities = activity.Activities()
         self.interventions = []
 
@@ -351,18 +357,26 @@ class Eutopia:
                 intervention.apply(self, self.time)
 
         # run model
+        # BUG: order of agent execution matters here!
+        # we should be using doublebuffering
+        # and then handling the fiddly corner cases like what happens
+        #  when two agents make incompatible decisions, like both buying the same farm, etc
         self.latest_activity_count = self.get_activity_count()
         for family in self.families:
             family.step()
+        self.time += 1
         
+        self._log() #TODO: should logging happen *before* we compute?
+        
+    def _log(self):
         # log system state
         # ...
         
         # log metrics
         self.log("activity_counts", **self.get_activity_count()) #XXX see version 1 vs version 2 below; this is version 1
         
-        # finally, update the time
-        self.log.step()
+        # finally, update the log's time
+        self.log.step(self.time)
     
     @property
     def time(self):
@@ -401,13 +415,13 @@ class Eutopia:
         return self.get_activity_count(self.get_local_farms(farm.lat, farm.long, count))
 
 
-def create_demo_model():
+def create_demo_model(db=None):
     """
     Construct Eutopia under a specific scenario.
     
     This subroutine is useful as a benchmark for using Eutopia under different hosts.
     """
-    eutopia = Eutopia()
+    eutopia = Eutopia(db)
     
     eutopia.intervene(intervention.PriceIntervention(5, 'duramSeed', 10))
     eutopia.intervene(intervention.PriceIntervention(7, 'duramSeedOrganic', 0.001))
@@ -431,7 +445,7 @@ def create_demo_model():
     return eutopia
 
 
-def main(n=20, dumpMap=False):
+def main(n=20, db=None):
     """
     Run Eutopia with some default interventions, and plot the results if matplotlib is installed.
     
@@ -444,14 +458,14 @@ def main(n=20, dumpMap=False):
         [ ] Then, document how to use --dumpMap to reconstruct /assets/maps/elora.topo.json from this Elora_esque.shp.zip.real
     """
     
-    eutopia = create_demo_model()
+    eutopia = create_demo_model(db)
 
-    if dumpMap:
-        #write the map data from GDAL out to topojson
-        # TODO: move this to the `scripts/` folder
-        eutopia.dumpMap("elora.geo.json")
-        os.system("topojson elora.geo.json -o elora.topo.json")
-        print("Finished exporting map data to elora.topo.json")
+    #if dumpMap:
+    #    #write the map data from GDAL out to topojson
+    #    # TODO: move this to the `scripts/` folder
+    #    eutopia.dumpMap("elora.geo.json")
+    #    os.system("topojson elora.geo.json -o elora.topo.json")
+    #    print("Finished exporting map data to elora.topo.json")
     
     #run the model
     print("Simulating Eutopia:")
@@ -476,6 +490,7 @@ def main(n=20, dumpMap=False):
         # Version 1: flopping activities across columns
         timeseries[act] = [r[0] for r in select([activity_counts.c[act]])
                                          .order_by(activity_counts.c.time)
+                                         .where(activity_counts.c.run_id == eutopia.log.run_id)
                                          .execute().fetchall()]
         print(act, ":", timeseries[act])
         
@@ -503,4 +518,8 @@ def main(n=20, dumpMap=False):
     print("good bye!")
 
 if __name__=='__main__':
-    main()
+    db = None
+    import sys
+    if len(sys.argv) > 1:
+        db = "sqlite:///" + sys.argv[1] #construct
+    main(db=db)
