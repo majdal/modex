@@ -117,21 +117,13 @@ class SimulationLog(object):
         self.database.execute(self[table].insert(row))
     
     def create_tables(self):
-        try:
-            self._metadata.create_all(self.database)
-        except sqlalchemy.exc.OperationalException as e:
-            warn("couldn't finish making all tables:")
-            warn(e)
-    
-            # When do we do a table create? for comparison dataset does it *if it hasn't seen it before* 
-            # the only reason that method is usually alright is that by default it starts by loads tables from the db at
-            # and carefully updates the tables as columns are added or removed
-            # however it breaks if you db = connect(, reflectMetadata=False); db['table_that_already_exists'].insert()
-            #(it doesn't break at just getting the table, which )
-            #dataset's idea of "table exists" is "i have an item in my _tables dictionary with the same key"
-            
-            #TODO: improve this error case
-            # e.g. distinguish the "it already existed" from the "SQL broke" cases
+        """
+        create tables if they are missing from the db
+        
+        XXX: if tables with the same name exist in the db but have a different schema, bad things will happen
+        """
+        with self.database.begin(): #use a transaction, so that this really is either create_all or create_none
+            self._metadata.create_all(self.database, checkfirst=True) #TODO: look into if SQLAlchemy already uses a transaction
 
 class TimestepLog(SimulationLog):
     "a SimulationLog which adds a time column; cooperates with TimestepTable"
