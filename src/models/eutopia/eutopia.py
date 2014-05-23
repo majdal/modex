@@ -2,7 +2,8 @@
 # this program requires python2 because GDAL requires python2
 
 # system libs
-import os, warnings
+import os
+from warnings import warn
 
 import random
 import json
@@ -281,7 +282,12 @@ class Eutopia:
         
         self.log.create_tables()
         
-        equipment.insert().values([{"id": id, "name": name} for name, id in activity.equipments.items()]).execute()
+        try:
+            equipment.insert().values([{"id": id, "name": name} for name, id in activity.equipments.items()]).execute()
+        except sqlalchemy.exc.IntegrityError as e:
+            warn("We probably already inserted the static `equipment` table")
+            warn(str(e))
+            pass
         
     
     def __init__(self, log = "sqlite://"):
