@@ -15,6 +15,13 @@ TODO:
 
 """
 
+# the 1:1 mapping between equipment and equipment IDs 
+# copied into the database at init
+# pluralized to distinguish it from all the other variables named equipment
+equipments = ['tractor', 'plow']  
+equipments = dict((name, id) for id, name in enumerate(equipments)) #invert the mapping, so that we can log by looking up the ID
+# TODO: maybe use https://pypi.python.org/pypi/bidict/0.1.1 ? 
+
 # quick-hack hard-coding of the sorts of activities in the system
 # TODO: rewrite more flexibly and cleaner. Perhaps with subclasses (ruby-style)?
 activities = {

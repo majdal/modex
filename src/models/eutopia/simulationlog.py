@@ -5,6 +5,7 @@ the reason using dataset directly is awkward is because it is hard-coded to use 
 
 the reason this is complicated because we have several cooperating classes kicking around: the database and the tables in that database.
 
+TODO: use python's logging class instead of debugprints
 """
 
 
@@ -93,6 +94,8 @@ class SimulationLog(object):
      TODO: support minimal querying, for completeness
      e.g. a .read() method which does a full select()
      its awkward that the only way to get things out is to grab the internal member .database
+     
+     TODO: support syntactic sugar for generating tables; something like log['newtablename'](Column(), Column(), ...)
     """
     def __init__(self, connection_string):
         self.database = sqlalchemy.create_engine(connection_string)
@@ -114,6 +117,7 @@ class SimulationLog(object):
     def __call__(self, table, **row):
         "syntactic sugar for logging into one of the tables" 
         #TODO: support insert many: if row is a single
+        #print("log(%s, %s)" % (table, row)) #DEBUG
         self.database.execute(self[table].insert(row))
     
     def create_tables(self):

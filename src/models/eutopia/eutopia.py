@@ -7,9 +7,6 @@ import os, warnings
 import random
 import json
 
-# third party
-import dataset
-
 # local libs
 from simulationlog import *
 import pygdal
@@ -115,11 +112,12 @@ class Farm: #(pygdal.Feature): #inheritence commented out until we determine if 
                                # For now, we clone only the given feature's geometry, which is all we are using at the moment
     def __init__(self, feature):
         #pygdal.Feature.__init__(self, feature)
-        self.geometry = feature.GetGeometryRef() #instead of trying to muck with inheritence, just use get a pointer to the geometry and ignore the columns
+        self._geometry = feature.GetGeometryRef() #instead of trying to muck with inheritence, just use get a pointer to the geometry and ignore the columns
         
         self.soil_type = random.choice(SOIL_TYPES) #TODO: pull from a real dataset
         self.county = "BestCountyInTheWorldIsMyCountyAndNotYours"
-        self._activity = self.last_activity = None
+        self._activity = self._last_activity = None
+        # you might use _last_activity to make_planting_decision?
         
         (self.long, self.lat) #..uh oh. for some reason we need to access (and memoize) these here, or else gdal segfaults
         #print(self.lat, self.long)
@@ -128,23 +126,23 @@ class Farm: #(pygdal.Feature): #inheritence commented out until we determine if 
         return self._activity;
     
     def set_activity(self, value):
-        self.last_activity, self._activity = self._activity, value;
+        self._last_activity, self._activity = self._activity, value;
     
     activity = property(get_activity, set_activity)
     
     @property
     @memoize
     def lat(self):
-        return self.geometry.Centroid().GetY() 
+        return self._geometry.Centroid().GetY() 
 
     @property
     @memoize #fun fact: memoizing this function saves 700 times the calls
              #          --nearly 3 orders of magnitude-- as of this commit.
     def long(self):
-        return self.geometry.Centroid().GetX()
+        return self._geometry.Centroid().GetX()
 
     @property
-    def area(self): return self.geometry.Area()
+    def area(self): return self._geometry.Area()
     
     def ExportToJSON(self):
         # hand-rolled export function
@@ -218,14 +216,15 @@ class FarmFamily:
     def step(self):
         for farm in self.farms:
             # changed to self.eutopia to make it work with the sim version that is passed to Family21
-            activity = self.make_planting_decision(self.eutopia.activities.activities, farm)
-
-            money = activity.get_product('money', farm)
-            self.bank_balance += money
-
-            farm.last_activity = activity
+            farm.activity = self.make_planting_decision(self.eutopia.activities.activities, farm)
+            
+            self.bank_balance += farm.activity.get_product('money', farm)
 
 
+#notational hack
+#TODO: move somewhere less foolish
+sqlalchemy.JSON = sqlalchemy.String
+JSON = String
 
 class Eutopia:
     """
@@ -233,15 +232,69 @@ class Eutopia:
     The main simulation class
     There is an API here for controlling and querying the model state
     """
-    def __init__(self, log = None):
-        self.log = log
-        if self.log is None:
-            self.log = "sqlite://" #creates an in-memory database object
-        if isinstance(self.log, str):
-            self.log = dataset.connect(self.log)
-        else:
-            if not isinstance(self.log, dataset.Database):
-               warnings.warn("Eutopia log should be a dataset.Database object.") #only warn, don't crash, to allow for users doing funky mocking stuff that an explicit type check would miss; What I really want here is to assert on an Interface, like Java/C# or Twisted.
+    def _init_log(self, log):
+        """
+        helper to contan the verbose declarative schema statements
+        TODO: hack it with metaclasses and some schema-walking magic
+           so that the tables can be declared at the class level
+           but the actual log (and runID) only made at runtime
+           the Tables by themselves shouldn't need to know
+            the trick would be to swap out the tables' .parent at the right times
+        """
+        self.log = TimestepLog(log)
+        
+        equipment = Table(self.log, "equipment", Column("id", Integer, primary_key=True), Column("name", String))
+        TimestepTable(self.log, "farms",
+                                Column("id", Integer, primary_key=True),
+                                Column("activity", String), Column("county", String),
+                                Column("geometry", JSON)) #TODO: don't store geojson to the database; this is massively inefficient; instead, figure out a way to use geodata natively but not too clumsily; perhaps instead of storing a geometry, store a feature ID and include in the model docs a pointer to the shapefile that contains the geometry. The indirection is painful, but geojson is sooooo inefficient; plus, I promised my mother I would never pack entire objects into a whole database column ever again.
+        TimestepTable(self.log, "farmers",
+                                Column("id", Integer, primary_key=True),
+                                Column("bank_account", Float))
+        TimestepTable(self.log, "farmers_equipment", #list of each farmer's farms (this could also be done by an 'owner' column on farms, but that doesn't ORM-map as cleanly)
+                                Column("farmer_id", Integer, ForeignKey("farmers.id")),
+                                Column("equipment_id", Integer, ForeignKey("equipment.id")))
+        TimestepTable(self.log, "farmers_farms", #list of each farmer's farms (this could also be done by an 'owner' column on farms, but that doesn't ORM-map as cleanly)
+                                Column("farmer_id", Integer, ForeignKey("farmers.id")),
+                                Column("farm_id", Integer, ForeignKey("farms.id")))
+        TimestepTable(self.log, "farmers_preferences",
+                                Column("farmer_id", Integer, ForeignKey("farmers.id")),
+                                Column("money", Float), #these are hardcoded for now; but they come from a list which might change and, in SQL, that means this table should be a dictionary ((farmer, id) => preference) with a separate table to store the names to go with the ids
+                                Column("follow_local", Float),
+                                Column("follow_society", Float))
+        
+        # tables for "bigger" state
+        TimestepTable(self.log, "aggregate_measures",
+                                *[Column(a, Float) for a in activity.aggregate_measures])
+        
+        # (version 1 is in some ways "ugly sql" but it makes very pretty tables and is actually easier to work with! )
+        # activity_counts Version 1: flopping activities across columns
+        # activity_counts Version 2: a more normalized sql form, where we essentially embed a dictionary into a table
+        # ALSO this table can be derived from the farms table, e.g. by a
+        # related but separate EutopiaStatistics program; whether to use 
+        # only use one table, the other, or to write both is a question of
+        # a) speed b) space c) what the model writer is interested in looking at
+        # For now, we err on the side of logging too much than too little.
+        TimestepTable(self.log, "activity_counts", #notice how this table has no per-step primary key:
+                                                   #in this particular table, each timestep *has only one row*
+                                *[Column(a, Integer) for a in activity.activities])
+        
+        self.log.create_tables()
+        
+        equipment.insert().values([{"id": id, "name": name} for name, id in activity.equipments.items()]).execute()
+        
+    
+    def __init__(self, log = "sqlite://"):
+        """
+        log: the SQLAlchemy connection string to log into; default is to log into a temporary memory database.
+        """
+        self._init_log(log)
+                                                
+        #TODO: for categorical data, like 'county' and 'soil_type', switch to using an integer id to save space
+        #  even better, support the (now built in!) enum type: https://pypi.python.org/pypi/enum34 in general, with a spare table to give the mapped strings and a proper Foreign Key constraint
+        # (does SQLAlchemy already do this? it should!)
+        # TODO: apply SQLAlchemy's ORM because this is getting out of hand.
+        #  The trick will be to apply the ORM yet use TimestepTables.
         
         try:
             shapefile = pygdal.Shapefile(MAP_SHAPEFILE)
@@ -255,7 +308,7 @@ class Eutopia:
 
         #########################
         # modelling begins here
-        self.time = 0
+        # self.time is now == self.log.time
         self.activities = activity.Activities()
         self.interventions = []
 
@@ -295,33 +348,20 @@ class Eutopia:
         self.latest_activity_count = self.get_activity_count()
         for family in self.families:
             family.step()
-        self.time += 1
-
+        
+        # log system state
+        # ...
+        
         # log metrics
-        self.record("activities", **self.get_activity_count()) #XXX this will flop across allllll the columns; is that what we want?
-        #self.record("activities", [{"activity": a, "value": v} for a,v in self.get_activity_count().iteritems()]) #this rearranges the dictionary into two columns, which is more SQLish; dataset makes either one transparent to us, though
+        self.log("activity_counts", **self.get_activity_count()) #XXX see version 1 vs version 2 below; this is version 1
         
-    def record(self, table, many=None, **state):
-        "log model 'state' into 'table' in database self.log"
-        "if many is given, state should be empty"
-        #XXX 'many' is sketchy! It only really exists because of table layout "version 2";
-        # I can't make up my mind to keep it or not.
-        
-        table = self.log[table] #dataset constructs a new table here for us if needed
-                
-        def labelit(d): #XXX bad name
-            "label a row of state with the current run ID and the current time"
-            d = d.copy() #XXX this copy is a safety measure, but it is wasteful for this particular use case
-            d.update({"runID": -1}) #TODO: this should be outside of the model, like say in the Simulation class? hm. awkward!
-            d.update({"time": self.time}) #TODO: make some uber update method which logs every piece of "current" state and then incremements the timestep 
-            return d
-            
-        if many is None:
-            table.insert(labelit(state))
-        else:
-            assert not state, "`many` and `**state` are mutually exclusive" #XXX sketchy
-            assert all(isinstance(e, dict) for e in many)
-            table.insert_many([labelit(e) for e in many])
+        # finally, update the time
+        self.log.step()
+    
+    @property
+    def time(self):
+        #TODO: handle null logging; in that case, use a backing ._time like a normal person
+        return self.log.time
     
     next = __next__ #backwards compatibility with python2
     step = __next__ #backwards compat with ourselves
@@ -338,14 +378,11 @@ class Eutopia:
     def get_activity_count(self, farms = None):
         "return a dictionary containing the current value of each economic activitiy"
         if farms is None: farms = self.farms
+        # this is a 'bucketize' operation
         activities = {}
         for farm in farms:
-            if farm.last_activity is not None:
-                name = farm.last_activity.name
-                if name not in activities:
-                    activities[name] = 1
-                else:
-                    activities[name] += 1
+            if farm.activity is None: continue
+            activities[farm.activity.name] = activities.get(farm.activity.name, 0) + 1
         return activities
 
     def get_local_farms(self, lat, long, count):
@@ -415,14 +452,9 @@ def main(n=20, dumpMap=False):
     for t in range(n):
         print ("Timestep %d" % (t,))
         next(eutopia)
-
-    #version 1: flopping activities across columns; so the list of distinct activities is the list of columns minus the metadata columns
-    activities = [act for act in eutopia.log['activities'].columns if act not in ["id", "runID", "time"]]
-    #version 2: using one column "activity" to store the activities
-    #activities = list(e['activity'] for e in eutopia.log['activities'].distinct("activity"))
     
-
-    # display results
+    # display activity count results
+    # as a side effect, order the results into individual timeseries by name
     print("Farm activities over time:")
     #print(list(eutopia.log['activities'].all()))
     #print(eutopia.log['activities'].columns)
@@ -430,15 +462,16 @@ def main(n=20, dumpMap=False):
     # Now, reading the data is awkward because we use raw Python
     # If we installed Pandas (which is not unreasonable, given that we care about stats and dataset manipulation)
     # the cruft would get hidden (and probably run faster too, since Pandas has been tuned)
-    for act in activities:
+    timeseries = {}
+    activity_counts = eutopia.log.activity_counts
+    for act in activity.activities.keys():
 
         # (version 1 is in some ways "ugly sql" but it makes very pretty tables and is actually easier to work with! )
         # Version 1: flopping activities across columns
-        timeseries = [r[act] for r in eutopia.log['activities'].find(order_by="time")]
-        # Version 2: a more normalized sql form, where we essentially embed a dictionary into a table
-        #timeseries = [r["value"] for r in eutopia.log['activities'].find(activity=act, order_by="time")]
-        
-        print(act, ":", timeseries)
+        timeseries[act] = [r[0] for r in select([activity_counts.c[act]])
+                                         .order_by(activity_counts.c.time)
+                                         .execute().fetchall()]
+        print(act, ":", timeseries[act])
         
     
     
@@ -447,15 +480,10 @@ def main(n=20, dumpMap=False):
     try:
         import pylab
         print("Plotting activities with matplotlib:")
-        for act in activities:
-            
-            # (version 1 is in some ways "ugly sql" but it makes very pretty tables and is actually easier to work with! )
-            # Version 1: flopping activities across columns
-            timeseries = [r[act] for r in eutopia.log['activities'].find(order_by="time")]
-            # Version 2: a more normalized sql form, where we essentially embed a dictionary into a table
-            #timeseries = [r["value"] for r in eutopia.log['activities'].find(activity=act, order_by="time")]
-            
-            pylab.plot(range(len(timeseries)), timeseries, label=act)
+        # split the table into individual columns
+        # TODO: use pandas; in R I would say table[, act] and I want to do the same here.
+        for act in timeseries:
+            pylab.plot(range(len(timeseries[act])), timeseries[act], label=act)
             pylab.xlabel("time")
             pylab.ylabel("activity")
         
