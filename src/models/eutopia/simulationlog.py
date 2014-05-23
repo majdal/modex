@@ -65,7 +65,7 @@ class TimestepTable(SimulationTable):
         schema = (Column("time", Integer, primary_key=True, default=lambda: parent.time),) + schema
         return SimulationTable.__new__(cls, parent, name, *schema, **kwargs)
 
-class SimulationLog:
+class SimulationLog(object):
     """
     A coordinator class for managing logs from simulations.
     Each instance is for one simulation run, and handles constructing a random run ID.
@@ -119,7 +119,7 @@ class TimestepLog(SimulationLog):
     "a SimulationLog which adds a time column; cooperates with TimestepTable"
     def __init__(self, *args, **kwargs):
         self.time = 0
-        super().__init__(*args, **kwargs)
+        super(TimestepLog, self).__init__(*args, **kwargs)
         
     def step(self, value=None):
         if value is not None:
