@@ -71,13 +71,13 @@ class Normal:
     def __mul__(self, scale):
         return Normal(self.mean*scale, self.sd*scale)
 
-    def __addi__(self, location):
+    def __iadd__(self, location):
         self.mean += location
-    def __muli__(self, scale):
-        self.location *= scale
+    def __imul__(self, scale):
+        self.mean *= scale
         self.scale *= scale
         
-def Normal(a,b):
+def _Normal(a,b):
     """
     The above written as a closure
     problem: this does not support the operator overloading sugar.

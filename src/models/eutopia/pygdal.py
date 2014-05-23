@@ -144,6 +144,19 @@ class Layer(object):
 
 class Feature(object):
     """
+    thin wrapper around ogr.Feature which has a copy-constructor
+    """
+    def __init__(self, ogr_feature):
+        if isinstance(ogr_feature, Feature): #support pygdal to pygdal copy-construction
+            ogr_feature = ogr_feature._source
+        self.__dict__['_source'] = ogr_feature
+    def __getattr__(self, attr):
+        return getattr(self.__dict__['_source'], attr)
+    def __setattr__(self, attr, value):
+        return setattr(self.__dict__['_source'], attr, value)
+
+class _Feature(object):
+    """
     A wrapper that makes OGR Features objects pythonic
     Every column in the table is exposed as a property
     this class is the start of pygdal

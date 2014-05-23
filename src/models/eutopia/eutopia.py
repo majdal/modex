@@ -120,7 +120,9 @@ class Farm: #(pygdal.Feature): #inheritence commented out until we determine if 
         self.soil_type = random.choice(SOIL_TYPES) #TODO: pull from a real dataset
         self.county = "BestCountyInTheWorldIsMyCountyAndNotYours"
         self._activity = self.last_activity = None
-        import IPython; IPython.embed()
+        
+        (self.long, self.lat) #..uh oh. for some reason we need to access (and memoize) these here, or else gdal segfaults
+        #print(self.lat, self.long)
     
     def get_activity(self):
         return self._activity;
@@ -403,6 +405,7 @@ def main(n=20, dumpMap=False):
 
     if dumpMap:
         #write the map data from GDAL out to topojson
+        # TODO: move this to the `scripts/` folder
         eutopia.dumpMap("elora.geo.json")
         os.system("topojson elora.geo.json -o elora.topo.json")
         print("Finished exporting map data to elora.topo.json")
