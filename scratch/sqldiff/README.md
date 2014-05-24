@@ -19,13 +19,27 @@ Methods Considered
  for each line in the second set, find if its in the first and if not add to the first 
 
 
-2.
+2. Compute the set differences of the tables:
+   - the leftovers of the original (left ) table are the deleted lines
+   - the leftovers of the      new (right) table are the added lines
+   
+   To do this efficiently:
+    - sort the inputs;
+    - travel through them side by side
+    - search for identical pairs of lines and mark them as removed
+      (equivalently, add the non-removed lines to the output sets as you go)
+    - (due to the sort, you only need to check each row once)
 
-
+2.i 
+  compute set differences but find
+   [...?]
+  
 (2,1) could be implemented in SQL stored procedures, logging results to an "events" table; every time you call the procedure it erases the old table and writes a new one
 
 3. Find a way read the SQL log directly 
   (the equivalent with a journalling filesystem like ext3/ntfs/btrfs would be to parse the log; but not all SQLs necessarily keep such a log
+  -
+  - Implement the MySQL/Postgres/CouchDB/etc replication protocol in javascript and plug it into a WebSocket
 
 4. construct our own journal
      - use SQL triggers (MySQL, MSSQL, Postgres and Sqlite all have some extension method which you can get to do actions on CREATE, INSERT, UPDATE and DELETEs) and pass the events via IPC/filesystem queue/socket/HTTP
@@ -36,6 +50,30 @@ Methods Considered
 5. add timestamp column with automatic updates
   then to get the changes, you do SELECT * from table where ts > last_time_loaded
   ^ but this doesn't handle DELETEs
+
+Large Architecture
+------------------
+
+The most flexible and reliable way to plug this into a larger system is message-passing.
+
+What we really do not want to be doing is rerunning diff() every millisecond for every user,
+but that is what we might end up doing if we aren't careful, because generally every client will be at a slightly different place in the history
+If we instead have a central diffing agent which runs say, every 5 seconds
+and sends out a stream of change events to a queue
+and those get pushed up to a bus
+upon which clients (well, the websocket endpoint that is proxying for the client) registers listeners.
+ and pull down the events into their own queues
+ for playing out to clients
+ (and that way, if a client lags out its queue of deltas will not get misordered; they'll just wait and then batch)
+
+The central diffing agent will slow linearly (or worse, if badly programmed) as the database grows;
+it might get to a point where it takes longer to compute the diff than the time allotted.
+This seems silly, considering that in that case, most rows will remain unchanged.
+(dat must have this solved; how did they do it?)
+
+If we instead had a way (e.g. options 3, 4) to access the change events
+ directly we could replace the central diffing agent, and keep all the 
+ flexibility of the event-passing architecture. 
 
 TODO
 ----
