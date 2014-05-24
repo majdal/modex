@@ -31,6 +31,12 @@ def fancyslice(L, idx): #implements indexing-by-set like R and scipy
     return [l for i, l in enumerate(L) if i in idx]
 
 def diff(L, R):
+    """
+    this prototype operates on iterators of lists: the format you get by reading a csv
+    XXX bug: it actually is currently hardcoded to require knowing the length of the tables in advance
+    
+    (perhaps with suitable abstraction into iterables, the same code could run identically whether L and R are SQLAlchemy resultssets, csv.readers, or hard-coded lists)
+    """
     assert L == sorted(L)
     assert R == sorted(R)
     len_L, len_R = len(L), len(R)
@@ -89,18 +95,85 @@ def read_table(fname):
     load a csv , and sort it to serve the preconditions
     drops the header row!
     Inefficient!
-    """
+    """    
+    import csv
     return sorted(list(csv.reader(open(fname,"r")))[1:])
 
+# TODO: rewrite
 
-if __name__ == '__main__':
-    import sys
-    import csv
-    L, R = [read_table(f) for f in sys.argv[1:]]
+def test_empty_left():
+    L = []
+    R = [[-13, 'h', '55'],
+         [-9, 'a', '3'],
+         [1, 'a', 'q'],]
+         
     deletions, additions = diff(L, R)
+
     print("additions")
     for a in additions:
         print(a)
     print("deletions")
     for d in deletions:
         print(d)
+
+
+def test_empty_right():
+    L = [[-13, 'h', '55'],
+         [-9, 'a', '3'],
+         [1, 'a', 'q'],]    
+    R = []
+         
+    deletions, additions = diff(L, R)
+
+    print("additions")
+    for a in additions:
+        print(a)
+    print("deletions")
+    for d in deletions:
+        print(d)
+
+# i need tests...
+
+# one sort of test: construct a list of additions and deletions and updates
+# apply them
+# then run diff on the results
+# and compare the result of diffs
+
+# cases to check for:
+#  - a typical case
+#  - duplicate rows should be considered distinct!!
+#  - what happens if one of the earlier columns is updated; is it detected as an update?
+#  - what happens if a mixture of the 
+#  - what happens if only one column is updated
+#  - having lists of overlap [a, ...], [a, ....]
+#  - an empty left (---> ejntirely adds)
+#  - an empty right (---> entirely deletes)
+#  -
+
+def test_typical(f1 = "activity_counts.shuf1.csv", f2="activity_counts.shuf2.csv"):
+    L, R = [read_table(f) for f in (f1, f2)]
+    
+    deletions, additions = diff(L, R)
+
+    print("additions")
+    for a in additions:
+        print(a)
+    print("deletions")
+    for d in deletions:
+        print(d)
+
+def tests():
+    for name, test in list(globals().items()):
+        if not name.startswith("test_"): continue
+        print(name)
+        test()
+        print("----------------")
+        print()
+
+
+if __name__ == '__main__':
+    import sys
+    if sys.argv[1:]:
+        test_typical(sys.argv[1], sys.argv[2])
+    else:
+        tests()
