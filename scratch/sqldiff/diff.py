@@ -30,6 +30,42 @@ def fancyslice(L, idx): #implements indexing-by-set like R and scipy
     # TODO: support negative indexing to mean "drop it"
     return [l for i, l in enumerate(L) if i in idx]
 
+    # a line that is an /update/ is.. marked on the update list and stepped over, I think?
+    # because  you've figured out what is up with both rows and dealt with them
+    # an
+    # but if the rows are totally different
+    #  the rows
+    # ..my algorithm is going to miss some updates as written?? because how can it possibly detect if
+    # like, if I claim that ""
+    # instead what I have to do is iterate over all elements and find which ones are the same
+    # if ALL are different, that's
+    # but how does sorting come into this then?
+    # i still need to like, walk
+    # sorting ensures that the differences happen at the end
+    #  ..h
+    # [3]
+    # 
+    """
+    FLAG = None #instructs magic-gen whether to step left, right or eat
+    def magicgenerator():
+        # yields the current lines to consider
+        # carefully handling the cases where either gen might run out
+        while True:
+    
+    def cmp(l, r):
+        # compare two rows
+        # decide if the two rows are:
+        # equal
+        # r is an update to l
+        # we could do this with the built-in < and == ops, but to check for updatedness we also want to know *where* the elements
+        assert len(l) == len(r)
+        # TODO: also assert that the types of all elements match up
+      
+    for left, right in magicgenerator():
+       """ 
+# this feels sort of like a mergesort, doesn't it?
+
+
 def diff(L, R):
     """
     this prototype operates on iterators of lists: the format you get by reading a csv
@@ -47,12 +83,12 @@ def diff(L, R):
     # this algorithm is not supposed to be, youy know, elegant. i'll get to that.
     L_row = next(L)
     R_row = next(R)
-    i = -1
+    ops = -1 #DEBUG; count the number of steps the algorithm takes
     try:
         while True:
-            i+=1
+            ops+=1
             print()
-            print(i)
+            print(ops)
             print("L[%d] = %s" % (i_L, L_row))
             print("R[%d] = %s" % (i_R, R_row))
             # ending conditions are complicated 
@@ -82,13 +118,47 @@ def diff(L, R):
                     R_row= next(R)
     except StopIteration:
         # finish up any leftovers
-        Kept_L += islice(L, i_L, len_L)
-        Kept_R += islice(R, i_R, len_R)
+        Kept_L += islice(L, 0, None)
+        Kept_R += islice(R, 0, None)
 
     print(Kept_L)
     print(Kept_R)        
     #return fancyslice(L, Kept_L), fancyslice(R, Kept_R)
     return Kept_L, Kept_R
+
+
+def _diff(L, R):
+    "prev impl has bugs; this is one with more preconditions in order to shake them out oin th wash"
+    l, r = 0, 0 #left iterator; right iterator
+    deletions = []
+    additions = []
+    while True:
+        if l == len(L):
+            # patch remaining Rs onto "additions"
+            print("break left") #DEBUG
+            additions += R[r:]
+            break
+        
+        if r == len(R):
+            print("break right") #DEBUG
+            # ran out of Rs
+            # patch remaining Ls onto "deletions"
+            deletions += L[l:]
+            break
+        
+        print("L[%d] = %s" % (l, L[l]), "R[%d] = %s" % (r, R[r]), "out of %s" % ((len(L),len(R)),))  #DEBUG
+        if L[l] == R[r]:
+            l += 1
+            r += 1
+        elif L[l] < R[r]:
+            deletions += [L[l]]
+            #deletions += [l] #for deletions, we want to know the row ids to delete
+            l += 1
+        else:
+            additions += [R[r]]
+            r += 1
+        
+    return deletions, additions
 
 def read_table(fname):
     """
@@ -150,6 +220,37 @@ def test_empty_right():
 #  - an empty right (---> entirely deletes)
 #  -
 
+# these next two tests are not very interesting if we just have
+#  additions/deletions, but are very interesting if there's updates
+# will the algorithm detect updates to early columns?
+
+def test_later_column(): 
+    L = [[1,2,3,4]]
+    R = [[1,2,7,4]]
+    
+    deletions, additions = diff(L, R)
+
+    print("additions")
+    for a in additions:
+        print(a)
+    print("deletions")
+    for d in deletions:
+        print(d)
+
+def test_early_column():
+    L = [[1,2,3,4]]
+    R = [[7,2,3,4]]
+    
+    deletions, additions = diff(L, R)
+
+    print("additions")
+    for a in additions:
+        print(a)
+    print("deletions")
+    for d in deletions:
+        print(d)
+
+
 def test_typical(f1 = "activity_counts.shuf1.csv", f2="activity_counts.shuf2.csv"):
     L, R = [read_table(f) for f in (f1, f2)]
     
@@ -170,6 +271,7 @@ def tests():
         print("----------------")
         print()
 
+test_early_column()
 
 if __name__ == '__main__':
     import sys
