@@ -127,12 +127,13 @@ def diff(L, R):
     return Kept_L, Kept_R
 
 
-def _diff(L, R):
+def diff(L, R):
     "prev impl has bugs; this is one with more preconditions in order to shake them out oin th wash"
     l, r = 0, 0 #left iterator; right iterator
     deletions = []
     additions = []
-    while True:
+    while True: #this loop is essentially the merge() part of mergesort(), but with the inner operations changed
+                #curious; does that mean it can be factored?
         if l == len(L):
             # patch remaining Rs onto "additions"
             print("break left") #DEBUG
@@ -143,22 +144,71 @@ def _diff(L, R):
             print("break right") #DEBUG
             # ran out of Rs
             # patch remaining Ls onto "deletions"
-            deletions += L[l:]
+            #deletions += L[l:]
+            deletions += list(range(l,len(L)))
             break
         
-        print("L[%d] = %s" % (l, L[l]), "R[%d] = %s" % (r, R[r]), "out of %s" % ((len(L),len(R)),))  #DEBUG
+        #print("L[%d] = %s" % (l, L[l]), "R[%d] = %s" % (r, R[r]), "out of %s" % ((len(L),len(R)),))  #DEBUG
         if L[l] == R[r]:
             l += 1
             r += 1
         elif L[l] < R[r]:
-            deletions += [L[l]]
-            #deletions += [l] #for deletions, we want to know the row ids to delete
+            #deletions += [L[l]]
+            deletions += [l] #for deletions, we want to know the row ids to delete
             l += 1
         else:
             additions += [R[r]]
             r += 1
         
     return deletions, additions
+
+def applydiff(Table, additions, deletions):
+    """
+    preconditions (not enforced): L is a sorted list of rows;
+     additions is a sorted list of rows
+     deletions is a list of indexes
+    """
+    assert Table == sorted(Table)
+    assert additions == sorted(additions)
+    assert all(type(row) is list for row in Table)
+    assert all(type(id) is int for id in deletions)
+    assert all(0<=id<len(Table) for id in deletions)
+    
+    # first, remove the deletions
+    Table = [l for i, l in enumerate(Table) if i not in deletions]
+    
+    # add the additions via a mergesort (is mergesort in the stdlib somewhere?)
+    # mergesort is: 1) recursively partition the array until you have sorted arrays, ie. single elements (or, if you're more clever, you can use something else when you get to < 10 elts since the recursion overhead outweighs brute force there, usually) 2) as you go up the stack, use merge()
+    
+    def merge(L, R): #TODO: take *seqs instead of l1, l2 and support an arbitrary number of list TODO: support generic iterables (iter(), StopIteration, etc) 
+        # TODO: find this in the stdlib
+        l = r = 0
+        while l < len(L) or r < len(R):
+            #print(l,r,len(L),len(R)) #DEBUG
+            if l == len(L):
+                # patch remaining Rs
+                yield R[r]
+                r += 1
+                continue
+            if r == len(R):
+                # patch remaining Rs
+                yield L[l]
+                l += 1
+                continue
+            
+            if L[l] == R[r]:
+                yield L[l]
+                yield R[r]
+                l += 1
+                r += 1
+            elif L[l] < R[r]:
+                yield L[l]
+                l += 1
+            else:
+                yield R[r]
+                r += 1
+    
+    return list(merge(Table, additions))
 
 def read_table(fname):
     """
@@ -185,7 +235,8 @@ def test_empty_left():
     print("deletions")
     for d in deletions:
         print(d)
-
+    
+    assert applydiff(L, additions, deletions) == R
 
 def test_empty_right():
     L = [[-13, 'h', '55'],
@@ -201,6 +252,7 @@ def test_empty_right():
     print("deletions")
     for d in deletions:
         print(d)
+    assert applydiff(L, additions, deletions) == R
 
 # i need tests...
 
@@ -236,6 +288,8 @@ def test_later_column():
     print("deletions")
     for d in deletions:
         print(d)
+    
+    assert applydiff(L, additions, deletions) == R
 
 def test_early_column():
     L = [[1,2,3,4]]
@@ -249,6 +303,7 @@ def test_early_column():
     print("deletions")
     for d in deletions:
         print(d)
+    assert applydiff(L, additions, deletions) == R
 
 
 def test_typical(f1 = "activity_counts.shuf1.csv", f2="activity_counts.shuf2.csv"):
@@ -262,11 +317,14 @@ def test_typical(f1 = "activity_counts.shuf1.csv", f2="activity_counts.shuf2.csv
     print("deletions")
     for d in deletions:
         print(d)
+    assert applydiff(L, additions, deletions) == R
 
 def tests():
     for name, test in list(globals().items()):
         if not name.startswith("test_"): continue
-        print(name)
+        
+        print("----------------")
+        print("TEST:", name)
         test()
         print("----------------")
         print()
