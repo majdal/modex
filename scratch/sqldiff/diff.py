@@ -66,12 +66,19 @@ def fancyslice(L, idx): #implements indexing-by-set like R and scipy
 # this feels sort of like a mergesort, doesn't it?
 
 
+def coopy(diff):
+    "translate a table diff from internal format to [coopy](http://dataprotocols.org/tabular-diff-format/) format"
+    raise NotImplemented
+
 def diff(L, R):
     """
     this prototype operates on iterators of lists: the format you get by reading a csv
     XXX bug: it actually is currently hardcoded to require knowing the length of the tables in advance
     
     (perhaps with suitable abstraction into iterables, the same code could run identically whether L and R are SQLAlchemy resultssets, csv.readers, or hard-coded lists)
+    
+    L is "LOCAL" aka the Left input
+    R is "REMOTE" aka the Right input
     """
     assert L == sorted(L)
     assert R == sorted(R)
@@ -160,7 +167,19 @@ def diff(L, R):
             additions += [R[r]]
             r += 1
         
-    return deletions, additions
+    return deletions, additions #TODO: swap this API
+
+def diffu(L, R):
+    "diff() which returns (additions, updates, deletions)"
+    # an "update" as far as we care is a row which shares any of its elements
+    # it is typed as this tuple: (id, {columnid: newvalue, ...})
+    #  where id is the index of the row in the L table (not in the R table!)
+    # a single update takes the place of an addition plus a deletion in diff()
+    # we have as a precondition that L and R are sorted from the left column onwards (equivalent to the result of calling sorted() on them)
+    # so detecting a change like (a,b,c) -> (a,b,d) is easy
+    # detecting (a,b,c) -> (z,b,c) is harder (impossible?)
+    #
+    raise NotImplemented
 
 def applydiff(Table, additions, deletions):
     """

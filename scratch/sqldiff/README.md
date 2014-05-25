@@ -87,3 +87,4 @@ References
 -----------
 
 * DataProtocols' [Tabular Diff Format](http://dataprotocols.org/tabular-diff-format/)
+* [DiffKit](http://www.diffkit.org/)
