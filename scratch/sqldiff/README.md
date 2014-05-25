@@ -86,4 +86,4 @@ TODO
 References
 -----------
 
-(nothing yet; no readings have been done)
+* DataProtocols' [Tabular Diff Format](http://dataprotocols.org/tabular-diff-format/)

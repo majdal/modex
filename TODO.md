@@ -94,6 +94,10 @@ and that can be worked on indepedently of the critical path.
         - MySQL has replication built in. Maybe similar to CouchDB, we can create a fake MySQL server that listens to the replication stream and pushes it up to the web?
     - Could [CouchDB's Replication Protocol](http://couchdb.readthedocs.org/en/latest/replication/protocol.html) in `feed=continous` be used
     - ...?  
+
+- [ ] Lit review [the dat bug tracker](https://github.com/maxogden/dat/issues) for tips
+- [ ] Lit review [the d3 mailing list](FIXME) for tips    
+
 - [ ] Sensible data subsampling [this task will be very, very, very involved]
     - It doesn't seem to be too difficult for javascript (at least on a modernish laptop or better) to store a large amount of data
       (in fact, [Crossfilter can handle 5mb of tables or more](http://square.github.io/crossfilter/)),
